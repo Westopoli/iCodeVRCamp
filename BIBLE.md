@@ -985,3 +985,181 @@ None awaiting input. Next session is **hands-on playtest** — user opens each p
 - `dist/Day5_Racing_Complete.zip` — built clean (275 entries), no `_BUILD_SPEC.md` / `_balance/` / `_*.log` / `.godot/` cache.
 - `dist/Day5_Racing_Template.zip` — same.
 - `Day5_Racing/_stderr.log` + `_stdout.log` — written by 10s smoke test, then deleted pre-rebuild so they wouldn't leak into ZIPs.
+
+---
+
+## TODO — Slide-deck content authoring (next chat's job)
+
+Slide pipeline is planned but **content is not yet per-slide-authored**. Heavy authoring step. Direction locked 2026-05-26.
+
+### Pipeline status (read first)
+
+- `SLIDES_PLAN.md` — phase order, directory layout, locked decisions.
+- `SLIDES_FORMATS.md` — format catalog v1 (22 → likely collapse to ~12 once user confirms layout-merge plan).
+- `iCodeLogoRed.png` landed (red iCode logo). Still pending from user: 2-3 representative iCode PPTX decks + font picks.
+- Memory: `slides-build-pipeline.md`.
+
+### Why this section exists
+
+`SLIDE_SOURCE.md` (D1-D4) lists kid-facing content per chunk (concept · goal · board example · in-file location · as-typed code) but does **not** say what each slide *says*. Earlier AI estimates ("5 slides per chunk") were field-to-slide guesses, not derived from teaching density. User wants slide count to be chunk-dependent: simple concepts get fewer slides, dense ones get more.
+
+### Per-day opener pack (NEW — every day starts with this)
+
+Every day's deck opens with a fixed 4-5 slide welcome/orient pack BEFORE the first chunk:
+
+1. **Welcome + day title** — "Day N · <iconic title> · <year>".
+2. **Today we'll build** — 1-line elevator pitch of the game + screenshot of the finished game.
+3. **Yesterday recap → today** (D2-D5 only) — what we did yesterday + how today builds on it.
+4. **5-day arc placement** — horizontal timeline (Pong → Pac-Man → Base Defense → Fighter → Racing), today highlighted.
+5. **Concepts introduced today** — 2-3 concept names + 1-line each.
+
+### Per-chunk slide blueprint (LOCKED 2026-05-27 — 5-step micro-arc)
+
+For chunks that introduce a **new concept**, the slide pack walks the kid through this fixed 5-step micro-arc:
+
+1. **Concept slides (1 — N)** — name the concept, etymology / plain-English meaning. Density-dependent: `var` = 4 slides (title → "what does X mean?" → root word → mnemonic reveal). `match` state machine (D4 #6) = will need more. One-line slide message per slide.
+2. **Example slides (real-world metaphor, kid answers aloud)** — a concrete tangible metaphor for the concept (cookie jar for variables, light switch for booleans, etc.). At least one slide poses a question the instructor asks aloud and the kid answers. Ends with a takeaway slide naming the concept in plain English.
+3. **How-it's-used slides** — bridge from metaphor to games in general. "How do video games use this concept?" Frames the abstract use case before grounding in our specific game.
+4. **Where-in-our-game slides** — Godot screenshots of the actual lines in the open file, with red overlays pointing at existing instances (already-typed reference code) and the hole the kid is about to fill. Grounds the concept in the file they're looking at.
+5. **Example + TODO side-by-side slide (1, MANDATORY)** — the load-bearing "do it" slide.
+   - LHS: board example from BIBLE §4 / SLIDE_SOURCE §5 (the pattern the kid is about to follow).
+   - RHS: Godot screenshot of the `#@todo` marker block, red highlight overlay on the hole.
+
+For chunks that **extend / repeat** a concept already introduced (e.g. D1 #1b extending #1a, D1 #2 introducing `+=` as notation rather than a new concept), use a slimmer pack: 1-line concept recap + example+TODO + walkthroughs. Skip the example/how-used/where-in-game micro-arc — those only attach to first-introduction chunks.
+
+**Between-chunk additions:**
+
+- **Walkthroughs (variable)** — every Godot click between chunks gets its own slide per `slide-source-rules`: one step = one screenshot.
+- **After-works slide (0 — 1)** — only at high-payoff moments. Result-shot of the game in its new state. (D1 #6b ball moves; D3 #6 towers fire; D4 #4 fighters appear; D4 #7 fight loop alive.)
+
+**Why this pattern, per user 2026-05-27:** every new concept must travel the same path — "Example → how it's used → where in our game is it used → do it." Repeated exposure to the same teaching shape across all 4 days reduces cognitive load: kid learns the lesson rhythm, not just the lesson content. First instance is variable intro at D1 chunk #1a.
+
+### Authoring worksheet (next chat fills per chunk; commits to `DayN_*/SLIDE_SOURCE.md` as new §10)
+
+**For chunks introducing a NEW concept (full 5-step micro-arc):**
+
+```
+### Chunk #N — <concept>  [new-concept]
+
+- Concept slides (one msg per slide; name + etymology + mnemonic):
+  1. <one-line slide message>
+  2. ...
+
+- Example slides (real-world metaphor; ends with takeaway slide):
+  1. <slide content — image / caption / question for kid to answer aloud>
+  2. ...
+
+- How-it's-used slides (bridge to games in general):
+  1. <one-line slide message>
+  ...
+
+- Where-in-our-game slides (Godot screenshot with red overlay):
+  1. <screenshot filename + red-overlay target + caption>
+  ...
+
+- Example + TODO side-by-side slide:
+  - LHS (board example, lifted from BIBLE §4 or SLIDE_SOURCE §5):
+    <verbatim code>
+  - RHS (Godot screenshot of #@todo block):
+    <screenshot filename, e.g. d2_chunk5_todo.png>
+  - Red-highlight target: <which lines / which marker block>
+
+- After-works slide: <yes / no>
+  - If yes — message: <one-line slide message + which screenshot>
+
+- Walkthrough steps inserted BEFORE this chunk: <list, or "none">
+- Walkthrough steps inserted AFTER this chunk: <list, or "none">
+```
+
+**For chunks EXTENDING / REPEATING an already-introduced concept (slim pack):**
+
+```
+### Chunk #N — <concept>  [extension]
+
+- Recap slide (1, one-liner reminding the kid which earlier concept this builds on):
+  1. <one-line slide message>
+
+- Example + TODO side-by-side slide:
+  - LHS: <board example>
+  - RHS: <screenshot of #@todo block>
+  - Red-highlight target: <lines>
+
+- After-works slide: <yes / no>
+- Walkthrough steps inserted BEFORE: <list or none>
+- Walkthrough steps inserted AFTER: <list or none>
+```
+
+### Cross-day chunk budget (rough sizing)
+
+- D1: 8 chunks. D2: 6 chunks. D3: 8 chunks. D4: 7 chunks. D5: TBD (no morning code chunks per [[d5-racing-build-decisions]] — racing is creative-application; the opener pack + walkthroughs + personalization carry the day).
+- ~29 chunks across D1-D4. At a per-chunk average of ~4 slides + walkthroughs + opener pack + personalization beats → ~350-400 slides total. Heavier than the earlier ~520 estimate would suggest only if walkthroughs balloon; lighter overall because per-chunk pack drops from 5 fixed slides to ~3-4 variable.
+
+### Next-chat execution plan
+
+- **One chat per day** (5 chats), each ending with `DayN_*/SLIDE_SOURCE.md` containing a locked §10 "Slide blueprint."
+- Each chat boots: read this BIBLE §TODO + that day's `SLIDE_SOURCE.md` + `SLIDES_PLAN.md` + `SLIDES_FORMATS.md`.
+- Author chunk-by-chunk using the worksheet above; user gates each chunk's blueprint before moving on.
+- After all 5 days have §10, restart slide-pipeline Phase 3 (sample deck → templates → screenshots → build).
+
+### Stale line to refresh next time BIBLE is touched
+
+§17 line near 977 says "iCode is a git repo … initial commit + push still not done." Stale. Repo committed + pushed 2026-05-26 (`51e1845` initial, `c995ce0` logo). Refresh on next BIBLE edit.
+
+---
+
+## Session Pause — 2026-05-26 (slide-deck planning)
+
+**Lane / context:** single context (iCode camp).
+**Active workstream/task:** slide-deck pipeline — Phase 2.5 (per-slide content authoring blueprint).
+**Status:** awaiting-pick (which day to author first).
+
+### Where we are
+
+Pipeline planning is locked at the structural level. `SLIDES_PLAN.md` defines phases + directory layout + locked decisions (python-pptx, 16:9, 1 PPTX/day, embedded media, static, code = Godot screenshots + draggable red highlight overlay). `SLIDES_FORMATS.md` lists 22 candidate formats (F01-F22) v1 + a v2 collapse mapping to 12 formats (G01-G12) at the bottom of the file — durable record persisted, but the §"Format list" + §"Per-day count estimate" sections have NOT been rewritten under G-IDs yet (deferred until after Phase 2.5 lands). Then user redirected scope: real blocker isn't format count, it's that `SLIDE_SOURCE.md` files don't carry per-slide messaging. New direction locked in BIBLE §TODO above: per-day fixed-5-slide opener pack + variable-length per-chunk pack (concept N · why-it-matters N · mandatory example+TODO side-by-side · walkthroughs · optional after-works). Authoring worksheet template lives in §TODO. Next 5 chats (1 per day) extend each `DayN_*/SLIDE_SOURCE.md` with a §10 "Slide blueprint" filled chunk-by-chunk. Git repo: initial commit + logo pull pushed to `origin/master`.
+
+### Last decision locked
+
+Per-slide authoring direction (user framing 2026-05-26):
+
+- Each day starts with fixed welcome pack: welcome + today's title, today's elevator pitch, yesterday-recap-to-today (D2-D5 only), 5-day-arc placement timeline, concepts introduced today.
+- Then jump into chunks. Between chunks, every Godot click gets its own walkthrough slide (one step = one screenshot — already locked in `slide-source-rules`).
+- Each chunk gets a chunk-dependent number of slides. Concept explainer (what IS the thing) comes first. Then why-we're-doing-it / how-it-affects-the-system slides — 1-2 for trivial concepts, several for dense ones (e.g. D4 `match` state machine).
+- **Mandatory per chunk:** example + TODO side-by-side slide. LHS = BIBLE board example (the pattern). RHS = Godot screenshot of the `#@todo` marker block they need to fill, with red highlight overlay marking the hole.
+- Optional after-works slide at high-payoff moments only.
+- Heavy authoring — "this is basically THE content for the class" — so deliberately gated by user per chunk.
+
+User's exact words for the BIBLE addition: "record this in the bible and develop an organizational method for the next chat to hash out task complexity, what the message per-slide will be." Done — see BIBLE §TODO.
+
+Format catalog v2 collapse mapping (F→G) recorded in `SLIDES_FORMATS.md` "v2 collapse target" section. 12 surviving formats: G01 Day Title · G02 Timeline/Closer · G03 GDScript-vs-Python · G04 Headline/Divider · G05 Build Narrative · G06 Scene Tree · G07 Table · G08 Asset Pack Card · G09 Concept+Task · G10 Board Example · G11 Code Screenshot · G12 Screenshot+Caption.
+
+### Next pending pick (awaiting user input)
+
+When the next chat boots, which day do we blueprint first?
+
+Options:
+- **D1 (Pong)** — recommended start. 8 chunks (smallest concept density: variables + conditions). Best place to calibrate the worksheet itself before tackling denser days. Risk: D1 is "copy-along" — least amount of why-it-matters substance, so the chat may under-stress the worksheet.
+- **D2 (Pac-Man)** — 6 chunks, but introduces TileMapLayer concept which needs its own orientation walkthrough. Medium density.
+- **D3 (Base Defense)** — 8 chunks including the day-of-the-camp #6 nested-function-call payoff. Highest list-and-function depth.
+- **D4 (Fighter)** — 7 chunks but #6 + #7 are the biggest slide-load-bearing chunks of the camp (large `match` block, attack method). Will need the most why-it-matters slides.
+- **D5 (Racing)** — no morning code chunks per `d5-racing-build-decisions`. Opener pack + walkthroughs + personalization carry the day. Lightest authoring but novel shape — defer.
+
+Default if user says "start": **D1**.
+
+### Critical context to carry forward
+
+- v2 collapse mapping (F→G) is persisted in `SLIDES_FORMATS.md` but the §"Format list" + §"Per-day count estimate" sections still use F-IDs. Rewrite to G-IDs is deferred until after Phase 2.5 — formats may shift further once per-slide content is known.
+- Per-slide count is **density-driven, not formulaic.** Earlier "5 slides per chunk" was a guess derived from §5's 5 fields — explicitly rejected.
+- Brand inputs pending: 2-3 sample iCode PPTX decks + font picks. Logo arrived (`iCodeLogoRed.png`). Not blocking Phase 2.5 (content auth); is blocking Phase 3 (sample deck).
+- `slide-source-rules` memory governs every existing §-section of `SLIDE_SOURCE.md`. The new §10 "Slide blueprint" is additive — do not refactor §1-§9.
+- User went to bed; do not start D1 authoring in this session. Wrap only.
+- Repo: `master` tracks `origin/master`. Commits `51e1845` + `c995ce0`. No outstanding push from this wrap session — user can push wrap edits next time.
+
+### Files Touched This Session
+
+- `BIBLE.md` — appended §TODO with per-slide authoring direction, per-day opener pack spec, per-chunk variable-length pack spec, authoring worksheet template, chunk budget, next-chat execution plan, stale-line note; appended this Session Pause block.
+- `SLIDES_PLAN.md` (new) — canonical slide-deck pipeline plan, phase order, directory layout, locked decisions.
+- `SLIDES_FORMATS.md` (new) — format catalog v1 (F01-F22) + v2 collapse mapping (F→G, 22→12) at bottom.
+- `~/.claude/.../memory/slides-build-pipeline.md` (new memory) — cross-chat pointer to `SLIDES_PLAN.md` + next-chat boot procedure.
+- `~/.claude/.../memory/MEMORY.md` — added one-line pointer to `slides-build-pipeline.md`.
+- Git: `51e1845` initial commit (883 files, scaffolds + plan), `c995ce0` logo pull (`iCodeLogoRed.png`). Both on `origin/master`. Wrap session edits (BIBLE §TODO + pause-block + SLIDES_PLAN + SLIDES_FORMATS + memory) NOT YET committed — defer to user.
+

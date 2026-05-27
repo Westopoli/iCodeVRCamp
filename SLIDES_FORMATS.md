@@ -138,3 +138,50 @@ User reviews sample deck, lists fixes, AI iterates `templates.py` only.
 3. **Concept icons** (F11) — use Kenney UI icons? Custom SVGs? Skip icons entirely?
 4. **Red highlight default shape + size** — rectangle 400×120 px stroke 4px red? Or smaller circle? User pick.
 5. **Speaker notes** — populate per slide for instructor? (Adds ~520 small writing tasks; can skip and have instructor use SLIDE_SOURCE.md as cue card.)
+
+---
+
+## v2 collapse target (proposed, awaits user lock)
+
+User flagged 2026-05-26: 22 formats is over-specced. Format count doesn't drive slide count — it drives template variation. Fewer formats = simpler `templates.py` + smaller sample deck + faster Phase 3 iteration. No visual loss because every merge below is a layout duplicate.
+
+**Note:** Phase 2.5 (per-slide content authoring per BIBLE §TODO) may shift this further once per-slide content is known. Acceptable to defer v2 rewrite until after Phase 2.5; the mapping below is the durable record.
+
+### Merge mapping (22 → 12)
+
+| v2 format | Merged from v1 | Rationale |
+|---|---|---|
+| **G01 Day Title** | F01 | Distinct opener slide; keep. |
+| **G02 Timeline / Closer** | F02 Narrative Arc + F22 Day Closer | Both = horizontal 5-step strip, today highlighted. Closer = same strip + "next: <iconic title>" tag. |
+| **G03 GDScript-vs-Python** | F03 | Distinctive two-column code panel. Used 5×. Keep. |
+| **G04 Headline / Divider** | F04 Section Divider + F18 Personalization Beat Intro | Both = giant text + 1-line subtitle on near-empty slide. |
+| **G05 Build Narrative** | F05 | Text-heavy body. Keep — distinctive layout. |
+| **G06 Scene Tree** | F06 | Monospace ASCII tree, big, centered. Keep — distinctive. |
+| **G07 Table** | F07 File Manifest + F09 Constants + F10 Chunk Table + F19 FC Mirror Map (+ table portion of F08) | All four = header-row + N data-rows. Only column labels + cell contents differ. |
+| **G08 Asset Pack Card** | F08 (image-rich portion: pack name + sprite previews) | Kept distinct from G07 because of sprite thumbnail row. Could fold in if thumbnail row becomes a G07 optional element. |
+| **G09 Concept + Task** | F11 Concept Intro + F13 Your Task | Both = small text block + heading. Collapses per-chunk pack by 1 slide. |
+| **G10 Board Example** | F12 | Small code example, centered, monospace. Distinctive — kept separate so it can linger while kid copies. |
+| **G11 Code Screenshot** | F14 In-File Location + F15 As-Typed Code + F20 FC Hole | All three = Godot script-editor screenshot + red highlight + caption. Source PNG varies, layout identical. |
+| **G12 Screenshot + Caption** | F16 After-Works + F17 Walkthrough Step + F21 Export Walkthrough | All three = screenshot + caption. Step-number badge is an optional element (off for F16, on for F17/F21). |
+
+**Survivors:** G01..G12 = 12 formats.
+
+### Format-count change in slide-count terms
+
+Format collapse alone does NOT reduce slide count (user clarified 2026-05-26: format ≠ slide). But two per-chunk merges DO trim slides:
+
+- **G09 (Concept + Task)** collapses F11 + F13 → per-chunk pack drops 1 slide.
+- **G11 (Code Screenshot)** stays 1-slide-per-instance (F14 location screenshot + F15 typed screenshot are still two separate moments in the lesson, they just share a layout). No slide-count change here.
+
+Realistic per-chunk pack with v2: **~3-4 slides** (concept+task · board example · code screenshot location · optional code screenshot result · optional after-works). Confirmed against BIBLE §TODO per-chunk variable-length pack spec.
+
+### Things kept distinct (rejected merges considered, NOT done)
+
+- F11+F12+F13 into one mega "chunk intro" slide — rejected. Too dense; board example needs its own slide so it can linger while kid copies.
+- F08 Asset Pack Card → G07 Table — rejected for now because of sprite thumbnail row. Revisit if thumbnails fit Table layout.
+- F03 → G04 Headline — rejected. GDScript-vs-Python is a two-column code panel, not headline-shaped.
+- F06 Scene Tree → G10 Board Example — rejected. Tree is wider + multi-line + uses box-drawing characters; needs different sizing than centered code snippet.
+
+### Action when next chat lands
+
+If Phase 2.5 day-by-day blueprint stays consistent with the chunk-pack shape above, **rewrite §"Format list" + §"Per-day count estimate" using G01-G12** as the canonical catalog. Until then, F-IDs above remain the working reference.

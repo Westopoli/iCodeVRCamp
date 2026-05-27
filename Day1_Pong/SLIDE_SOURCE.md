@@ -464,3 +464,943 @@ End-of-day beat after all morning chunks. Order suggested, not mandatory. Each b
 - [x] Each walkthrough (Pre-coding setup + Personalization + FC) appears exactly once at its lesson position.
 
 End-to-end smoke test: hand `BIBLE.md` + this file to a fresh Claude session, ask "draft slide bullets for Day 1." Output should require no follow-up clarification from this end — only screenshot injection by the user.
+
+---
+
+## 10. Slide blueprint (Phase 2.5 — LOCKED 2026-05-27)
+
+> **Audience for this section: the future chat implementing the python-pptx build pipeline.**
+> This is the per-slide build manifest for the Day 1 deck. Walk top to bottom; emit one slide per entry, in order. No interpretation needed — body text is final and pasteable.
+
+### 10.0 Schema
+
+Every slide entry uses this template:
+
+```
+#### Slide D1-S### — <short label>
+- Format: <G##> <name from SLIDES_FORMATS.md v2>
+- Title: "<exact title text>"
+- Body: <bullets, prose, or code block — verbatim>
+- Image: <filename + content description + red-overlay spec, or "none">
+- Notes: <instructor cue line, or "—">
+```
+
+- **SLIDE_ID** = `D1-S001` … `D1-S140` (sequential within day, zero-padded to 3 digits).
+- **Format** references the v2 catalog in `SLIDES_FORMATS.md` ("v2 collapse target" section): G01 Day Title · G02 Timeline/Closer · G03 GDScript-vs-Python · G04 Headline/Divider · G05 Build Narrative · G06 Scene Tree · G07 Table · G08 Asset Pack Card · G09 Concept+Task · G10 Board Example · G11 Code Screenshot · G12 Screenshot+Caption.
+- **Image filenames** are screenshots the instructor / AI captures during the live Godot session. All D1 screenshots use prefix `d1_`. Red overlays are described in plain text — python-pptx draws the rectangle from the (x, y, w, h) tuple given, OR uses the master red-rectangle shape if no coords are listed.
+- **Notes** field is optional speaker-cue prose. Empty = `—`.
+
+### 10.1 Opener pack (slides 1-5)
+
+#### Slide D1-S001 — Welcome / Day title
+- Format: G01 Day Title
+- Title: "Day 1 — Pong"
+- Body:
+  - "1972 · Atari"
+  - "The game that started the whole industry."
+- Image: optional era arcade-cabinet art (placeholder OK).
+- Notes: instructor reads the day title aloud and points to the year.
+
+#### Slide D1-S002 — Today we'll build
+- Format: G12 Screenshot + Caption
+- Title: "Today we're building Pong"
+- Body: "Two paddles. One ball. No art — every visible thing on screen is just a coloured rectangle controlled by code you'll write."
+- Image: `d1_finished_game.png` — screenshot of running Pong with the scoreboard active, both paddles in play, ball mid-flight. No red overlay.
+- Notes: —
+
+#### Slide D1-S003 — 5-day arc placement
+- Format: G02 Timeline / Closer
+- Title: "The 5-day arc"
+- Body: horizontal 5-step strip, left-to-right, today's box highlighted in iCode red:
+  - 1972 — **Pong** (today, highlighted)
+  - 1980 — Pac-Man
+  - 1990s — Tower / Base Defense
+  - late 1990s — Fighter
+  - 2020s — Racing
+- Image: rendered timeline strip (python-pptx draws this as a row of 5 rectangles; today's rectangle filled iCode red, others light grey).
+- Notes: "You're going to walk through the whole history of gaming this week. Pong is where it starts."
+
+#### Slide D1-S004 — Today's concepts
+- Format: G04 Headline / Divider
+- Title: "Today's concepts"
+- Body:
+  - "**Variables** — values that can change."
+  - "**Conditions** — if / else, and comparing numbers."
+- Image: none
+- Notes: tee up the two umbrella concepts; both expand in the chunks ahead.
+
+#### Slide D1-S005 — GDScript vs Python
+- Format: G03 GDScript-vs-Python
+- Title: "GDScript is Python with one extra word"
+- Body (two-column code panel, monospace, side-by-side):
+  ```
+  Python:                       GDScript:
+  x = 5                         var x = 5
+  name = "Alex"                 var name = "Alex"
+
+  if score > 10:                if score > 10:
+      print("winning")              print("winning")
+  else:                         else:
+      print("losing")               print("losing")
+  ```
+- Below the code panel, single line: "Add `var` when you make a NEW variable. Everything else looks identical."
+- Image: none (the code panel is the slide)
+- Notes: "If you've ever seen Python — congrats, you almost already know GDScript."
+
+### 10.2 Section divider — Pre-coding setup (slide 6)
+
+#### Slide D1-S006 — Section divider: Pre-coding setup
+- Format: G04 Headline / Divider
+- Title: "Pre-coding setup"
+- Subtitle: "Open the project. Open the script. Run it. Read the errors."
+- Image: none
+- Notes: orientation phase begins.
+
+### 10.3 Walkthrough A — Open the project in Godot (slides 7-13)
+
+> Source: §4 Walkthrough A. One step = one slide (per `slide-source-rules`).
+
+#### Slide D1-S007 — Walk A.1: Open the Godot 4 launcher
+- Format: G12 Screenshot + Caption (with step badge "A.1")
+- Title: "Step A.1 — Open the Godot launcher"
+- Body: "Find the Godot 4 icon on the desktop or Start menu. Double-click to open the Project Manager window."
+- Image: `d1_walkA_step1.png` — Godot launcher / Project Manager window, full visible.
+- Notes: this is the launcher, NOT the editor yet.
+
+#### Slide D1-S008 — Walk A.2: Click Import
+- Format: G12 (badge "A.2")
+- Title: "Step A.2 — Click Import"
+- Body: "In the Project Manager, click the **Import** button at the top-right of the window."
+- Image: `d1_walkA_step2.png` — Project Manager with red overlay around the Import button.
+- Notes: —
+
+#### Slide D1-S009 — Walk A.3: Navigate to Day1_Pong
+- Format: G12 (badge "A.3")
+- Title: "Step A.3 — Find the Day1_Pong folder"
+- Body: "A file browser opens. Navigate to the `Day1_Pong` folder wherever it lives on your computer."
+- Image: `d1_walkA_step3.png` — file browser showing the camp folder tree, Day1_Pong highlighted.
+- Notes: instructor calls out the folder location for the room.
+
+#### Slide D1-S010 — Walk A.4: Select project.godot
+- Format: G12 (badge "A.4")
+- Title: "Step A.4 — Select project.godot"
+- Body: "Inside `Day1_Pong`, click the file named `project.godot`. This is the file every Godot project starts with."
+- Image: `d1_walkA_step4.png` — file browser inside Day1_Pong with project.godot highlighted (red overlay).
+- Notes: —
+
+#### Slide D1-S011 — Walk A.5: Import & Edit
+- Format: G12 (badge "A.5")
+- Title: "Step A.5 — Click Import & Edit"
+- Body: "Click the **Import & Edit** button at the bottom-right of the import dialog."
+- Image: `d1_walkA_step5.png` — import dialog, Import & Edit button highlighted (red overlay).
+- Notes: —
+
+#### Slide D1-S012 — Walk A.6: Editor opens
+- Format: G12 (badge "A.6")
+- Title: "Step A.6 — The editor opens"
+- Body: "The Godot editor opens. On the left, the **Scene** panel shows the `Main` node — the top of our scene tree."
+- Image: `d1_walkA_step6.png` — full Godot editor view, Scene panel highlighted (red overlay around the Main node entry).
+- Notes: first time the kid sees the editor.
+
+#### Slide D1-S013 — Walk A.7: Check the title bar
+- Format: G12 (badge "A.7")
+- Title: "Step A.7 — Confirm the title bar"
+- Body: "Look at the title bar at the top of the window. It should read: `Day 1 - Pong - Godot Engine`."
+- Image: `d1_walkA_step7.png` — close-up of the title bar.
+- Notes: project is open. Done with Walkthrough A.
+
+### 10.4 Walkthrough B — Open main.gd to edit (slides 14-19)
+
+> Source: §4 Walkthrough B.
+
+#### Slide D1-S014 — Walk B.1: Find FileSystem panel
+- Format: G12 (badge "B.1")
+- Title: "Step B.1 — FileSystem panel"
+- Body: "Look at the **FileSystem** panel at the bottom-left of the editor. It shows all the files in your project."
+- Image: `d1_walkB_step1.png` — editor with FileSystem panel highlighted (red overlay).
+- Notes: —
+
+#### Slide D1-S015 — Walk B.2: Find main.gd
+- Format: G12 (badge "B.2")
+- Title: "Step B.2 — Find `main.gd`"
+- Body: "In the FileSystem panel, find the file named `main.gd` at the top level."
+- Image: `d1_walkB_step2.png` — FileSystem panel close-up, main.gd highlighted (red overlay).
+- Notes: —
+
+#### Slide D1-S016 — Walk B.3: Double-click main.gd
+- Format: G12 (badge "B.3")
+- Title: "Step B.3 — Double-click `main.gd`"
+- Body: "Double-click `main.gd` to open it."
+- Image: `d1_walkB_step3.png` — same panel, mid-double-click indicator.
+- Notes: —
+
+#### Slide D1-S017 — Walk B.4: Script editor opens
+- Format: G12 (badge "B.4")
+- Title: "Step B.4 — The Script editor opens"
+- Body: "The view switches from the 2D scene to the **Script editor**. You're now looking at the code for `main.gd`."
+- Image: `d1_walkB_step4.png` — Godot Script editor with main.gd open.
+- Notes: —
+
+#### Slide D1-S018 — Walk B.5: 2D button
+- Format: G12 (badge "B.5")
+- Title: "Step B.5 — Back to the 2D view"
+- Body: "To get back to the 2D scene view, click the **2D** button at the top centre of the editor."
+- Image: `d1_walkB_step5.png` — editor with 2D button highlighted (red overlay).
+- Notes: —
+
+#### Slide D1-S019 — Walk B.6: Script button
+- Format: G12 (badge "B.6")
+- Title: "Step B.6 — Back to the script"
+- Body: "To get back to the script while in the 2D view, click the **Script** button at the top centre."
+- Image: `d1_walkB_step6.png` — editor with Script button highlighted (red overlay).
+- Notes: end of Walkthrough B.
+
+### 10.5 Section divider — Lesson chunks (slide 20)
+
+#### Slide D1-S020 — Section divider: Lesson chunks
+- Format: G04 Headline / Divider
+- Title: "Lesson chunks"
+- Subtitle: "Eight holes to fill. We'll fill them in order."
+- Image: none
+- Notes: into the chunks.
+
+### 10.6 Chunk #1a — Variable declaration (slides 21-33, full new-concept arc)
+
+#### Slide D1-S021 — Concept 1/4: Title
+- Format: G04 Headline / Divider
+- Title: "Variable"
+- Body: (just the word, very large, centred on slide)
+- Image: none
+- Notes: read the word aloud. Pause.
+
+#### Slide D1-S022 — Concept 2/4: Meaning prompt
+- Format: G04 Headline / Divider
+- Title: "What does *variable* mean?"
+- Subtitle: "What does *vary* mean?"
+- Image: none
+- Notes: instructor asks aloud. Wait for answers from the room.
+
+#### Slide D1-S023 — Concept 3/4: Root word
+- Format: G04 Headline / Divider
+- Title: "vary = something that can change"
+- Image: none
+- Notes: confirm answers; land the root.
+
+#### Slide D1-S024 — Concept 4/4: Mnemonic reveal
+- Format: G04 Headline / Divider
+- Title: "V in **variable** → **V**ALUE that can **C**HANGE"
+- Body: V and VALUE and CHANGE rendered in iCode red, rest in default colour.
+- Image: none
+- Notes: lock the mnemonic.
+
+#### Slide D1-S025 — Example 1/4: Empty cookie jar
+- Format: G12 Screenshot + Caption
+- Title: "The cookie jar"
+- Body: "`CookiesInJar = 0`"
+- Image: `d1_chunk1a_jar_empty.png` — illustration / clip art of an empty cookie jar.
+- Notes: —
+
+#### Slide D1-S026 — Example 2/4: Cookie jar with 8 cookies
+- Format: G12
+- Title: "A week later…"
+- Body: "`CookiesInJar = 8`"
+- Image: `d1_chunk1a_jar_full.png` — same jar, now with 8 cookies inside.
+- Notes: same jar, same name, value changed.
+
+#### Slide D1-S027 — Example 3/4: Question
+- Format: G04 Headline / Divider
+- Title: "You eat 3 cookies."
+- Subtitle: "What is `CookiesInJar` now?"
+- Image: none
+- Notes: instructor waits for the room. Answer: 5. The variable's value CHANGED.
+
+#### Slide D1-S028 — Example 4/4: Takeaway
+- Format: G04 Headline / Divider
+- Title: "A variable is a VALUE that can CHANGE across time."
+- Image: none
+- Notes: read aloud. This is the definition they'll carry into every later chunk.
+
+#### Slide D1-S029 — How-it's-used 1/2: Games in general
+- Format: G04 Headline / Divider
+- Title: "How does a video game use variables?"
+- Image: none
+- Notes: rhetorical — instructor leads into next slide.
+
+#### Slide D1-S030 — How-it's-used 2/2: Pong specifically
+- Format: G04 Headline / Divider
+- Title: "Pong's variables"
+- Body:
+  - "How fast is the ball moving left/right? → `ball_speed_x`"
+  - "How fast is the ball moving up/down? → `ball_speed_y`"
+  - "How fast does the paddle move? → `paddle_speed`"
+  - "Every frame, these numbers decide how fast everything goes."
+- Image: none
+- Notes: —
+
+#### Slide D1-S031 — Where-in-our-game 1/2: Reference variable
+- Format: G11 Code Screenshot
+- Title: "Where in `main.gd`?"
+- Body: "Up at the top of `main.gd` we already have two variables for the score."
+- Image: `d1_chunk1a_reference.png` — screenshot of main.gd lines 28-29 (`var left_score := 0`, `var right_score := 0`). Red overlay arrow / label: "← already a variable" pointing at line 28.
+- Notes: —
+
+#### Slide D1-S032 — Where-in-our-game 2/2: Your hole
+- Format: G11 Code Screenshot
+- Title: "Your three new variables go HERE"
+- Body: "Right below the score, between `#@todo` and `#@end`, you'll add three variables of your own."
+- Image: `d1_chunk1a_hole.png` — screenshot of main.gd lines 33-39 (the comment + the empty #@todo block). Red overlay rectangle covers lines 36-38 (the gap between #@todo on line 35 and #@end on line 39).
+- Notes: —
+
+#### Slide D1-S033 — Example + TODO side-by-side (MANDATORY "do it")
+- Format: G09 Concept + Task (LHS) + G11 Code Screenshot (RHS) — composite layout
+- Title: "Your task: chunk #1a"
+- Body LHS (board example, big monospace centred in left half):
+  ```gdscript
+  var score := 0
+  ```
+  With caption underneath: "Pattern: `var` + name + `:=` + starting value."
+- Body RHS (right half, image): `d1_chunk1a_todo.png` — Godot script editor screenshot of main.gd lines 34-39 with a red overlay rectangle covering the gap between line 35 (`#@todo`) and line 39 (`#@end`).
+- Caption below RHS: "Make THREE variables: ball x-speed, ball y-speed, paddle speed. Pick any numbers."
+- Image (RHS): see above.
+- Notes: kids type for the next few minutes. Instructor circulates.
+
+### 10.7 Walkthrough C — Run the project (slides 34-37)
+
+> Source: §4 Walkthrough C. Inserted after chunk #1a so the file compiles before first run.
+
+#### Slide D1-S034 — Walk C.1: Press F5
+- Format: G12 (badge "C.1")
+- Title: "Step C.1 — Press F5"
+- Body: "Press the **F5** key on your keyboard. (Or click the **Play ▶** button in the top-right toolbar.)"
+- Image: `d1_walkC_step1.png` — editor with the Play button highlighted (red overlay).
+- Notes: —
+
+#### Slide D1-S035 — Walk C.2: Set Main Scene dialog
+- Format: G12 (badge "C.2")
+- Title: "Step C.2 — Set Main Scene"
+- Body: "If Godot asks 'Set Main Scene?', click **Select Current**. The scene we're running is `Main.tscn`."
+- Image: `d1_walkC_step2.png` — Set Main Scene dialog with Select Current highlighted.
+- Notes: only appears the first run.
+
+#### Slide D1-S036 — Walk C.3: Game window opens
+- Format: G12 (badge "C.3")
+- Title: "Step C.3 — The game window opens"
+- Body: "A new window pops up, 1152 × 648 pixels. Dark background, two cyan paddles. The ball will be frozen at the centre until chunk #6b — that's normal."
+- Image: `d1_walkC_step3.png` — running Pong game window, ball at centre, paddles in start position.
+- Notes: —
+
+#### Slide D1-S037 — Walk C.4: Stop the game
+- Format: G12 (badge "C.4")
+- Title: "Step C.4 — Stop the game"
+- Body: "Close the game window, OR press **F8** in the editor to stop it."
+- Image: `d1_walkC_step4.png` — editor with F8 / stop button highlighted.
+- Notes: —
+
+### 10.8 Walkthrough D — Reading an error (slides 38-41)
+
+> Source: §4 Walkthrough D.
+
+#### Slide D1-S038 — Walk D.1: Output panel
+- Format: G12 (badge "D.1")
+- Title: "Step D.1 — Find the Output panel"
+- Body: "If your game window doesn't open after F5, look at the **Output** panel at the bottom of the editor. That's where errors print."
+- Image: `d1_walkD_step1.png` — editor with Output panel highlighted (red overlay).
+- Notes: —
+
+#### Slide D1-S039 — Walk D.2: The three errors you'll see
+- Format: G05 Build Narrative (text-heavy)
+- Title: "Step D.2 — Three errors you WILL hit"
+- Body:
+  - "`Parse Error: Expected ':' after \"if\" condition.` → you forgot the colon at the end of an `if` line."
+  - "`Identifier \"ball_speedy\" not declared in the current scope.` → typo in a variable name (probably missing the `_x` or `_y`)."
+  - "`Expected indented block.` → the line after `if ...:` is not indented (use Tab or 4 spaces)."
+- Image: none (text-heavy slide).
+- Notes: instructor reads each aloud. Tell the room: "When you see these, don't panic — it tells you EXACTLY what to fix."
+
+#### Slide D1-S040 — Walk D.3: Click the blue line number
+- Format: G12 (badge "D.3")
+- Title: "Step D.3 — Click the blue line number"
+- Body: "The error message shows a blue underlined line number. Click it — the script editor jumps you straight to the broken line."
+- Image: `d1_walkD_step3.png` — Output panel showing an example error with the blue line number highlighted (red overlay).
+- Notes: —
+
+#### Slide D1-S041 — Walk D.4: Fix and re-run
+- Format: G12 (badge "D.4")
+- Title: "Step D.4 — Fix it, press F5 again"
+- Body: "Fix the line. Save with Ctrl+S. Press F5 again. Repeat until the game window opens."
+- Image: `d1_walkD_step4.png` — script editor with the corrected line + Ctrl+S indicator.
+- Notes: this is the loop they'll do all day.
+
+### 10.9 Chunk #1b — Variable naming freedom (slides 42-50, small new-concept arc)
+
+#### Slide D1-S042 — Concept 1/4: Title
+- Format: G04 Headline / Divider
+- Title: "Naming your variables"
+- Image: none
+- Notes: —
+
+#### Slide D1-S043 — Concept 2/4: Code doesn't care
+- Format: G04 Headline / Divider
+- Title: "Code doesn't care what you call a variable."
+- Subtitle: "The name is for **YOU**."
+- Image: none
+- Notes: —
+
+#### Slide D1-S044 — Concept 3/4: Programmers go silly
+- Format: G05 Build Narrative
+- Title: "Programmers go SILLY on purpose"
+- Body:
+  - "`foobar` and `bazinga` are decades-old programmer jokes — built right into real codebases."
+  - "Even Claude (the AI in your editor) types nonsense words like `fligerbigitibetting` when it's just thinking out loud."
+  - "Making code feel personal makes it more fun to read AND more fun to write."
+- Image: none
+- Notes: —
+
+#### Slide D1-S045 — Example 1/3: Side-by-side comparison
+- Format: G10 Board Example
+- Title: "Both work — pick your favourite"
+- Body (two stacked code blocks):
+  ```gdscript
+  var score := 0
+  ```
+  vs
+  ```gdscript
+  var skibidi_score := 0
+  ```
+- Caption: "Identical to the computer. The name is your choice."
+- Image: none
+- Notes: —
+
+#### Slide D1-S046 — Example 2/3: Kid question
+- Format: G04 Headline / Divider
+- Title: "What's the funniest variable name you can think of?"
+- Image: none
+- Notes: instructor takes 2-3 answers from the room.
+
+#### Slide D1-S047 — Example 3/3: Takeaway
+- Format: G04 Headline / Divider
+- Title: "Your code, your names."
+- Image: none
+- Notes: —
+
+#### Slide D1-S048 — How-it's-used: real codebases
+- Format: G04 Headline / Divider
+- Title: "Real game studios do this every day"
+- Subtitle: "Codebases are full of inside jokes, pet names, and references hidden in variable names. It's part of the culture."
+- Image: none
+- Notes: —
+
+#### Slide D1-S049 — Where-in-our-game
+- Format: G11 Code Screenshot
+- Title: "Your two NEW variables go HERE"
+- Body: "Right below your chunk #1a variables, you've got another `#@todo` block waiting for two more — names of your choosing."
+- Image: `d1_chunk1b_where.png` — screenshot of main.gd lines 44-48 with a red overlay rectangle covering lines 46-47 (gap between `#@todo` on line 45 and `#@end` on line 48).
+- Notes: —
+
+#### Slide D1-S050 — Example + TODO side-by-side
+- Format: G09 + G11 composite
+- Title: "Your task: chunk #1b"
+- Body LHS (board example, big monospace centred):
+  ```gdscript
+  var skibidi_speed := 99
+  ```
+- Body RHS (image): `d1_chunk1b_todo.png` — Godot screenshot of main.gd lines 44-48, red overlay on the gap.
+- Caption below RHS: "Make TWO variables — any name, any starting number. Go weird if you want."
+- Notes: kids type.
+
+### 10.10 Chunk #6a — Boolean (slides 51-62, full new-concept arc)
+
+#### Slide D1-S051 — Concept 1/4: Title
+- Format: G04 Headline / Divider
+- Title: "Boolean"
+- Image: none
+- Notes: —
+
+#### Slide D1-S052 — Concept 2/4: Two possible values
+- Format: G04 Headline / Divider
+- Title: "A variable with only TWO possible values."
+- Image: none
+- Notes: —
+
+#### Slide D1-S053 — Concept 3/4: true or false
+- Format: G04 Headline / Divider
+- Title: "Those two values: `true` or `false`."
+- Subtitle: "No numbers. No text. Just yes or no."
+- Image: none
+- Notes: —
+
+#### Slide D1-S054 — Concept 4/4: Yes/no switch
+- Format: G04 Headline / Divider
+- Title: "Boolean = a YES/NO switch."
+- Image: none
+- Notes: —
+
+#### Slide D1-S055 — Example 1/4: Light switch ON
+- Format: G12 Screenshot + Caption
+- Title: "The light switch"
+- Body: "`light_on = true`"
+- Image: `d1_chunk6a_switch_on.png` — clip art of a light switch in ON position.
+- Notes: —
+
+#### Slide D1-S056 — Example 2/4: Light switch OFF
+- Format: G12
+- Title: "Flip it."
+- Body: "`light_on = false`"
+- Image: `d1_chunk6a_switch_off.png` — same switch in OFF position.
+- Notes: "There's no 'sort of on'. ON or OFF. That's it."
+
+#### Slide D1-S057 — Example 3/4: Question
+- Format: G04 Headline / Divider
+- Title: "Is the light in this room on right now?"
+- Subtitle: "True or false?"
+- Image: none
+- Notes: instructor waits for room answer.
+
+#### Slide D1-S058 — Example 4/4: Takeaway
+- Format: G04 Headline / Divider
+- Title: "A boolean is a true/false switch. Like a light switch."
+- Image: none
+- Notes: —
+
+#### Slide D1-S059 — How-it's-used 1/2: Games in general
+- Format: G05 Build Narrative
+- Title: "Games are full of yes/no switches"
+- Body:
+  - "Is the player alive? `is_alive`"
+  - "Is the game paused? `is_paused`"
+  - "Is the door locked? `door_locked`"
+  - "All booleans."
+- Image: none
+- Notes: —
+
+#### Slide D1-S060 — How-it's-used 2/2: Pong specifically
+- Format: G04 Headline / Divider
+- Title: "Today in Pong: is the ball moving yet?"
+- Subtitle: "That's a boolean. We'll call it `ball_moving`."
+- Image: none
+- Notes: —
+
+#### Slide D1-S061 — Where-in-our-game
+- Format: G11 Code Screenshot
+- Title: "Where in `main.gd`?"
+- Body: "Just below your variables from #1b, there's a `#@todo` block for one boolean."
+- Image: `d1_chunk6a_where.png` — screenshot of main.gd lines 53-56 with red overlay on line 55 (the gap between `#@todo` on line 54 and `#@end` on line 56).
+- Notes: —
+
+#### Slide D1-S062 — Example + TODO side-by-side
+- Format: G09 + G11 composite
+- Title: "Your task: chunk #6a"
+- Body LHS (board example):
+  ```gdscript
+  var is_alive := true
+  ```
+- Body RHS (image): `d1_chunk6a_todo.png` — Godot screenshot of main.gd lines 53-56, red overlay on the gap.
+- Caption below RHS: "Make a true/false variable called `ball_moving`. Start it as `false`."
+- Notes: kids type.
+
+### 10.11 Chunk #6b — `if` statement (slides 63-75, full new-concept arc + after-works)
+
+#### Slide D1-S063 — Concept 1/3: Title
+- Format: G04 Headline / Divider
+- Title: "`if` statement"
+- Image: none
+- Notes: —
+
+#### Slide D1-S064 — Concept 2/3: Definition
+- Format: G04 Headline / Divider
+- Title: "An `if` runs a block of code ONLY WHEN something is true."
+- Image: none
+- Notes: —
+
+#### Slide D1-S065 — Concept 3/3: Syntax shape
+- Format: G10 Board Example
+- Title: "The shape"
+- Body (centred monospace):
+  ```gdscript
+  if [something is true]:
+      do this
+      and this
+  ```
+- Caption: "Indent matters. The indented block runs ONLY when the condition is true."
+- Image: none
+- Notes: —
+
+#### Slide D1-S066 — Example 1/3: If you're hungry → eat
+- Format: G12 Screenshot + Caption
+- Title: "IF you're hungry → eat."
+- Body: "Real life is full of `if` rules."
+- Image: `d1_chunk6b_hungry.png` — cartoon clip art of a stomach growling / kid reaching for snack.
+- Notes: instructor lists more: "If it's bedtime → brush teeth. If it's Saturday → no school. All `if`s."
+
+#### Slide D1-S067 — Example 2/3: Question
+- Format: G04 Headline / Divider
+- Title: "IF you finish your veggies → you get dessert."
+- Subtitle: "What if you DIDN'T finish?"
+- Image: none
+- Notes: kids answer aloud. Right answer: nothing happens — the rule didn't fire.
+
+#### Slide D1-S068 — Example 3/3: Takeaway
+- Format: G04 Headline / Divider
+- Title: "`if` is a rule that only fires when its condition is true."
+- Subtitle: "Otherwise: nothing."
+- Image: none
+- Notes: —
+
+#### Slide D1-S069 — How-it's-used 1/2: Games in general
+- Format: G05 Build Narrative
+- Title: "Every game runs on `if` checks. Every. Single. Frame."
+- Body:
+  - "if button pressed → jump"
+  - "if enemy near → attack"
+  - "if health = 0 → game over"
+- Image: none
+- Notes: —
+
+#### Slide D1-S070 — How-it's-used 2/2: Pong specifically
+- Format: G04 Headline / Divider
+- Title: "Today in Pong:"
+- Subtitle: "IF the player has NOT pressed Space yet → freeze the ball. Use `return` to skip the rest of the frame."
+- Image: none
+- Notes: —
+
+#### Slide D1-S071 — Where-in-our-game
+- Format: G11 Code Screenshot
+- Title: "Where in `main.gd`?"
+- Body: "Inside the `_process` function, near the top."
+- Image: `d1_chunk6b_where.png` — screenshot of main.gd lines 70-77 with red overlay covering lines 73-76 (gap between `#@todo` on line 72 and `#@end` on line 77).
+- Notes: —
+
+#### Slide D1-S072 — Example + TODO side-by-side
+- Format: G09 + G11 composite
+- Title: "Your task: chunk #6b"
+- Body LHS (board example):
+  ```gdscript
+  if is_alive == false:
+      return
+  ```
+- Body RHS (image): `d1_chunk6b_todo.png` — Godot screenshot of main.gd lines 70-77, red overlay on the gap.
+- Caption below RHS: "When the player presses Space → flip `ball_moving` to true. While `ball_moving` is still false → `return` to freeze the ball."
+- Notes: —
+
+#### Slide D1-S073 — After-works payoff
+- Format: G12 Screenshot + Caption
+- Title: "It works! The ball waits for Space."
+- Body: "Press F5. The ball sits frozen at the centre until you tap **Space**. Then it moves."
+- Image: `d1_chunk6b_afterworks.png` — running Pong showing the ball at centre (pre-Space) and a second smaller inset showing the ball mid-flight (post-Space). Caption arrow between them.
+- Notes: first visible game-behavior moment. Celebrate it.
+
+### 10.12 Chunk #2 — `+=` shortcut (slides 74-76, slim extension)
+
+#### Slide D1-S074 — Recap
+- Format: G04 Headline / Divider
+- Title: "Updating a variable"
+- Body: "We already know `var` makes a variable. Now we UPDATE one. `x = x + 1` works — but `x += 1` is the shortcut every programmer uses for the rest of their life."
+- Image: none
+- Notes: —
+
+#### Slide D1-S075 — Example + TODO side-by-side
+- Format: G09 + G11 composite
+- Title: "Your task: chunk #2"
+- Body LHS (board example):
+  ```gdscript
+  score = score + 1
+  # …same thing, shorter:
+  score += 1
+  ```
+- Body RHS (image): `d1_chunk2_todo.png` — Godot screenshot of main.gd lines 80-84, red overlay on the gap between `#@todo` (line 81) and `#@end` (line 84).
+- Caption below RHS: "Add `ball_speed_x` to `ball.position.x` every frame. Same for y. The ball will start moving (and drift off-screen — we'll catch it next)."
+- Notes: —
+
+#### Slide D1-S076 — After-works payoff (small)
+- Format: G12 Screenshot + Caption
+- Title: "The ball moves now"
+- Body: "Press F5, then Space. The ball drifts off the right side of the screen. That's expected — chunk #4 catches it."
+- Image: `d1_chunk2_afterworks.png` — short clip / still showing the ball mid-drift.
+- Notes: —
+
+### 10.13 Chunk #4 — `if / else` (slides 77-89, full new-concept arc + after-works)
+
+#### Slide D1-S077 — Concept 1/3: Title
+- Format: G04 Headline / Divider
+- Title: "`if` / `else`"
+- Image: none
+- Notes: —
+
+#### Slide D1-S078 — Concept 2/3: The else branch
+- Format: G04 Headline / Divider
+- Title: "`else` is the OTHERWISE branch."
+- Subtitle: "When the `if` is NOT true → run the `else` block instead."
+- Image: none
+- Notes: —
+
+#### Slide D1-S079 — Concept 3/3: One always runs
+- Format: G04 Headline / Divider
+- Title: "`if / else` = two paths. ONE always runs."
+- Image: none
+- Notes: —
+
+#### Slide D1-S080 — Example 1/3: Fork in the road
+- Format: G12 Screenshot + Caption
+- Title: "Fork in the road"
+- Body: "Sign reads: IF it's daytime → go left. ELSE → go right."
+- Image: `d1_chunk4_fork.png` — clip art of a road sign at a forked path.
+- Notes: —
+
+#### Slide D1-S081 — Example 2/3: Question
+- Format: G04 Headline / Divider
+- Title: "IF it's raining → umbrella."
+- Subtitle: "ELSE → ?"
+- Image: none
+- Notes: kids answer aloud. Sunglasses, hat, nothing. Whatever. Point is: ELSE is the other path.
+
+#### Slide D1-S082 — Example 3/3: Takeaway
+- Format: G04 Headline / Divider
+- Title: "One of the two paths ALWAYS runs."
+- Image: none
+- Notes: —
+
+#### Slide D1-S083 — How-it's-used 1/2: Games in general
+- Format: G05 Build Narrative
+- Title: "Two-outcome checks are everywhere"
+- Body:
+  - "if you have the key → open the door, else → it stays locked"
+  - "if HP > 0 → take damage, else → game over"
+  - "if input pressed → move, else → idle"
+- Image: none
+- Notes: —
+
+#### Slide D1-S084 — How-it's-used 2/2: Pong specifically
+- Format: G04 Headline / Divider
+- Title: "Today in Pong:"
+- Subtitle: "IF the ball hit the top OR bottom wall → flip its vertical speed. ELSE → let it keep going."
+- Image: none
+- Notes: —
+
+#### Slide D1-S085 — Where-in-our-game
+- Format: G11 Code Screenshot
+- Title: "Where in `main.gd`?"
+- Body: "Inside `_process`, right after we move the ball."
+- Image: `d1_chunk4_where.png` — screenshot of main.gd lines 87-94 with red overlay covering lines 90-93 (gap between `#@todo` on line 89 and `#@end` on line 94).
+- Notes: —
+
+#### Slide D1-S086 — Example + TODO side-by-side
+- Format: G09 + G11 composite
+- Title: "Your task: chunk #4"
+- Body LHS (board example):
+  ```gdscript
+  if hungry:
+      eat()
+  else:
+      sleep()
+  ```
+- Body RHS (image): `d1_chunk4_todo.png` — Godot screenshot of main.gd lines 87-94, red overlay on the gap.
+- Caption below RHS: "When the ball goes off the top OR bottom → flip `ball_speed_y`. Else → keep going (use `pass` for now)."
+- Notes: —
+
+#### Slide D1-S087 — After-works payoff
+- Format: G12 Screenshot + Caption
+- Title: "The ball bounces"
+- Body: "Press F5, then Space. The ball ricochets off the top and bottom walls now. It still flies off the LEFT and RIGHT sides — chunk #5 fixes that."
+- Image: `d1_chunk4_afterworks.png` — Pong screenshot showing the ball mid-bounce off a wall.
+- Notes: —
+
+### 10.14 Chunk #3 — `if` (single condition, slides 88-90, slim extension)
+
+#### Slide D1-S088 — Recap
+- Format: G04 Headline / Divider
+- Title: "`if` — without an else"
+- Body: "Same `if` from chunk #6b. This time we use it WITHOUT an `else`. If the check fails → nothing happens (no else, no other path)."
+- Image: none
+- Notes: —
+
+#### Slide D1-S089 — Example + TODO side-by-side
+- Format: G09 + G11 composite
+- Title: "Your task: chunk #3"
+- Body LHS (board example):
+  ```gdscript
+  if score > 5:
+      print("winning")
+  ```
+- Body RHS (image): `d1_chunk3_todo.png` — Godot screenshot of main.gd lines 99-103, red overlay on the gap between `#@todo` (line 100) and `#@end` (line 103).
+- Caption below RHS: "When the ball goes past the right edge → `print(\"point!\")` to the Output panel. (Real scoring comes in #5.)"
+- Notes: —
+
+#### Slide D1-S090 — After-works payoff (small)
+- Format: G12 Screenshot + Caption
+- Title: "'point!' shows up"
+- Body: "Press F5. Let the ball go past the right edge. Look at the Output panel — `point!` prints."
+- Image: `d1_chunk3_afterworks.png` — close-up of the Output panel showing the `point!` line.
+- Notes: —
+
+### 10.15 Chunk #5 — Comparison operators (slides 91-102, full new-concept arc + after-works)
+
+#### Slide D1-S091 — Concept 1/3: Title
+- Format: G04 Headline / Divider
+- Title: "Comparison operators"
+- Image: none
+- Notes: —
+
+#### Slide D1-S092 — Concept 2/3: Symbols
+- Format: G10 Board Example
+- Title: "`>` and `<`"
+- Body (large, centred):
+  - "`>` means GREATER THAN"
+  - "`<` means LESS THAN"
+- Image: none
+- Notes: read each aloud. The "alligator eats the bigger number" mnemonic if you want.
+
+#### Slide D1-S093 — Concept 3/3: Inside `if`
+- Format: G10 Board Example
+- Title: "Use them inside `if`"
+- Body (centred monospace):
+  ```gdscript
+  if score > 5:
+      print("winning")
+  ```
+- Caption: "Read aloud: IF score is GREATER THAN 5, print 'winning'."
+- Image: none
+- Notes: —
+
+#### Slide D1-S094 — Example 1/4: Rollercoaster height
+- Format: G12 Screenshot + Caption
+- Title: "The rollercoaster"
+- Body: "YOU MUST BE THIS TALL → 48 inches"
+- Image: `d1_chunk5_rollercoaster.png` — clip art of a rollercoaster height chart, red line at 48 in.
+- Notes: classic kid-life example.
+
+#### Slide D1-S095 — Example 2/4: Question
+- Format: G04 Headline / Divider
+- Title: "You're 50 inches tall."
+- Subtitle: "Can you ride? What's the check? `your_height > 48` — true or false?"
+- Image: none
+- Notes: kids answer aloud. Right answer: true. They get on.
+
+#### Slide D1-S096 — Example 3/4: Scoreboard comparison
+- Format: G12 Screenshot + Caption
+- Title: "Who wins?"
+- Body: "Player 1: **7**   vs   Player 2: **4**"
+- Image: `d1_chunk5_scoreboard.png` — clip art of a two-player scoreboard. Caption underneath: "`7 > 4` → Player 1 wins."
+- Notes: —
+
+#### Slide D1-S097 — Example 4/4: Takeaway
+- Format: G04 Headline / Divider
+- Title: "`>` and `<` let `if` compare two numbers."
+- Image: none
+- Notes: —
+
+#### Slide D1-S098 — How-it's-used 1/2: Games in general
+- Format: G05 Build Narrative
+- Title: "Games are constantly comparing numbers"
+- Body:
+  - "is score > high score?"
+  - "is health < 20%?"
+  - "is enemy distance < 100 pixels?"
+  - "is timer == 0?"
+- Image: none
+- Notes: —
+
+#### Slide D1-S099 — How-it's-used 2/2: Pong specifically
+- Format: G04 Headline / Divider
+- Title: "Today in Pong:"
+- Subtitle: "Is the ball past the right edge? (`ball.x > SCREEN_W`) → left player scores. Past the left edge? (`ball.x < 0`) → right player scores."
+- Image: none
+- Notes: —
+
+#### Slide D1-S100 — Where-in-our-game
+- Format: G11 Code Screenshot
+- Title: "Where in `main.gd`?"
+- Body: "Same area you put the `print(\"point!\")` test. We're upgrading it to real scoring."
+- Image: `d1_chunk5_where.png` — screenshot of main.gd lines 105-114 with red overlay covering lines 108-113 (gap between `#@todo` on line 107 and `#@end` on line 114).
+- Notes: —
+
+#### Slide D1-S101 — Example + TODO side-by-side
+- Format: G09 + G11 composite
+- Title: "Your task: chunk #5"
+- Body LHS (board example):
+  ```gdscript
+  if lives == 0:
+      game_over()
+  ```
+- Body RHS (image): `d1_chunk5_todo.png` — Godot screenshot of main.gd lines 105-114, red overlay on the gap.
+- Caption below RHS: "Use `>` for the right edge and `<` for the left edge. Bump the correct score and call `reset_ball()`."
+- Notes: —
+
+#### Slide D1-S102 — After-works payoff
+- Format: G12 Screenshot + Caption
+- Title: "The scoreboard counts!"
+- Body: "Press F5, then Space. Score a point past either edge. The number at the top of the screen jumps up."
+- Image: `d1_chunk5_afterworks.png` — Pong running with the scoreboard reading e.g. `1 : 0` after a point.
+- Notes: payoff moment — game now has real stakes.
+
+### 10.16 Chunk #1b-suffix — Display silly vars on scoreboard (slides 103-105, slim extension)
+
+#### Slide D1-S103 — Recap
+- Format: G04 Headline / Divider
+- Title: "Remember your silly variables?"
+- Body: "Time to put your `#1b` variables ON SCREEN. We use `str()` to turn numbers into text so we can stick them onto the scoreboard."
+- Image: none
+- Notes: —
+
+#### Slide D1-S104 — Example + TODO side-by-side
+- Format: G09 + G11 composite
+- Title: "Your task: chunk #1b-suffix"
+- Body LHS (board example):
+  ```gdscript
+  label.text = "Speed: " + str(skibidi_speed)
+  ```
+- Body RHS (image): `d1_chunk1b_suffix_todo.png` — Godot screenshot of main.gd lines 119-122, red overlay on line 121 (gap between `#@todo` on line 120 and `#@end` on line 122).
+- Caption below RHS: "Append your two silly variables onto `score_label.text`. Decorate with stars, emojis, whatever you want."
+- Notes: —
+
+#### Slide D1-S105 — After-works payoff
+- Format: G12 Screenshot + Caption
+- Title: "Your variables, live on the scoreboard"
+- Body: "Run it. The scoreboard now shows your skibidi_speed (or whatever you called it) right next to the score."
+- Image: `d1_chunk1b_suffix_afterworks.png` — Pong running with the scoreboard showing the customized text suffix.
+- Notes: high personalization payoff. Have kids show their neighbour.
+
+### 10.17 Remaining sections — TO BE AUTHORED IN A FOLLOW-UP PASS
+
+> **python-pptx chat: stop emitting slides at S105.** The sections below are placeholders. They reference content that already exists in §6 (Personalization), §7 (Final Challenge), and §8 (Asset reference recap) of this file, but those sections have NOT yet been broken down into per-slide blueprints. A follow-up authoring pass will fill in §10.17a through §10.17d using the same schema as above. Do not invent slides for these sections — leave them out of the v1 deck build, or stub them as section-divider placeholders only.
+
+#### §10.17a — Section divider: Personalization
+- Format: G04 Headline / Divider
+- Title: "Make it yours"
+- Subtitle: "Six beats. Pick the ones you want."
+- Slide range when authored: ~S106 — S123 (estimate)
+- Source content: §6 "Personalization layer" of this file.
+
+#### §10.17b — Section divider: Final Challenge
+- Format: G04 Headline / Divider
+- Title: "Final Challenge — `player2.gd`"
+- Subtitle: "Kick out the AI. Make Pong 2-player."
+- Slide range when authored: ~S124 — S130 (estimate)
+- Source content: §7 "Stretch goals — Final Challenge" of this file.
+
+#### §10.17c — Asset reference recap
+- Format: G08 Asset Pack Card
+- Title: "Day 1 assets: none"
+- Body: "Day 1 used zero imported art. Every visible thing was a `ColorRect`. From Day 2 on, we use Kenney.nl asset packs."
+- Slide range: ~S131 (single slide)
+- Source content: §8 of this file.
+
+#### §10.17d — Export-to-exe walkthrough (Beat 6)
+- Slide range: ~S132 — S141 (estimate ~10 step shots)
+- Source content: §6 Beat 6 of this file.
+
+#### §10.17e — Day closer
+- Format: G02 Timeline / Closer
+- Title: "Tomorrow: Pac-Man"
+- Subtitle: "1980. The next leap. We're using tiles instead of rectangles."
+- Slide range: S142 (last slide)
+- Source content: BIBLE §15 narrative arc.
+
+### 10.18 Build-time notes for python-pptx chat
+
+- **Master frame**: every slide gets the iCode master (logo top-left, day tab "Day 1" top-right, page-number bottom-right) per `SLIDES_FORMATS.md` "master frame" spec.
+- **Day tab color**: D1 = iCode red. (Confirm against brand pack when it lands.)
+- **Walkthrough step badges**: G12 slides with a step ID (e.g. "A.1", "C.3") render the badge as a small filled circle top-right of the screenshot, badge text inside. python-pptx implements this as a single `Shape` per slide.
+- **Red highlight overlays**: described in plain text in each `Image:` field. Default shape is a 4px-stroke red rectangle (no fill, slight transparency on edges OK). If multiple targets per slide, list each separately.
+- **Speaker notes**: the `Notes:` field on each slide may be populated into the PPTX speaker-notes pane (optional — instructor can also just reference this file as a cue card per `SLIDES_FORMATS.md` open spec item 5).
+- **Slide count v1 (lesson portion only, S001-S105)**: **105 slides**. Adding §10.17 sections later brings D1 to ~142 slides total.
+- **Verification before build**: re-run §9 checklist on this file. If `main.gd` line numbers shift, the `where` and `todo` screenshots need re-capturing and the body text in S031, S032, S033, S049, S050, S061, S062, S071, S072, S075, S085, S086, S089, S100, S101, S104 needs updating (every slide that references a `main.gd` line range).
