@@ -1,0 +1,34 @@
+# Godot import cache (machine-specific, regenerated on first open)
+.godot/
+*.import
+
+# Generated student ZIPs
+dist/
+
+# Build-script staging
+.tmp/
+
+# Smoke-test logs (ephemeral)
+_stderr.log
+_stdout.log
+_*.log
+
+# Ephemeral build specs (delete after build, but exclude if missed)
+_BUILD_SPEC.md
+
+# Swarm cascade state (briefs, assumptions, leaf workspaces)
+.swarm/
+
+# Python bytecode (sim/balance scripts)
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# OS junk
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor
+.vscode/
+.idea/

@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=4 uid="uid://b8d5p_str_l"]
+
+[ext_resource type="PackedScene" path="res://assets/kenney_racing/roadStraightLong.glb" id="1"]
+
+[node name="Straight_Long" type="Node3D"]
+
+[node name="Road" parent="." instance=ExtResource("1")]

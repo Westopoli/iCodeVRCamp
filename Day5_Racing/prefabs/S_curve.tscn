@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=4 uid="uid://b8d5p_scrv"]
+
+[ext_resource type="PackedScene" path="res://assets/kenney_racing/roadCurved.glb" id="1"]
+
+[node name="S_Curve" type="Node3D"]
+
+[node name="Curve1" parent="." instance=ExtResource("1")]
+
+[node name="Curve2" parent="." instance=ExtResource("1")]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, -8)

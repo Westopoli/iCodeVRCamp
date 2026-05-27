@@ -1,0 +1,10 @@
+{
+  "mass": 1126.0512606211962,
+  "engine_force": 3805.979803337389,
+  "brake_force": 6890.034719705341,
+  "max_steer_angle": 0.4046901732482429,
+  "front_grip": 1.1177236022644335,
+  "rear_grip": 0.8531394497535374,
+  "handbrake_grip_multiplier": 0.26657556384770253,
+  "throttle_powerslide_threshold": 0.5544689750325468
+}

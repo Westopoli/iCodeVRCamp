@@ -1,0 +1,18 @@
+[gd_scene load_steps=4 format=4 uid="uid://b8d5p_fnsh"]
+
+[ext_resource type="PackedScene" path="res://assets/kenney_racing/roadStraight.glb" id="1"]
+[ext_resource type="PackedScene" path="res://assets/kenney_racing/bannerTowerRed.glb" id="2"]
+[ext_resource type="PackedScene" path="res://assets/kenney_racing/flagCheckers.glb" id="3"]
+
+[node name="Finish" type="Node3D"]
+
+[node name="Road" parent="." instance=ExtResource("1")]
+
+[node name="BannerL" parent="." instance=ExtResource("2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0, 0)
+
+[node name="BannerR" parent="." instance=ExtResource("2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, 0)
+
+[node name="Flag" parent="." instance=ExtResource("3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
