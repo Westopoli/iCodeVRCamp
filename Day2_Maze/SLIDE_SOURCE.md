@@ -493,3 +493,215 @@ The header comment in `ghost_personalities.gd` lays out 3 options. Most natural:
 - [x] Each walkthrough (Pre-coding setup + Personalization + FC) appears exactly once at its lesson position.
 
 End-to-end smoke test: hand `BIBLE.md` + this file to a fresh Claude session, ask "draft slide bullets for Day 2." Output should require no follow-up clarification.
+
+---
+
+## 10. Slide blueprint (DRAFT — summary level, Phase 2.5 in progress, 2026-05-29)
+
+> **Status**: structural draft. Order + content topics + metaphors are locked at this level. Per-slide expansion (matching D1 §10 schema verbatim — title / body / image / notes per slide) is the next pass, gated on:
+> (a) Per-chunk RHS prose goal statement options (pending user pick — options to follow in chat).
+> (b) Historical-context slide content sourcing for Pac-Man (1980 revolutionary background).
+> (c) Day tab color for D2 (pending brand pack).
+>
+> The python-pptx build chat should NOT consume this draft. Per-slide expansion pass must land first.
+
+### 10.0 Decisions locked for D2
+
+Carried forward from BIBLE §TODO (locked 2026-05-26 / -27) plus user picks 2026-05-28 / -29:
+
+- **Two new concepts today** per BIBLE §4 Concept Map: **Loops** + **Functions**. Chunks #2 / #3 / #5 / #6 are variants of these two umbrellas, not separate new concepts. Boolean is a D1 refresher only.
+- **Source of truth for board examples + in-file code + as-typed code**: §3 chunk table + §5 lesson chunks of THIS file. Slides reference §5 verbatim — no new code invented at slide-author time.
+- **Side-by-side slide composition for every chunk**:
+  - **LHS**: board example (verbatim from §5).
+  - **RHS top**: prose goal statement, plain English — "what we want to happen" (not algorithmic, not step-by-step; goal-level). Options pending user pick.
+  - **RHS bottom**: Godot screenshot of `#@todo` block with red overlay.
+- **Locked metaphors**:
+  - for-range → **climbing stairs to your bedroom** (known count, 14 stairs, one repeated motion).
+  - while → **climbing stairs in the dark** (unknown count, same motion, stop when foot doesn't find another stair). Direct callback to for-range stairs for max contrast.
+  - function → **pizza order** (say `margherita`, kitchen makes margherita; define recipe once, call name many times).
+  - parameter → **pizza extends** (`margherita("large")` vs `margherita("small")` — same recipe, different input).
+  - return → **pizza extends** (kitchen hands the pizza BACK; `var dinner = margherita("large")` — dinner IS the pizza).
+  - boolean → **D1 light-switch callback only** (1-slide refresher in chunk #6, not a fresh teach).
+- **Walkthroughs A / B / C / D for already-taught Day 1 flows** = **2-slide jog-memory pack each** (8 slides total across all four). Pattern per pack:
+  1. **Challenge slide**: "Do this the same way you did yesterday." Kid struggles for a moment, tries to remember.
+  2. **Hint slide**: text + arrows only, no screenshots — e.g. `FileSystem → main.gd → double-click`. Memory jog for kids who blanked.
+- **Walkthrough T (TileMap)** is NEW today — full walkthrough with screenshots (8 slides: 2 concept + 6 click steps).
+- **Historical-context slide added to opener pack** — Pac-Man's revolutionary status (1980, invented maze chase, first character-with-personality, first cutscenes, first arcade game marketed beyond young men, etc.). Equivalent slide retrofitted to D1 Pong opener in a later pass (D1 SLIDE_SOURCE.md edit, deferred).
+
+### 10.1 Opener pack (~7 slides)
+
+1. Welcome / day title — "Day 2 — Pac-Man · 1980 · Namco"
+2. Today we'll build — finished Pac-Man screenshot + 1-line pitch
+3. **Why Pac-Man was revolutionary** (NEW) — historical context: pre-Pac-Man arcade was almost all space shooters. Pac-Man invented the maze chase, the character-with-personality, the cutscene, the merchandising tie-in. First arcade game massively marketed beyond young men. Without it: no Mario, no Sonic, no character mascots.
+4. Yesterday → Today — Pong recap (vars + conditions) → today adds Loops + Functions
+5. 5-day arc timeline — Day 2 highlighted, Day 1 ticked
+6. Today's concepts — **Loops** + **Functions** (the two)
+7. GDScript vs Python — 4-pattern side-by-side (for-range, for-each, while, `def` → `func`)
+
+### 10.2 Pre-coding setup (~12 slides)
+
+- Section divider — "Pre-coding setup"
+- **Walk A — Open the Day 2 project (jog-memory, 2 slides)**:
+  1. Challenge: "Open the Day 2 Maze project the same way you did yesterday."
+  2. Hint (text + arrows, no screenshots): `Godot launcher → Import → Day2_Maze/project.godot → Import & Edit`
+- **Walk B — Open main.gd (jog-memory, 2 slides)**:
+  1. Challenge: "Open `main.gd` and switch to the Script editor."
+  2. Hint: `FileSystem panel → main.gd → double-click → Script editor`
+- **Walkthrough T — TileMap orientation (NEW, full ~8 slides)**:
+  - 2 concept slides — TileSet (palette) vs TileMapLayer (canvas); today's two layers Walls + Dots share the same TileSet; kid's API surface is `wall_layer.get_cell_source_id(cell)`
+  - 6 click-step slides — click Walls → Inspector Tile Set → Edit → TileSet panel opens → click source row → atlas chops appear → back to 2D button
+
+### 10.3 Lesson chunks
+
+- Section divider — "Lesson chunks"
+
+#### Chunk #1 — `for i in range(N)` (FULL ARC, ~11 slides)
+- **Concept root (4 slides)**: word "loop" + meaning prompt ("what does *loop* mean? roller coaster, rope") + root ("loop = repeating") + shape (G10 board ex `for i in range(3): print(i)`)
+- **Example/metaphor (3-4 slides)**: **stairs to your bedroom** — 14 stairs, you know the count, one motion repeated; question slide ("how many runs for `range(5)`?"); trick slide ("`range(0)`?"); takeaway
+- **How-it's-used (2 slides)**: games general (spawn 50 trees / 12 enemies / 4 ghost eyes) + Pac-Man (spawn 3 ghosts in pen)
+- **Where-in-our-game (1 slide)**: screenshot main.gd:63-66 with red overlay on the `#@todo` gap inside `_ready()`
+- **Side-by-side (1, MANDATORY)**:
+  - **LHS**: `for i in range(3):` / `    print(i)` (verbatim §5 board ex)
+  - **RHS top**: PROSE GOAL — *pending pick (options to follow)*
+  - **RHS bottom**: `d2_chunk1_todo.png` — main.gd:63-66 red overlay
+- **No after-works** (payoff deferred to chunk #2)
+
+#### Walk C — Run the project (jog-memory, 2 slides)
+1. Challenge: "Run your game."
+2. Hint: `F5 → Set Main Scene? → Select Current → game window opens → F8 to stop`
+
+#### Walk D — Reading an error (jog-memory, 2 slides)
+1. Challenge: "Game didn't open? Find the error."
+2. Hint: `Output panel → click blue line number → fix → Ctrl+S → F5 again`
+
+#### Chunk #2 — `for item in list` (PURE SLIM, 3 slides)
+- **Recap (1 slide)**: "Same `for` keyword. New shape. Last time you wrote a number after `range`. This time you write the name of a thing you already have."
+- **Side-by-side (1, MANDATORY)**:
+  - **LHS**: `for colour in ["red", "green", "blue"]:` / `    print(colour)` (verbatim §5)
+  - **RHS top**: PROSE GOAL — *pending pick*
+  - **RHS bottom**: `d2_chunk2_todo.png` — main.gd:102-105 red overlay
+- **After-works (1 slide)**: "Ghosts patrol!" — running screenshot post 2-sec release. First big visible payoff of the day.
+
+#### Chunk #3 — `while` (SMALL-ARC + dual hole, ~13 slides)
+- **Recap-bridge (1 slide)**: "Loops have a cousin: `while`."
+- **Concept root (3 slides)**: word "while" = "as long as" + plain-English meaning + shape (G10 board ex `var n := 0; while n < 5: print(n); n += 1`)
+- **For-vs-while disambiguator (1 slide, LOAD-BEARING)**: `for` = you KNOW the count (yesterday, 14 stairs to your bedroom). `while` = you DON'T know (tonight, stairs in the dark). Same motion. Different stopping rule.
+- **Example/metaphor (2-3 slides)**: **stairs in the dark** — step up, step up, stop when foot doesn't find another stair; question slide (how many runs for `n := 3; while n > 0: print(n); n -= 1`?); takeaway
+- **How-it's-used (2 slides)**: games general (scan grid / count coins / fall until ground) + Pac-Man (scan all 28 × 31 = 868 tiles, count dots, that's the win target)
+- **Where-in-our-game (2 slides)**: caller location (main.gd:70-72) + body location (main.gd:202-214)
+- **Side-by-side TWO holes (2 slides, paired)**:
+  - **3a (caller)**: LHS `dots_remaining = count_dots()`. RHS top = PROSE GOAL — *pending pick*. RHS bottom = `d2_chunk3a_todo.png` main.gd:70-72.
+  - **3b (body)**: LHS `var n := 0; while n < 5: print(n); n += 1` (verbatim §5). RHS top = PROSE GOAL — *pending pick*. RHS bottom = `d2_chunk3b_todo.png` main.gd:202-214.
+- **No after-works** (count_dots produces invisible number; payoff is implicit in win-condition existence)
+
+#### Chunk #4 — `func` no params (FULL ARC, ~12 slides)
+- **Concept root (4 slides)**: word "function" — "what's the FUNCTION of a remote? a calculator? a door?" → "the thing it DOES." Function = a NAMED block of code. Shape (G10 `func say_hi(): print("hi!")` + 2 calls)
+- **Example/metaphor (3 slides)**: **pizza order** — say `margherita`, kitchen makes margherita pizza; recipe (cheese + tomato + basil + bake) defined behind counter once, called by name many times. Question slide ("how many `hi!`s if we call `say_hi()` three times?"). Takeaway.
+- **How-it's-used (2 slides)**: games general (`jump()` / `die()` / `spawn_enemy()` — define once, call from many places, no copy-paste) + Pac-Man (ghost catches player → recipe is `reset_player()`)
+- **Where-in-our-game (1 slide)**: screenshot main.gd:132-139 with red overlay on the gap
+- **Side-by-side (1, MANDATORY)**:
+  - **LHS**: `func say_hi():` / `    print("hi!")` (verbatim §5 board ex)
+  - **RHS top**: PROSE GOAL — *pending pick*
+  - **RHS bottom**: `d2_chunk4_todo.png` — main.gd:132-139 red overlay
+- **After-works (1 slide)**: "Ghost catches you → respawn!" — before/after screenshot pair
+
+#### Chunk #5 — `func` with a parameter (SMALL-ARC, ~9 slides)
+- **Recap-bridge (1 slide)**: "Functions can take INPUTS. Same `func`. Now there's something between the parentheses."
+- **Concept root (3 slides)**: word "parameter" — info you HAND TO the function when you call it. Shape (G10 board ex `func add_points(amount): score += amount`).
+- **Example/metaphor (2 slides)**: **pizza extends** — `margherita("large")` vs `margherita("small")`. Same recipe, different input → different output. Takeaway.
+- **How-it's-used (1 slide, Pac-Man)**: `move_player(direction)` — direction is the parameter; player moves wherever the arrow key points.
+- **Where-in-our-game (1 slide)**: screenshot main.gd:154-162, highlight `direction: Vector2i` in the signature
+- **Side-by-side (1, MANDATORY)**:
+  - **LHS**: `func add_points(amount):` / `    score += amount` (verbatim §5)
+  - **RHS top**: PROSE GOAL — *pending pick*
+  - **RHS bottom**: `d2_chunk5_todo.png` — main.gd:154-162 red overlay
+- **After-works (1 slide)**: "Arrow keys move the player!" — player mid-tile slide screenshot
+
+#### Chunk #6 — `func` returning a bool (SMALL-ARC + boolean refresher, ~10 slides)
+- **Recap-bridge (1 slide)**: "Functions can HAND BACK an answer. That answer has a name: the **return value**."
+- **Concept root (3 slides)**: word "`return`" — function hands X back to the caller. Shape (G10 board ex `func double(n): return n * 2` + `var y = double(5)` → y is 10).
+- **Boolean refresher (1 slide, D1 CALLBACK)**: "Remember booleans from yesterday? Light switch — true or false. Today our function hands back a true/false answer."
+- **Example/metaphor (2 slides)**: **pizza extends** — kitchen doesn't just MAKE the pizza, it HANDS IT BACK. The pizza IS the return value. `var dinner = margherita("large")` → dinner IS the pizza. Takeaway.
+- **How-it's-used (1 slide, games)**: yes/no checks everywhere — `hit_wall(cell)` / `is_alive()` / `in_range(target)`. Every check returns bool.
+- **How-it's-used (1 slide, Pac-Man)**: `hit_wall(cell)` — the player asks the Walls layer: "is there a wall here?" Walls answers true or false.
+- **Where-in-our-game (1 slide)**: screenshot main.gd:172-180, highlight `-> bool` in the signature
+- **Side-by-side (1, MANDATORY)**:
+  - **LHS**: `func is_even(n) -> bool:` / `    return n % 2 == 0` (verbatim §5)
+  - **RHS top**: PROSE GOAL — *pending pick*
+  - **RHS bottom**: `d2_chunk6_todo.png` — main.gd:172-180 red overlay
+- **After-works (1 slide)**: "The maze is alive!" — full-play screenshot. Walls block, tunnel wraps, ghosts patrol, dots chompable. End-of-morning celebration moment.
+
+### 10.4 Remaining sections — STUB (deferred to Phase 2.5b)
+
+Mirror D1 §10.17 sub-sectioning when authored:
+
+- **§10.4a** Section divider — Personalization. 7 beats from §6. Estimated ~25-30 slides.
+- **§10.4b** Section divider — Final Challenge (`ghost_personalities.gd`). Mirror map + 4 personality cards (Blinky / Pinky / Inky / Clyde) + 4 hole packs. Estimated ~25-35 slides.
+- **§10.4c** Asset recap — Kenney Tiny Dungeon atlas card (G08). Estimated ~3-5 slides.
+- **§10.4d** Export-to-exe walkthrough (Beat 6 of §6). Estimated ~6-8 slides.
+- **§10.4e** Day closer — "Tomorrow: Tower Defense." Estimated ~1-2 slides.
+
+### 10.5 Build-time notes for python-pptx chat (placeholder)
+
+- **Master frame**: iCode logo top-left, day tab top-right (D2 = TBD color, awaiting brand pack), page-number bottom-right per `SLIDES_FORMATS.md` master frame spec.
+- **Walkthrough step badges**: G12 slides with step IDs (e.g. "T.1") render the badge as a small filled circle top-right of the screenshot.
+- **Red highlight overlays**: described per-slide in `Image:` field, default 4px-stroke red rectangle.
+- **Speaker notes**: `Notes:` field per slide populated into the PPTX speaker-notes pane.
+- **Lesson-portion slide count (draft estimate)**: ~85-90 slides. Locked once per-slide expansion pass is done.
+- **Verification before build**: re-run §9 checklist. If `main.gd` line numbers shift, screenshots + line-reference body text must update.
+
+### 10.6 RHS prose-goal options (pending user pick)
+
+Per chunk, three options for the plain-English goal statement that sits ABOVE the Godot `#@todo` screenshot on the side-by-side slide. Goal-statement tone — what you'd tell a person if you wanted them to make this happen. Not algorithmic. Not step-by-step.
+
+**Note (2026-05-29)**: user flagged the "RHS code (kid types)" column below as needing re-review against the actual `Day2_Maze/main.gd` Complete version before locking prose choices. Code shown is sourced from §5 "Lesson chunks" of this file (which claims byte-identical to `main.gd` between `#@todo`/`#@end` markers per §9 last verified 2026-05-26). Re-verify before locking.
+
+#### Chunk #1 — `for i in range(N)` — spawn 3 ghosts
+
+| LHS board (pattern) | RHS code (kid types) | Prose goal options (RHS top) |
+|---|---|---|
+| `for i in range(3):`<br>`    print(i)` | `for i in range(3):`<br>`    spawn_ghost_at(pen_marker.position + Vector2(i * TILE, 0))` | **A.** Spawn three ghosts in the pen — but write the spawn call only once.<br><br>**B.** Make three ghosts appear in the pen when the game starts.<br><br>**C.** Get three ghosts into the pen at startup, lined up side by side, without copy-pasting. |
+
+#### Chunk #2 — `for item in list` — move every ghost each frame
+
+| LHS board (pattern) | RHS code (kid types) | Prose goal options (RHS top) |
+|---|---|---|
+| `for colour in ["red", "green", "blue"]:`<br>`    print(colour)` | `for ghost in ghosts:`<br>`    step_ghost(ghost)` | **A.** Every frame, give every ghost a chance to take one step.<br><br>**B.** Each frame, walk through all the ghosts and move each one.<br><br>**C.** Move all the ghosts — not just one — every frame. |
+
+#### Chunk #3a — caller (one-liner)
+
+| LHS board (pattern) | RHS code (kid types) | Prose goal options (RHS top) |
+|---|---|---|
+| *(paired with 3b — uses the while board ex from 3b)* | `dots_remaining = count_dots()` | **A.** Find out how many dots the maze has, and remember the number.<br><br>**B.** Count the dots so we know what the player has to chomp.<br><br>**C.** Get the dot total from `count_dots()` and store it in `dots_remaining`. |
+
+#### Chunk #3b — body of `count_dots()` (while loop)
+
+| LHS board (pattern) | RHS code (kid types) | Prose goal options (RHS top) |
+|---|---|---|
+| `var n := 0`<br>`while n < 5:`<br>`    print(n)`<br>`    n += 1` | `func count_dots() -> int:`<br>`    var count := 0`<br>`    var x := 0`<br>`    while x < MAZE_W:`<br>`        var y := 0`<br>`        while y < MAZE_H:`<br>`            if dot_layer.get_cell_source_id(Vector2i(x, y)) != -1:`<br>`                count += 1`<br>`            y += 1`<br>`        x += 1`<br>`    return count` | **A.** Walk every single tile in the maze and count up the ones with a dot on them.<br><br>**B.** Look at every cell in the 28 × 31 grid. Count the dots. Hand the total back.<br><br>**C.** Scan the whole maze. Count the dots. Return the count. |
+
+#### Chunk #4 — `func` no params — `reset_player()`
+
+| LHS board (pattern) | RHS code (kid types) | Prose goal options (RHS top) |
+|---|---|---|
+| `func say_hi():`<br>`    print("hi!")` | `func reset_player() -> void:`<br>`    player_cell = PLAYER_START`<br>`    player.position = cell_to_world(player_cell)`<br>`    player_moving = false`<br>`    current_dir = Vector2i.ZERO`<br>`    queued_dir = Vector2i.ZERO` | **A.** When a ghost catches the player, this is the recipe for un-doing the damage: send them home with a clean slate.<br><br>**B.** Send the player back to the starting tile and clear any movement they had going.<br><br>**C.** Reset the player. Position back to start. Movement cleared. Direction wiped. |
+
+#### Chunk #5 — `func` with parameter — `move_player(direction)`
+
+| LHS board (pattern) | RHS code (kid types) | Prose goal options (RHS top) |
+|---|---|---|
+| `func add_points(amount):`<br>`    score += amount` | `func move_player(direction: Vector2i) -> void:`<br>`    var next_cell := player_cell + direction`<br>`    if hit_wall(next_cell):`<br>`        return`<br>`    next_cell = wrap_cell(next_cell)`<br>`    player_cell = next_cell`<br>`    tween_player_to(cell_to_world(player_cell))` | **A.** Move the player one tile in the direction they pressed — but only if a wall isn't in the way.<br><br>**B.** Take one step in the given direction. Wall in front? Don't move. Tunnel edge? Wrap to the other side.<br><br>**C.** Given a direction, try to slide the player there. Bounce off walls. Wrap through tunnels. |
+
+#### Chunk #6 — `func` returning bool — `hit_wall(cell)`
+
+| LHS board (pattern) | RHS code (kid types) | Prose goal options (RHS top) |
+|---|---|---|
+| `func is_even(n) -> bool:`<br>`    return n % 2 == 0` | `func hit_wall(cell: Vector2i) -> bool:`<br>`    if cell.y < 0 or cell.y >= MAZE_H:`<br>`        return true`<br>`    if cell.x < 0 or cell.x >= MAZE_W:`<br>`        return not (cell.y in TUNNEL_ROWS)`<br>`    return wall_layer.get_cell_source_id(cell) != -1` | **A.** Answer the question: is this tile a wall, or can we walk through it?<br><br>**B.** Given a cell, hand back `true` if it's blocked, `false` if it's open. Off-grid tiles are walls — except on tunnel rows.<br><br>**C.** Decide whether a tile blocks movement. Walls block. Open floor doesn't. Off the edge counts as a wall, unless you're on the tunnel row. |
+
+### 10.7 Pending decisions (blocking per-slide expansion)
+
+- [ ] **As-typed code re-verification** — user flagged 2026-05-29 that the actual code kids write needs a rethink before prose picks lock. Re-verify §5 + §10.6 RHS code column against `Day2_Maze/main.gd` Complete version. May result in §5 edits, which would cascade to §10.6 prose options.
+- [ ] **RHS prose pick (per chunk)** — A / B / C / remix for each of #1, #2, #3a, #3b, #4, #5, #6. Blocked on the verification above.
+- [ ] **Historical-context slide content** — Pac-Man 1980 revolutionary background. Sourcing pending.
+- [ ] **Day tab color for D2** — brand pack pending.
+- [ ] **D1 retrofit** — add equivalent historical-context slide to D1 Pong opener pack (currently 5-slide pack per D1 §10.1; would become 6).
