@@ -18,7 +18,7 @@ comments as a worksheet. Template does NOT compile until kids fill chunks
 
 Usage:
   .\build\build_templates.ps1            # build all days
-  .\build\build_templates.ps1 -Day Day1_Pong   # build one day
+  .\build\build_templates.ps1 -Day Day1_Pong_Game   # build one day
 
 .godot/ is always excluded from ZIPs (machine-specific import cache).
 .exe export stays manual via Godot's export dialog.
@@ -65,9 +65,12 @@ function Build-Zip {
     New-Item -ItemType Directory -Path $stageDir -Force | Out-Null
 
     # Copy project, excluding the machine-specific import cache.
-    Copy-Item -Path (Join-Path $ProjectDir "*") -Destination $stageDir -Recurse -Force
-    $godotCache = Join-Path $stageDir ".godot"
-    if (Test-Path $godotCache) { Remove-Item $godotCache -Recurse -Force }
+    # Use robocopy so .godot/ is skipped during traversal — Copy-Item walks
+    # into it first and dies on MAX_PATH for deep shader-cache subdirs.
+    # robocopy exit codes 0-7 = success; 8+ = real failure.
+    $rc = (robocopy $ProjectDir $stageDir /E /XD ".godot" /NFL /NDL /NJH /NJS /NP /R:1 /W:1) 2>&1 | Out-Null
+    if ($LASTEXITCODE -ge 8) { throw "robocopy failed for $ProjectDir (exit $LASTEXITCODE)" }
+    $global:LASTEXITCODE = 0
 
     # Strip solution markers in every .gd file.
     # Read/write via .NET so encoding is UTF-8 with no BOM (PS 5.1's

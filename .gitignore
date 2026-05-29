@@ -1,6 +1,8 @@
-# Godot import cache (machine-specific, regenerated on first open)
+# Godot import cache (machine-specific, regenerated on first open).
+# NOTE: `.import` files ARE tracked — they hold stable UIDs that .tscn
+# files reference. Excluding them breaks asset references on a fresh clone.
+# Only the regenerated .godot/imported/ cache is excluded.
 .godot/
-*.import
 
 # Generated student ZIPs
 dist/

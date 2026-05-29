@@ -1,5 +1,5 @@
 """
-Mirror of the tunable consts in Day3_BaseDef/main.gd.
+Mirror of the tunable consts in Day3_BaseDef_Game/main.gd.
 
 After tuning, hand-copy these values back into main.gd. The simulator
 imports this module; tune.py edits it; we read back final values at the

@@ -64,6 +64,52 @@ Five-day summer coding camp. Replaces a prior Unity + C# + VR camp that collapse
 | 4 | 2-player fighter | Objects + State + polish | 7 |
 | 5 | Racing game + Escape Sim (VR rotation) | No new code — creative application of all prior concepts | — |
 
+### Rules — Stretch Goals, TODO Authoring, Final Challenges (locked 2026-05-29)
+
+These rules supersede any earlier mention of mid-day stretch chunks in this BIBLE. Any older table cell or "as-built" note that tags a mid-day chunk as `stretch` / `[stretch]` / `(STRETCH)` is **historical**, not authoritative; remediation per-day is tracked in the triage plan.
+
+**R1 — Stretch goals.** Stretch = the day's **Final Challenge file only**. One per day, one bounded goal. No mid-day chunk is ever tagged as stretch. Mid-day chunks must sit at or below the day's concept ceiling for every kid line.
+
+**R2 — TODO line authoring.** Each kid-written line has **one purpose**. C-style simple. Nesting restrictions by day:
+  - **D1–D2:** no nested function calls inside other calls; no chained method calls (`foo().bar()`); no multi-concept expression stacks.
+  - **D3+:** nested function calls allowed (e.g. `shoot(get_target(enemies))`).
+  - **D4+:** object method chains allowed.
+
+  **Dense-line remediation algorithm** (apply when a current scaffold ships a kid line that packs multiple concepts):
+  1. Expand the dense line into multiple simple lines, each with one purpose.
+  2. Preserve this BIBLE's recorded **kid line-count** for that chunk where possible. Drift permitted where needed to meet R4 / R5.
+  3. From the expanded logic, pick which lines are pre-given (visible scaffold) vs student-written (`#@todo` block) based on what concept the chunk was really teaching ("spirit" of the original TODO).
+  4. Net effect: every kid line at-or-below the day's concept ceiling, surrounding logic becomes copy-along context.
+
+**R4 — No OO patterns before D4.** OO constructs (composed predicates, helper chains reading like method composition, methods-on-objects, polymorphism, classes) are **D4-only**. D1–D3 use flat-procedural style:
+  - Pre-given helpers must be **standalone**. One helper hides one chunk of gnarly API. Kid should never need to read 2–3 helper names to understand a single kid line.
+  - No `predicate_a(x) or predicate_b(x)` composition style anywhere kid will read it.
+  - Helper naming reflects what it *does* in plain terms (e.g. `spawn_pos_for(i)`, `cell_has_dot(x, y)`) — not stacks of `is_x` / `has_y` predicates.
+  - **Why:** D1–D3 kids have not seen objects, methods, classes, polymorphism. Helper chains that compose like methods front-load the OO mental model before it is taught.
+
+**R5 — Partial-function holes are valid (and preferred when whole-body exceeds ceiling).** When a function's complete body needs constructs beyond the day's concept ceiling, **do not** force the kid to own the whole body. Instead:
+  1. Pre-give the parts that exceed ceiling, in plain view inside the function body.
+  2. Place a single `#@todo` block around only the section the kid can write at the day's ceiling.
+  3. Annotate pre-given sections with a short `# Pre-given:` comment so the kid knows what's given vs what they wrote.
+
+  **Why:** earlier wording "kid writes whole function body" pushed prior sessions to either (a) skip the function or (b) hide too much logic in a chained helper soup. Partial-section ownership is the cleaner alternative — kid still learns the day's concept by writing the at-ceiling section, and doesn't have to confront constructs they haven't been taught.
+
+  **How to apply:** when a function has bounds / sentinel / edge-case lines needing ops beyond the day (e.g. D2 `hit_wall` needs `or`/`in`/`not`), wrap those in pre-given lines; kid's `#@todo` block holds only the at-ceiling section (D2 #6: the in-grid TileMap query that mirrors morning board example `return n % 2 == 0`).
+
+**R6 — Outcome-based TODO instructions, no pattern-prescribing hints.** TODO comments tell the kid **what** to produce, not **how** to write it line by line. Multiple valid implementations should pass.
+  - **Yes:** "Write `count_dots()` so it returns the total number of dot tiles in the maze."
+  - **No:** "Pattern: `var count = 0; var x = 0; while x < MAZE_W: ...; x += 1; return count`."
+  - No pseudo-code blocks. No "your function should look like…" templates inside TODO comments. No prescribed variable names or loop shapes beyond what is needed to identify the inputs / outputs / observable effect.
+  - Naming a *required output type* or a *required helper to call* is fine (those are contract terms, not implementation steps).
+  - **Why:** FC + chunks are R3-reskins of concepts taught that morning. If a kid already learned `for / while / func`, they don't need a one-true-path hint — they need a clear *outcome*. Pattern hints punish creative implementations and turn the lesson into transcription. The board-example slide already shows one shape; the TODO comment should not double down on the same shape and exclude others.
+  - **How to apply:** when authoring or editing a TODO comment, state goal in input → output terms. If a step is structurally required (e.g. "use a `while` loop" when the chunk teaches `while`), name the construct *category*, not the literal shape. Cross-check by asking: "could a kid pass this TODO with a `for`-loop instead of `while`?" — if yes, accept both; only forbid alternatives when the chunk's lesson construct is the actual subject being taught.
+
+**R3 — Final Challenge definition.** The Final Challenge is **a review of the day's TODO chunks**, presented all-at-once and **guided by pointer, not by walkthrough**.
+  - Difficulty ceiling = **same code constructs as the day's in-chunk TODOs**, nothing harder. No new concepts. If a current Final Challenge requires concepts beyond the day, **rewrite the Final Challenge**, not this rule.
+  - Framing = "review disguised as unlocking a new feature" — tangible payoff (new mode / new character / new behavior) but the code shape reuses what they already wrote that day.
+  - **Required Final Challenge slide** in each day's deck: maps each FC TODO → the earlier chunk(s) it mirrors. Core message: "contrast each FC TODO with what you already implemented earlier today — each one is nothing new, you already learned how to do it." No new code on this slide; pure pointer.
+  - This supersedes earlier "half-guided — slides give targeting rules in prose + diagrams" framing in the Final Challenge table for D2 and D3.
+
 ### Day 1 — Pong concept chunks (Vars + Conditions)
 
 8 conceptual chunks; chunk #1b is used in two places (declaration + scoreboard suffix), so the actual `main.gd` ships 9 `#@todo` blocks. Chunk #6 is split into 6a (declaration) + 6b (use), mirroring the 1a/1b split.
@@ -98,14 +144,14 @@ Five-day summer coding camp. Replaces a prior Unity + C# + VR camp that collapse
 |---|---|---|---|---|---|
 | 1 | List creation + access | `var fruits = ["apple","banana"]; fruits[0]` | Declare 4 vars: `var enemies = []`, `var towers = []`, `var coins := 100`, `var base_hp := 20` | 4 | — |
 | 2 | `append` / `erase` | Shopping list add/remove | `enemies.append(new_enemy)` in spawn helper + `enemies.erase(e)` + coin reward in kill helper | 2 | — |
-| 3 | Iterate list + act | `for s in scores: print(s)` | 2 loops in `_process`: enemies + towers, calling per-entity tick helpers | 2 | **stretch** |
+| 3 | Iterate list + act | `for s in scores: print(s)` | 2 loops in `_process`: enemies + towers, calling per-entity tick helpers | 2 | — |
 | 4 | Function taking a list | `func total(numbers): ...` | Body of `move_all(enemy_list)` — loops list, calls `step_enemy` on each (refactor of #3 into a function) | 3 | — |
-| 5a | Function returning ONE from list | `func nearest(list, pos)` | `func get_nearest_enemy_in_range(pos: Vector2, range: float) -> Node` — loop enemies, track nearest within range, return enemy or null | 6-8 | **stretch** |
-| 5b | Function returning LIST from list | `func filter_in_radius(list, pos, r)` | `func get_enemies_in_radius(pos: Vector2, radius: float) -> Array` — loop enemies, distance check, append to result list, return list (Splash tower uses it) | 6 | **stretch** |
-| 6 | Nested function calls | `shoot(get_target(enemies))` | In `tower_tick(t, delta)`: `fire_at(t, get_nearest_enemy_in_range(...))` for Cannon/Sniper, `fire_at(t, get_enemies_in_radius(...))` for Splash | 3 | **stretch** |
+| 5a | Function returning ONE from list | `func nearest(list, pos)` | `func get_nearest_enemy_in_range(pos: Vector2, range: float) -> Node` — loop enemies, track nearest within range, return enemy or null | 6-8 | — |
+| 5b | Function returning LIST from list | `func filter_in_radius(list, pos, r)` | `func get_enemies_in_radius(pos: Vector2, radius: float) -> Array` — loop enemies, distance check, append to result list, return list (Splash tower uses it) | 6 | — |
+| 6 | Nested function calls | `shoot(get_target(enemies))` | In `tower_tick(t, delta)`: `fire_at(t, get_nearest_enemy_in_range(...))` for Cannon/Sniper, `fire_at(t, get_enemies_in_radius(...))` for Splash | 3 | — |
 | 7 | List size check / wave trigger | `if enemies.size() == 0: next_wave()` | Compound `if enemies.size() == 0 and enemies_to_spawn.size() == 0:` → increment `wave_index`, `you_win()` if last, else load `waves[wave_index]` and reset spawn state | 7 | — |
 
-Total kid LoC ≈ 31-33 across 8 holes. 4 stretch chunks (3, 5a, 5b, 6) — heavier than D1/D2 because §4 chunk #5 is split into two stretch holes. Acceptable for a Functions-deep day.
+Total kid LoC ≈ 31-33 across 8 holes. All chunks sit at-or-below the D3 concept ceiling (functions deep + lists, nested calls allowed per R2). Stretch lives in the Final Challenge file only (R1). Per-chunk LoC counts are authoritative; when current scaffolds pack multiple concepts into a single kid line, expand per R2's remediation algorithm (preserve kid LoC, redistribute pre-given vs student-written).
 
 ### Day 4 — 2-player fighter concept chunks (Objects + State)
 
@@ -205,34 +251,36 @@ class Player:                       class_name Player
 
 **Scaffold scope — locked (varied per day, not flat):**
 
-Each §4 concept chunk = one `# TODO #N` hole. Hole size varies *within* a day; per-day center of gravity:
-- **D2 (maze):** mostly 1-2 line holes; at least a couple of 5-7 line holes for stretch.
-- **D3 (tower defense):** middle — mostly small function bodies.
-- **D4 (fighter):** mostly whole-method holes; one or two kept at 1-2 lines as breathers.
+Each §4 concept chunk = one `# TODO #N` hole. Hole size varies *within* a day; per-day center of gravity (no mid-day stretch — see R1):
+- **D2 (maze):** mostly 1-2 line holes. Larger holes get their logic expanded into multiple simple lines (R2) so each kid line stays at the day's concept ceiling; surrounding multi-step logic is pre-given copy-along.
+- **D3 (tower defense):** mostly small function bodies. Where a function needs nested loops or min-tracking, expand into named-variable steps so each kid line is single-purpose; pre-give the scaffolding lines.
+- **D4 (fighter):** mostly whole-method holes; one or two kept at 1-2 lines as breathers. Match-statement bodies are split per arm or per state so no single kid line packs state + velocity + input + UI updates together.
 - **D1 (Pong):** copy-along (§3 locked).
 
-**Final Challenge — locked (every day, D1–D4):**
+In all days, kid LoC per chunk recorded in §4 is the authoritative target; if existing scaffolds drift dense, apply R2's remediation algorithm rather than inflating or shrinking the kid hole.
 
-Each day's scaffold ships one extra file: the **Final Challenge**. It is an applied review — kid re-uses every concept learned that day to add a desirable feature, *unguided*.
+**Final Challenge — locked (every day, D1–D4) — governed by R3:**
 
-- Incomplete in the same way as the main scaffold: same `#@todo` holes (§11).
-- **Not** on the slide deck. No `# TODO #N` numbering, no board example, no instructor walkthrough. Holes labeled `# FINAL CHALLENGE` instead of `# TODO #N`.
-- File is **visible** in the Template ZIP, not hidden. Kid opts in.
-- Framing = desirable payoff, not homework ("figure out this file → the game becomes 2-player; everything you need we already learned").
-- Replaces the old "per-day stretch goals" idea — this is the stretch mechanism, generalized.
+Each day's scaffold ships one extra file: the **Final Challenge**. It is an applied **review** — kid re-uses concepts already learned that day to add a desirable feature. Difficulty ceiling = same constructs as the day's in-chunk TODOs (R3). No new concepts.
+
+- Incomplete in the same way as the main scaffold: same `#@todo` holes (§11). Holes labeled `# FINAL CHALLENGE` instead of `# TODO #N`.
+- File is **visible** in the Template ZIP, not hidden. Kid opts in. Framing = desirable payoff, not homework.
+- **Guided by pointer, not by walkthrough.** Each day's deck includes one Final Challenge slide whose core message is: *"contrast each FC TODO with what you already implemented earlier today — each one is nothing new, you already learned how to do it."* The slide maps each FC hole → the earlier chunk(s) it mirrors. No new code on this slide; pure pointer.
+- No `# TODO #N` numbering inside the FC file, no per-hole board example, no instructor walkthrough beyond the pointer slide.
+- This is the **only** stretch mechanism (R1). Per-day stretch chunks do not exist.
 - Build script needs no change: it strips `#@` markers regardless of the comment text above them.
 
-| Day | Final Challenge file | Payoff |
-|---|---|---|
-| D1 Pong | `player2.gd` | Right paddle becomes a real WASD second player |
-| D2 Maze | `ghost_personalities.gd` | Replaces the 3 base 50/50 ghosts with **4 authentic Pac-Man personality ghosts** — Blinky (direct chase), Pinky (ambush 4 tiles ahead of player), Inky (Blinky + player vector trick), Clyde (chase when far, scatter when close). Touches all 6 D2 chunks: `range(4)` to spawn them, `for ghost in ghosts` to move each, `while game_running` for the run loop, `reset_ghosts()` no-param, `move_personality(ghost)` w/ param, `should_scatter(ghost, player_pos) -> bool` return. Half-guided — slides give the targeting algorithm in prose + diagrams, not code (§15). |
-| D3 Base defense | `endless_mode.gd` | Rewrites wave system: drops hardcoded `waves` list, spawns enemies on a timer with escalating count/speed over time. Touches chunks #1 (new list/state), #2 (append on timer), #3 (iterate), #7 (no `.size()==0` termination — infinite shape). Half-guided slides (D2 precedent: directional hints in prose, no verbatim code). |
-| D4 | _(designed per-day chat)_ | _(TBD)_ |
+| Day | Final Challenge file | Payoff | Status vs R3 |
+|---|---|---|---|
+| D1 Pong | `player2.gd` | Right paddle becomes a real WASD second player | ✅ compliant — input polling + conditions, both taught D1. Add pointer slide. |
+| D2 Maze | `ghost_personalities.gd` | _(pending rewrite)_ Currently ships 4 unguided personality stubs requiring Pac-Man targeting algebra (Pinky 4-tile ambush, Inky Blinky-vector trick, distance-threshold scatter). Concepts **beyond D2**. | 🚨 **NON-COMPLIANT** — rewrite required. New FC must use only `for`/`while` loops + intro functions. Payoff target TBD in D2 rewrite chat. The "half-guided slides give targeting rules in prose + diagrams" framing previously in this row is **superseded** by R3. |
+| D3 Base defense | `endless_mode.gd` | Rewrites wave system: drops hardcoded `waves` list, spawns enemies on a timer with escalating count/speed over time. Touches chunks #1 (decls), #2 (append on timer), #5a (return-one picker), #7 (size check). Per the D14 mirror-task design (line ~313+), each FC hole is a near-clone of a morning chunk. | ✅ compliant — verify in D3 chat; add pointer slide. |
+| D4 Fighter | `final_challenge.gd` | Kid invents 5th character. Holes mirror chunks #1/#2/#4/#6/#7. | ✅ compliant in shape — verify creative-attack hint list (charge, spread, heal) doesn't push past D4 patterns; add pointer slide. |
 
 ### Day 2 — Pac-Man (as built)
 
-Built 2026-05-22 at `iCode/Day2_Maze/` (project display name `Pac-Man`,
-folder name stays `Day2_Maze` because the build script regex needs the
+Built 2026-05-22 at `iCode/Day2_Maze_Game/` (project display name `Pac-Man`,
+folder name stays `Day2_Maze_Game` because the build script regex needs the
 `Day\d` prefix). Godot 4.6.3, viewport 896×992 (28×31 tiles × 16 px × 2× scale).
 
 **Files:**
@@ -249,14 +297,14 @@ folder name stays `Day2_Maze` because the build script regex needs the
 - **Tween grid-snap is real-Pac-Man-enough.** Looks smooth (0.15s slide between tile centres via Godot tween), feels like the arcade. The arcade actually does "continuous + grid-aligned turns" (option #3), but #2 (tween-snap) is visually indistinguishable for kids and keeps `hit_wall` clean.
 - **Maze layout = instructor-painted starter, kid repaints (Q9=A).** Scaffold ships with a starter maze + ghost pen so the project plays out of the box; kid's TileMap personalization (§10) is to repaint the whole thing. (Q9=A originally said "kid paints from blank" — relaxed slightly so day-1 launch isn't blocked by 30 minutes of tile painting before any code runs.)
 - **Two TileMapLayer nodes** (`Walls`, `Dots`) sharing one TileSet — modern Godot 4.3+ pattern, replaces legacy single-TileMap-with-layers. Kid's `wall_layer.get_cell_source_id(cell)` and `dot_layer.get_cell_source_id(cell)` calls are the only API surface they touch.
-- **Chunk #3 effectively stretch-sized.** Q3=B locked stretch on chunks 2/5/6, but `count_dots()` ended up as a nested-while ~7-line kid task. The comment in `main.gd` shows the pattern verbatim, so it's a transcription hole rather than a design hole — effort-wise it sits between "1-2 line tiny" and "5-7 line stretch." Three explicit stretch chunks remain (2, 5, 6); #3 is bonus stretch.
+- **Chunk #3 effectively stretch-sized.** Q3=B locked stretch on chunks 2/5/6, but `count_dots()` ended up as a nested-while ~7-line kid task. *(Historical: this note described chunks 2/5/6 + bonus #3 as stretch. Superseded 2026-05-29 by §4 R1 — no mid-day stretch. D2 on-disk scaffold ships chunks #5 `move_player` and #6 `hit_wall` as dense one-liners and is queued for R2 remediation; chunk #3 also gets re-expanded to single-purpose lines.)*
 - **Game state UI = plain labels in a CanvasLayer.** "Lives: 3" + "Dots: N", no heart icons. Game over = a `Panel` overlay with a single Label, hidden by default, shown by `game_over()` / `you_win()`. `R` key reloads the scene to restart.
 
 **Final Challenge — `ghost_personalities.gd`:** swaps the 3 base 50/50 chasers for 4 authentic Pac-Man personalities (Blinky/Pinky/Inky/Clyde). Touches all 6 §4 chunks. Half-guided: slides spell out the targeting rules (§15), kid writes the code.
 
 **Personalization (§10):** TileMap repaint (Walls + Dots layers). Kid's maze, kid's dot layout, kid's ghost-pen placement.
 
-**Build status:** `dist/Day2_Maze_{Template,Complete}.zip` generate; marker-strip verified clean; assets bundled. TileSet wiring + maze paint done in editor 2026-05-23. Playtest passing for player movement, dot eating, ghost behaviour, tunnel wrap, game-over freeze. **Not yet verified:** `.exe` export.
+**Build status:** `dist/Day2_Maze_Game_{Template,Complete}.zip` generate; marker-strip verified clean; assets bundled. TileSet wiring + maze paint done in editor 2026-05-23. Playtest passing for player movement, dot eating, ghost behaviour, tunnel wrap, game-over freeze. **Not yet verified:** `.exe` export.
 
 **Build refinements added 2026-05-23 (post-initial-build playtest):**
 
@@ -292,7 +340,7 @@ Genre **pivot from "tower defense lite" → "base defense"**. Triggered when sur
 - **D10 — Obstacles:** none. Replaced by **per-enemy attack-waypoint randomization** — each enemy on spawn picks its own target point (random offset near base perimeter, or pick from a list of base-adjacent cells). Solves visual cluster (enemies don't all converge to one pixel) and eliminates obstacle-collision scope entirely. No A*/Nav code, no obstacle authoring.
 - **D11 — Tower selection UI:** both keys (1/2/3) and clickable HUD buttons wired. Number keys = fast selection, HUD buttons = discoverability. Both pre-given (mouse + input not in §4 concept scope).
 - **D12 — §10 personalization:** `@export` tuning vars (Inspector) + Modulate per tower type + drag-drop Kenney scenery props (no collision — pure art). Replaces earlier TileMap/Path2D plan (both eliminated by D10).
-- **D13 — Chunk-to-task pinning:** see §4 D3 table — 8 holes, ~31-33 LoC, 4 stretch (3, 5a, 5b, 6). Chunk #1 = 4 var declarations. Chunk #5 split into 5a (return ONE enemy) + 5b (return LIST of enemies — Splash needs it). All other chunks as drafted.
+- **D13 — Chunk-to-task pinning:** see §4 D3 table — 8 holes, ~31-33 LoC. Chunk #1 = 4 var declarations. Chunk #5 split into 5a (return ONE enemy) + 5b (return LIST of enemies — Splash needs it). All other chunks as drafted. *(Historical: this line previously said "4 stretch (3, 5a, 5b, 6)." Superseded 2026-05-29 by §4 R1 — no mid-day stretch. Existing on-disk D3 scaffold ships those chunks as dense one-liners and is queued for the R2 remediation pass.)*
 
 **Pre-given (NOT kid task — outside `#@todo` markers, ships in both Template and Complete ZIPs):**
 - `step_enemy(e, delta)` — moves enemy toward its `target_pos` via `move_and_collide`, triggers damage on base entry
@@ -321,15 +369,15 @@ Genre **pivot from "tower defense lite" → "base defense"**. Triggered when sur
 
 Skipped chunks (3, 4, 5b, 6) live in `main.gd` combat loop and survive endless mode unchanged. Slides give plain-English rule per hole + explicit mirror map ("FC-1 ← #1 decls, FC-2 ← #2 append, FC-3 ← #5a return-one, FC-4 ← #7 size check"). No verbatim code. Toggle via `const ENDLESS_MODE := false` at top of `main.gd` — kid flips after filling endless file.
 
-**D2 consistency caveat (logged 2026-05-23):** D2 Final Challenge (`ghost_personalities.gd`) is mostly mirror-consistent (skeleton functions mirror D2 chunks #1/#2/#3/#4/#5/#6) but `target_for` body introduces novel algorithmic content for Pinky (vector ahead) and especially Inky (mirror-through-point math). When D2 slides are authored, recommend reframing per-personality targeting as **diagrammed look-ups** (slides show target tile pictorially; kid implements branches without deriving math) — preserves the 4-ghost payoff without violating D3's mirror principle retroactively. No code change to existing `ghost_personalities.gd` needed.
+**D2 consistency caveat (logged 2026-05-23, escalated 2026-05-29):** D2 Final Challenge (`ghost_personalities.gd`) is mostly mirror-consistent (skeleton functions mirror D2 chunks #1/#2/#3/#4/#5/#6) but `target_for` body introduces novel algorithmic content for Pinky (vector ahead) and especially Inky (mirror-through-point math). The earlier proposal to "reframe targeting as diagrammed look-ups" is **insufficient** under §4 R3 — diagrams substitute for derivation but the *code* still uses Vector2i math operations beyond D2's loops + intro-functions ceiling. **Resolution:** rewrite the FC payoff and holes so every kid line uses only D2 constructs. Payoff candidates TBD in D2 rewrite chat. Existing `ghost_personalities.gd` is queued for replacement.
 
 **D15 — File/scene-tree spec (locked 2026-05-23):**
-- **15a — Folder + project name:** `Day3_BaseDef/`, display name "Base Defense"
+- **15a — Folder + project name:** `Day3_BaseDef_Game/`, display name "Base Defense"
 - **15b — Scene tree (`Main.tscn`):** `Main` (Node2D, `main.gd`) with children — `Background` (ColorRect 1280×720), `Grid` (Node2D + GridLines visual), `Base` (Area2D + Sprite2D + CollisionShape2D rect 128×64 over cells (9,5)+(10,5)), `Enemies` (Node2D container), `Towers` (Node2D container), `Scenery` (Node2D w/ 8 pre-placed Kenney sprites — 2× tree, 2× rock, 2× fence, 1× sign, 1× bush), `FlashLayer` (Node2D for Line2D fire flashes), `UI` (CanvasLayer with HUD VBox: WaveLabel, CoinsLabel, BaseHPLabel, TowerButtons HBox with Cannon/Sniper/Splash buttons, SelectedLabel; plus GameOverPanel + YouWinPanel hidden by default).
 - `Enemy.tscn`: `Enemy` (CharacterBody2D + `enemy.gd` per-instance) with `Sprite2D` (Modulate-tinted by type) + `CollisionShape2D` (CircleShape2D ~24 px).
 - **15c — Asset paths:**
   ```
-  Day3_BaseDef/
+  Day3_BaseDef_Game/
     project.godot
     Main.tscn  Enemy.tscn
     main.gd  enemy.gd  endless_mode.gd
@@ -342,7 +390,7 @@ Skipped chunks (3, 4, 5b, 6) live in `main.gd` combat loop and survive endless m
       ui/        (button bgs if needed)
   ```
 
-**Built at `iCode/Day3_BaseDef/`, Godot 4.6.3, viewport 1280×720.**
+**Built at `iCode/Day3_BaseDef_Game/`, Godot 4.6.3, viewport 1280×720.**
 
 **Files (on disk):**
 - `project.godot` — name "Base Defense", main scene `Main.tscn`, input map for `select_cannon/sniper/splash` (1/2/3), `start_wave` (SPACE), `restart` (R).
@@ -385,7 +433,7 @@ Three of five inside band; Mixed and Random at edges. Acceptable — the simulat
 - **Int-division warning silenced** in `world_to_cell` — replaced `int(x)/TILE` with `floori(x / TILE)` for explicit semantics.
 - **`var collision := ...` typed** — Godot 4 couldn't infer `move_and_collide` return type, parse error. Made explicit: `var collision: KinematicCollision2D = ...`.
 
-**Build status:** `dist/Day3_BaseDef_{Template,Complete}.zip` generate; marker-strip verified clean (Template 626 lines, Complete 671 lines, 8 kid chunks + 4 FC chunks differ). Headless `--quit` parse pass clean. 12s smoke test ran without runtime errors. `_balance/` excluded from both ZIPs (filter regex). **Not yet verified:** `.exe` export, real in-Godot playtest (sprite picks may need swapping if certain Kenney tile numbers look wrong).
+**Build status:** `dist/Day3_BaseDef_Game_{Template,Complete}.zip` generate; marker-strip verified clean (Template 626 lines, Complete 671 lines, 8 kid chunks + 4 FC chunks differ). Headless `--quit` parse pass clean. 12s smoke test ran without runtime errors. `_balance/` excluded from both ZIPs (filter regex). **Not yet verified:** `.exe` export, real in-Godot playtest (sprite picks may need swapping if certain Kenney tile numbers look wrong).
 
 **Playtest refinements (2026-05-26):**
 - **Background swallowed clicks** — root cause of "placement does nothing, no money spent." Background `ColorRect` default `mouse_filter=STOP` ate every click before `_unhandled_input`. Fixed: `Main.tscn` Background `mouse_filter = 2` (IGNORE).
@@ -401,7 +449,7 @@ Three of five inside band; Mixed and Random at edges. Acceptable — the simulat
 
 **Open items for next D3 touchpoint:**
 - `.exe` export via Godot dialog.
-- Rebuild `dist/Day3_BaseDef_{Template,Complete}.zip` after all post-build patches (deferred until D4 + D5 playtest done so one rebuild pass covers everything).
+- Rebuild `dist/Day3_BaseDef_Game_{Template,Complete}.zip` after all post-build patches (deferred until D4 + D5 playtest done so one rebuild pass covers everything).
 - Real-kid balance iteration (current sim says game is on the harder side — Random wins only 6%, Mixed 78%; if first playtest with a real human shows base falling too often, bump START_COINS or START_BASE_HP).
 - Per-day slide deck authoring (web Claude per §13) — D3 slide stub at §15 already lists what to cover.
 
@@ -431,7 +479,7 @@ The 5-day camp **traverses video game history**: D1 Pong (1972) → D2 Pac-Man (
 - **D7:** static sprites + `flip_h` for facing + Modulate flash on hit. AnimatedSprite2D out of scope.
 - **D8:** P1 = WASD + **F** (attack). P2 = Arrows + **RShift** (attack). Space = confirm in menus. R = restart-to-character-select.
 - **D9:** Player.tscn + Projectile.tscn PackedScenes. Main.tscn is the game-flow root.
-- **D10:** chunk-to-task pinning — 7 chunks total. #1+#2 = property declarations in player.gd top (small breathers). #3 = `take_damage` body. #4 = `start_match` `Player.instantiate()` ×2 in main.gd. #5 = state var + `set_state` helper. #6 (STRETCH) = `match` body with 6 states in `_physics_process`. #7 (STRETCH) = `attack` body with type-branch + projectile spawn.
+- **D10:** chunk-to-task pinning — 7 chunks total. #1+#2 = property declarations in player.gd top (small breathers). #3 = `take_damage` body. #4 = `start_match` `Player.instantiate()` ×2 in main.gd. #5 = state var + `set_state` helper. #6 = `match` body with 6 states in `_physics_process`. #7 = `attack` body with type-branch + projectile spawn. *(Historical: #6 and #7 were originally tagged "(STRETCH)". Superseded 2026-05-29 by §4 R1 — no mid-day stretch. On-disk D4 scaffold ships #3/#6/#7 as multi-concept dense bodies and is queued for R2 remediation.)*
 - **D11:** Final Challenge = kid invents 5th character free-form. 3 holes: fill `CUSTOM_CHARACTER` dict (mirror #1 declaration), register it into CHARACTERS (mirror #4), implement new attack match case in `player.gd` (mirror #6+#7).
 - **D12:** 3 maps via procgen (no per-map .tscn files — `build_map(map_id)` in main.gd reads from MAPS dict and spawns StaticBody2D children at runtime). Iconic Smash maps as accidental history lesson:
   - **Battlefield** — ground + 3 platforms (left, right, top).
@@ -439,7 +487,7 @@ The 5-day camp **traverses video game history**: D1 Pong (1972) → D2 Pac-Man (
   - **Pokémon Stadium** — ground + 2 asymmetric side platforms.
 - **D13:** Final Challenge concept = free-form 5th character. Stocks + ring-out reserved as informal bonus-stretch (not in shipped FC file).
 
-**Built at `iCode/Day4_Fighter/`, Godot 4.6.3, viewport 1280×720.**
+**Built at `iCode/Day4_Fighter_Game/`, Godot 4.6.3, viewport 1280×720.**
 
 **Files (on disk):**
 - `project.godot` — name "2-Player Fighter", main scene `Main.tscn`, full input map for `p1_left/right/jump/down/attack` + `p2_*` mirror + `confirm` (Space) + `restart` (R).
@@ -462,7 +510,7 @@ User invoked `/swarm` skill but the full TDD-cascade infra (umbrella tests, type
 - **`MAIN` ref resolution:** initial `@onready var MAIN = get_tree().root.get_node_or_null("Main")` returned `null` — `get_tree().root` is the viewport Window, not the loaded scene. Switched to `_enter_tree` callback assigning `MAIN = get_tree().current_scene`. Pre-given.
 - **`_BUILD_SPEC.md` leaked into Template ZIP** on first build (build script regex strips only `.godot/`, doesn't filter by filename pattern). Deleted spec doc post-build. Future-day spec docs should be placed OUTSIDE the `DayN_*` folder OR renamed to start with a dot prefix that the build script could be updated to exclude.
 
-**Build status:** `dist/Day4_Fighter_{Template,Complete}.zip` generate; marker-strip verified clean (Template 239+102+25 lines, Complete 245+178+38 lines for main.gd/player.gd/final_challenge.gd; chunk content diff matches expected ~85 lines of kid task code). Headless `--quit` parse pass clean. 10s smoke test ran without runtime errors. **Not yet verified:** `.exe` export, real in-Godot playtest (sprite picks + balance feel + the actual fight loop).
+**Build status:** `dist/Day4_Fighter_Game_{Template,Complete}.zip` generate; marker-strip verified clean (Template 239+102+25 lines, Complete 245+178+38 lines for main.gd/player.gd/final_challenge.gd; chunk content diff matches expected ~85 lines of kid task code). Headless `--quit` parse pass clean. 10s smoke test ran without runtime errors. **Not yet verified:** `.exe` export, real in-Godot playtest (sprite picks + balance feel + the actual fight loop).
 
 **Playtest refinements (2026-05-26):**
 - **`MAIN` null crash on match start** — `main.gd` `start_match` called `player.setup(...)` BEFORE `add_child`. At `instantiate()` time the node isn't in the tree, so `_enter_tree` hadn't fired and `get_tree()` in `setup`'s null-guard returned null too → `MAIN.CHARACTERS[char_name]` blew up. Fixed: reorder to `add_child(player)` first, THEN `player.setup(...)` for both P1 and P2.
@@ -475,13 +523,13 @@ User invoked `/swarm` skill but the full TDD-cascade infra (umbrella tests, type
 - Drop-through one-way-platforms (Down+Jump): pre-given `attempt_drop_through` helper not yet implemented — known gap. Add at first playtest if kids want to drop off platforms.
 - Knockback / hit-stun: locked OFF per D15. If feel is too floaty without it, consider adding as polish.
 - Character sprite swap if cute-monster Kenney picks (tile_0000-0003 + tile_0151) clash with archetype names at slide time.
-- Rebuild `dist/Day4_Fighter_{Template,Complete}.zip` after all post-build patches (bundled with D3 + D5 rebuild pass).
+- Rebuild `dist/Day4_Fighter_Game_{Template,Complete}.zip` after all post-build patches (bundled with D3 + D5 rebuild pass).
 - `.exe` export via Godot dialog.
 - Slide deck per §15.
 
 ### Day 1 — Pong (as built)
 
-Built 2026-05-22 at `iCode/Day1_Pong/`. Godot 4.6 project, viewport 1152×648.
+Built 2026-05-22 at `iCode/Day1_Pong_Game/`. Godot 4.6 project, viewport 1152×648.
 
 **Files:**
 - `project.godot` — name "Day 1 - Pong", main scene `Main.tscn`.
@@ -506,7 +554,7 @@ Built 2026-05-22 at `iCode/Day1_Pong/`. Godot 4.6 project, viewport 1152×648.
 
 **Current tuning values:** `ball_speed_x` 6, `ball_speed_y` 3, `paddle_speed` 6, `ai_speed` 5, spin max 8.
 
-**Build status:** `dist/Day1_Pong_{Template,Complete}.zip` generate; marker-strip verified clean. **Not yet verified:** Godot compile check, playtest, `.exe` export.
+**Build status:** `dist/Day1_Pong_Game_{Template,Complete}.zip` generate; marker-strip verified clean. **Not yet verified:** Godot compile check, playtest, `.exe` export.
 
 ### Day 5 — Racing Game (as built 2026-05-25)
 
@@ -551,9 +599,9 @@ Genre: Art-of-Rally-inspired 3D rally racer. Solo time trial + ghost replay. Cus
 - `INSTRUCTOR_NOTES.md`
 - `assets/kenney_racing/` — full pack contents
 - `car_tune.json` — sim output, starting values for `car.gd`
-- `_balance/Day5/sim.py` + `_balance/Day5/test_driver.py` + `_balance/Day5/tune.py` + `_balance/Day5/test_sim.py` — Python bicycle sim + fitness runner + pytest umbrella. **OUTSIDE** the `Day5_Racing/` folder so build script's `^Day\d` regex excludes from ZIPs.
+- `_balance/Day5/sim.py` + `_balance/Day5/test_driver.py` + `_balance/Day5/tune.py` + `_balance/Day5/test_sim.py` — Python bicycle sim + fitness runner + pytest umbrella. **OUTSIDE** the `Day5_Racing_Game/` folder so build script's `^Day\d` regex excludes from ZIPs.
 
-**Built at `iCode/Day5_Racing/`, Godot 4.6.3, 3D rally racer.**
+**Built at `iCode/Day5_Racing_Game/`, Godot 4.6.3, 3D rally racer.**
 
 **Files (on disk):**
 - `project.godot` — name "Rally Camp", main scene `Main.tscn`, full input map (`throttle/brake/steer_left/steer_right/handbrake/reset/pause`).
@@ -585,9 +633,9 @@ Genre: Art-of-Rally-inspired 3D rally racer. Solo time trial + ghost replay. Cus
 - **`types.py` → `contract.py` rename** — Python stdlib shadow. `.claude-swarm.toml` `type_contract_path` updated to `_balance/Day5/contract.py`.
 - **Cavecrew bypass note in merge-log** — cavecrew-builder has no Bash so leaves wrote to both real path AND `.swarm/pending/`; merge protocol's backup+copy was idempotent (files identical at both paths). Documented on all 5 D5 sim leaves for audit clarity.
 - **`hud.gd` group lookup warning** — `hud.gd: warning — no node in group 'car' found at _ready` (HUD `_ready` runs before Main spawns Car). Non-fatal; HUD picks up car on first telemetry signal. Note for visual playtest — fix to deferred lookup if HUD shows blank labels at race start.
-- **Smoke-test logs leaked into first ZIP** — `_stderr.log` + `_stdout.log` from headed smoke test sat in `Day5_Racing/` when build ran. Deleted + rebuilt; final ZIPs clean. Future: build script should filter `_*.log` (same pattern D4 noted for `_BUILD_SPEC.md`).
+- **Smoke-test logs leaked into first ZIP** — `_stderr.log` + `_stdout.log` from headed smoke test sat in `Day5_Racing_Game/` when build ran. Deleted + rebuilt; final ZIPs clean. Future: build script should filter `_*.log` (same pattern D4 noted for `_BUILD_SPEC.md`).
 
-**Build status:** `dist/Day5_Racing_{Template,Complete}.zip` generate (275 entries each); headless `--import` clean (112 GLBs reimported); headless `--quit` parse pass clean (1 warning, see above); 10s headed smoke test clean. ZIP scan confirms no `_BUILD_SPEC.md`, `_balance/`, `_stderr.log`, `_stdout.log`, or `.godot/` cache leak. **Not yet verified:** `.exe` export, real in-Godot drive playtest (car feel, track flow, ghost playback, lap detection, customization workflow), sprite/mesh picks.
+**Build status:** `dist/Day5_Racing_Game_{Template,Complete}.zip` generate (275 entries each); headless `--import` clean (112 GLBs reimported); headless `--quit` parse pass clean (1 warning, see above); 10s headed smoke test clean. ZIP scan confirms no `_BUILD_SPEC.md`, `_balance/`, `_stderr.log`, `_stdout.log`, or `.godot/` cache leak. **Not yet verified:** `.exe` export, real in-Godot drive playtest (car feel, track flow, ghost playback, lap detection, customization workflow), sprite/mesh picks.
 
 **Open items for next D5 touchpoint:**
 - Real visual playtest (drive a lap, watch ghost play back, complete 3 laps, hit pause/restart). Fix HUD group lookup if blank at start.
@@ -749,14 +797,14 @@ iCode/
   BIBLE.md   CLAUDE.md          docs in root
   build/
     build_templates.ps1         solution-stripping + ZIP script (§11)
-  Day1_Pong/                     Godot project (Complete game)
+  Day1_Pong_Game/                     Godot project (Complete game)
     project.godot
     *.tscn  *.gd                 scenes + scripts in root (§7)
     assets/                      art (§7)
-  Day2_Maze/
-  Day3_BaseDef/
-  Day4_Fighter/
-  Day5_Racing/                   Sloyd 3D assets
+  Day2_Maze_Game/
+  Day3_BaseDef_Game/
+  Day4_Fighter_Game/
+  Day5_Racing_Game/                   Sloyd 3D assets
   dist/                          generated: DayN_Template.zip, DayN_Complete.zip, *.exe
 ```
 
@@ -784,10 +832,10 @@ Per-game build chats surface things the slide deck must cover. Recorded here so 
 
 ### Day 2 — Top-down maze (Pac-Man)
 
-- **TileMap walkthrough** — the instructor (user) hasn't used TileMap before; slides need to teach it cold. How to open the TileSet, paint tiles, set collision per-tile, the difference between TileMap (layout) and TileSet (palette). Companion `Day2_Maze/INSTRUCTOR_NOTES.md` covers the deep version.
+- **TileMap walkthrough** — the instructor (user) hasn't used TileMap before; slides need to teach it cold. How to open the TileSet, paint tiles, set collision per-tile, the difference between TileMap (layout) and TileSet (palette). Companion `Day2_Maze_Game/INSTRUCTOR_NOTES.md` covers the deep version.
 - **CharacterBody2D + `move_and_collide`** — what the node is, why it's not a Sprite2D, what CollisionShape2D is for, how `move_and_collide` returns a collision. Pair with `INSTRUCTOR_NOTES.md`.
 - **Grid-snap movement explainer** — the pre-given tween/step helper that turns "press right" into "slide one tile right." Kids see it; they don't write it.
-- **D2 TileSet wiring + maze-painting step-by-step (kid-facing).** Slides MUST reproduce the click-by-click walkthrough used during the build (see `Day2_Maze/INSTRUCTOR_NOTES.md` "One-time TileSet setup" — that's the instructor version; the kid-facing slide version covers the same steps but framed for first-time-in-Godot students): opening the project, clicking `Walls`, `Inspector → Tile Set → New TileSet`, adding the Atlas source, picking `tilemap_packed.png`, setting 16×16 region, "auto-create tiles → Yes", **saving the TileSet to disk as `res://assets/PacmanTileSet.tres`** (Inspector → Tile Set drop-down → Save As — this step was missed on first playthrough and broke Quick Load on Dots), mirroring to `Dots` via Quick Load, then the paint-mode flow.
+- **D2 TileSet wiring + maze-painting step-by-step (kid-facing).** Slides MUST reproduce the click-by-click walkthrough used during the build (see `Day2_Maze_Game/INSTRUCTOR_NOTES.md` "One-time TileSet setup" — that's the instructor version; the kid-facing slide version covers the same steps but framed for first-time-in-Godot students): opening the project, clicking `Walls`, `Inspector → Tile Set → New TileSet`, adding the Atlas source, picking `tilemap_packed.png`, setting 16×16 region, "auto-create tiles → Yes", **saving the TileSet to disk as `res://assets/PacmanTileSet.tres`** (Inspector → Tile Set drop-down → Save As — this step was missed on first playthrough and broke Quick Load on Dots), mirroring to `Dots` via Quick Load, then the paint-mode flow.
 - **Wall-painting step-by-step (kid-facing, separate sub-walkthrough).** Pulled out from the TileSet bullet above because the painting flow is its own pitfall surface. Slides MUST cover, in order: (1) selecting the `Walls` node in the Scene panel **before** painting — wrong-node-selected was the #1 bug during the build (the kid would paint floor tiles thinking they were dots, ending up on the Walls layer, sealing every corridor → player can't move, ghosts trapped, "Dots: 0" on launch). (2) Identifying the active TileMapLayer via the highlighted node in the Scene panel while painting. (3) Picking a wall-style tile from the TileSet panel (visual: stone block, brick, etc.). (4) Drag-painting border + pen + internal walls in the viewport. (5) Switching to the `Dots` node. (6) Picking a *dot*-style tile (small bright item — coin, gem, pellet — NOT a floor tile). (7) Drag-painting one dot per corridor cell. (8) Using the **eraser tool (E)** + rect mode to fix mistakes — slides MUST cover the eraser explicitly because tile-painting mistakes are unavoidable on a first try and "I painted the wrong layer, how do I undo" is the most predictable kid question. (9) Toggling layer visibility (eye icon) to verify each layer independently before launch.
 - **Picking a "dot" tile from the Kenney Tiny Dungeon atlas (kid-facing).** The atlas has no classic Pac-Man pellet sprite. Slides MUST show 2-3 acceptable substitutes from the atlas (coin, gem, heart) with their atlas locations called out visually — the kid won't find one labelled "pellet" and may stall. Reinforce: the code doesn't care which tile, only whether *any* tile is painted.
 - **Tunnel teleport (kid-facing, paint + const pair).** Slides MUST explain (1) what a tunnel row is (one row where stepping off the left edge wraps to the right edge); (2) editing the `TUNNEL_ROWS` const in `main.gd` to match the row the kid wants (default `[13]` — match to the painted row); (3) painting that row so the left- and right-most cells are EMPTY (no wall tile), with the corridor reaching the edge; (4) why off-grid is otherwise a wall (so nothing escapes the maze and breaks the game). Pair this with a "verify in Output panel" tip: if walking off the edge logs nothing, the row number is wrong.
@@ -868,7 +916,7 @@ Meta-arc payoff: kids see how games (and the tools to build them) evolved. Reinf
 
 Massive session — covered D3 build close-out (visual-playtest still incomplete, flagged in BIBLE), full D4 design + build (parallel-cavecrew pattern, 4 agents, 5 files + assets, smoke-tested clean), D5 design (D1-D14 + implementation defaults all locked), D5 git init + .claude-swarm.toml + type contract + umbrella, D5 sim cascade via /swarm (5 leaves, all green per-leaf, umbrella initially 8/9 then loosened to 9/9 per BIBLE "sim ~80% + manual ~20%" lock), all 5 leaves queue-merged (with merge-log cavecrew-bypass note since cavecrew has no Bash so leaves wrote to both real path AND pending — backup+copy was idempotent), `car_tune.json` generated from tune.py (100 trials), Godot scaffold via 4 parallel cavecrew agents (project.godot, Main.tscn, main.gd, Car.tscn, car.gd, GhostCar.tscn, ghost.gd, hud.gd, track.gd, INSTRUCTOR_NOTES.md), 12 corner prefab `.tscn` files written sequentially as parent task (Straight_Short/Long, Hairpin_L/R, Sweeper_L/R, Chicane, 90_L/R, S_curve, Start, Finish), `_BUILD_SPEC.md` deleted post-build.
 
-**Immediate next move (cold-start blocker):** run Godot headless `--import` then `--quit` on `Day5_Racing/` to verify scaffold parses; if clean, run a 10s headed smoke test capturing stderr; if clean, run `.\build\build_templates.ps1 -Day Day5_Racing`; verify ZIPs don't contain `_BUILD_SPEC.md` or `_balance/` artifacts; then flip BIBLE §6 D5 "design locked, build pending" → "as built" with the build refinement log (same shape as D3/D4 "as built" subsections).
+**Immediate next move (cold-start blocker):** run Godot headless `--import` then `--quit` on `Day5_Racing_Game/` to verify scaffold parses; if clean, run a 10s headed smoke test capturing stderr; if clean, run `.\build\build_templates.ps1 -Day Day5_Racing_Game`; verify ZIPs don't contain `_BUILD_SPEC.md` or `_balance/` artifacts; then flip BIBLE §6 D5 "design locked, build pending" → "as built" with the build refinement log (same shape as D3/D4 "as built" subsections).
 
 ### Last decision locked
 
@@ -881,15 +929,15 @@ None. User said "spec deleted" and was confirming step completion; integration c
 ### Critical context to carry forward
 
 - **D5 sim cascade is COMPLETE** — `_balance/Day5/{contract,sim,driver,track_builder,fitness,tune,test_*}.py` all written, 9/9 umbrella GREEN, `car_tune.json` generated. Do not re-derive or re-emit cascade briefs.
-- **D5 Godot scaffold is WRITTEN** but UNVERIFIED in-engine. Headless parse + smoke test pending. Files: `Day5_Racing/{project.godot, Main.tscn, main.gd, Car.tscn, car.gd, GhostCar.tscn, ghost.gd, hud.gd, track.gd, INSTRUCTOR_NOTES.md, car_tune.json}` + `Day5_Racing/prefabs/*.tscn` (12 files) + `Day5_Racing/assets/kenney_racing/` (112 GLBs + License.txt).
+- **D5 Godot scaffold is WRITTEN** but UNVERIFIED in-engine. Headless parse + smoke test pending. Files: `Day5_Racing_Game/{project.godot, Main.tscn, main.gd, Car.tscn, car.gd, GhostCar.tscn, ghost.gd, hud.gd, track.gd, INSTRUCTOR_NOTES.md, car_tune.json}` + `Day5_Racing_Game/prefabs/*.tscn` (12 files) + `Day5_Racing_Game/assets/kenney_racing/` (112 GLBs + License.txt).
 - **`_BUILD_SPEC.md` was deleted** — ephemeral, served its purpose. Do not regenerate.
-- **`_balance/Day5/` lives OUTSIDE Day5_Racing/** — build script `^Day\d` regex excludes it from student ZIPs. Same pattern as D3's `_balance/Day3/`.
+- **`_balance/Day5/` lives OUTSIDE Day5_Racing_Game/** — build script `^Day\d` regex excludes it from student ZIPs. Same pattern as D3's `_balance/Day3/`.
 - **Cavecrew "GREEN" claims need parent verification** — cavecrew-builder has no Bash, can't actually run pytest. I ran all 5 per-leaf tests + umbrella myself post-spawn. Same applies if any more cavecrew agents fire — verify via real test runs.
 - **Merge-log has cavecrew-bypass note** on all 5 D5 sim leaves (files pre-existed at real path because cavecrew wrote both places; protocol still ran its gates idempotently). Documented for audit clarity.
 - **Sim test was renamed `types.py` → `contract.py`** because `types` shadows Python stdlib. `.claude-swarm.toml` references `_balance/Day5/contract.py`. Do not rename back.
 - **Type contract dropped `CornerKind` Literal alias + dropped `: float` annotations from UPPER constants** so swarm-review's check_invariants.py symbol regex (which doesn't handle annotated constants or PascalCase aliases) accepts. `ALLOWED_CORNER_KINDS` tuple lives in its place. Advisory was logged: `check_invariants.py` regex would benefit from supporting annotated UPPER constants — separate task, not blocking.
 - **Camp narrative arc locked** (BIBLE §15 Universal slide content): Pong → Pac-Man → Base Defense → Smash → VR/Racing chronological tour. Mention on every day's intro slide.
-- **D3 visual playtest STILL pending** — `Day3_BaseDef/` ZIPs ship + smoke-test clean but real in-Godot visual playtest never happened. Sprite picks may need swapping. Same applies for D4 + (about to apply for) D5.
+- **D3 visual playtest STILL pending** — `Day3_BaseDef_Game/` ZIPs ship + smoke-test clean but real in-Godot visual playtest never happened. Sprite picks may need swapping. Same applies for D4 + (about to apply for) D5.
 - **D5 has NO Final Challenge file** (per D8 lock — customization-day). Do not invent one.
 - **Open VR Escape Sim logistics** = BIBLE §12 territory, NOT a D5 build chat concern.
 - **iCode is now a git repo** (this session, `git init`) with remote `https://github.com/Westopoli/iCodeVRCamp.git`. Initial commit + push not yet done. User has not asked for it. Defer to future user direction.
@@ -898,9 +946,9 @@ None. User said "spec deleted" and was confirming step completion; integration c
 ### Files Touched This Session
 
 - `BIBLE.md` — D3 "as built" subsection, D4 design lock + "as built" subsection, D5 design lock subsection, §10 D3/D4 personalization rows, §15 D3/D4 slide stubs, Universal slide rule "camp history" block, this Session Pause
-- `Day3_BaseDef/` — full project (already shipped Template + Complete ZIPs)
-- `Day4_Fighter/` — full project (project.godot, Main.tscn, main.gd, Player.tscn, player.gd, Projectile.tscn, projectile.gd, enemy.gd, final_challenge.gd, INSTRUCTOR_NOTES.md, assets/kenney_pp/) — ZIPs shipped
-- `Day5_Racing/` — full project pending integration check (see "Where we are")
+- `Day3_BaseDef_Game/` — full project (already shipped Template + Complete ZIPs)
+- `Day4_Fighter_Game/` — full project (project.godot, Main.tscn, main.gd, Player.tscn, player.gd, Projectile.tscn, projectile.gd, enemy.gd, final_challenge.gd, INSTRUCTOR_NOTES.md, assets/kenney_pp/) — ZIPs shipped
+- `Day5_Racing_Game/` — full project pending integration check (see "Where we are")
 - `_balance/Day3/` — D3 base-defense sim (sim.py, strategies.py, tune.py, configs.py) — locked from D3 build session
 - `_balance/Day5/` — D5 rally sim cascade: contract.py, test_sim.py (umbrella), sim.py, test_sim_unit.py, driver.py, test_driver.py, track_builder.py, test_track_builder.py, fitness.py, test_fitness.py, tune.py, test_tune.py
 - `.claude-swarm.toml` — created, spec_dir="." briefs_dir=".swarm/briefs/" type_contract_path="_balance/Day5/contract.py" umbrella_test_cmd="python -m pytest _balance/Day5/test_sim.py -x --tb=short"
@@ -909,8 +957,8 @@ None. User said "spec deleted" and was confirming step completion; integration c
 - `.swarm/briefs/leaf-01..05.ASSUMPTIONS.md` — leaf assumption logs (5 files)
 - `.swarm/merge-log.md` — 5 entries, cavecrew-bypass noted
 - `.swarm/backups/leaf-01..05/_balance/Day5/*` — backup files (idempotent — same as real)
-- `dist/Day3_BaseDef_{Template,Complete}.zip` — built clean
-- `dist/Day4_Fighter_{Template,Complete}.zip` — built clean
+- `dist/Day3_BaseDef_Game_{Template,Complete}.zip` — built clean
+- `dist/Day4_Fighter_Game_{Template,Complete}.zip` — built clean
 - Memory: `d3-base-defense-build-decisions.md` (new), `d4-fighter-build-decisions.md` (new), `d5-racing-build-decisions.md` (new), `d5-racing-asset-pin.md` (updated), `sim-tuning-pattern.md` (new), `parallel-agent-build-pattern.md` (new), `camp-narrative-arc.md` (new), `playtest-tuning-pattern.md` (new), `MEMORY.md` (index updated), `d2-pacman-build-decisions.md` (D2 FC consistency caveat appended)
 
 ---
@@ -923,13 +971,13 @@ None. User said "spec deleted" and was confirming step completion; integration c
 
 ### Where we are
 
-This session closed D5 integration. Ran the 7-step checklist from `RESUME_NEXT_CHAT.md`: headless `--import` (112 GLBs clean), `--quit` parse (1 warning on `hud.gd` group lookup), 10s headed smoke (no errors), built `dist/Day5_Racing_{Complete,Template}.zip` (275 entries each), verified ZIPs clean of `_BUILD_SPEC.md` / `_balance/` / `_*.log` / `.godot/`, flipped BIBLE §6 D5 to "as built 2026-05-25" with full files manifest + sim-cascade summary + build refinements. D5 ships.
+This session closed D5 integration. Ran the 7-step checklist from `RESUME_NEXT_CHAT.md`: headless `--import` (112 GLBs clean), `--quit` parse (1 warning on `hud.gd` group lookup), 10s headed smoke (no errors), built `dist/Day5_Racing_Game_{Complete,Template}.zip` (275 entries each), verified ZIPs clean of `_BUILD_SPEC.md` / `_balance/` / `_*.log` / `.godot/`, flipped BIBLE §6 D5 to "as built 2026-05-25" with full files manifest + sim-cascade summary + build refinements. D5 ships.
 
 **All 5 day ZIPs now live in `dist/`.** Code-correct + smoke-test clean across the board. NONE of the games has been opened in Godot and actually played. User explicitly flagged: "I was given steps to verify in Godot but skipped to keep building" — next session is the visual verification pass + any bug-fix loop the playtest surfaces.
 
 ### Last decision locked
 
-D5 BIBLE flipped "design locked, build pending" → "as built 2026-05-25" with: full file manifest (10 main + 12 prefabs + 112 GLBs + `car_tune.json` + INSTRUCTOR_NOTES), sim-cascade summary (5 leaves + umbrella 9/9 + `_balance/Day5/` layout), 6 build refinements (band test loosen / contract.py rename / cavecrew-bypass note / hud group warning / smoke-log leak / suspension `@export` adds), build status (`dist/Day5_Racing_*.zip` 275 entries each), open items (visual playtest at top of list).
+D5 BIBLE flipped "design locked, build pending" → "as built 2026-05-25" with: full file manifest (10 main + 12 prefabs + 112 GLBs + `car_tune.json` + INSTRUCTOR_NOTES), sim-cascade summary (5 leaves + umbrella 9/9 + `_balance/Day5/` layout), 6 build refinements (band test loosen / contract.py rename / cavecrew-bypass note / hud group warning / smoke-log leak / suspension `@export` adds), build status (`dist/Day5_Racing_Game_*.zip` 275 entries each), open items (visual playtest at top of list).
 
 ### Next pending pick (if awaiting user input)
 
@@ -937,7 +985,7 @@ None awaiting input. Next session is **hands-on playtest** — user opens each p
 
 **Verification protocol (per-day checklist for next chat):**
 
-**D3 Base Defense (`Day3_BaseDef/`):**
+**D3 Base Defense (`Day3_BaseDef_Game/`):**
 - Open in Godot 4.6.3 editor, hit Play.
 - Place each of 3 tower types (Cannon / Sniper / Splash) via keys 1/2/3 + click on grid.
 - Press SPACE to start wave 1, watch enemies seek base.
@@ -945,7 +993,7 @@ None awaiting input. Next session is **hands-on playtest** — user opens each p
 - Watch for: Kenney TD sprite picks looking wrong, splash AoE radius unclear, currency too tight/loose, tower-type damage feel imbalanced.
 - Test `endless_mode.gd` Final Challenge if user wants to verify FC flow.
 
-**D4 Smash Bros lite (`Day4_Fighter/`):**
+**D4 Smash Bros lite (`Day4_Fighter_Game/`):**
 - Open in Godot editor, hit Play.
 - Char-select both players, map-select, drive through one full match (HP → 0).
 - Verify: P1 WASD+F works, P2 Arrows+RShift works, gravity feels right, jump-through one-way platforms, projectiles spawn + die + damage, HP bars deplete, win panel shows, R-restart works.
@@ -953,7 +1001,7 @@ None awaiting input. Next session is **hands-on playtest** — user opens each p
 - Watch for: character sprite picks (currently `tile_0000-0003` semi-arbitrary, may not match Knight/Ninja/Mage/Archer flavor — user can swap), projectile sprite (`tile_0151`) looking wrong, drop-through platform gap (Down+Jump not implemented — known).
 - Test all 3 maps (Battlefield / Final Destination / Pokémon Stadium).
 
-**D5 Rally Camp (`Day5_Racing/`):**
+**D5 Rally Camp (`Day5_Racing_Game/`):**
 - Open in Godot editor, hit Play.
 - Drive starter mini-rally track (W/Up throttle, S/Down brake, A/D steer, Space handbrake).
 - Verify: car physics feel approximates AoR (handbrake oversteer, controllable slide, throttle-modulated power slide), 3 laps complete, ghost car records on lap 1 + plays back on lap 2+, lap counter increments only after checkpoints crossed in order, P pause works, R reset works, race-complete panel at lap 3.
@@ -982,9 +1030,9 @@ None awaiting input. Next session is **hands-on playtest** — user opens each p
 ### Files Touched This Session
 
 - `BIBLE.md` — flipped §6 D5 heading "design locked 2026-05-23, build pending" → "as built 2026-05-25"; added full D5 files-on-disk manifest, sim-cascade summary, build approach note, 6 build refinements, build status, open items; appended this Session Pause block.
-- `dist/Day5_Racing_Complete.zip` — built clean (275 entries), no `_BUILD_SPEC.md` / `_balance/` / `_*.log` / `.godot/` cache.
-- `dist/Day5_Racing_Template.zip` — same.
-- `Day5_Racing/_stderr.log` + `_stdout.log` — written by 10s smoke test, then deleted pre-rebuild so they wouldn't leak into ZIPs.
+- `dist/Day5_Racing_Game_Complete.zip` — built clean (275 entries), no `_BUILD_SPEC.md` / `_balance/` / `_*.log` / `.godot/` cache.
+- `dist/Day5_Racing_Game_Template.zip` — same.
+- `Day5_Racing_Game/_stderr.log` + `_stdout.log` — written by 10s smoke test, then deleted pre-rebuild so they wouldn't leak into ZIPs.
 
 ---
 
@@ -1162,4 +1210,69 @@ Default if user says "start": **D1**.
 - `~/.claude/.../memory/slides-build-pipeline.md` (new memory) — cross-chat pointer to `SLIDES_PLAN.md` + next-chat boot procedure.
 - `~/.claude/.../memory/MEMORY.md` — added one-line pointer to `slides-build-pipeline.md`.
 - Git: `51e1845` initial commit (883 files, scaffolds + plan), `c995ce0` logo pull (`iCodeLogoRed.png`). Both on `origin/master`. Wrap session edits (BIBLE §TODO + pause-block + SLIDES_PLAN + SLIDES_FORMATS + memory) NOT YET committed — defer to user.
+
+---
+
+## Session Pause — 2026-05-27 (D1 slide blueprint authored)
+
+**Lane / context:** single context (iCode camp).
+**Active workstream/task:** slide-deck pipeline — Phase 2.5 (per-day blueprint authoring), D1 done; D2-D5 pending.
+**Status:** awaiting-pick (which day to blueprint next).
+
+### Where we are
+
+D1 Pong slide blueprint is fully authored and committed. The pattern that drives every concept introduction is now locked: **Concept → Example → How-it's-used → Where-in-our-game → Do-it** (the "5-step micro-arc"). Worksheet template in BIBLE §TODO is updated with `[new-concept]` and `[extension]` variants. The full per-slide manifest for D1 lives in `Day1_Pong_Game/SLIDE_SOURCE.md` as §10 — 105 slides (S001-S105) covering the opener pack + walkthroughs A/B/C/D + all 9 chunks (in lesson order: #1a, #1b, #6a, #6b, #2, #4, #3, #5, #1b-suffix). Each slide is tagged with its G01-G12 format from the v2 collapse map, has final body prose, screenshot filename, and red-overlay description ready for the python-pptx build chat to consume mechanically. §10.17 sections (personalization, FC, asset recap, export, closer — ~37 more slides) are stubbed but deferred to a follow-up pass. Commit `15cdd6d` pushed to `origin/master` 2026-05-27. Next chat: pick a day (D2/D3/D4/D5), repeat the same authoring shape.
+
+### Last decision locked
+
+**5-step micro-arc pattern** (BIBLE §TODO "Per-chunk slide blueprint (LOCKED 2026-05-27)"):
+
+For chunks introducing a NEW concept — full 5-step pack:
+1. **Concept slides** — name, etymology, plain-English meaning.
+2. **Example slides** — concrete real-world metaphor; ends with a kid Q answered aloud + a takeaway slide.
+3. **How-it's-used slides** — bridge to games in general.
+4. **Where-in-our-game slides** — Godot screenshots with red overlays pointing at existing instances + the upcoming hole.
+5. **Example + TODO side-by-side slide (MANDATORY)** — board example LHS, `#@todo` screenshot with red highlight RHS.
+
+For chunks that EXTEND a concept already introduced — slim pack: recap line + Example+TODO + optional after-works.
+
+**Reason recorded:** "every new concept must travel the same path; repeated exposure to the same teaching shape across all 4 days reduces cognitive load — kid learns the lesson rhythm, not just the lesson content."
+
+D1 concept decomposition decisions (also locked):
+- 6 new-concept arcs: #1a Variable (cookie jar), #1b naming (programmer-silliness, foobar/`fligerbigitibetting`), #6a Boolean (light switch), #6b if (hungry → eat), #4 if/else (fork in road), #5 comparison (rollercoaster height).
+- 3 slim extensions: #2 `+=`, #3 if-recap, #1b-suffix display.
+- Cuss-word reference removed from #1b per user (kids audience).
+
+### Next pending pick (awaiting user input)
+
+When the next chat boots, which day do we blueprint next?
+
+Options:
+- **D2 (Pac-Man)** — 6 chunks. Introduces TileMapLayer concept which needs its own orientation walkthrough (separate from per-chunk arcs). Medium density. Natural next step after D1.
+- **D3 (Base Defense)** — 8 chunks. Highest list-and-function depth; #6 nested function calls is the heaviest concept-intro of the camp. Save for after D2 so concept-intro pattern has a calibration day in between.
+- **D4 (Fighter)** — 7 chunks. #6 + #7 are the largest slide-load-bearing chunks (big `match` block, attack method). Save for last among code-heavy days.
+- **D5 (Racing)** — no morning code chunks per `d5-racing-build-decisions`. Opener pack + walkthroughs + personalization carry the day. Lightest authoring but novel shape. Defer until D2-D4 are done so the cross-day rhythm is locked first.
+
+**Default if user says "start":** D2 (lesson-day-order is the natural cadence).
+
+### Critical context to carry forward
+
+- 5-step micro-arc is THE template for every new-concept chunk going forward. Slim pack for extensions. Do not invent new structures per day.
+- Per-slide author must produce: format tag (G01-G12 per `SLIDES_FORMATS.md` v2), final pasteable body prose, screenshot filename, red-overlay description, optional speaker note. This is the contract with the python-pptx build chat.
+- D1 §10 is the reference implementation. Match its schema verbatim in §10 of every other DayN_*/SLIDE_SOURCE.md.
+- Per-day fixed opener pack: welcome / today / yesterday→today (D2+ only) / 5-day arc / concepts. Same shape every day.
+- After-works slides only at visible-game-behavior payoff moments. D1 had 6; budget similar per day.
+- §10.17 sections (personalization, FC, asset recap, export, closer) are stubbed but NOT authored. They get a Phase 2.5b pass after all 5 day-§10 lesson blocks are done. Do not stop and author them per-day.
+- Format catalog v2 collapse (G01-G12) is what slides reference; v1 F-IDs still appear in the §"Format list" and §"Per-day count estimate" sections of `SLIDES_FORMATS.md` — rewrite to G-IDs is deferred until after Phase 2.5.
+- Brand inputs still pending: 2-3 sample iCode PPTX decks + font picks. Not blocking Phase 2.5; blocks Phase 3.
+- BIBLE §17 (~line 977) "iCode is a git repo … initial commit + push still not done" is STALE. Repo is committed + pushed (`15cdd6d` latest). Refresh on next BIBLE edit that touches §17.
+
+### Files Touched This Session
+
+- `BIBLE.md` — replaced §TODO "Per-chunk slide blueprint" section with locked 5-step micro-arc spec; replaced authoring worksheet with `[new-concept]` and `[extension]` variants; appended this Session Pause block.
+- `Day1_Pong_Game/SLIDE_SOURCE.md` — appended §10 "Slide blueprint" (940 lines): schema, opener pack S001-S005, GDScript-vs-Python S005, Pre-coding section divider S006, Walkthroughs A/B S007-S019, lesson section divider S020, all 9 chunks (S021-S105) with full per-slide prose + screenshot specs + red-overlay descriptions, §10.17 stubs for personalization/FC/asset/export/closer, §10.18 build-time notes for python-pptx chat.
+- `SLIDES_FORMATS.md` — already had v2 collapse mapping from prior session; committed unchanged this session.
+- `RESUME.md` — overwritten with new kickoff (see below).
+- `~/.claude/.../memory/slides-build-pipeline.md` — updated Phase 2.5 status: D1 done.
+- Git: `15cdd6d` "D1 slide blueprint: lock 5-step micro-arc, author §10 per-slide manifest" — pushed to `origin/master` 2026-05-27. Submodule `Demos/MedievalRTS` left alone (unrelated to this session).
 
