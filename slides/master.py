@@ -53,18 +53,60 @@ def _add_gradient_header(slide):
 
 
 def _add_logo(slide):
-    """Drop the iCode logo top-left on the header strip."""
-    if not theme.LOGO_RED_PATH.exists():
-        return None
-    # Logo height = ~70% of header strip
+    """Drop the iCode logo top-left on the header strip + the iCode wordmark
+    + tagline next to it (matches the brand sample decks)."""
     logo_height = Inches(0.65)
     logo_top = Inches(0.15)
     logo_left = Inches(0.3)
-    slide.shapes.add_picture(
-        str(theme.LOGO_RED_PATH),
-        logo_left, logo_top,
-        height=logo_height,
+
+    if theme.LOGO_RED_PATH.exists():
+        slide.shapes.add_picture(
+            str(theme.LOGO_RED_PATH),
+            logo_left, logo_top,
+            height=logo_height,
+        )
+        # Match the logo's natural aspect (~1.3:1) so the text-box starts at the right edge
+        wordmark_left = logo_left + Inches(0.85)
+    else:
+        wordmark_left = logo_left
+
+    # "iCode" wordmark — large bold white
+    wordmark_box = slide.shapes.add_textbox(
+        wordmark_left, Inches(0.05),
+        Inches(2.0), Inches(0.55),
     )
+    tf = wordmark_box.text_frame
+    tf.margin_left = Emu(0)
+    tf.margin_right = Emu(0)
+    tf.margin_top = Emu(0)
+    tf.margin_bottom = Emu(0)
+    p = tf.paragraphs[0]
+    p.alignment = 1  # left
+    run = p.add_run()
+    run.text = "iCode"
+    run.font.name = theme.FONT_HEADING
+    run.font.size = Pt(32)
+    run.font.bold = True
+    run.font.color.rgb = theme.BG_WHITE
+
+    # Tagline — small white below the wordmark
+    tagline_box = slide.shapes.add_textbox(
+        wordmark_left, Inches(0.6),
+        Inches(2.5), Inches(0.25),
+    )
+    tf = tagline_box.text_frame
+    tf.margin_left = Emu(0)
+    tf.margin_right = Emu(0)
+    tf.margin_top = Emu(0)
+    tf.margin_bottom = Emu(0)
+    p = tf.paragraphs[0]
+    p.alignment = 1
+    run = p.add_run()
+    run.text = "EMPOWERING FUTURE INNOVATORS"
+    run.font.name = theme.FONT_BODY
+    run.font.size = Pt(8)
+    run.font.bold = True
+    run.font.color.rgb = theme.BG_WHITE
 
 
 def _add_day_tab(slide, day_number):

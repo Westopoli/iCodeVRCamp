@@ -51,10 +51,10 @@ def main():
                  image_path=Path("placeholder.png"),
                  caption="Pong (Atari, 1972) — the arcade cabinet that started it all.")
 
-    # L5 — Table (chunk-table style)
+    # L5 — Table (task-table style — kid-facing label is "task" not "chunk")
     tpl.l5_table(prs, day=1, page=6,
-                 heading="Today's chunks",
-                 header_row=["#", "Concept", "File location", "Hole size"],
+                 heading="Today's tasks",
+                 header_row=["#", "Concept", "File location", "Size"],
                  data_rows=[
                      ["#1a", "Variable declaration", "main.gd:35-39", "small"],
                      ["#1b", "Creative naming", "main.gd:45-48", "small"],
