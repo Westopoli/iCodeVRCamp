@@ -3,6 +3,10 @@
 [ext_resource type="PackedScene" path="res://assets/kenney_racing/roadCornerSmall.glb" id="1"]
 
 [node name="Hairpin_L" type="Node3D"]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 0, 0)
 
-[node name="Road" parent="." instance=ExtResource("1")]
+[node name="CornerA" parent="." instance=ExtResource("1")]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 0, 0, 0)
+
+[node name="CornerB" parent="." instance=ExtResource("1")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -3, 0, -3)

@@ -1276,3 +1276,75 @@ Options:
 - `~/.claude/.../memory/slides-build-pipeline.md` — updated Phase 2.5 status: D1 done.
 - Git: `15cdd6d` "D1 slide blueprint: lock 5-step micro-arc, author §10 per-slide manifest" — pushed to `origin/master` 2026-05-27. Submodule `Demos/MedievalRTS` left alone (unrelated to this session).
 
+## Session Pause — 2026-05-29 (D5 visual playtest debug + mac port)
+
+**Lane / context:** D5 visual playtest (separate from slide-deck pipeline lane — that one lives in `RESUME.md`).
+**Active workstream/task:** D5 Godot visual debug + Z-track prefab rebuild + cross-platform repo setup.
+**Status:** in-progress — initial debug + mac port committed and pushed (`714c8f5`); paused mid Z-rebuild awaiting a 3-fork pick (tile/car scale, Hairpin composition, Chicane composition).
+
+### Where we are
+
+D5 game opened blank brown viewport on first launch. Diagnosed via instrumented prints in `main.gd`/`car.gd`/`track.gd`: `StarterTrack` ship-empty, car free-falling into void, camera tracking car y to -426. Patched with temp 80×80 green StaticBody3D ground plane + one `Straight_Long` prefab + visible BoxMesh under `StarterTrack` so car lands and is visible. Then fixed wheel y=0.3→-0.3 in `Car.tscn` (wheels couldn't reach ground past body collider) + added `wheel_rest_length=0.15` to rear wheels (was missing → no suspension travel). Car now drives. Visual GLB faced camera + steering inverted because Godot/Kenney axis conventions disagreed — fixed by rotating Car spawn 180° around Y in `Main.tscn` + flipping steering sign in `car.gd`.
+
+Game is playable on a flat stub plane. Real B-layout track is not laid yet. Prefab AABB probe revealed all road tiles 1-3m (car collision 2m×1m×4m) — scale mismatch. Audit of the 12 prefab `.tscn` files exposed two semantic bugs from the original swarm build: **Hairpin_L/R** instances `roadCornerSmall.glb` (just a 1m tight 90°, not a 180° U-turn); **Chicane** instances `roadCurvedSplit.glb` (a Y-fork, not an S-curve).
+
+Parallel work this session — full cross-platform repo port (user moving to mac): `.gitignore` fix (removed `*.import` which was breaking fresh clones — `.import` files hold stable UIDs that `.tscn` files reference), new `.gitattributes` (LF + binary patterns), Python port of `build_templates.ps1` → `build/build_templates.py` (same Template/Complete ZIP contract, cross-platform), new `CROSS_PLATFORM.md` workflow doc, 787 previously-untracked `.import` files staged + committed.
+
+### Last decision locked
+
+User picks (this session, in order):
+1. **C** — DayN folder rename to `Day1_Pong_Game/` etc. with `_Game` suffix. Renames + path patches done + committed earlier in session, plus mac-portability commit on top.
+2. **Mac port: FULL** — ship `.gitignore` fix + `.gitattributes` + Python build script + `CROSS_PLATFORM.md` + stage all `.import` files in one commit. Done in `714c8f5`.
+3. **Z** — rebuild prefab library properly (audit-and-rewrite the 12 prefab `.tscn` files using correct Kenney GLBs, compose Hairpin from 2 corners, Chicane from L+R corners). Decision locked but execution paused on the 3-fork pick below.
+4. **B** — classic rally lap layout for the starter track: Start → Straight_Long → Sweeper_R → Straight_Short → Hairpin_L → Straight_Short → 90_R → Chicane → Straight_Long → Sweeper_L → 90_L → Finish (~11 segments, hits all 6 turn types BIBLE D13 called for). Authoring blocked on Z prefab fixes + scale decision.
+
+### Next pending pick (3-fork — verbatim from session)
+
+**1 — Tile/car scale fix:**
+- (a) Shrink car collision to ~2.5m × 1.0m to match Kenney scale **[recommended]**
+- (b) Scale all prefabs ×4 (transform.scale)
+- (c) Audit car GLB first, then decide
+
+**2 — Hairpin composition:**
+- (a) 2× `roadCornerSmall` back-to-back → true 180° U-turn, 2m × 2m footprint **[recommended]**
+- (b) Single `roadCornerLarger` → smooth 90° (renames "Hairpin" misleadingly)
+- (c) `roadCornerSmall` + `roadStraight` (short side) + `roadCornerSmall` → longer hairpin with infield
+
+**3 — Chicane composition:**
+- (a) `roadCornerLarge` L + `roadCornerLarge` R → smooth S-curve **[recommended]**
+- (b) `roadCornerSmall` L + R → sharp S
+- (c) Existing `roadCurved.glb` if already S-shaped (needs probe of that GLB)
+
+After pick is locked: rebuild the 4 affected prefabs, re-run AABB probe to measure final dims, author Main.tscn with B layout using measured transforms, relocate Checkpoint1/2/3 to fit B (current positions are at static (±50, 1, ±50) and assume large diamond), strip debug prints, rebuild ZIPs, commit.
+
+### Critical context to carry forward
+
+- **Lane discipline:** D5 visual playtest is a separate lane from the slide-deck pipeline (Phase 2.5 per-day §10 blueprints). Slide lane's resume = `RESUME.md`; this lane's resume = `C:\Users\Westley Yarlott\bangmans-abode\random\a.txt` (per user's pattern). Do not cross-contaminate.
+- **CLAUDE.md Hard Rule 1 still in force:** present 2-4 options + pros/cons for any open D5 design choice; do not decide unilaterally. The remaining 3-fork above is the live application of this rule.
+- **Kenney pack pivot persists:** D5 uses Kenney 3D racing kit (112 GLBs in `Day5_Racing_Game/assets/kenney_racing/`), NOT Sloyd procgen. Asset pack `kenney_racing` confirmed present + license preserved.
+- **Tile/car scale is the load-bearing unknown:** AABB probe results (in committed `paste.txt`-equivalent and in pause notes above) say tiles are 1-3m, car collision is 4m. Whatever Z rebuild does, it must converge tile + car to one scale before B-layout transforms make sense. The original BIBLE D11 "Cell size 4m" lock is now in tension with measured Kenney tile sizes — flag for revisit if user picks (a) and shrinks car.
+- **Probe + debug prints are still live** in `main.gd`/`car.gd`/`track.gd` (AABB probe in `_probe_prefab_aabbs`, `[CARPHYS]`/`[MAIN tick]`/etc.). Must strip before shipping ZIPs but USEFUL during Z rebuild — keep them for the next session's iteration loop, strip in the same commit that locks the B layout.
+- **Temp visible ground + single stub straight** under `Track/StarterTrack` in `Main.tscn` is a debug scaffold, not the ship state. Z-rebuild will replace it. Don't accidentally ship the green plane as the final track.
+- **Mac portability fully wired** as of `714c8f5`. Fresh clone on a mac should work: `git clone` → open Godot 4.6.3 → File → Open Project. If a mac chat reports asset-resolve failures, first check `.import` files are present (`git ls-files | grep .import | wc -l` should show ~787).
+- **Demos/MedievalRTS** submodule pointer advanced in this commit (was carried along). Independent lane; not part of D5 work — left in commit because user said "current state."
+- **Probe / debug print presence flag for resume:** `_probe_prefab_aabbs` runs every `_ready` and spawns + frees 12 prefabs at origin during one frame each. Visual flicker on start is expected, not a regression. Remove only after Z+B is shipped.
+- **User feedback this session:** prefers `paste.txt` at `C:/Users/Westley Yarlott/Games/iCode/paste.txt` for pasting long console output (terminal paste in PowerShell breaks on long input). Read this file directly rather than asking user to paste in chat when console-heavy debugging is happening.
+
+### Files Touched This Session
+
+- `Day5_Racing_Game/Main.tscn` — added temp 80×80 green StaticBody3D ground + BoxMesh + StandardMaterial3D under `Track/StarterTrack`; instanced one `Straight_Long` prefab under same; rotated `Car` spawn 180° around Y (Transform3D(-1,0,0, 0,1,0, 0,0,-1, 0,1,5)).
+- `Day5_Racing_Game/Car.tscn` — lowered all 4 wheel y from 0.3 to -0.3; added `wheel_rest_length=0.15` to RL+RR (was missing).
+- `Day5_Racing_Game/car.gd` — debug prints in `_ready` (GLB load, group membership, tune dict keys) and `_physics_process` (`[CARPHYS]` every 30 ticks: throttle/brake/steer/handbrake/y/vel/wheel contact); `add_to_group("car")` at end of `_ready`; flipped steering sign (`steer_right - steer_left`); added `_dbg_phys_counter` var.
+- `Day5_Racing_Game/main.gd` — `_probe_prefab_aabbs` runs in `_ready` (loads each of 12 prefabs, awaits one process frame, computes aggregate AABB from `VisualInstance3D` descendants, prints, frees); chase-cam tick logging every 1s; track child-count + group-membership diagnostic prints; helpers `_aggregate_aabb` + `_iter_descendants`.
+- `Day5_Racing_Game/track.gd` — `_ready` debug prints (car group lookup, StartLine, Checkpoint1-3 resolution, StarterTrack child count + per-child class).
+- `.gitignore` — removed `*.import` line + added explanatory note (`.import` files are stable-UID asset metadata, must be tracked).
+- `.gitattributes` — NEW. `* text=auto eol=lf` global LF normalization + explicit per-extension overrides + binary asset flags (`.glb`, `.png`, `.zip`, etc.).
+- `build/build_templates.py` — NEW. Cross-platform Python port of `build_templates.ps1`. Same on-disk contract (`#@todo`/`#@end` marker strip + per-target ZIP output, `--day` filter flag). Uses `pathlib` + `shutil.copytree(ignore=)` + `zipfile`.
+- `CROSS_PLATFORM.md` — NEW. Workflow doc: Godot 4.6.3 pin, tracked-vs-ignored manifest with `.import` rationale, build-script usage, first-clone steps, case-sensitivity note for case-sensitive APFS.
+- 787 `.import` files across `Day1_Pong_Game/`, `Day2_Maze_Game/`, `Day3_BaseDef_Game/`, `Day4_Fighter_Game/`, `Day5_Racing_Game/` — newly staged + committed (were silently untracked due to old gitignore).
+- Pre-session staged renames + doc patches (Day1_Pong→Day1_Pong_Game etc.) also rolled into this commit since they were already in the index.
+- Git: `714c8f5` "D5 visual playtest debug + DayN folder rename + cross-platform port" — pushed to `origin/master` 2026-05-29.
+- `BIBLE.md` — appended this Session Pause block.
+- `C:\Users\Westley Yarlott\bangmans-abode\random\a.txt` — overwritten with the new D5-lane resume kickoff (see end of this wrap response).
+- `dist/Day1_Pong_Game_*.zip` — touched only by the build-script smoke test (Python build verified working). Other days' ZIPs remain stale from earlier session; rebuild deferred.
+

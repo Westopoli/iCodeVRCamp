@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" path="res://assets/kenney_racing/bannerTowerGreen.glb" id="2"]
 
 [node name="Start" type="Node3D"]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 0, 0)
 
 [node name="Road" parent="." instance=ExtResource("1")]
 

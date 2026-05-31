@@ -3,6 +3,7 @@
 [ext_resource type="PackedScene" path="res://assets/kenney_racing/roadCurved.glb" id="1"]
 
 [node name="S_Curve" type="Node3D"]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 0, 0)
 
 [node name="Curve1" parent="." instance=ExtResource("1")]
 

@@ -13,8 +13,25 @@ var _debug_tick: float = 0.0
 
 
 func _ready() -> void:
-	_probe_prefab_aabbs()
 	print("[MAIN] _ready: car=", car, " pos=", car.position if car else "null")
+	print("[MAIN] _ready: track=", track, " children=", track.get_child_count() if track else -1)
+	if track:
+		var starter := track.get_node_or_null("StarterTrack")
+		print("[MAIN] StarterTrack children=", starter.get_child_count() if starter else -1)
+		var obstacles := track.get_node_or_null("Obstacles")
+		print("[MAIN] Obstacles children=", obstacles.get_child_count() if obstacles else -1)
+	print("[MAIN] car_groups=", car.get_groups() if car else "n/a")
+	if track.has_signal("lap_completed"):
+		track.lap_completed.connect(on_lap_completed)
+	if track.has_signal("race_complete"):
+		track.race_complete.connect(on_race_complete)
+	camera_rig.position = car.position + Vector3(0, 15, 20)
+	camera.look_at(car.position)
+	countdown_label.visible = false
+	race_complete_panel.visible = false
+	pause_panel.visible = false
+	print("[MAIN] _ready done: cam_rig=", camera_rig.position, " cam_global=", camera.global_position)
+	_probe_prefab_aabbs()
 
 
 func _probe_prefab_aabbs() -> void:
@@ -56,23 +73,6 @@ func _iter_descendants(node: Node) -> Array:
 	for c in node.get_children():
 		out.append_array(_iter_descendants(c))
 	return out
-	print("[MAIN] _ready: track=", track, " children=", track.get_child_count() if track else -1)
-	if track:
-		var starter := track.get_node_or_null("StarterTrack")
-		print("[MAIN] StarterTrack children=", starter.get_child_count() if starter else -1)
-		var obstacles := track.get_node_or_null("Obstacles")
-		print("[MAIN] Obstacles children=", obstacles.get_child_count() if obstacles else -1)
-	print("[MAIN] car_groups=", car.get_groups() if car else "n/a")
-	if track.has_signal("lap_completed"):
-		track.lap_completed.connect(on_lap_completed)
-	if track.has_signal("race_complete"):
-		track.race_complete.connect(on_race_complete)
-	camera_rig.position = car.position + Vector3(0, 15, 20)
-	camera.look_at(car.position)
-	countdown_label.visible = false
-	race_complete_panel.visible = false
-	pause_panel.visible = false
-	print("[MAIN] _ready done: cam_rig=", camera_rig.position, " cam_global=", camera.global_position)
 
 
 func _process(delta: float) -> void:

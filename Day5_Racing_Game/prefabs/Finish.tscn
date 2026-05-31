@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" path="res://assets/kenney_racing/flagCheckers.glb" id="3"]
 
 [node name="Finish" type="Node3D"]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 0, 0)
 
 [node name="Road" parent="." instance=ExtResource("1")]
 

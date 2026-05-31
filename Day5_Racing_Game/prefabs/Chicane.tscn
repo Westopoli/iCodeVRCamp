@@ -1,7 +1,12 @@
 [gd_scene load_steps=2 format=4 uid="uid://b8d5p_chic"]
 
-[ext_resource type="PackedScene" path="res://assets/kenney_racing/roadCurvedSplit.glb" id="1"]
+[ext_resource type="PackedScene" path="res://assets/kenney_racing/roadCornerSmall.glb" id="1"]
 
 [node name="Chicane" type="Node3D"]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 0, 0)
 
-[node name="Road" parent="." instance=ExtResource("1")]
+[node name="CornerL" parent="." instance=ExtResource("1")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 0, 0, 0)
+
+[node name="CornerR" parent="." instance=ExtResource("1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, -3)
