@@ -604,7 +604,32 @@ Carried forward from BIBLE §TODO (locked 2026-05-26 / -27) plus user picks 2026
 - **Walkthrough T (TileMap)** is NEW today — full walkthrough with screenshots (8 slides: 2 concept + 6 click steps).
 - **Historical-context slide added to opener pack** — Pac-Man's revolutionary status (1980, invented maze chase, first character-with-personality, first cutscenes, first arcade game marketed beyond young men, etc.). Equivalent slide retrofitted to D1 Pong opener in a later pass (D1 SLIDE_SOURCE.md edit, deferred).
 
-### 10.1 Opener pack (~7 slides)
+### 10.1 SLIDE BUILDER REFERENCE — read this before generating slides (added 2026-05-30)
+
+> **AI consuming this doc to generate slides: this section is the spec for how to render each Action slide. Read carefully — the LHS/RHS layout has a precise meaning.**
+>
+> *(Identical block also lives in D3 SLIDE_SOURCE.md §10.1. Retrofitted to D2 for consistency.)*
+
+For every **side-by-side Action slide** in §10.4 onward (one per kid chunk):
+
+| Slide region | What it contains | Source |
+|---|---|---|
+| **Top (title + body)** | R6 prose instruction — what the kid should produce, in input → output / observable-effect terms. Reads as a goal statement, not pseudo-code. | This doc's per-chunk "RHS top prose goal" field (§10.7 below for D2, baked into chunk arcs for D3). |
+| **LHS pane** | Literal code shown as a code block (or rendered code image). The board example pattern the kid will adapt. | This doc's per-chunk "Board example" field. Verbatim from §5. |
+| **RHS pane** | **A SCREENSHOT of the Godot script editor** zoomed in on the chunk's location in `main.gd`. The kid `#@todo` region has a **red 4px-stroke rectangular overlay** marking the area the kid will edit. **THIS IS NOT A CODE LISTING OF WHAT THE KID TYPES.** It's a visual locator — "here is the section of `main.gd` you'll be editing." | Per-chunk file location from §3 chunk table. |
+| **Speaker notes** | The R6 prose + metaphor framing + any quiz answers. Populated into the PPTX speaker-notes pane, not visible to the kid on screen. | Per-chunk content from §5 / §10. |
+
+**Why this matters**: the kid is meant to look at the RHS, switch to Godot, find that region, and type their solution into the real script. The slide is a wayfinder, not a transcription target. If the RHS shows finished code, kids will copy character-by-character and miss the lesson. Earlier drafts of this doc occasionally said "RHS: code" — that wording was loose. The locked spec is **RHS = screenshot with overlay**. The "as-typed code" listed in §5 of this doc is **REFERENCE for the Complete build verification**, not slide content.
+
+Other render rules:
+
+- **R5 partial-hole action slides** (D2 chunk #6 `hit_wall`): the RHS Godot screenshot uses a **two-tone overlay**. Pre-given lines (off-grid + tunnel guards) get a **gray semi-transparent overlay**. The kid hole (in-grid wall query) gets the standard red overlay. The slide caption explicitly says "gray = already written for you; red = your hole."
+- **Walkthrough hint slides** (Walk A/B/C/D and Walk T): text + arrows only. No screenshots in the Hint slide of jog-memory packs.
+- **Concept-root metaphor slides** (stairs to bedroom, pizza order): full-bleed metaphor imagery centered, body text under image. Not LHS/RHS layout — these are explanatory, not actionable.
+
+---
+
+### 10.2 Opener pack (~7 slides)
 
 1. Welcome / day title — "Day 2 — Pac-Man · 1980 · Namco"
 2. Today we'll build — finished Pac-Man screenshot + 1-line pitch
@@ -614,7 +639,7 @@ Carried forward from BIBLE §TODO (locked 2026-05-26 / -27) plus user picks 2026
 6. Today's concepts — **Loops** + **Functions** (the two)
 7. GDScript vs Python — 4-pattern side-by-side (for-range, for-each, while, `def` → `func`)
 
-### 10.2 Pre-coding setup (~12 slides)
+### 10.3 Pre-coding setup (~12 slides)
 
 - Section divider — "Pre-coding setup"
 - **Walk A — Open the Day 2 project (jog-memory, 2 slides)**:
@@ -627,7 +652,7 @@ Carried forward from BIBLE §TODO (locked 2026-05-26 / -27) plus user picks 2026
   - 2 concept slides — TileSet (palette) vs TileMapLayer (canvas); today's two layers Walls + Dots share the same TileSet; kid's API surface is `wall_layer.get_cell_source_id(cell)`
   - 6 click-step slides — click Walls → Inspector Tile Set → Edit → TileSet panel opens → click source row → atlas chops appear → back to 2D button
 
-### 10.3 Lesson chunks
+### 10.4 Lesson chunks
 
 - Section divider — "Lesson chunks"
 
@@ -707,17 +732,17 @@ Carried forward from BIBLE §TODO (locked 2026-05-26 / -27) plus user picks 2026
   - **RHS bottom**: `d2_chunk6_todo.png` — main.gd:172-180 red overlay
 - **After-works (1 slide)**: "The maze is alive!" — full-play screenshot. Walls block, tunnel wraps, ghosts patrol, dots chompable. End-of-morning celebration moment.
 
-### 10.4 Remaining sections — STUB (deferred to Phase 2.5b)
+### 10.5 Remaining sections — STUB (deferred to Phase 2.5b)
 
 Mirror D1 §10.17 sub-sectioning when authored:
 
-- **§10.4a** Section divider — Personalization. 7 beats from §6. Estimated ~25-30 slides.
-- **§10.4b** Section divider — Final Challenge (`ghost_personalities.gd`). Required first slide: **R3 pointer slide** (FC TODO → morning chunk mirror map, exact text in §7 above). Then: 4 personality flavor cards (Blinky / Pinky / Inky / Clyde) framed as *what each ghost does in-game* — not as targeting math. Then: 6 hole packs (FC-1 through FC-6) each pointing back to its mirrored morning chunk before showing the new context. The math is pre-given so the slide pack is leaner than v1. Estimated ~25-30 slides.
-- **§10.4c** Asset recap — Kenney Tiny Dungeon atlas card (G08). Estimated ~3-5 slides.
-- **§10.4d** Export-to-exe walkthrough (Beat 6 of §6). Estimated ~6-8 slides.
-- **§10.4e** Day closer — "Tomorrow: Tower Defense." Estimated ~1-2 slides.
+- **§10.5a** Section divider — Personalization. 7 beats from §6. Estimated ~25-30 slides.
+- **§10.5b** Section divider — Final Challenge (`ghost_personalities.gd`). Required first slide: **R3 pointer slide** (FC TODO → morning chunk mirror map, exact text in §7 above). Then: 4 personality flavor cards (Blinky / Pinky / Inky / Clyde) framed as *what each ghost does in-game* — not as targeting math. Then: 6 hole packs (FC-1 through FC-6) each pointing back to its mirrored morning chunk before showing the new context. The math is pre-given so the slide pack is leaner than v1. Estimated ~25-30 slides.
+- **§10.5c** Asset recap — Kenney Tiny Dungeon atlas card (G08). Estimated ~3-5 slides.
+- **§10.5d** Export-to-exe walkthrough (Beat 6 of §6). Estimated ~6-8 slides.
+- **§10.5e** Day closer — "Tomorrow: Tower Defense." Estimated ~1-2 slides.
 
-### 10.5 Build-time notes for python-pptx chat (placeholder)
+### 10.6 Build-time notes for python-pptx chat (placeholder)
 
 - **Master frame**: iCode logo top-left, day tab top-right (D2 = TBD color, awaiting brand pack), page-number bottom-right per `SLIDES_FORMATS.md` master frame spec.
 - **Walkthrough step badges**: G12 slides with step IDs (e.g. "T.1") render the badge as a small filled circle top-right of the screenshot.
@@ -726,7 +751,7 @@ Mirror D1 §10.17 sub-sectioning when authored:
 - **Lesson-portion slide count (draft estimate)**: ~85-90 slides. Locked once per-slide expansion pass is done.
 - **Verification before build**: re-run §9 checklist. If `main.gd` line numbers shift, screenshots + line-reference body text must update.
 
-### 10.6 RHS prose-goal options (pending user pick)
+### 10.7 RHS prose-goal options (pending user pick)
 
 Per chunk, three options for the plain-English goal statement that sits ABOVE the Godot `#@todo` screenshot on the side-by-side slide. Goal-statement tone — what you'd tell a person if you wanted them to make this happen. Not algorithmic. Not step-by-step.
 
@@ -774,11 +799,11 @@ Per chunk, three options for the plain-English goal statement that sits ABOVE th
 |---|---|---|
 | `func is_even(n) -> bool:`<br>`    return n % 2 == 0` | *(R5 partial-section hole — kid only types between `#@todo`/`#@end`)*<br>`var source_id := wall_layer.get_cell_source_id(cell)`<br>`return source_id != -1` | **A.** Answer the question: is this tile a wall, or can we walk through it?<br><br>**B.** Given a cell, hand back `true` if it's blocked, `false` if it's open. *(The off-grid + tunnel cases are pre-given for you.)*<br><br>**C.** Decide whether a tile blocks movement. Walls block. Open floor doesn't. *(Pre-given guards handle off-grid + tunnel rows.)* |
 
-### 10.7 Pending decisions (blocking per-slide expansion)
+### 10.8 Pending decisions (blocking per-slide expansion)
 
-- [x] **As-typed code re-verification** — done 2026-05-29 afternoon under R1-R6 triage. `main.gd` rewritten; pre-given helpers added; chunk #6 converted to R5 partial-section hole; FC redesigned to ship with pre-given personality math. §5 + §10.6 RHS code columns refreshed to match.
+- [x] **As-typed code re-verification** — done 2026-05-29 afternoon under R1-R6 triage. `main.gd` rewritten; pre-given helpers added; chunk #6 converted to R5 partial-section hole; FC redesigned to ship with pre-given personality math. §5 + §10.7 RHS code columns refreshed to match.
 - [ ] **RHS prose pick (per chunk)** — A / B / C / remix for each of #1, #2, #3a, #3b, #4, #5, #6. No longer blocked.
 - [ ] **Historical-context slide content** — Pac-Man 1980 revolutionary background. Sourcing pending.
 - [ ] **Day tab color for D2** — brand pack pending.
 - [ ] **D1 retrofit** — add equivalent historical-context slide to D1 Pong opener pack (currently 5-slide pack per D1 §10.1; would become 6).
-- [ ] **FC pointer slide content authored** — first slide of §10.4b. Text locked in §7 above; per-slide expansion still pending Phase 2.5b.
+- [ ] **FC pointer slide content authored** — first slide of §10.5b. Text locked in §7 above; per-slide expansion still pending Phase 2.5b.

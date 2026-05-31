@@ -68,6 +68,18 @@ Five-day summer coding camp. Replaces a prior Unity + C# + VR camp that collapse
 
 These rules supersede any earlier mention of mid-day stretch chunks in this BIBLE. Any older table cell or "as-built" note that tags a mid-day chunk as `stretch` / `[stretch]` / `(STRETCH)` is **historical**, not authoritative; remediation per-day is tracked in the triage plan.
 
+#### Lingo lock — "concept" vs "chunk" vs "sub-hole" (added 2026-05-30)
+
+To avoid ambiguity in slide planning, FC-mirror counting, and rule-application:
+
+- **Concept** = the day's umbrella idea(s). One or two per day, per the §4 concept map (D1 = Vars + Conditions; D2 = Loops + Functions; D3 = Lists + Deeper Functions; D4 = Objects + State). "For-loops" and "while-loops" are NOT separate concepts — they are sub-shapes under the umbrella "Loops."
+- **Chunk** = a specific lesson slot in this BIBLE's §4 per-day tables. D3 has 8 chunks (#1, #2, #3, #4, #5a, #5b, #6, #7); the splits like `#5a / #5b` are still **one chunk each** — they are sibling lesson slots, not sub-concepts.
+- **Sub-hole** = a single `#@todo` block in the scaffold. A chunk can ship as multiple sub-holes when R5 splits it (e.g. D3 chunk #6 ships as sub-holes #6a + #6b inside a pre-given `match` dispatcher; D3 chunk #2 ships as sub-holes #2a + #2b reward-branch + #2b no-reward-branch under the single "list grow/shrink" lesson).
+
+**Why this matters:** R3.1 (FC mirror completeness) is measured in *chunks*, not in *concepts* and not in *sub-holes*. FC ships one mirror hole per morning chunk — not one per concept (would under-mirror) and not one per sub-hole (would over-mirror).
+
+**How to apply:** when sizing the FC, count rows in the §4 per-day chunk table. That's the FC's hole count target (±20% LoC envelope).
+
 **R1 — Stretch goals.** Stretch = the day's **Final Challenge file only**. One per day, one bounded goal. No mid-day chunk is ever tagged as stretch. Mid-day chunks must sit at or below the day's concept ceiling for every kid line.
 
 **R2 — TODO line authoring.** Each kid-written line has **one purpose**. C-style simple. Nesting restrictions by day:
@@ -109,6 +121,10 @@ These rules supersede any earlier mention of mid-day stretch chunks in this BIBL
   - Framing = "review disguised as unlocking a new feature" — tangible payoff (new mode / new character / new behavior) but the code shape reuses what they already wrote that day.
   - **Required Final Challenge slide** in each day's deck: maps each FC TODO → the earlier chunk(s) it mirrors. Core message: "contrast each FC TODO with what you already implemented earlier today — each one is nothing new, you already learned how to do it." No new code on this slide; pure pointer.
   - This supersedes earlier "half-guided — slides give targeting rules in prose + diagrams" framing in the Final Challenge table for D2 and D3.
+
+**R3.1 — FC mirror completeness (locked 2026-05-29).** The Final Challenge ships **one kid mirror hole per morning chunk** (see Lingo lock above — "chunk" means a row in the §4 per-day table, not a "concept" umbrella and not a `#@todo` sub-hole). Total FC kid LoC is within **±20%** of morning kid LoC. Every chunk's lesson reappears in the FC; no chunk skipped. Same shape, new context — payoff math hidden in pre-given helpers.
+  - **Why:** R3 says FC is a review. A "review" that skips half the day's chunks isn't a review — it's a sample. D2's FC (6 morning chunks → 6 FC mirror holes → ~24 vs ~25 kid LoC) is the reference model. D3's earlier FC (8 morning chunks → 4 FC mirror holes → ~12 vs ~36 kid LoC) failed this rule; remediated 2026-05-29 to 8 mirror holes (one per chunk; FC ships 12 `#@todo` sub-holes total because FC-6 mirrors morning chunk #6's match dispatcher with one sub-hole per branch).
+  - **How to apply:** count rows in the §4 per-day chunk table when sizing FC. Ship one mirror hole per row. Sub-hole count can differ on both sides (R5 splits + match-branch splits); what must match is *mirror hole per chunk* coverage. Tally kid LoC for both sides and confirm ±20% envelope. If the FC needs a payoff that doesn't naturally exercise every chunk, expand the payoff (more state, more lists, more per-frame loops) rather than dropping mirrors.
 
 ### Day 1 — Pong concept chunks (Vars + Conditions)
 

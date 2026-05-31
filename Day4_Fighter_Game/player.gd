@@ -67,7 +67,7 @@ var state: String = "idle"
 func set_state(new_state: String) -> void:
 	if new_state == state:
 		return
-	print("[P%d %s] state %s -> %s" % [player_num, character_name, state, new_state])
+	print(new_state)
 	state = new_state
 #@end
 
@@ -77,6 +77,13 @@ func get_input_pressed(action: String) -> bool:
 
 func get_input_just_pressed(action: String) -> bool:
 	return Input.is_action_just_pressed("p%d_%s" % [player_num, action])
+
+func get_move_direction() -> int:
+	if get_input_pressed("left"):
+		return -1
+	if get_input_pressed("right"):
+		return 1
+	return 0
 
 # === pre-given: physics + flow ===
 func _physics_process(delta: float) -> void:
@@ -99,53 +106,61 @@ func _physics_process(delta: float) -> void:
 		queue_redraw()
 	sprite.modulate = character_data["tint"] if hit_flash_timer <= 0.0 else Color(1, 0.4, 0.4)
 
-	# === KID CHUNK #6 — STATE MACHINE MATCH (STRETCH) ===
-	#@todo
+	# === KID CHUNK #6 — STATE MACHINE: pick the right state-change ===
+	# Pre-given: the match dispatcher + per-branch velocity + attack / hit exits.
+	# Kid fills (4 sub-holes): the `if` blocks that decide WHICH state comes next.
 	match state:
 		"idle":
 			velocity.x = 0
-			if get_input_pressed("left") or get_input_pressed("right"):
+			# TODO #6a — idle exits: switch to walk on movement, jump on jump-key.
+			#@todo
+			if get_move_direction() != 0:
 				set_state("walk")
 			if get_input_just_pressed("jump") and is_on_floor():
 				velocity.y = -jump_impulse
 				set_state("jump")
-			if get_input_just_pressed("attack") and attack_cooldown_timer <= 0.0:
-				attack()
-				set_state("attack")
+			#@end
 		"walk":
-			velocity.x = walk_speed * (-1 if get_input_pressed("left") else 1 if get_input_pressed("right") else 0)
-			if velocity.x == 0:
+			velocity.x = walk_speed * get_move_direction()
+			# TODO #6b — walk exits: back to idle when no movement, up to jump on jump-key.
+			#@todo
+			if get_move_direction() == 0:
 				set_state("idle")
 			if get_input_just_pressed("jump") and is_on_floor():
 				velocity.y = -jump_impulse
 				set_state("jump")
-			if get_input_just_pressed("attack") and attack_cooldown_timer <= 0.0:
-				attack()
-				set_state("attack")
+			#@end
 		"jump":
-			velocity.x = walk_speed * (-1 if get_input_pressed("left") else 1 if get_input_pressed("right") else 0) * 0.85
+			velocity.x = walk_speed * get_move_direction() * 0.85
+			# TODO #6c — jump exit: when upward velocity runs out, switch to fall.
+			#@todo
 			if velocity.y > 0:
 				set_state("fall")
-			if get_input_just_pressed("attack") and attack_cooldown_timer <= 0.0:
-				attack()
-				set_state("attack")
+			#@end
 		"fall":
-			velocity.x = walk_speed * (-1 if get_input_pressed("left") else 1 if get_input_pressed("right") else 0) * 0.85
+			velocity.x = walk_speed * get_move_direction() * 0.85
+			# TODO #6d — fall exit: when the player lands, switch to idle.
+			#@todo
 			if is_on_floor():
 				set_state("idle")
-			if get_input_just_pressed("attack") and attack_cooldown_timer <= 0.0:
-				attack()
-				set_state("attack")
+			#@end
 		"attack":
-			# cooldown is timed via attack_cooldown_timer started by attack()
-			velocity.x = walk_speed * (-1 if get_input_pressed("left") else 1 if get_input_pressed("right") else 0) * (1.0 if is_on_floor() else 0.85)
+			# Pre-given: keep moving while attacking, exit when cooldown done.
+			var ground_factor: float = 1.0 if is_on_floor() else 0.85
+			velocity.x = walk_speed * get_move_direction() * ground_factor
 			if attack_cooldown_timer <= 0.0:
 				set_state("idle" if is_on_floor() else "fall")
 		"hit":
+			# Pre-given: frozen while flashing, then exit.
 			velocity.x = 0
 			if hit_flash_timer <= 0.0:
 				set_state("idle" if is_on_floor() else "fall")
-	#@end
+
+	# Pre-given: attack input is universal across idle / walk / jump / fall.
+	if state != "attack" and state != "hit":
+		if get_input_just_pressed("attack") and attack_cooldown_timer <= 0.0:
+			attack()
+			set_state("attack")
 
 	move_and_slide()
 
@@ -169,11 +184,16 @@ func attack() -> void:
 			melee_swing_timer = 0.15
 			queue_redraw()
 			var opponent = get_opponent()
-			if opponent != null and not opponent.is_dead():
-				var to_opp = opponent.position - position
-				# in range AND in facing direction
-				if abs(to_opp.x) <= character_data["attack_range"] and sign(to_opp.x) == facing and abs(to_opp.y) <= 60:
-					opponent.take_damage(attack_damage)
+			if opponent == null:
+				return
+			if opponent.is_dead():
+				return
+			var to_opp = opponent.position - position
+			var in_range = abs(to_opp.x) <= character_data["attack_range"]
+			var facing_opponent = sign(to_opp.x) == facing
+			var same_height = abs(to_opp.y) <= 60
+			if in_range and facing_opponent and same_height:
+				opponent.take_damage(attack_damage)
 		"projectile":
 			spawn_projectile()
 	#@end

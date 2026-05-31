@@ -123,21 +123,31 @@ Projectile (Area2D) — script: projectile.gd
 
 ---
 
-## 3. Chunk table — verified against code
+## 3. Chunk table — verified against code (refreshed 2026-05-30 under R1 + R2 + R5)
 
-In lesson order (BIBLE §4 D4 order: 1 → 2 → 3 → 4 → 5 → 6 → 7).
+In lesson order (BIBLE §4 D4 order: 1 → 2 → 3 → 4 → 5 → 6 → 7). Chunk #6 is now an R5 partial-section hole — the `match` dispatcher + per-branch velocity + `attack`/`hit` exits are pre-given; the kid fills four sub-holes (#6a/#6b/#6c/#6d) holding only the state-transition `if` blocks.
 
-| # | Concept | File location | Hole lines | Hole size |
+| # | Concept | File location | Kid LoC | Hole size |
 |---|---|---|---|---|
 | #1 | Object properties — core (hp, facing) | `player.gd:48-52` | 3 | small |
 | #2 | Object properties — character data (speed, attack stats) | `player.gd:55-61` | 5 | small |
-| #3 | Method — `take_damage(amount)` | `player.gd:154-161` | 6 | medium |
+| #3 | Method — `take_damage(amount)` | `player.gd:169-176` | 6 | medium |
 | #4 | Two instances of the same class | `main.gd:205-212` | 6 | medium |
-| #5 | State variable + `set_state()` helper | `player.gd:64-72` | 8 | medium |
-| #6 | `match state:` block in `_physics_process` | `player.gd:103-148` | 45 | large |
-| #7 | `attack()` body with `match attack_type:` | `player.gd:165-179` | 14 | medium |
+| #5 | State variable + `set_state()` helper | `player.gd:64-72` | 6 | medium |
+| #6a | State exits — `idle` → walk / jump | `player.gd:116-122` | 5 | small |
+| #6b | State exits — `walk` → idle / jump | `player.gd:126-132` | 5 | small |
+| #6c | State exits — `jump` → fall | `player.gd:136-139` | 2 | tiny |
+| #6d | State exits — `fall` → idle | `player.gd:143-146` | 2 | tiny |
+| #7 | `attack()` body with `match attack_type:` | `player.gd:180-199` | 15 | medium |
 
-**Total**: 7 `#@todo` blocks across **7 conceptual chunks**. Chunks #6 and #7 are the longest blocks of the entire camp — heavy on the kid, but the payoff is the *game becomes a fighting game* the moment they're done.
+**Total**: 10 `#@todo` sub-holes across **7 conceptual chunks** (BIBLE §4 D4 table). Morning kid LoC ≈ **55**.
+
+**Notes (R1 + R2 + R5 compliance):**
+- No mid-day stretch tags (R1). `(STRETCH)` banner on #6 removed.
+- Every kid line is single-purpose, C-style (R2 D3+ ceiling: nested calls allowed, but the ternary `velocity.x = walk_speed * (-1 if ... else 1 if ... else 0)` lines + the compound `if` in `attack()` were exploded into named-variable / named-bool form).
+- A pre-given helper `get_move_direction()` (`player.gd:82-87`) replaces the four-way ternary used inside the original match branches.
+- #6 is an R5 partial-section hole (per D3 #6 precedent) — `match` dispatcher + branch velocity calcs + attack/hit exits + the universal "attack input" check are pre-given; kid fills four small sub-holes per state.
+- `set_state()` is part of chunk #5 — between chunks #3 and #5 the file won't run (take_damage calls a not-yet-defined function). Slide deck flags this in the Chunk #3 pre-cursor "pieces you'll wire through #5" beat.
 
 ---
 
@@ -174,7 +184,8 @@ In lesson order (BIBLE §4 D4 order: 1 → 2 → 3 → 4 → 5 → 6 → 7).
 ### Chunk #1 — Object properties (core)
 
 - **Concept**: An object's **properties** are the variables that live on the object. Each instance gets its own copy. In GDScript, properties are just `var` declarations at the top of the script file.
-- **Goal**: Declare the three core properties every Player needs to track its own state: `hp` (health, starts at 100), `max_hp` (also 100 — used to scale the HP bar), and `facing` (1 = facing right, -1 = facing left, starts at 1). Without these, the Player class has no idea what it's *supposed* to remember.
+- **What is `facing`?** A single integer that records which way the panda is looking. `facing = 1` → looks right; `facing = -1` → looks left. The pre-given `_physics_process` flips `facing` automatically when the kid presses left or right (`player.gd:89-93`), and uses it for sprite-flip + projectile-aim. **The kid only declares it; the file already updates it every frame.**
+- **Goal**: Declare the three core properties every Player needs to track its own state: `hp` (start at 100), `max_hp` (also 100 — used to scale the HP bar), and `facing` (start at 1 = looking right).
 - **Board example**:
   ```gdscript
   # Inside a class:
@@ -188,13 +199,15 @@ In lesson order (BIBLE §4 D4 order: 1 → 2 → 3 → 4 → 5 → 6 → 7).
   var max_hp: int = 100
   var facing: int = 1
   ```
+- **Action-slide prose (top)**: *"Declare the three things every Player needs to remember about itself: `hp` (start at 100), `max_hp` (also 100, for the HP bar), and `facing` (start at 1 = looking right)."*
 
 ---
 
 ### Chunk #2 — Object properties (character-data driven)
 
 - **Concept**: An object's properties can come from a configuration dictionary — not every property has to be hard-coded. The `setup()` method in `player.gd` reads from `MAIN.CHARACTERS[char_name]` and copies those values into per-player vars.
-- **Goal**: Declare the five properties that mirror the character config: `walk_speed`, `jump_impulse`, `attack_type`, `attack_damage`, `attack_cooldown`. Default values are the Knight's stats — but `setup()` overwrites them with whatever character the player picked. Without these, the Player has no idea how fast to walk, how high to jump, or which kind of attack to do.
+- **Where do the Knight stats come from?** Open `main.gd` and scroll to `CHARACTERS["knight"]` (`main.gd:6-59`). The five property names below are the same five keys you'll see in that dict. Defaults in chunk #2 are the Knight's values — `setup()` overwrites them with whatever character the player picked.
+- **Goal**: Declare the five properties that mirror the character config: `walk_speed`, `jump_impulse`, `attack_type`, `attack_damage`, `attack_cooldown`.
 - **Board example**:
   ```gdscript
   var hunger = 100
@@ -209,19 +222,26 @@ In lesson order (BIBLE §4 D4 order: 1 → 2 → 3 → 4 → 5 → 6 → 7).
   var attack_damage: int = 18
   var attack_cooldown: float = 0.55
   ```
+- **Action-slide prose (top)**: *"Declare five more properties — `walk_speed`, `jump_impulse`, `attack_type`, `attack_damage`, `attack_cooldown` — with Knight's stats as defaults (see `main.gd:6-59 CHARACTERS[\"knight\"]`). `setup()` overwrites them with the picked character's stats."*
 
 ---
 
 ### Chunk #3 — Method: `take_damage(amount)`
 
 - **Concept**: A **method** is a function defined inside a class. It can read and update the object's own properties. Calling `player1.take_damage(10)` runs this method on `player1` — `hp` inside refers to `player1`'s hp.
-- **Goal**: Write the body of `take_damage(amount)`: subtract `amount` from `hp`, flash the sprite red briefly, switch to the `"hit"` state, update the HP bar's visible width, and call `die()` if HP dropped to 0 or below. After this chunk, hits from the opponent actually do damage and the HP bar shrinks.
+- **Pieces you'll use (you already have or will write)**:
+  - `hp` — chunk #1 property.
+  - `hit_flash_timer` — pre-given (`player.gd:11`). Setting it to a positive number makes the sprite flash red for that many seconds.
+  - `set_state("hit")` — chunk #5 helper. **You haven't written it yet** — that means the file won't actually run between chunks #3 and #5. Type the line; save; move on to #4.
+  - `hp_bar_fill` — pre-given `@onready` (`player.gd:15`). It's a `ColorRect`; the kid changes its `.size.x` to shrink the bar.
+  - `die()` — pre-given (`player.gd:206-209`). Hides the sprite and tells `MAIN` that this player lost.
+- **Goal**: Fill the empty `take_damage(amount)` body so opponents can actually hurt each other. Subtract `amount` from `hp`, start the hit flash, switch state to `"hit"`, shrink the HP bar to match `hp/max_hp`, and call `die()` if HP dropped to zero.
 - **Board example**:
   ```gdscript
   func feed():
       hunger -= 10
   ```
-- **In-file location**: `player.gd:154-161`, inside the empty `func take_damage(amount: int) -> void:` body.
+- **In-file location**: `player.gd:169-176`, inside the empty `func take_damage(amount: int) -> void:` body.
 - **As-typed code**:
   ```gdscript
   hp -= amount
@@ -231,6 +251,7 @@ In lesson order (BIBLE §4 D4 order: 1 → 2 → 3 → 4 → 5 → 6 → 7).
   if hp <= 0:
       die()
   ```
+- **Action-slide prose (top)**: *"Subtract `amount` from `hp`, set `hit_flash_timer` to 0.2, switch state to `\"hit\"`, shrink the HP bar to match the new `hp/max_hp` ratio, and call `die()` if `hp` dropped to zero."*
 
 ---
 
@@ -255,6 +276,7 @@ In lesson order (BIBLE §4 D4 order: 1 → 2 → 3 → 4 → 5 → 6 → 7).
   add_child(player2)
   player2.setup(2, p2_char, Vector2(1080, 500))
   ```
+- **Action-slide prose (top)**: *"Instantiate the Player scene twice. Add each to the tree, then call `setup()` on each — P1 at `Vector2(200, 500)`, P2 at `Vector2(1080, 500)`."*
 
 > **After this chunk works**: run F5, pick characters + map → the countdown plays and both characters appear at opposite ends of the map. They don't move yet (chunk #6 is still empty) — but you can see them standing there.
 
@@ -263,11 +285,15 @@ In lesson order (BIBLE §4 D4 order: 1 → 2 → 3 → 4 → 5 → 6 → 7).
 ### Chunk #5 — State variable + `set_state()` helper
 
 - **Concept**: A **state machine** is a pattern where an object remembers what mode it's in (a string or number), and behaves differently based on that mode. The state itself is just a regular property — but it's the *anchor* for chunk #6's branching logic.
-- **Goal**: Declare a `state` property (starts at `"idle"`) and write a `set_state(new_state)` helper that only triggers a change when the new state is different (so we don't spam-log every frame). The helper prints a debug line so kids can watch state transitions in the Output panel when they play. Without this, chunk #6 has nothing to branch on.
+- **Goal**: Declare a `state` property (starts at `"idle"`) and write a `set_state(new_state)` helper. The helper does three things: skip if the new state matches the current one, print the new state so kids can watch transitions in the Output panel, then update `state`.
 - **Board example**:
   ```gdscript
   var state = "asleep"
+
   func set_state(new):
+      if new == state:
+          return
+      print(new)
       state = new
   ```
 - **In-file location**: `player.gd:64-72`, under `# === KID CHUNK #5 — state var + set_state helper ===`.
@@ -278,17 +304,24 @@ In lesson order (BIBLE §4 D4 order: 1 → 2 → 3 → 4 → 5 → 6 → 7).
   func set_state(new_state: String) -> void:
       if new_state == state:
           return
-      print("[P%d %s] state %s -> %s" % [player_num, character_name, state, new_state])
+      print(new_state)
       state = new_state
   ```
+- **Action-slide prose (top)**: *"Declare `state` (start at `\"idle\"`). In `set_state(new_state)`: bail if it matches the current state, otherwise print `new_state` and update `state`."*
 
 ---
 
-### Chunk #6 — State machine in `_physics_process`
+### Chunk #6 — State machine in `_physics_process` (R5 partial — 4 sub-holes)
 
-- **Concept**: A `match` statement reads a variable and runs the branch whose pattern matches. We use it on `state` to give each mode (`idle / walk / jump / fall / attack / hit`) its own per-frame behaviour. This is the chunk that *makes the character respond to input*.
-- **Goal**: Write the `match state:` block inside `_physics_process`. Each branch decides how the player accepts input and updates velocity *for that state*. Six branches (idle, walk, jump, fall, attack, hit). After this chunk, the characters walk, jump, fall, and switch states based on input — watch the Output panel to see state transitions print as you play.
-- **Board example**:
+- **Concept**: A `match` statement reads a variable and runs the branch whose pattern matches. We use it on `state` to give each mode (`idle / walk / jump / fall / attack / hit`) its own per-frame behaviour. **This is the chunk that decides when one state becomes another.**
+- **Hole type**: **R5 partial-section hole — 4 sub-holes.** The `match state:` dispatcher, each branch's velocity calculation, the `attack` and `hit` exit logic, and the universal "attack input" check are pre-given. The kid fills only the small `if`-blocks that decide WHICH state comes next (#6a–#6d). Per BIBLE R2, the kid never writes a ternary `velocity.x = walk_speed * (-1 if ... else ...)` one-liner — the pre-given `get_move_direction()` helper (`player.gd:82-87`) returns -1/0/1 for left/none/right, and the branch velocity becomes a single `velocity.x = walk_speed * get_move_direction()` line (pre-given).
+- **Pieces you'll use (all pre-given)**:
+  - `get_move_direction()` — returns -1/0/1 for left/none/right (defined by us in `player.gd:82-87`).
+  - `get_input_just_pressed("jump")` — true on the frame the jump key was first pressed.
+  - `is_on_floor()` — Godot built-in; true if the player is standing on a platform.
+  - `set_state("name")` — your chunk #5 helper.
+  - `velocity.y = -jump_impulse` — launches the player upward (negative Y = up in Godot 2D).
+- **Board example** (kid sees this shape for their `if` blocks):
   ```gdscript
   match state:
       "asleep":
@@ -298,63 +331,107 @@ In lesson order (BIBLE §4 D4 order: 1 → 2 → 3 → 4 → 5 → 6 → 7).
           if tired:
               set_state("asleep")
   ```
-- **In-file location**: `player.gd:103-148`, inside `_physics_process(delta)`, under `# === KID CHUNK #6 — STATE MACHINE MATCH ===`.
-- **As-typed code**:
+- **In-file location**: pre-given block at `player.gd:109-159`, inside `_physics_process(delta)`. Four kid sub-holes:
+  - **#6a** `idle` exits: `player.gd:116-122` (5 kid LoC).
+  - **#6b** `walk` exits: `player.gd:126-132` (5 kid LoC).
+  - **#6c** `jump` exit: `player.gd:136-139` (2 kid LoC).
+  - **#6d** `fall` exit: `player.gd:143-146` (2 kid LoC).
+- **Full block (pre-given + kid sub-holes), as it lives in the Complete ZIP**:
   ```gdscript
+  # Pre-given: the match dispatcher + per-branch velocity + attack / hit exits.
+  # Kid fills (4 sub-holes): the `if` blocks that decide WHICH state comes next.
   match state:
       "idle":
           velocity.x = 0
-          if get_input_pressed("left") or get_input_pressed("right"):
+          # TODO #6a — idle exits: switch to walk on movement, jump on jump-key.
+          if get_move_direction() != 0:
               set_state("walk")
           if get_input_just_pressed("jump") and is_on_floor():
               velocity.y = -jump_impulse
               set_state("jump")
-          if get_input_just_pressed("attack") and attack_cooldown_timer <= 0.0:
-              attack()
-              set_state("attack")
       "walk":
-          velocity.x = walk_speed * (-1 if get_input_pressed("left") else 1 if get_input_pressed("right") else 0)
-          if velocity.x == 0:
+          velocity.x = walk_speed * get_move_direction()
+          # TODO #6b — walk exits: back to idle when no movement, up to jump on jump-key.
+          if get_move_direction() == 0:
               set_state("idle")
           if get_input_just_pressed("jump") and is_on_floor():
               velocity.y = -jump_impulse
               set_state("jump")
-          if get_input_just_pressed("attack") and attack_cooldown_timer <= 0.0:
-              attack()
-              set_state("attack")
       "jump":
-          velocity.x = walk_speed * (-1 if get_input_pressed("left") else 1 if get_input_pressed("right") else 0) * 0.85
+          velocity.x = walk_speed * get_move_direction() * 0.85
+          # TODO #6c — jump exit: when upward velocity runs out, switch to fall.
           if velocity.y > 0:
               set_state("fall")
-          if get_input_just_pressed("attack") and attack_cooldown_timer <= 0.0:
-              attack()
-              set_state("attack")
       "fall":
-          velocity.x = walk_speed * (-1 if get_input_pressed("left") else 1 if get_input_pressed("right") else 0) * 0.85
+          velocity.x = walk_speed * get_move_direction() * 0.85
+          # TODO #6d — fall exit: when the player lands, switch to idle.
           if is_on_floor():
               set_state("idle")
-          if get_input_just_pressed("attack") and attack_cooldown_timer <= 0.0:
-              attack()
-              set_state("attack")
       "attack":
-          # cooldown is timed via attack_cooldown_timer started by attack()
-          velocity.x = walk_speed * (-1 if get_input_pressed("left") else 1 if get_input_pressed("right") else 0) * (1.0 if is_on_floor() else 0.85)
+          # Pre-given: keep moving while attacking, exit when cooldown done.
+          var ground_factor: float = 1.0 if is_on_floor() else 0.85
+          velocity.x = walk_speed * get_move_direction() * ground_factor
           if attack_cooldown_timer <= 0.0:
               set_state("idle" if is_on_floor() else "fall")
       "hit":
+          # Pre-given: frozen while flashing, then exit.
           velocity.x = 0
           if hit_flash_timer <= 0.0:
               set_state("idle" if is_on_floor() else "fall")
-  ```
 
-> **After this chunk works**: characters walk + jump + fall correctly. Attack key triggers the `attack` state but doesn't do anything yet (that's #7). Hit state freezes the player briefly after taking damage. Open the Output panel during gameplay to see `[P1 Knight] state idle -> walk` style lines print as states change.
+  # Pre-given: attack input is universal across idle / walk / jump / fall.
+  if state != "attack" and state != "hit":
+      if get_input_just_pressed("attack") and attack_cooldown_timer <= 0.0:
+          attack()
+          set_state("attack")
+  ```
+- **Kid types in #6a (between `#@todo`/`#@end` only — 5 lines)**:
+  ```gdscript
+  if get_move_direction() != 0:
+      set_state("walk")
+  if get_input_just_pressed("jump") and is_on_floor():
+      velocity.y = -jump_impulse
+      set_state("jump")
+  ```
+- **Kid types in #6b (5 lines)**:
+  ```gdscript
+  if get_move_direction() == 0:
+      set_state("idle")
+  if get_input_just_pressed("jump") and is_on_floor():
+      velocity.y = -jump_impulse
+      set_state("jump")
+  ```
+- **Kid types in #6c (2 lines)**:
+  ```gdscript
+  if velocity.y > 0:
+      set_state("fall")
+  ```
+- **Kid types in #6d (2 lines)**:
+  ```gdscript
+  if is_on_floor():
+      set_state("idle")
+  ```
+- **Action-slide prose (top, one slide per sub-hole — short imperatives)**:
+  - **#6a**: *"Inside the `idle` branch: switch to `\"walk\"` when `get_move_direction()` is non-zero, and switch to `\"jump\"` (with upward `velocity.y`) when jump is pressed on the floor."*
+  - **#6b**: *"Inside the `walk` branch: switch back to `\"idle\"` when `get_move_direction()` is zero, and switch to `\"jump\"` (with upward `velocity.y`) when jump is pressed on the floor."*
+  - **#6c**: *"Inside the `jump` branch: when `velocity.y > 0` (upward velocity has run out), switch to `\"fall\"`."*
+  - **#6d**: *"Inside the `fall` branch: when `is_on_floor()` is true (player has landed), switch back to `\"idle\"`."*
+
+> **After this chunk works**: characters walk + jump + fall correctly. Attack key triggers the `attack` state (via the pre-given universal attack-input check) but doesn't damage anything yet (that's #7). Hit state freezes the player briefly after taking damage. Open the Output panel during gameplay to see state names print as transitions happen.
 
 ---
 
 ### Chunk #7 — `attack()` body
 
 - **Concept**: A method can branch on one of its own object's properties. `match attack_type` lets a single `attack()` method handle both melee (Knight, Ninja) and projectile (Mage, Archer) attacks — each character picks which branch via `attack_type`.
-- **Goal**: Write the body of `attack()`. Start the cooldown timer. Then branch on `attack_type`: if melee, draw a swing rectangle and damage the opponent if they're in range and facing direction; if projectile, spawn a Projectile via the pre-given helper. Without this, the attack key triggers the `attack` state but nothing visible happens.
+- **Pieces you'll use (all pre-given)**:
+  - `attack_cooldown_timer` — pre-given var (`player.gd:10`). Counts down in `_physics_process`; while it's > 0 the attack key can't re-fire.
+  - `melee_swing_timer` — pre-given var (`player.gd:12`). Setting it to a positive number triggers the white swing-rectangle draw for that many seconds.
+  - `queue_redraw()` — Godot built-in; asks the engine to call `_draw()` next frame.
+  - `get_opponent()` — pre-given (`player.gd:193-194`). Returns the OTHER player.
+  - `spawn_projectile()` — pre-given (`player.gd:182-191`). Fires one Projectile in the `facing` direction.
+- **Goal**: Fill the empty `attack()` body. Start the cooldown timer. Then `match attack_type:` — melee branch does the swing rectangle and damages the opponent (only if they exist, aren't dead, and are in range + facing direction + same height). Projectile branch just spawns a projectile.
+- **No wicked one-liners (BIBLE R2)**: the old in-range / facing / height check was a three-condition `if` on one line. The kid splits it into three named booleans, then a clean `if a and b and c:`. Two early-`return`s replace the compound `opponent != null and not opponent.is_dead()` check.
 - **Board example**:
   ```gdscript
   func bark():
@@ -364,7 +441,7 @@ In lesson order (BIBLE §4 D4 order: 1 → 2 → 3 → 4 → 5 → 6 → 7).
           "soft":
               annoy_cat()
   ```
-- **In-file location**: `player.gd:165-179`, inside `func attack() -> void:`, under `# === KID CHUNK #7 — attack ===`.
+- **In-file location**: `player.gd:180-199`, inside `func attack() -> void:`, under `# === KID CHUNK #7 — attack ===`.
 - **As-typed code**:
   ```gdscript
   attack_cooldown_timer = attack_cooldown
@@ -373,14 +450,20 @@ In lesson order (BIBLE §4 D4 order: 1 → 2 → 3 → 4 → 5 → 6 → 7).
           melee_swing_timer = 0.15
           queue_redraw()
           var opponent = get_opponent()
-          if opponent != null and not opponent.is_dead():
-              var to_opp = opponent.position - position
-              # in range AND in facing direction
-              if abs(to_opp.x) <= character_data["attack_range"] and sign(to_opp.x) == facing and abs(to_opp.y) <= 60:
-                  opponent.take_damage(attack_damage)
+          if opponent == null:
+              return
+          if opponent.is_dead():
+              return
+          var to_opp = opponent.position - position
+          var in_range = abs(to_opp.x) <= character_data["attack_range"]
+          var facing_opponent = sign(to_opp.x) == facing
+          var same_height = abs(to_opp.y) <= 60
+          if in_range and facing_opponent and same_height:
+              opponent.take_damage(attack_damage)
       "projectile":
           spawn_projectile()
   ```
+- **Action-slide prose (top)**: *"Start the cooldown timer, then `match attack_type:` — `\"melee\"` does the swing-rectangle and damages an opponent who's in range + facing + same height; `\"projectile\"` calls `spawn_projectile()`."*
 
 > **After this chunk works**: Knight and Ninja's melee swings damage the opponent on contact. Mage's fireball arcs in a slow gravity-affected curve; Archer's arrow flies fast and straight. HP bars shrink, hit flashes fire, eventually somebody hits 0 HP → WinLabel appears → R or 4-second auto-restart back to char select. **The fight loop is now complete — the game is a game.**
 
@@ -559,9 +642,9 @@ None currently. All tuning lives in code (the `CHARACTERS` and `MAPS` dicts). Pe
 
 ---
 
-## 9. Verification checklist (re-run if code changes)
+## 9. Verification checklist (re-run if code changes — refreshed 2026-05-30)
 
-- [x] All 6 `#@todo` blocks in `player.gd` mapped to chunk rows in §3 (#1, #2, #3, #5, #6, #7).
+- [x] All 9 `#@todo` blocks in `player.gd` mapped to chunk rows in §3 (#1, #2, #3, #5, #6a, #6b, #6c, #6d, #7).
 - [x] 1 `#@todo` block in `main.gd` mapped to chunk #4.
 - [x] 1 `#@todo` block in `final_challenge.gd` mapped to FC-1.
 - [x] As-typed code blocks byte-identical to source between `#@todo` and `#@end` markers.
@@ -571,9 +654,540 @@ None currently. All tuning lives in code (the `CHARACTERS` and `MAPS` dicts). Pe
 - [x] Input map (§8) matches `project.godot`.
 - [x] Narrative-arc card (§1) matches BIBLE §15 universal narrative arc memory (Smash Bros = 1999 N64).
 - [x] Chunk order in §3 + §5 matches BIBLE §4 D4 order (1, 2, 3, 4, 5, 6, 7).
-- [x] No "stretch" tag on any morning chunk; "Stretch goals" applies only to §7 FC.
+- [x] No "(STRETCH)" tag on any morning chunk; banner on chunk #6 stripped 2026-05-30. "Stretch goals" applies only to §7 FC.
+- [x] `(STRETCH)` removed from `# === KID CHUNK #6 — STATE MACHINE ===` banner per R1.
+- [x] R5 partial-section split applied to chunk #6 — 4 sub-holes (#6a/#6b/#6c/#6d), each holding only the state-transition `if` blocks. Per BIBLE R5 + D3 #6 precedent.
+- [x] Pre-given helper `get_move_direction()` (`player.gd:82-87`) replaces ternary one-liners in chunk #6 branches per R2.
+- [x] Named-bool decomposition applied to chunk #7 melee branch (`in_range` / `facing_opponent` / `same_height` + two early-return guards) per R2 "no wicked one-liners."
+- [x] Chunk #5 print simplified to `print(new_state)` (was `print("[P%d %s] state %s -> %s" % [...])`).
+- [x] Chunk #3 pre-cursor "pieces you'll use" note flags that `set_state` lives in chunk #5 — kid file won't run between #3 and #5; type, save, move on.
+- [x] Chunk #1 prose explicitly defines `facing` (1 = right, -1 = left) and notes `_physics_process:89-93` updates it automatically.
+- [x] Chunk #2 prose points kids at `main.gd:6-59 CHARACTERS["knight"]` so they see where Knight defaults come from.
 - [x] Each walkthrough (Pre-coding demo + per-chunk "After this chunk works" + Personalization + FC enable) appears exactly once at its lesson position.
 - [ ] Sprite picks confirmed correct on visual playtest — **PENDING**.
 - [ ] Real-fight playtest with two humans — **PENDING** (stats may need rebalancing).
+- [ ] `final_challenge.gd` audited for R3.1 FC mirror completeness (currently 3 FC holes for 7 morning chunks — under the per-chunk mirror rule) — **DEFERRED to next remediation pass**.
 
 End-to-end smoke test: hand `BIBLE.md` + this file to a fresh Claude session, ask "draft slide bullets for Day 4." Output should require no follow-up clarification on chunk content. Visual playtest screenshots are a separate user-driven pass.
+
+---
+
+## 10. Slide blueprint — Full draft (DRAFT — locked 2026-05-30)
+
+> Status: structural draft for the python-pptx slide build. Per-section slide bullets + per-chunk Action-slide specs live below. Slide counts are estimates; final counts settle in build-time pass. Hand this whole `SLIDE_SOURCE.md` to the build chat. Mirrors D3 §10 structure (locked 2026-05-29).
+
+### 10.0 Decisions locked
+
+#### Locked metaphors — two per day, one per umbrella concept
+
+Following D2/D3 convention: each day's two umbrella concepts get one locked metaphor each. Sub-chunks under each umbrella reuse that metaphor; no fresh metaphor invention per chunk.
+
+- **Objects** → **Minecraft mob (Panda)**. A panda is one *instance* of the panda class. Each panda you spawn has its own HP, its own personality, its own position — but they all share the same blueprint (same script, same methods, same property names). One concept root introduces this before chunk #1, then chunks #2 / #3 / #4 callback the Panda framing without re-teaching. Specific hook: **personalities** — Minecraft pandas come in 7 personality variants (lazy/worried/playful/aggressive/weak/brown/normal), each personality changes how the panda behaves. That bridges naturally into the State concept on chunk #5.
+
+- **State** → **Traffic light**. Same intersection, three modes (red / yellow / green). The cars behave differently based on the current mode. State transitions happen on events (timer ticks, sensor triggers). One concept root introduces this before chunk #5, then chunk #6 (the state machine) + chunk #7 (`match attack_type`) callback the Traffic-light framing without re-teaching.
+
+Other chunks lean on cross-day callbacks rather than fresh metaphors:
+
+- **Function / method** = pizza order (D2 lock — call by name, kitchen handles it). Chunk #3 `take_damage` is "the panda has a `feed()` method — call `panda.take_damage(10)` and the panda's own HP goes down."
+- **Instantiate** = spawning a Minecraft mob (Panda metaphor extension — `/summon panda` is `PLAYER_SCENE.instantiate()`).
+- **`match`** = no fresh metaphor; D3 already introduced `match` as pre-given in chunk #6 (dispatcher). D4 chunks #6 + #7 use `match` directly, leaning on the Traffic-light framing ("the panda checks its state, runs the matching branch").
+
+#### Other locks
+
+- **Side-by-side action-slide composition** (every chunk's payoff slide): top = R6 prose instruction. LHS = board example (literal code shown on slide). RHS = Godot screenshot of the `#@todo` region with red overlay. See §10.1 for builder-AI rules.
+- **Walkthroughs reused from D1/D2/D3**: Walk A (open project), Walk B (open script), Walk C (run F5), Walk D (read errors). Each ships as a 2-slide jog-memory pack per D2/D3 §10 convention.
+- **Walk MF (NEW for D4)**: Menu Flow demo — instructor walks char-select → map-select → countdown → empty fight screen *before* chunks start. Shows the *shape* of the game even with chunk #4 empty. ~4 slides.
+- **Walk CD (NEW for D4)**: CHARACTERS dict tour — instructor reads `main.gd:6-59`, points to the 11 properties per character, primes kids for chunks #1 + #2 ("these property names will appear on the Player class in a moment"). ~3 slides.
+- **Historical context slide added to opener pack**: fighter-genre lineage (Street Fighter II 1991 → Mortal Kombat 1992 → Smash Bros 1999 = roster + multi-character + percent-damage breakout → Smash Bros Melee 2001 → modern Smash Ultimate). One opener slide, matches D3 historical-context pattern.
+- **After-works payoff slides** — only at chunks where the game becomes visibly more alive:
+  - **#4** (two characters appear on the map — first visible payoff).
+  - **#6** (characters move + jump + fall — the big "the game responds to me" moment).
+  - **#7** (fight loop complete — somebody can actually WIN).
+  - Chunks #1, #2, #3, #5 have no after-works slide — their effect is invisible in isolation.
+
+---
+
+### 10.1 SLIDE BUILDER REFERENCE — read this before generating slides
+
+> **AI consuming this doc to generate slides: this section is the spec for how to render each Action slide. Read carefully — the LHS/RHS layout has a precise meaning.**
+
+For every **Action slide** in §10.4 onward (one per kid sub-hole):
+
+| Slide region | What it contains | Source |
+|---|---|---|
+| **Top (title + body)** | R6 prose instruction — what the kid should produce, in input → output / observable-effect terms. Reads as a goal statement, not pseudo-code. | This doc's per-chunk "Action-slide prose (top)" field in §5. |
+| **LHS pane** | Literal code shown as a code block (or rendered code image). The board example pattern the kid will adapt. | This doc's per-chunk "Board example" field. Verbatim from §5. |
+| **RHS pane** | **A SCREENSHOT of the Godot script editor** zoomed in on the chunk's location in `player.gd` or `main.gd`. The kid `#@todo` region has a **red 4px-stroke rectangular overlay** marking the area the kid will edit. **THIS IS NOT A CODE LISTING OF WHAT THE KID TYPES.** It's a visual locator — "here is the section you'll be editing." | Per-chunk "In-file location" field below + line refs from §3. |
+| **Speaker notes** | The R6 prose + metaphor framing + any quiz answers. Populated into the PPTX speaker-notes pane, not visible to the kid on screen. | Per-chunk "Speaker notes" field below. |
+
+**Why this matters**: the kid is meant to look at the RHS, switch to Godot, find that region, and type their solution into the real script. The slide is a wayfinder, not a transcription target. If the RHS shows finished code, kids will copy character-by-character and miss the lesson. The "As-typed code" listed in §5 of this doc is **REFERENCE for the Complete build verification**, not slide content.
+
+Other render rules:
+
+- **R5 partial-hole action slides** (chunk #6 — see §10.10): the RHS Godot screenshot uses a **two-tone overlay**. Pre-given lines (inside `_physics_process` but OUTSIDE the `#@todo`/`#@end` markers — the `match` dispatcher + per-branch velocity + attack/hit exits + universal attack-input check) get a **gray semi-transparent overlay**. The kid sub-hole gets the standard red overlay. The slide caption explicitly says "gray = already written for you; red = your hole."
+- **Multi-sub-hole chunks** (chunk #6 has 4 sub-holes #6a/#6b/#6c/#6d): one Action slide per sub-hole. Same `match state:` concept, separate Action slide per state's `#@todo` block.
+- **Walkthrough hint slides** (Walk A/B/C/D, Walk MF, Walk CD): text + arrows only. No screenshots in the Hint slide of jog-memory packs.
+- **Concept-root metaphor slides** (Minecraft panda, Traffic light): full-bleed metaphor imagery centered, body text under image. Not LHS/RHS layout — these are explanatory, not actionable.
+
+---
+
+### 10.2 Opener pack (~7 slides)
+
+1. **Day title** — "Day 4 — 2-Player Fighter · 1999 · Smash Bros Era". Subtitle: "Super Smash Bros. (N64, 1999) — multi-character platformer fighter."
+2. **Today we'll build** — finished Fighter screenshot + 1-line pitch: "Two humans, one keyboard, four characters, three maps. Last fighter standing wins."
+3. **Why fighters matter** — historical context. Bullets: Street Fighter II 1991 = solo-vs-solo arcade boom. Mortal Kombat 1992 = breakout home console. Smash Bros 1999 = *roster + multi-character + percent-damage* invention. Modern Smash Ultimate = direct descendant of N64 Smash with 87 characters. Takeaway: every roster fighter today owes a debt to the N64 disc.
+4. **Yesterday → Today** — D3 Tower Defense recap (Lists + Deeper Functions) → D4 adds **Objects + State**. Same `for`-loop / `func` shapes, new way to *package* code into reusable classes.
+5. **5-day arc timeline** — D4 highlighted in red, D1/D2/D3 ticked in green, D5 dim.
+6. **Today's two concepts** — full slide: **Objects** + **State**. One-line each: "Objects are blueprints that hold data + methods together. State is a label that lets one object behave differently depending on what mode it's in."
+7. **GDScript vs Python — class card** — verbatim from §1: `class Player:` → `extends CharacterBody2D`, `def __init__(self):` → vars at top of file, `def take_damage(self, n):` → `func take_damage(n):`. Takeaway: "Classes are almost identical to Python. No `self.` everywhere; no `__init__`; `extends Parent` instead of `class Foo(Parent):`."
+
+---
+
+### 10.3 Pre-coding setup (~13 slides)
+
+- **Section divider** — "Pre-coding setup."
+- **Walk A — Open the Day 4 project** (jog-memory, 2 slides):
+  1. Challenge: "Open the Day 4 Fighter project the same way you did yesterday."
+  2. Hint (text + arrows, no screenshots): `Godot launcher → Import → Day4_Fighter_Game/project.godot → Import & Edit`.
+- **Walk B — Open `player.gd`** (jog-memory, 2 slides):
+  1. Challenge: "Open `player.gd` in the script editor — this is where most of today's chunks live."
+  2. Hint: `FileSystem panel → player.gd → double-click → Script editor`.
+- **Walk MF — Menu Flow Demo** (NEW for D4, instructor-driven, 4 slides):
+  1. **Concept setup**: "The menu screens already work. Even with empty chunks, the kid can walk the flow." Screenshot title screen.
+  2. **Click step 1**: F5 → char-select panel for P1 → press `1` (Knight). Screenshot panel updating.
+  3. **Click step 2**: char-select P2 → press `2` (Ninja) → map-select → press `1` (Battlefield) → countdown. Screenshot countdown "3... 2... 1... GO!".
+  4. **Takeaway**: "Fight screen appears — but the two fighters DON'T spawn yet (chunk #4 empty). Once you fill #4, both characters appear here. R = restart." Screenshot empty fight screen.
+- **Walk CD — CHARACTERS Dict Tour** (NEW for D4, instructor-driven, 3 slides):
+  1. **Open dict**: open `main.gd`, scroll to lines 6-59. Screenshot of `CHARACTERS = {...}` block.
+  2. **11 properties per character**: bullet list — `display_name`, `sprite`, `tint`, `walk_speed`, `jump_impulse`, `attack_type`, `attack_damage`, `attack_cooldown`, `attack_range`, `projectile_speed`, `projectile_gravity_scale`. Highlight five that map directly to chunks #1+#2.
+  3. **Takeaway**: "Each character is just a dictionary of property values. Today, the Player CLASS gets the same property names — so each Player object can remember its own copy." Bridges into chunk #1 + Panda metaphor.
+
+---
+
+### 10.4 Chunk #1 — Object properties (core) (FULL ARC, ~12 slides)
+
+> First chunk of the day. Carries the **OBJECTS** concept root as a full-arc prefix (per D2/D3 pattern). **Concept and metaphor are interwoven** — the Minecraft panda image opens the section and every concept slide reuses it. Kids meet the metaphor first, then the technical vocabulary lands on top of something they can already see.
+
+#### Concept root — OBJECTS (metaphor + concept interwoven, 7 slides)
+
+1. **Hook — full-bleed Minecraft panda image** (3 pandas in different poses: lazy / playful / aggressive). No technical text yet. Caption: "Three pandas. Same Minecraft. Same script under the hood. What's different about them?" Prompt: invite kids to call out the differences (color, pose, mood, HP bar).
+2. **Word reveal — "Object"** — overlay the word "OBJECT" on the same panda image. Caption: "Each panda is one *object*. The Minecraft code only has ONE panda script — but it can make as many pandas as it wants. Each one is its own object."
+3. **Class vs instance — with pandas** — split layout: LEFT = single "Panda blueprint" card (sprite + property labels: `hp`, `personality`, `facing`); RIGHT = five different pandas spawned in a row (each with their own filled-in values: `hp=20 personality="lazy"`, `hp=18 personality="playful"`, ...). Caption: "The *class* is the blueprint (left). Each *instance* is one panda built from it (right). Same blueprint, different values per instance."
+4. **Properties + methods — with pandas** — same panda image, two callout boxes:
+   - **Properties (what each panda remembers about itself)** — `hp = 20`, `personality = "lazy"`, `facing = -1`.
+   - **Methods (what each panda can DO)** — `eat()`, `sit_up()`, `roll_over()`.
+   Caption: "An object is properties + methods bundled together. Pandas have both — and so does today's Player class."
+5. **Quiz — two pandas** — image: Panda A (HP 18) + Panda B (HP 20). Question: "You damage Panda A for 5. What's Panda B's HP?" Answer reveal: 20. Caption: "Each instance has its OWN copy of every property. Hitting A doesn't touch B. That's the whole point of objects."
+6. **Shape in code — Panda class** — board example, with the metaphor *visible alongside the code*:
+   ```gdscript
+   # Class blueprint (one panda class):
+   extends CharacterBody2D
+
+   var hp = 100              # property — each panda's own HP
+   var personality = "lazy"  # property — each panda's own mood
+
+   func eat():               # method — what pandas can do
+       hp += 5
+   ```
+   Caption: "Vars at the top = properties. Funcs below = methods. That's a class. Today's Player class looks just like this."
+7. **Personalities preview** — show all 7 Minecraft panda personalities (lazy/worried/playful/aggressive/weak/brown/normal). Caption: "Each panda has a `personality` property. The same code runs every frame — but each panda *behaves differently* depending on its personality. That bridges into the second big idea today: STATE. You'll meet it after lunch."
+
+#### How-it's-used (2 slides)
+
+8. **Games general** — every game uses objects: Mario coin = object. Zelda enemy = object. Fortnite weapon = object. Caption: "If a thing has its own stats and its own behavior, it's an object. Pandas, coins, enemies, weapons — same idea."
+9. **D4 Fighter** — Diagram: one `Player.tscn` blueprint (same shape as the panda blueprint from slide 3), two instances on screen (P1 Knight + P2 Ninja, each with own HP bar). Caption: "Today: ONE Player class, TWO instances. Both run the same code. Different `player_num`, different character, different HP. Same shape as the panda class."
+
+#### Where-in-game (1 slide)
+
+10. **`player.gd:48-52` screenshot** with red overlay on the `#@todo` block (3-line region). Caption: "Time to declare your panda's three core properties."
+
+#### ACTION SLIDE — #1 (1 slide, MANDATORY)
+
+11. **Action slide**:
+    - **Prose instruction (top)**: *"Declare the three things every Player needs to remember about itself: `hp` (start at 100), `max_hp` (also 100, for the HP bar), and `facing` (start at 1 = looking right)."*
+    - **LHS board example**:
+      ```gdscript
+      # Inside a class:
+      var hp = 100
+      var personality = "lazy"
+      ```
+    - **RHS screenshot**: `player.gd:47-52` (banner + `#@todo` block), red overlay on lines 49-51.
+    - **Speaker notes**: Panda callback — "every panda gets its own HP and own facing." Mention `_physics_process` already updates `facing` from input (lines 89-93) so the kid only declares it.
+
+#### After-works (skipped)
+
+12. *No after-works payoff slide.* Game runs F5 without "identifier not declared" errors, but nothing visible changes yet. Payoff deferred to #4 (two characters appear).
+
+---
+
+### 10.5 Walks C/D — Run + Read errors (jog-memory, 4 slides)
+
+> D2/D3 precedent: kids run early after first chunk to catch typos before piling on more logic. Even though Chunk #1 has no visible payoff, hitting F5 here confirms the property declarations compile cleanly.
+
+- **Walk C — Run the project** (jog-memory, 2 slides):
+  1. Challenge: "Run the game and confirm it opens without errors."
+  2. Hint (text + arrows, no screenshots): `F5 → Set Main Scene? → Select Current → game window opens → F8 to stop`.
+- **Walk D — Reading an error** (jog-memory, 2 slides):
+  1. Challenge: "Game didn't open? Find the error."
+  2. Hint: `Output panel → click blue line number → fix → Ctrl+S → F5 again`.
+
+---
+
+### 10.6 Chunk #2 — Character-data properties (SMALL-ARC, ~5 slides)
+
+> No new metaphor — Panda callback. Reuses the OBJECTS concept root from #1.
+
+- **Recap-bridge** (1 slide) — "Your panda remembers `hp` + `facing`. Time to remember what KIND of panda it is."
+- **Concept slide — data-driven properties** (1 slide) — diagram: `CHARACTERS["knight"]` dict on the left → arrow into `setup()` → arrow into per-player vars. Caption: "Each character's stats live in the `CHARACTERS` dict. `setup()` copies them onto the Player object. Pick Knight, get Knight's numbers."
+- **Quiz** (1 slide) — "P1 picks Knight (`walk_speed = 220`). P2 picks Ninja (`walk_speed = 320`). Same property name, different values. Who walks faster?" Answer: P2 (Ninja). Caption: "Same property name. Each instance has its own copy."
+- **Where-in-game** (1 slide) — `player.gd:54-61` screenshot, red overlay on lines 56-60. Side-pointer thumbnail to `main.gd:6-26` (Knight's entry in CHARACTERS) so kids see where the defaults came from.
+
+#### ACTION SLIDE — #2 (1 slide, MANDATORY)
+
+- **Action slide**:
+  - **Prose instruction (top)**: *"Declare five more properties — `walk_speed`, `jump_impulse`, `attack_type`, `attack_damage`, `attack_cooldown` — with Knight's stats as defaults (see `main.gd:6-59 CHARACTERS[\"knight\"]`). `setup()` overwrites them with the picked character's stats."*
+  - **LHS board example**:
+    ```gdscript
+    var hunger = 100
+    var bark_volume = 5
+    ```
+  - **RHS screenshot**: `player.gd:54-61`, red overlay on lines 56-60.
+  - **Speaker notes**: Same five property names appear in `CHARACTERS["knight"]`. `setup()` does the copy. Defaults exist so the file compiles even before `setup()` runs.
+
+---
+
+### 10.7 Chunk #3 — Method: `take_damage(amount)` (~6 slides)
+
+- **Recap-bridge** (1 slide) — "You declared your panda's HP. Now teach the panda how to *lose* HP."
+- **Method concept slide** (1 slide) — board example: `func feed(): hunger -= 10`. Caption: "A method is a function INSIDE a class. It can read + change the object's own properties."
+- **Pieces you'll use** (1 slide) — bullets listing all five pre-given names:
+  - `hp` (your chunk #1 property)
+  - `hit_flash_timer` (pre-given var)
+  - `set_state("hit")` — **chunk #5 helper; not yet written.** *"That means: after #3, your file won't actually RUN until #5 is done. Type the line, save, move on."*
+  - `hp_bar_fill` (pre-given `@onready`; change `.size.x` to shrink)
+  - `die()` (pre-given function)
+- **Where-in-game** (1 slide) — `player.gd:167-176` screenshot, red overlay on lines 169-176.
+
+#### ACTION SLIDE — #3 (1 slide, MANDATORY)
+
+- **Action slide**:
+  - **Prose instruction (top)**: *"Subtract `amount` from `hp`, set `hit_flash_timer` to 0.2, switch state to `\"hit\"`, shrink the HP bar to match the new `hp/max_hp` ratio, and call `die()` if `hp` dropped to zero."*
+  - **LHS board example**:
+    ```gdscript
+    func feed():
+        hunger -= 10
+    ```
+  - **RHS screenshot**: `player.gd:167-176`, red overlay on lines 169-176.
+  - **Speaker notes**: Method = function inside a class. `hp` here refers to *this panda's* HP, not the class's. Flag the `set_state` dependency — file is not runnable yet; will be after #5.
+
+#### After-works (skipped)
+
+- *No after-works payoff slide.* File doesn't compile-and-run between #3 and #5. Payoff deferred to #4 (characters spawn) + #7 (damage actually does anything visible).
+
+---
+
+### 10.8 Chunk #4 — Two instances (~6 slides)
+
+- **Recap-bridge** (1 slide) — "Your Player class has properties and a method. Time to *spawn* two of them."
+- **Class vs instance refresher** (1 slide) — Panda callback. Board example:
+  ```gdscript
+  var panda1 = Panda.new()
+  var panda2 = Panda.new()
+  panda1.feed()
+  panda2.bark()
+  ```
+  Caption: "Two pandas. Same class. Each one has its own state."
+- **Godot instantiate framing** (1 slide) — "In Godot, the equivalent of `Panda.new()` is `PLAYER_SCENE.instantiate()` — because `Player.tscn` packages the class + scene tree together."
+- **Where-in-game** (1 slide) — `main.gd:205-212` screenshot, red overlay on lines 205-212.
+
+#### ACTION SLIDE — #4 (1 slide, MANDATORY)
+
+- **Action slide**:
+  - **Prose instruction (top)**: *"Instantiate the Player scene twice. Add each to the tree, then call `setup()` on each — P1 at `Vector2(200, 500)`, P2 at `Vector2(1080, 500)`."*
+  - **LHS board example**:
+    ```gdscript
+    var panda1 = Panda.new()
+    var panda2 = Panda.new()
+    panda1.feed()
+    panda2.bark()
+    ```
+  - **RHS screenshot**: `main.gd:205-212`, red overlay on lines 205-212.
+  - **Speaker notes**: `instantiate()` builds a fresh Player from `Player.tscn`. `add_child` puts it in the scene tree (so it actually appears + ticks). `setup()` configures it — chunk #2's `setup()` method runs and overwrites the defaults with the picked character's stats.
+
+#### After-works (PAYOFF — first visible payoff of the day)
+
+- F5 → char select → map select → countdown → **two characters appear at opposite ends of the map**. They stand still (chunk #6 still empty). Caption: "FIGHTERS ARE ON SCREEN. They can't move yet — but they exist."
+
+---
+
+### 10.9 Chunk #5 — State variable + `set_state()` helper (FULL ARC, ~11 slides)
+
+> Second concept root of the day — **STATE**. Carries the Traffic-light metaphor. **Concept and metaphor are interwoven** — traffic light image opens the section and every concept slide reuses it. The technical word "state" lands on top of something kids see at every intersection.
+
+#### Concept root — STATE (metaphor + concept interwoven, 7 slides)
+
+1. **Section divider** — "Objects can change mode."
+2. **Hook — full-bleed traffic light image** at a real intersection. No technical text yet. Caption: "One light. Same intersection. But what the CARS do is totally different right now versus 30 seconds from now. Why?" Prompt: invite kids to call out what changes (the color of the light, what the drivers do).
+3. **Word reveal — "State"** — overlay the word "STATE" on the same traffic light image, with the red lens highlighted. Caption: "The light's CURRENT MODE is its *state*. The state right now is `\"red\"`. Tomorrow's first car at this intersection will see a different state. Same hardware, different behavior."
+4. **Three states + behaviors — traffic light table** — image: 3 traffic-light icons (red/yellow/green) with cars under each. Table:
+   | State | Cars do |
+   |---|---|
+   | `"red"` | Stop |
+   | `"yellow"` | Slow down |
+   | `"green"` | Go |
+   Caption: "Same intersection. Three modes. The cars run a totally different branch of behavior depending on which mode is active."
+5. **Transitions on events — traffic light** — diagram: red → (30 s timer) → green → (25 s timer) → yellow → (3 s timer) → red. Caption: "States change on events. For the traffic light, it's a timer. For your panda in a minute, it'll be a key press."
+6. **Shape in code — traffic light class** — board example, with the metaphor visible alongside the code:
+   ```gdscript
+   var state = "red"        # the current mode
+
+   match state:             # check the mode, run the matching branch
+       "red":
+           cars_must_stop()
+       "yellow":
+           cars_slow_down()
+       "green":
+           cars_go()
+
+   func set_state(new):     # helper that changes the mode
+       state = new
+   ```
+   Caption: "One variable. One `match`. One helper to change it. That's a state machine. Your Player class is going to look exactly like this."
+7. **Quiz — state transition** — "Light is green. Pedestrian hits the crosswalk button. What state does the light go to next?" Multiple choice: red / yellow / stays green. Answer: yellow (then red). Caption: "States change in order — green never jumps straight to red. Same rule applies to your panda: idle never jumps straight to fall."
+
+#### How-it's-used (1 slide)
+
+8. **D4 Fighter** — Diagram: panda figure with 6 state labels arranged in a circle (idle / walk / jump / fall / attack / hit) and arrows showing legal transitions. Caption: "Your panda has 6 states. Each one accepts different input and applies different physics. Chunk #6 (right after this one) is where you write the transitions."
+
+#### Where-in-game (1 slide)
+
+9. **`player.gd:63-72` screenshot**, red overlay on lines 64-72. Caption: "Time to declare your panda's `state` variable and write the helper that changes it."
+
+#### ACTION SLIDE — #5 (1 slide, MANDATORY)
+
+10. **Action slide**:
+    - **Prose instruction (top)**: *"Declare `state` (start at `\"idle\"`). In `set_state(new_state)`: bail if it matches the current state, otherwise print `new_state` and update `state`."*
+    - **LHS board example** (traffic-light flavored):
+      ```gdscript
+      var state = "red"
+
+      func set_state(new):
+          if new == state:
+              return
+          print(new)
+          state = new
+      ```
+    - **RHS screenshot**: `player.gd:63-72`, red overlay on lines 64-72.
+    - **Speaker notes**: Why the guard? Without `if new_state == state: return`, the Output panel would spam every frame. Why `print(new_state)`? Lets kids *see* state transitions live as they play in chunk #6 — the traffic light "telling you" which mode it just switched to.
+
+#### After-works (skipped)
+
+11. *No after-works payoff slide.* Game still doesn't visibly do more than after #4 — `state` exists but nothing reads it yet. Payoff deferred to #6 (characters actually MOVE).
+
+---
+
+### 10.10 Chunk #6 — State machine in `_physics_process` (R5 partial, ~10 slides)
+
+> R5 partial-section hole — 4 sub-holes (#6a `idle` exits, #6b `walk` exits, #6c `jump` exit, #6d `fall` exit). Pre-given block holds the `match` dispatcher + per-branch velocity (using pre-given `get_move_direction()`) + `attack`/`hit` exits + universal attack-input check.
+
+- **Recap-bridge** (1 slide) — "Your panda has a `state` variable + a `set_state` helper. Time to actually USE them — make the panda behave differently per state."
+- **`match` framing** (1 slide) — "The `match` keyword routes by state value. It's mostly pre-given here — `match` is the same shape D3 used in chunk #6 (Towers' `match t_type:`)." Diagram: state variable → match → six branches.
+- **Pre-given vs kid breakdown** (1 slide) — bullets:
+  - Pre-given: `match state:` dispatcher, per-branch velocity (`velocity.x = walk_speed * get_move_direction()`), `attack` + `hit` branches, universal "attack input" check.
+  - Kid fills (4 sub-holes): the `if` blocks inside `idle` / `walk` / `jump` / `fall` that decide WHICH state comes next.
+  Caption: "We give you 4 mostly-empty branches. You write the 'when do I switch?' lines."
+- **`get_move_direction()` helper** (1 slide) — board example:
+  ```gdscript
+  func get_move_direction() -> int:
+      if get_input_pressed("left"):
+          return -1
+      if get_input_pressed("right"):
+          return 1
+      return 0
+  ```
+  Caption: "Pre-given helper. Returns -1 / 0 / 1 for left / nothing / right. Use it instead of writing the long ternary."
+- **Where-in-game** (1 slide) — `player.gd:109-159` screenshot with **two-tone overlay**: gray on pre-given lines (109-114, 124-125, 133-134, 140-141, 147-159), red on kid sub-holes (116-122, 126-132, 136-139, 143-146). Caption: "Gray = already written for you. Red = your four holes — one per state."
+
+#### ACTION SLIDE — #6a (idle exits, 1 slide)
+
+- **Action slide**:
+  - **Prose**: *"Inside the `idle` branch: switch to `\"walk\"` when `get_move_direction()` is non-zero, and switch to `\"jump\"` (with upward `velocity.y`) when jump is pressed on the floor."*
+  - **LHS board example**:
+    ```gdscript
+    if get_move_direction() != 0:
+        set_state("walk")
+    ```
+  - **RHS screenshot**: `player.gd:114-122` zoom, red overlay on lines 116-122.
+  - **Speaker notes**: Two `if`s. First detects movement and switches to walk. Second detects jump-key + on-floor and launches. Same pattern repeats in #6b.
+
+#### ACTION SLIDE — #6b (walk exits, 1 slide)
+
+- **Action slide**:
+  - **Prose**: *"Inside the `walk` branch: switch back to `\"idle\"` when `get_move_direction()` is zero, and switch to `\"jump\"` (with upward `velocity.y`) when jump is pressed on the floor."*
+  - **LHS board example**:
+    ```gdscript
+    if get_move_direction() == 0:
+        set_state("idle")
+    ```
+  - **RHS screenshot**: `player.gd:124-132` zoom, red overlay on lines 126-132.
+  - **Speaker notes**: Mirror of #6a — exits walk back to idle when input drops, or up into jump on key press.
+
+#### ACTION SLIDE — #6c (jump exit, 1 slide)
+
+- **Action slide**:
+  - **Prose**: *"Inside the `jump` branch: when `velocity.y > 0` (upward velocity has run out), switch to `\"fall\"`."*
+  - **LHS board example**:
+    ```gdscript
+    if velocity.y > 0:
+        set_state("fall")
+    ```
+  - **RHS screenshot**: `player.gd:134-139` zoom, red overlay on lines 136-139.
+  - **Speaker notes**: Gravity (pre-given, `player.gd:86-87`) is constantly pulling `velocity.y` more positive. When it crosses 0, the panda is now falling. Switch state to fall.
+
+#### ACTION SLIDE — #6d (fall exit, 1 slide)
+
+- **Action slide**:
+  - **Prose**: *"Inside the `fall` branch: when `is_on_floor()` is true (player has landed), switch back to `\"idle\"`."*
+  - **LHS board example**:
+    ```gdscript
+    if is_on_floor():
+        set_state("idle")
+    ```
+  - **RHS screenshot**: `player.gd:141-146` zoom, red overlay on lines 143-146.
+  - **Speaker notes**: `is_on_floor()` is a Godot built-in on `CharacterBody2D`. Returns true when the body's collision shape rests on a static body.
+
+#### After-works (BIG PAYOFF — second visible payoff of the day)
+
+- Full-game screenshot mid-jump. Caption: "PANDA MOVES." Body: "Press A/D to walk. W to jump. Watch the Output panel — `walk` `jump` `fall` `idle` print as the state transitions. The game now responds to you." Note: attack key triggers state but no damage yet (that's #7).
+
+---
+
+### 10.11 Chunk #7 — `attack()` body (~6 slides)
+
+- **Recap-bridge** (1 slide) — "Your panda walks, jumps, falls. Pressing attack switches state — but nothing happens. Let's make the attack DO something."
+- **`match attack_type` framing** (1 slide) — "Same shape as chunk #6's `match state:`. One method, two branches: `\"melee\"` (Knight/Ninja) or `\"projectile\"` (Mage/Archer). Each character picks its branch via the `attack_type` property you declared in chunk #2."
+- **Pieces you'll use** (1 slide) — bullets listing pre-given names:
+  - `attack_cooldown_timer` (pre-given var; setting > 0 blocks re-fire)
+  - `melee_swing_timer` + `queue_redraw()` (cosmetic — white swing rectangle)
+  - `get_opponent()` (pre-given — returns the OTHER player)
+  - `spawn_projectile()` (pre-given — fires one projectile in `facing` direction)
+  - `take_damage(n)` on the opponent (chunk #3 method — works on EITHER player)
+- **No wicked one-liners** (1 slide) — board contrast: BAD (one compound `if`) vs GOOD (three named bools + clean `and`-chain).
+  ```gdscript
+  # GOOD:
+  var in_range = abs(to_opp.x) <= attack_range
+  var facing_opponent = sign(to_opp.x) == facing
+  var same_height = abs(to_opp.y) <= 60
+  if in_range and facing_opponent and same_height:
+      opponent.take_damage(attack_damage)
+  ```
+  Caption: "One purpose per line. C-style. Each `var` is readable on its own."
+- **Where-in-game** (1 slide) — `player.gd:178-199` screenshot, red overlay on lines 180-199.
+
+#### ACTION SLIDE — #7 (1 slide, MANDATORY)
+
+- **Action slide**:
+  - **Prose instruction (top)**: *"Start the cooldown timer, then `match attack_type:` — `\"melee\"` does the swing-rectangle and damages an opponent who's in range + facing + same height; `\"projectile\"` calls `spawn_projectile()`."*
+  - **LHS board example**:
+    ```gdscript
+    func bark():
+        match volume:
+            "loud":
+                wake_neighbours()
+            "soft":
+                annoy_cat()
+    ```
+  - **RHS screenshot**: `player.gd:178-199`, red overlay on lines 180-199.
+  - **Speaker notes**: Two early-`return`s replace the old compound `if opponent != null and not opponent.is_dead()`. Each named bool is one check. Final `if in_range and facing_opponent and same_height:` reads like English.
+
+#### After-works (HUGE PAYOFF — third visible payoff, end of morning)
+
+- Full-fight screenshot: Knight + Ninja, both with HP bars half-empty, swing-rectangle mid-fire. Caption: "FIGHT LOOP COMPLETE." Body: "Hits actually damage. HP bars shrink. Hit flashes fire. Someone hits 0 HP → WinLabel appears. R restarts back to char select. **The game is a game.**"
+
+---
+
+### 10.12 Personalization layer (~18 slides)
+
+> Section divider — "Make it yours."
+
+- **Beat 1 — Tune a character's stats** (3 slides): open `CHARACTERS` dict → change one number → run. Example: Knight `walk_speed` 220 → 600 (Speed Knight).
+- **Beat 2 — Re-tint with Modulate** (3 slides): same dict, `Color(R, G, B)` field. Example: pink Ninja → bright green Ninja.
+- **Beat 3 — Swap a character's sprite** (3 slides): browse `assets/kenney_pp/characters/` → pick `tile_0004.png` or higher → edit `"sprite"` path → run.
+- **Beat 4 — Edit a map's platform layout** (3 slides): open `MAPS` dict → add `[600, 320, 100, 16, true]` to Pokémon Stadium → run → new platform appears.
+- **Beat 5 — Add a fifth map** (3 slides): copy a map block, change key name, edit `_unhandled_input` keys array to include the new map, update map-select panel text.
+- **Beat 6 (stretch) — Take on the Final Challenge** (1 slide) — pointer to §10.13.
+
+---
+
+### 10.13 Final Challenge — `final_challenge.gd` (~14 slides)
+
+> User-locked envelope: D2 FC pack was ~6 slides for 6 holes; D3 FC pack was ~16 slides for 9 holes. D4 has 3 FC holes (FC-1, FC-2, FC-3) — but each one is creativity-heavy (invent a 5th character). Aim for ~14 slides total. **R3.1 audit pending** — current 3 holes don't mirror every morning chunk; remediation deferred.
+
+- **Section divider** — "Final Challenge — Invent Your Own Fighter."
+- **FC payoff card** (1 slide) — what the FC unlocks: "Build a 5th character with whatever stats, sprite, and attack you want. Then play it against your friend."
+- **R3 POINTER SLIDE** (1 slide, REQUIRED per BIBLE §4 R3) — global mirror map. Three rows:
+  - FC-1 ← chunks #1 + #2 (property declarations → a fresh stats dict)
+  - FC-2 ← chunk #4 (hook a new instance into the existing system)
+  - FC-3 ← chunks #6 + #7 (add a new `match` branch + invent attack behavior)
+  Caption: "Every FC hole is a *reword* of something you wrote this morning."
+- **FC enable walkthrough** (2 slides):
+  1. Open `final_challenge.gd`. Fill the `CUSTOM_CHARACTER` dict (FC-1).
+  2. Open `main.gd` `_ready()` — add `CHARACTERS["custom"] = CUSTOM_CHARACTER` (FC-2). Open `player.gd` `attack()` — add a `"custom":` branch (FC-3). Save all three, F5.
+- **Per-hole Action slides** — one slide each:
+  - **FC-1** — *"Fill the `CUSTOM_CHARACTER` dict with stats for your fighter. Pick a sprite from `assets/kenney_pp/characters/` (try `tile_0004.png` and up). Set `attack_type` to `\"custom\"` so FC-3's new branch takes over."* Banner: "FC-1 ← chunks #1 + #2".
+  - **FC-2** — *"In `main.gd` `_ready()` (after `CHARACTERS` is defined), add `CHARACTERS[\"custom\"] = CUSTOM_CHARACTER`. Update the char-select keys array + panel text so key `5` picks your character."* Banner: "FC-2 ← chunk #4".
+  - **FC-3** — *"In `player.gd`'s `attack()` `match attack_type:`, add a `\"custom\":` branch. Invent whatever behavior you want — swing twice, shoot 3 projectiles, heal yourself, charge attack. The morning's pieces (`take_damage`, `spawn_projectile`, `melee_swing_timer`, `queue_redraw`) are still available."* Banner: "FC-3 ← chunks #6 + #7".
+- **Creativity menu** (2 slides) — bullets of "things you could try":
+  - Slide 1: damage twice in one swing; shoot 3 projectiles in a spread; charge attack (longer cooldown, bigger damage); self-heal instead of damage; teleport behind opponent; mirror opponent's HP back at them.
+  - Slide 2: "Or invent something the camp has never seen. There's no wrong answer."
+- **FC payoff** (1 slide) — screenshot of an instructor's custom-fighter test. Caption: "Your fighter, in the ring."
+
+---
+
+### 10.14 Day closer (~3 slides)
+
+1. **Recap** — "Today: Objects + State. Two big ideas. Your code now has *blueprints* and *modes*."
+2. **Tomorrow teaser** — "Day 5: VR / Racing showcase + Steam Escape Simulator. No new code — just play what you built, show it off, and play together."
+3. **Build-time / export walkthrough** — handed to instructor in a separate pack. Slide here just points: "Ask your instructor for the export pack to ship your Windows .exe."
+
+---
+
+### 10.15 Build-time notes for python-pptx chat
+
+- **Master frame**: iCode logo top-left, D4 day tab top-right (color TBD — pending brand pack), page number bottom-right per `SLIDES_FORMATS.md` master frame spec.
+- **Walkthrough step badges**: jog-memory Challenge/Hint slides use small step badges (A.1, A.2, B.1, B.2, MF.1-4, CD.1-3, C.1, C.2, D.1, D.2) top-right.
+- **Red overlay** on RHS Godot screenshots: 4px stroke, fully transparent fill, drawn over the kid `#@todo` region.
+- **Gray overlay** for R5 partial hole (chunk #6): semi-transparent fill (alpha ~0.3), no stroke, over pre-given lines (match dispatcher, per-branch velocity, attack/hit exits, universal attack-input check).
+- **Speaker notes**: every Action slide populates its "Speaker notes" field per §10.4+ above.
+- **Estimated total slide count**: 105-115 slides. Final count locks in build-time pass.
+- **Verification before build**: re-run §9 checklist. If `player.gd` / `main.gd` line numbers shift, all RHS screenshots + line refs must update.
+
+---
+
+### 10.16 Pending decisions (blocking final build)
+
+- [ ] **Day tab color for D4** — brand pack pending.
+- [ ] **Historical context slide content** — Fighter-genre lineage sourcing pending (SF2 1991, MK 1992, Smash N64 1999, Melee 2001, Smash Ultimate modern).
+- [ ] **Sprite picks confirmed on visual playtest** — pending Kenney character pack review; flag any swaps that affect §8.
+- [ ] **`final_challenge.gd` R3.1 audit** — currently 3 FC holes for 7 morning chunks. R3.1 says one mirror hole per chunk. Either expand FC to 7+ holes OR document explicit exemption. Deferred to next remediation pass.
+- [ ] **Real-fight playtest** — D4 stats not Python-simulated; rebalance via real two-human playtest, then update CHARACTERS dict + §8 stats table.
+
+---
+
+## Rework log
+
+- **2026-05-30 — R1 + R2 + R5 remediation pass.**
+  - Stripped `(STRETCH)` from chunk #6 banner (R1).
+  - Simplified chunk #5 `print` from format-string to `print(new_state)` (R6 "kid-readable level").
+  - Added pre-given helper `get_move_direction()` in `player.gd:82-87` (returns -1/0/1) to replace four-way ternary `velocity.x = walk_speed * (-1 if ... else 1 if ... else 0)` lines in chunk #6 branches per R2 ("no wicked one-liners, C-style simple").
+  - Restructured chunk #6 as **R5 partial-section hole** — 4 sub-holes (#6a `idle` exits, #6b `walk` exits, #6c `jump` exit, #6d `fall` exit). The `match` dispatcher, per-branch velocity, `attack`/`hit` exits, and the universal attack-input check are pre-given. Kid fills 14 LoC total across the four sub-holes (was 45 LoC in one block).
+  - Exploded the chunk #7 melee compound `if` into three named bools (`in_range` / `facing_opponent` / `same_height`) + two early-return null/dead guards per R2.
+  - Added per-chunk "Pieces you'll use" pre-cursor bullets (chunks #3, #6, #7) listing pre-given helpers + which chunk they live in.
+  - Added single-sentence "Action-slide prose (top)" lines per chunk matching D3 convention (20-45 words, imperative, names vars directly).
+  - Chunk #3 prose explicitly flags the file-won't-run-between-#3-and-#5 dependency (set_state defined in #5); kid types, saves, moves on.
+  - §3 chunk table refreshed: now lists 10 `#@todo` sub-holes across 7 chunks; total kid LoC ≈ 55.
+  - §9 verification checklist refreshed with R1 + R2 + R5 line items.
+
+- **2026-05-30 PM (§10 slide blueprint pass)** — Locked Minecraft Panda (Objects concept) + Traffic light (State concept) as the two D4 metaphors per D2/D3 convention (one metaphor per umbrella concept, all chunks under that umbrella reuse without re-teaching). Built §10 in full presentation order mirroring D3 §10 structure (15 sub-sections: 10.0 decisions locked → 10.1 SLIDE BUILDER REFERENCE → 10.2 opener pack → 10.3 pre-coding setup with NEW Walk MF + Walk CD demos → 10.4 Chunk #1 FULL ARC (OBJECTS concept root + Panda metaphor + Action slide) → 10.5 Walks C/D → 10.6 Chunk #2 SMALL-ARC → 10.7 Chunk #3 → 10.8 Chunk #4 (first visible payoff) → 10.9 Chunk #5 FULL ARC (STATE concept root + Traffic light metaphor + Action slide) → 10.10 Chunk #6 R5 partial with two-tone overlay + 4 per-sub-hole Action slides → 10.11 Chunk #7 (third visible payoff) → 10.12 Personalization → 10.13 FC pack → 10.14 day closer → 10.15 build-time notes → 10.16 pending decisions). Three after-works payoff slides only — at chunks #4 (fighters appear), #6 (panda moves), #7 (fight loop complete). Estimated total deck: 105-115 slides.
+
+- **2026-05-30 PM (concept + metaphor interweave pass)** — User feedback: concept and metaphor should be *interwoven*, not stacked sequentially (metaphor first then concept is less effective than them landing together). Restructured §10.4 (OBJECTS) and §10.9 (STATE) concept roots so the metaphor image opens each section and every concept slide reuses it. OBJECTS root: panda hook → word reveal *on the panda image* → class-vs-instance shown via panda blueprint vs spawned pandas → properties/methods labeled on a panda diagram → quiz with two pandas → code block uses Panda class (not abstract names) → personalities bridge to State. STATE root: traffic-light hook → word reveal *on the traffic light* → behaviors table uses red/yellow/green directly → transitions diagram traces a real traffic-light cycle → code block uses `state = "red"` with cars_must_stop() / cars_slow_down() / cars_go() → quiz on legal state transitions. Both concept roots remained ~7 slides each — same slide count, reshuffled order so the metaphor never appears AFTER the technical vocabulary.

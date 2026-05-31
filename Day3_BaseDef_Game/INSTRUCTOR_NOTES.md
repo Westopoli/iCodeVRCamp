@@ -27,22 +27,22 @@ Companion to BIBLE §6 "Day 3 — Base Defense" lock. Quick-reference for setup,
 
 ## Code layout
 
-- `main.gd` — all 8 kid chunks live here. Pre-given helpers outside `#@todo` markers (so they survive Template/Complete strip).
+- `main.gd` — all 9 kid chunks live here (11 `#@todo` blocks after R5 splits on #5a + #6). Pre-given helpers outside `#@todo` markers (so they survive Template/Complete strip). FC hook wiring (`fc_node` field + `_ready` instantiation + `_process` routing) also lives here, all outside `#@todo` blocks.
 - `Enemy.tscn` + `enemy.gd` — per-instance state container. Kids don't write here.
-- `endless_mode.gd` — Final Challenge. 4 mirror holes (FC-1 through FC-4). Each holed task is a near-clone of a morning chunk.
+- `endless_mode.gd` — Final Challenge. 9 mirror holes (FC-1 through FC-7, with FC-6 split into 4 sub-branches). Each FC hole is a near-clone of a morning chunk per BIBLE §4 R3.1.
 
-## Chunk map (matches BIBLE §4 table)
+## Chunk map (matches BIBLE §4 table — refreshed 2026-05-29 under R1-R6 + R3.1)
 
 | # | Where | What |
 |---|---|---|
 | 1 | `main.gd` top of script | 4 var declarations (enemies, towers, coins, base_hp) |
 | 2a | `spawn_enemy()` | `enemies.append(e)` |
-| 2b | `kill_enemy()` (×2 branches) | `enemies.erase(e)` + reward |
-| 3 | `_process()` STRETCH | Two for-loops calling `step_enemy` + `tower_tick` |
+| 2b | `kill_enemy()` (×2 branches) | `enemies.erase(e)` + reward (and erase-only on no-reward branch) |
+| 3 | `_process()` | Two for-loops calling `step_enemy` + `tower_tick` |
 | 4 | `move_all()` | List-loop refactor |
-| 5a | `get_nearest_enemy_in_range()` STRETCH | Loop + closest-in-range |
-| 5b | `get_enemies_in_radius()` STRETCH | Loop + collect-in-radius |
-| 6 | `tower_tick()` STRETCH | Match on tower type, nested call to 5a/5b |
+| 5a | `get_nearest_enemy_in_range()` (R5 partial) | Loop body only — closest-in-range; init + return pre-given |
+| 5b | `get_enemies_in_radius()` | Loop + collect-in-radius |
+| 6 | `tower_tick()` (R5 partial split: 6a + 6b) | Pre-given `match` dispatcher; kid fills single-target body (6a) + list-target body (6b) |
 | 7 | `_process()` | Size check + wave advance |
 
 ## Common kid stuck-points (anticipated — log refinements after first camp)
@@ -74,14 +74,22 @@ Generates `dist/Day3_BaseDef_Game_Template.zip` (kid scaffold, won't compile unt
 
 `.exe` export is manual via Godot's export dialog (BIBLE §11).
 
-## Final Challenge framing (D2 precedent)
+## Final Challenge framing (R3 + R3.1 — refreshed 2026-05-29)
 
-Half-guided. Slides give the rule in prose + mirror-pointer to the morning chunk it clones. No verbatim code. Kid recognizes "oh I did this earlier" and writes it.
+Pointer-guided review. Slides give the rule in prose + mirror-pointer to the morning chunk it clones. No verbatim code on the pointer slide. Kid recognizes "oh I did this earlier" and writes it. Per BIBLE §4 R3.1, the FC mirrors every morning chunk (no skipped chunks).
 
-Mirror map (in `endless_mode.gd` comments too):
-- FC-1 ← TODO #1 (declare vars)
-- FC-2 ← TODO #2a (append-on-spawn)
-- FC-3 ← TODO #5a (return ONE thing)
-- FC-4 ← TODO #7 (size() check + escalation)
+Mirror map (also in `endless_mode.gd` comments):
 
-To activate after kid fills the file: open `main.gd`, set `const ENDLESS_MODE := false` → `true`. Save, play.
+- **FC-1**  ← TODO #1   (declare state vars — 5 vars this time)
+- **FC-2a** ← TODO #2a  (`.append` to a list)
+- **FC-2b** ← TODO #2b  (`.erase` from a list + reward)
+- **FC-3**  ← TODO #3   (iterate two lists each frame, inline in `endless_tick`)
+- **FC-4**  ← TODO #4   (function takes a list as a parameter — `buff_all`)
+- **FC-5a** ← TODO #5a  (function returns ONE from a list — `get_fastest_enemy`, R5 partial)
+- **FC-5b** ← TODO #5b  (function returns a LIST from a list — `get_wounded_enemies`)
+- **FC-6**  ← TODO #6   (`match` + nested calls — kid fills four `escalate()` branches)
+- **FC-7**  ← TODO #7   (`list.size()` check + state transition — screen-clear escalation)
+
+Total FC kid LoC ≈ 36 (morning ≈ 39 → −8%, within R3.1 ±20% envelope).
+
+To activate after kid fills the file: open `main.gd`, set `const ENDLESS_MODE := false` → `true`. Save, play. The hook wiring (instantiate `endless_mode.gd` as a child of Main, route `_process` to `fc_node.endless_tick`, swap HUD wave label for "Endless Mode") is pre-given in `main.gd` — kid never touches `preload / new / add_child`.
