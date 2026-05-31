@@ -45,3 +45,12 @@ python build_day.py 4   # → out/Day4.pptx
 ## Manual user step
 
 The **red overlay rectangle** on every L8 Action slide ships at a default size + position. After build, open the `.pptx` in PowerPoint and drag the rectangle on each Action slide so it surrounds the actual kid `#@todo` lines on the screenshot. ~60 drags across D1-D4.
+
+## Skipped screenshots (`--not done--`)
+
+User marks intentionally-skipped shots in `../SCREENSHOTS_CAPTURE_GUIDE.md` with a literal `--not done--` line directly under the screenshot entry. **The build-day author (whether human or AI) MUST honor this:**
+
+- `--not done--` present → omit the corresponding slide entirely. No placeholder, no warning.
+- `--not done--` absent + file missing → emit a visible placeholder ("[ MISSING: filename.png ]") so the user can spot pending captures.
+
+Full rule set lives in `SCREENSHOTS_CAPTURE_GUIDE.md` under "Skip marker: `--not done--`".

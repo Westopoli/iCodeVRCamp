@@ -11,6 +11,26 @@
 
 **Variable count is OK** — if you decide a walk needs 5 shots instead of 4, just name them `WalkA1`-`WalkA5` and the build will emit 5 slides for that walk. If you add `WalkA6.png` later, the build picks it up automatically (one slide added). Same for beats — `D1Beat1Step1`-`D1Beat1Step4` → 4 slides for beat 1.
 
+### Skip marker: `--not done--`
+
+If you decide to skip a screenshot listed in this guide, **add the literal text `--not done--` on a new line directly under that screenshot's entry**. Example:
+
+```
+**`D1Beat3Step2.png`** — Editor showing the line edited to a much higher value.
+--not done--
+Steps:
+1. ...
+```
+
+**Rules for AI consuming this guide (per-day SLIDES.py authoring)**:
+
+1. Treat `--not done--` as authoritative: **the file does not exist and the corresponding slide must be omitted from the deck entirely.** Do not emit a placeholder, do not generate a slide with a "MISSING:" box, do not warn the user. Just skip.
+2. For per-task tasks (`D1C1a`, `D2C3b`, etc.) marked `--not done--`: skip the Action slide for that task. Adjacent slides (Concept root, How-used, Where-in-game) stay — only the Action slide that needs the screenshot is dropped.
+3. For walks (`WalkA1`, `WalkA2`, ...) marked `--not done--`: skip just that walk-step slide. The remaining walk-step slides keep their original order.
+4. For personalization beats (`D1Beat1Step1`, `D1Beat1Step2`, ...) marked `--not done--`: skip just that step slide.
+5. For FC (`D2FC1`, ...) marked `--not done--`: skip just that slide.
+6. `--not done--` is NOT the same as a missing file with no marker. If the marker is absent and the file is missing, treat as **pending capture** — emit a visible placeholder so the user can spot it. If the marker is present, treat as **intentionally skipped** — emit nothing.
+
 ## Universal capture rules
 
 - **Resolution**: native, 1920×1080 minimum.
