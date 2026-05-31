@@ -23,8 +23,43 @@ from pptx.enum.text import PP_ALIGN, MSO_ANCHOR
 from pptx.dml.color import RGBColor
 from pathlib import Path
 
+from pygments import lex
+from pygments.lexers import GDScriptLexer
+from pygments.token import Token
+
 import theme
 from master import apply_master
+
+
+# ============================================================
+#  GDScript syntax highlighter — maps Pygments tokens to theme colors
+# ============================================================
+
+def _token_color(tok_type):
+    """Map a Pygments token type to a theme RGBColor.
+
+    GDScript lexer emits: Token.Keyword, Token.Keyword.Type, Token.Name.Function,
+    Token.Name.Builtin, Token.Literal.String.*, Token.Literal.Number.*,
+    Token.Comment.*, Token.Operator, Token.Punctuation, Token.Text.
+    """
+    if tok_type in Token.Comment:
+        return theme.SYNTAX_COMMENT
+    if tok_type in Token.Literal.String:
+        return theme.SYNTAX_STRING
+    if tok_type in Token.Literal.Number:
+        return theme.SYNTAX_NUMBER
+    if tok_type in Token.Keyword.Type:
+        return theme.SYNTAX_TYPE
+    if tok_type in Token.Keyword:
+        # Pygments groups GDScript control-flow under Keyword; distinguish by string
+        return theme.SYNTAX_KEYWORD
+    if tok_type in Token.Name.Function:
+        return theme.SYNTAX_FUNCTION
+    if tok_type in Token.Name.Builtin:
+        return theme.SYNTAX_FUNCTION
+    if tok_type in Token.Name.Class:
+        return theme.SYNTAX_TYPE
+    return theme.CODE_TEXT
 
 
 # ============================================================
@@ -76,8 +111,15 @@ def _add_bullets(slide, left, top, width, height, bullets, *,
 
 
 def _add_code_block(slide, left, top, width, height, code_text,
-                    bg_color=None, fg_color=None, font_size=None):
-    """Add a dark-bg code block with monospace text."""
+                    bg_color=None, fg_color=None, font_size=None,
+                    highlight=True):
+    """Add a dark-bg code block with monospace text.
+
+    `highlight=True` (default) runs the code through the Pygments GDScript
+    lexer and applies per-token colors. `highlight=False` falls back to a
+    single foreground color (useful for non-GDScript content like Python
+    comparison panes).
+    """
     shape = slide.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE,
                                     left, top, width, height)
     shape.fill.solid()
@@ -89,14 +131,55 @@ def _add_code_block(slide, left, top, width, height, code_text,
     tf.margin_right = Inches(0.2)
     tf.margin_top = Inches(0.15)
     tf.margin_bottom = Inches(0.15)
-    for i, line in enumerate(code_text.split("\n")):
+
+    if not highlight:
+        # Plain rendering — one run per line, single color
+        for i, line in enumerate(code_text.split("\n")):
+            p = tf.paragraphs[0] if i == 0 else tf.add_paragraph()
+            p.alignment = PP_ALIGN.LEFT
+            run = p.add_run()
+            run.text = line if line else " "
+            run.font.name = theme.FONT_MONO
+            run.font.size = font_size or theme.SIZE_CODE
+            run.font.color.rgb = fg_color or theme.CODE_TEXT
+        return shape
+
+    # Pygments-highlighted rendering — one paragraph per line, one run per token
+    size = font_size or theme.SIZE_CODE
+    lines = code_text.split("\n")
+    # Pre-tokenize the whole block once, then split tokens across lines
+    tokens = list(lex(code_text, GDScriptLexer()))
+
+    # Group tokens by line. A token can contain newlines — split on \n.
+    lines_tokens = [[]]
+    for tok_type, tok_text in tokens:
+        if "\n" in tok_text:
+            parts = tok_text.split("\n")
+            for j, part in enumerate(parts):
+                if part:
+                    lines_tokens[-1].append((tok_type, part))
+                if j < len(parts) - 1:
+                    lines_tokens.append([])
+        else:
+            lines_tokens[-1].append((tok_type, tok_text))
+
+    for i, line_tokens in enumerate(lines_tokens):
         p = tf.paragraphs[0] if i == 0 else tf.add_paragraph()
         p.alignment = PP_ALIGN.LEFT
-        run = p.add_run()
-        run.text = line if line else " "
-        run.font.name = theme.FONT_MONO
-        run.font.size = font_size or theme.SIZE_CODE
-        run.font.color.rgb = fg_color or theme.CODE_TEXT
+        if not line_tokens:
+            # blank line — add a single space so paragraph height holds
+            run = p.add_run()
+            run.text = " "
+            run.font.name = theme.FONT_MONO
+            run.font.size = size
+            run.font.color.rgb = theme.CODE_TEXT
+            continue
+        for tok_type, tok_text in line_tokens:
+            run = p.add_run()
+            run.text = tok_text
+            run.font.name = theme.FONT_MONO
+            run.font.size = size
+            run.font.color.rgb = _token_color(tok_type)
     return shape
 
 

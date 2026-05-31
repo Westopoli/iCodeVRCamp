@@ -46,6 +46,12 @@ python build_day.py 4   # → out/Day4.pptx
 
 The **red overlay rectangle** on every L8 Action slide ships at a default size + position. After build, open the `.pptx` in PowerPoint and drag the rectangle on each Action slide so it surrounds the actual kid `#@todo` lines on the screenshot. ~60 drags across D1-D4.
 
+## Slide content rules (per-day SLIDES.py authoring)
+
+- **No specific line numbers in any slide body text.** Line numbers shift as the kid types and screenshots become stale. Reference TODO banners (`# TODO #1: VARIABLES`), function names (`spawn_enemy()`), or section descriptors ("inside the `match state:` block") instead. The instructor explains "your line numbers may look different from the screenshot" verbally — no slide text needed.
+- **Code blocks (L3 / L6 / L8 LHS) are rendered as styled text, not screenshots.** The Pygments GDScript lexer applies syntax highlighting (keywords, strings, numbers, comments) directly in python-pptx text runs. No PowerPoint markdown — colors come from per-run `font.color.rgb` assignments in `templates.py`.
+- **Kid-facing label = "task"**, not "chunk" (per BIBLE Lingo lock).
+
 ## Skipped screenshots (`--not done--`)
 
 User marks intentionally-skipped shots in `../SCREENSHOTS_CAPTURE_GUIDE.md` with a literal `--not done--` line directly under the screenshot entry. **The build-day author (whether human or AI) MUST honor this:**

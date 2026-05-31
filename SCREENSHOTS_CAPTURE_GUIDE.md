@@ -31,6 +31,28 @@ Steps:
 5. For FC (`D2FC1`, ...) marked `--not done--`: skip just that slide.
 6. `--not done--` is NOT the same as a missing file with no marker. If the marker is absent and the file is missing, treat as **pending capture** — emit a visible placeholder so the user can spot it. If the marker is present, treat as **intentionally skipped** — emit nothing.
 
+### Inline notes: `-- ... --`
+
+User adds freeform notes about specific screenshots inline within this guide, using **two dashes on each side**:
+
+```
+**`D1Beat3Step2.png`** — Editor showing the line edited to a much higher value.
+-- I cropped this one to remove a window-title that showed my username --
+Steps:
+1. ...
+```
+
+**Rules for AI consuming this guide (per-day SLIDES.py authoring)**:
+
+1. **Read every `-- ... --` note attached to a screenshot entry** before emitting the slide(s) for that screenshot. They contain user observations + corrections + occasional instructions.
+2. **If the note contains an instruction (imperative phrasing), follow it.** Examples:
+   - `-- caption this one "before the kid types" --` → use that exact caption text on the slide.
+   - `-- this one shows step 2 and step 3 combined, only build one slide --` → emit a single slide referencing both source steps.
+   - `-- skip the red overlay on this Action slide --` → drop the overlay rect when rendering this L8 slide.
+3. **If the note is observational only** (e.g., "I cropped this one", "the gutter was on by default"), use it as context but no action needed.
+4. **`--not done--` (reserved marker)** is distinct from inline notes. `--not done--` means "skip the slide entirely." Any other `-- ... --` text means "read me and adjust accordingly."
+5. **Notes apply to the screenshot they sit directly under.** A note in the middle of a personalization beat applies to the step it's under, not the whole beat. If user wants a beat-wide note, they'll put it above the beat heading.
+
 ## Universal capture rules
 
 - **Resolution**: native, 1920×1080 minimum.

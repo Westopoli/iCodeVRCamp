@@ -52,17 +52,19 @@ def main():
                  caption="Pong (Atari, 1972) — the arcade cabinet that started it all.")
 
     # L5 — Table (task-table style — kid-facing label is "task" not "chunk")
+    # NOTE: no line numbers in slide body — they go stale as kid types.
+    # Reference by file + banner / function name instead.
     tpl.l5_table(prs, day=1, page=6,
                  heading="Today's tasks",
-                 header_row=["#", "Concept", "File location", "Size"],
+                 header_row=["#", "Concept", "Where in main.gd", "Size"],
                  data_rows=[
-                     ["#1a", "Variable declaration", "main.gd:35-39", "small"],
-                     ["#1b", "Creative naming", "main.gd:45-48", "small"],
-                     ["#6a", "Boolean variable", "main.gd:54-56", "tiny"],
-                     ["#2",  "Read + update (+=)", "main.gd:81-84", "small"],
-                     ["#4",  "if / else (wall bounce)", "main.gd:89-94", "medium"],
-                     ["#3",  "if statement", "main.gd:100-103", "small"],
-                     ["#5",  "Comparison operators", "main.gd:107-114", "medium"],
+                     ["#1a", "Variable declaration", "TODO #1a banner",   "small"],
+                     ["#1b", "Creative naming",      "TODO #1b banner",   "small"],
+                     ["#6a", "Boolean variable",     "TODO #6a banner",   "tiny"],
+                     ["#2",  "Read + update (+=)",   "TODO #2 banner",    "small"],
+                     ["#4",  "if / else (wall bounce)", "TODO #4 banner", "medium"],
+                     ["#3",  "if statement",         "TODO #3 banner",    "small"],
+                     ["#5",  "Comparison operators", "TODO #5 banner",    "medium"],
                  ])
 
     # L6 — Code (centered code block)

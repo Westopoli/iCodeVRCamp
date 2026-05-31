@@ -62,6 +62,16 @@ TEXT_MUTED = RGBColor(0x66, 0x66, 0x66)
 CODE_BG = RGBColor(0x2D, 0x2D, 0x2D)
 CODE_TEXT = RGBColor(0xE6, 0xE6, 0xE6)
 
+# Syntax-highlight palette for code blocks (VSCode dark theme inspired)
+SYNTAX_KEYWORD = RGBColor(0x56, 0x9C, 0xD6)        # blue — var, func, if, for, return
+SYNTAX_KEYWORD_FLOW = RGBColor(0xC5, 0x86, 0xC0)   # purple — match, while, in, and, or, not
+SYNTAX_STRING = RGBColor(0xCE, 0x91, 0x78)         # orange
+SYNTAX_NUMBER = RGBColor(0xB5, 0xCE, 0xA8)         # green
+SYNTAX_COMMENT = RGBColor(0x6A, 0x99, 0x55)        # muted green
+SYNTAX_FUNCTION = RGBColor(0xDC, 0xDC, 0xAA)       # yellow — function-call / def names
+SYNTAX_TYPE = RGBColor(0x4E, 0xC9, 0xB0)           # teal — types, classes
+SYNTAX_OPERATOR = RGBColor(0xE6, 0xE6, 0xE6)       # default fg — =, +, -, etc.
+
 # Red overlay for L8 Action slides (kid #@todo region marker)
 OVERLAY_RED = RGBColor(0xE5, 0x3A, 0x2C)
 OVERLAY_GRAY = RGBColor(0x99, 0x99, 0x99)  # for R5 partial pre-given regions
