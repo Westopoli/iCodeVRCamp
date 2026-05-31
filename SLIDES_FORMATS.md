@@ -1,187 +1,83 @@
-# Slide Format Catalog (draft for user review)
+# Slide Format Catalog — L1-L8 (LOCKED 2026-05-31)
 
-Derived from end-to-end read of `Day{1..4}_*/SLIDE_SOURCE.md`. D5 expected to fit existing formats (same §-skeleton per `slide-source-rules`); D5 forecast in counts is an estimate.
+Locked format set for the python-pptx slide-build pipeline. Down from 22 (v1) → 12 (v2 proposed) → **8 (L1-L8, final)**. Format count drives `templates.py` complexity, not deck size. Across D1-D4 we still ship ~520 slides total.
 
-Every format inherits the **master frame**: iCode logo top-left, day tab + section tag top-right, page number bottom-right, footer rule. Master defined once in `master.py`.
+Every format inherits the **master frame** (`slides/master.py`): full-width gradient header strip (purple → pink → orange → yellow) with iCode logo top-left + day tab top-right (color per day) + page number bottom-right.
 
 ## Format list
 
-| ID | Name | Use | Screenshot? | Red highlight? |
-|---|---|---|---|---|
-| F01 | Day Title | Open of each day. Year · iconic title · genre · concepts. | Optional (era art) | No |
-| F02 | Narrative Arc | 5-day video-game-history timeline; today highlighted. | No | No |
-| F03 | GDScript-vs-Python | Two-column code panel pulled verbatim from §1. | No (rendered text) | No |
-| F04 | Section Divider | Large §-label (e.g. "Pre-coding setup", "Lesson chunks"). | No | No |
-| F05 | Build Narrative | Text-heavy "how this game is built" body. | Optional small | No |
-| F06 | Scene Tree | Monospace ASCII tree (from §2). | No | No |
-| F07 | File Manifest | Table: File · Role · Kid edits? | No | No |
-| F08 | Asset Pack Card | Pack name · license · filename convention · sprite picks. | Optional sprite previews | No |
-| F09 | Constants Table | e.g. D2 timing consts, D3 stat block, D4 character stats. | No | No |
-| F10 | Chunk Table | Full per-day chunk roster (from §3). | No | No |
-| F11 | Concept Intro | Concept name + 1-sentence definition + small icon. | No | No |
-| F12 | Board Example | Small code example, centered, big monospace. | No | No |
-| F13 | Your Task | Goal field as bullets + optional thumbnail of expected end state. | Optional | No |
-| F14 | In-File Location | Godot script-editor screenshot + caption "file:line". | YES | YES (where chunk goes) |
-| F15 | As-Typed Code | Screenshot of completed code in Godot (or pre-rendered code image). | YES | Optional (highlight key new lines) |
-| F16 | After-This-Works | Game-running screenshot + one-line caption. | YES | Optional |
-| F17 | Walkthrough Step | One screenshot (~60% slide) + step number + caption (~40%). | YES | YES |
-| F18 | Personalization Beat Intro | Beat number + one-line goal ("Make your cannon overpowered"). | No | No |
-| F19 | FC Mirror Map | Table: FC hole · mirrors morning chunk · concept reviewed. | No | No |
-| F20 | FC Hole | Placeholder code (`KEY_?` / `???`) + goal + "no copy-paste" reminder. | Optional (image of placeholder code) | Optional |
-| F21 | Takeaway / Export | End-of-day export-to-exe walkthrough (D1 Beat 6 reused D2-D4). | YES (step shots) | YES |
-| F22 | Day Closer | "Tomorrow: <next iconic title>" teaser. | Optional era art | No |
+| ID | Name | Use | Red overlay? | Step badge? | Layout function |
+|---|---|---|---|---|---|
+| **L1** | Title | Day Title, Section Divider, Word Reveal, Day Closer, Personalization Beat header. Big centered heading + optional subtitle / background image. | No | No | `tpl.l1_title()` |
+| **L2** | Body | Headline + bullets / paragraphs. Historical context, "Today's concepts", how-used, pieces-you'll-use, concept definitions, quiz Q+A. | No | No | `tpl.l2_body()` |
+| **L3** | Side-by-Side | Two-column layout. GDScript-vs-Python, before/after, "Shape in code" alongside metaphor caption. | No | No | `tpl.l3_side_by_side()` |
+| **L4** | Image | Full-bleed image / diagram + caption strip. Metaphor hooks (panda, PS5, traffic light, vending machine), after-works payoff screenshots, class/state diagrams. | No | No | `tpl.l4_image()` |
+| **L5** | Table | Header row + N data rows. Chunk table, FC mirror map, character stats, behaviors table, constants. | No | No | `tpl.l5_table()` |
+| **L6** | Code | Centered monospace code block + optional caption. Standalone board examples, scene tree, constants block. | No | No | `tpl.l6_code()` |
+| **L7** | Step | Screenshot ~60% + step badge + caption ~40%. All walks (A-D, MF, CD, DK), where-in-game screenshots, personalization step beats, export-to-exe steps. | Optional | Yes | `tpl.l7_step()` |
+| **L8** | Action | Top prose + LHS code + RHS Godot screenshot with red overlay. Per-chunk Action slides, per-FC-hole Action slides. R5 partial-hole variant adds a gray overlay underneath the red. | **YES** | No | `tpl.l8_action()` |
 
-## Per-day count estimate
+## v1 → v3 merge mapping
 
-Counts cover authored content density. ±10% wiggle.
+Every v1 format (F01-F22) folds into one of L1-L8:
 
-### D1 — Pong (8 chunks, copy-along)
-
-| Section | Slides | Notes |
-|---|---|---|
-| F01 Day Title | 1 | |
-| F02 Narrative Arc | 1 | |
-| F03 GDScript-vs-Python | 1 | |
-| F04 Section Dividers | 5 | §2/§4/§5/§6/§7 |
-| F05 Build Narrative | 1 | |
-| F06 Scene Tree | 1 | |
-| F07 File Manifest | 1 | |
-| F08 Asset Pack | 1 | "no assets — colored boxes" |
-| F09 Constants | 0 | None for D1 |
-| F10 Chunk Table | 1 | |
-| Pre-coding (Walk A/B/C/D) | 21 | F17 steps |
-| Per-chunk × 8 chunks × 5 slides | 40 | F11 concept · F12 board · F13 task · F14 in-file · F15 code |
-| F16 After-this-works | 2-3 | Sprinkled at high-payoff chunks (#6b, #5) |
-| Personalization (6 beats) | 30 | F18 intro ×6 + F17 step shots (~24 steps) |
-| FC mirror map + 2 hole slides + enable | 5 | F19, F20 ×2, F17 ×2 |
-| F08 Asset reference recap | 1 | |
-| F21 Export-to-exe | 10 | Beat 6 step-shots |
-| F22 Closer | 1 | "Tomorrow: Pac-Man" |
-| **Total** | **~125** | |
-
-### D2 — Pac-Man (6 chunks, TileSet-heavy)
-
-| Section | Slides |
+| L | Absorbs v1 |
 |---|---|
-| Top matter (F01-F10) | ~10 |
-| TileSet orientation walkthrough | 6 (F17) |
-| Per-chunk × 6 × 5 slides | 30 |
-| F16 After-works | 2 |
-| Personalization (7 beats, ~28 steps) | ~32 |
-| FC (4 holes + mirror map + enable) | 9 |
-| Asset recap + Closer + Export | 12 |
-| **Total** | **~100** |
+| L1 | F01 Day Title · F04 Section Divider · F18 Personalization Beat Intro · F22 Closer + "Word reveal" slides |
+| L2 | F05 Build Narrative · F11 Concept Intro · F13 Your Task · "How-used" / "Pieces you'll use" / quiz bodies |
+| L3 | F03 GDScript-vs-Python · "Shape in code alongside metaphor" variants |
+| L4 | F02 Narrative Arc (timeline as diagram) · F08 Asset Pack Card (image-heavy) · F16 After-Works · metaphor anchors |
+| L5 | F07 File Manifest · F09 Constants · F10 Chunk Table · F19 FC Mirror Map · character stats |
+| L6 | F06 Scene Tree · F12 Board Example (standalone, no LHS/RHS pairing) |
+| L7 | F14 In-File Location (where-in-game) · F17 Walkthrough Step · F21 Export Walkthrough |
+| L8 | F15 As-Typed Code (RHS pane only — kid doesn't see "as-typed") · F20 FC Hole · per-chunk Action slide spec |
 
-### D3 — Base Defense (8 chunks, FC has 4 holes)
+## Per-day count estimate (with L1-L8)
 
-| Section | Slides |
-|---|---|
-| Top matter | ~10 |
-| Difficulty-knob demo | 6 (F17) |
-| Per-chunk × 8 × 5 slides | 40 |
-| F16 After-works (chunk #6 placement walkthrough) | 8 |
-| Personalization (6 beats) | ~24 |
-| FC (4 holes + mirror map + enable) | 9 |
-| Asset recap + Closer + Export | 12 |
-| **Total** | **~110** |
+Counts unchanged from v1 — format collapse doesn't reduce slide count, only `templates.py` complexity.
 
-### D4 — Fighter (7 chunks, chunks #6/#7 huge)
+| Day | Total slides | L1 | L2 | L3 | L4 | L5 | L6 | L7 | L8 |
+|---|---|---|---|---|---|---|---|---|---|
+| D1 Pong | ~125 | 14 | 25 | 1 | 8 | 4 | 8 | 50 | 9 |
+| D2 Pac-Man | ~100 | 12 | 20 | 1 | 6 | 4 | 8 | 38 | 7 |
+| D3 Base Defense | ~110 | 14 | 22 | 1 | 7 | 5 | 10 | 38 | 11 |
+| D4 Fighter | ~107 | 13 | 22 | 1 | 7 | 5 | 8 | 38 | 10 |
+| D5 Racing (forecast) | ~80-100 | 10 | 15 | 0 | 12 | 3 | 4 | 35 | 0-3 |
+| **Total** | **~522-542** | ~63 | ~104 | 4 | ~40 | 21 | ~38 | ~199 | ~37 |
 
-| Section | Slides |
-|---|---|
-| Top matter | ~12 |
-| Menu-flow demo + CHARACTERS dict tour | 10 (F17 + F09) |
-| Per-chunk × 7 × 5 slides | 35 |
-| F16 After-works (esp. after #4, #6, #7) | 5 |
-| Personalization (6 beats) | ~25 |
-| FC (3 holes + mirror map + enable) | 8 |
-| Asset recap + Closer + Export | 12 |
-| **Total** | **~107** |
+**L7 Step is by far the largest by instance** — ~200 across the camp. Worth the most layout-iteration attention in the sample-deck loop.
 
-### D5 — Racing (forecast, no SLIDE_SOURCE yet)
+**L8 Action is the most layout-complex** — 4 zones (prose / LHS / RHS / overlay rect). Already the most-iterated layout in `templates.py`.
 
-Expect similar shape; ouroboros may change shape if FC absent (per [[d5-racing-build-decisions]] — no FC for D5). Reserve ~80-100 slot.
+## Manual user step on L8 Action slides
 
-**Cross-day grand total: ~520-550 slides.** Authored once at template level; per-slide work is content + screenshot only.
+Templates inject a **default red rectangle** at the center of the RHS screenshot pane. After the .pptx is built, the user opens it in PowerPoint and **drags + resizes that rectangle** so it surrounds the actual kid `#@todo` lines on each screenshot. ~37 manual drags across D1-D4 (one per L8 instance).
 
-## Format frequency (across all days)
+R5 partial-hole L8 slides (D2 chunk #6, D3 chunks #5a + #6, D4 chunk #6 sub-holes) get an additional **gray overlay** auto-dropped underneath the red — represents pre-given lines. User does NOT need to position the gray; it ships in a reasonable default position.
 
-| Format | Approx instances |
-|---|---|
-| F17 Walkthrough Step | ~180 (largest by count) |
-| Per-chunk pack (F11-F15) × 29 chunks total | ~145 |
-| F16 After-works | ~15 |
-| F20 FC Hole | ~13 |
-| F18 Personalization Beat Intro | ~25 |
-| F01-F10 Top matter | ~60 (12 × 5 days) |
-| F21 Export | ~50 (Beat-6 steps × 4 days that ship a takeaway) |
-| F22 Closer | 5 |
-| F19 FC Mirror Map | 4 |
+## Pipeline status
 
-Top 3 by instance count (F17, F14, F15) deserve the most layout-iteration attention in Phase 3 sample deck.
+- ✓ Format catalog locked (this file).
+- ✓ `slides/` scaffolded — `theme.py`, `master.py`, `templates.py`, `build_sample.py`, `build_day.py` stubs.
+- ✓ `SAMPLE_DECK.pptx` builds (one slide per L1-L8, placeholder content).
+- ✓ Logo asset present (`slides/assets/logos/icode_logo_red.png`).
+- ⏳ User capturing screenshots per `SCREENSHOTS_CAPTURE_GUIDE.md`.
+- ⏳ Sample-deck visual review → `templates.py` iteration loop.
+- ⏳ Per-day `SLIDES.py` authoring (post-template lock).
+- ⏳ Mass build `python build_day.py 1..4`.
 
-## Sample-deck spec for Phase 3
+## Open spec items (deferred — will lock as the sample-deck loop runs)
 
-`SAMPLE_DECK.pptx` includes one slide per format (F01-F22 = 22 slides). Each uses:
-- Real iCode header/footer (from brand-pull).
-- Lorem-ipsum text where content varies.
-- Real Godot placeholder screenshot for F14/F15/F17 (one shared dummy).
-- Real red highlight shape pre-dropped on F14/F17 at a default size + position.
-- Real concept-icon placeholder for F11.
-
-User reviews sample deck, lists fixes, AI iterates `templates.py` only.
-
-## Open spec items (decide before Phase 2 lock)
-
-1. **Font** — pulled from iCode sample decks once user provides. Need title font + body font + monospace.
-2. **Color palette** — pulled from iCode sample decks. Need primary, accent, code-block background.
-3. **Concept icons** (F11) — use Kenney UI icons? Custom SVGs? Skip icons entirely?
-4. **Red highlight default shape + size** — rectangle 400×120 px stroke 4px red? Or smaller circle? User pick.
-5. **Speaker notes** — populate per slide for instructor? (Adds ~520 small writing tasks; can skip and have instructor use SLIDE_SOURCE.md as cue card.)
+- **Brand fonts** — `theme.FONT_HEADING` / `FONT_BODY` currently set to `"Poppins"` with Calibri fallback. Confirm or override when raw iCode PPTX brand sample lands.
+- **Brand color sampling** — palette eyeballed from `iCodeScreenshots/` PNG samples. Raw brand pack (PPTX or PDF guide) would tighten exact hex values.
+- **White-on-transparent logo** — current `icode_logo_red.png` reads OK on the gradient header but a true white version would read better. User to provide if available.
+- **Concept icons** — locked: use **Kenney UI icons** from `slides/assets/icons/`. User to download the Kenney UI Pack + drop relevant icons into that folder before icon-using L2 slides build cleanly.
+- **Speaker notes** — currently NOT populated per slide (instructor uses `SLIDE_SOURCE.md` per-chunk Speaker-notes fields as cue cards). Could add a `notes=` kwarg to every layout function later if desired.
 
 ---
 
-## v2 collapse target (proposed, awaits user lock)
+## Rework log
 
-User flagged 2026-05-26: 22 formats is over-specced. Format count doesn't drive slide count — it drives template variation. Fewer formats = simpler `templates.py` + smaller sample deck + faster Phase 3 iteration. No visual loss because every merge below is a layout duplicate.
-
-**Note:** Phase 2.5 (per-slide content authoring per BIBLE §TODO) may shift this further once per-slide content is known. Acceptable to defer v2 rewrite until after Phase 2.5; the mapping below is the durable record.
-
-### Merge mapping (22 → 12)
-
-| v2 format | Merged from v1 | Rationale |
-|---|---|---|
-| **G01 Day Title** | F01 | Distinct opener slide; keep. |
-| **G02 Timeline / Closer** | F02 Narrative Arc + F22 Day Closer | Both = horizontal 5-step strip, today highlighted. Closer = same strip + "next: <iconic title>" tag. |
-| **G03 GDScript-vs-Python** | F03 | Distinctive two-column code panel. Used 5×. Keep. |
-| **G04 Headline / Divider** | F04 Section Divider + F18 Personalization Beat Intro | Both = giant text + 1-line subtitle on near-empty slide. |
-| **G05 Build Narrative** | F05 | Text-heavy body. Keep — distinctive layout. |
-| **G06 Scene Tree** | F06 | Monospace ASCII tree, big, centered. Keep — distinctive. |
-| **G07 Table** | F07 File Manifest + F09 Constants + F10 Chunk Table + F19 FC Mirror Map (+ table portion of F08) | All four = header-row + N data-rows. Only column labels + cell contents differ. |
-| **G08 Asset Pack Card** | F08 (image-rich portion: pack name + sprite previews) | Kept distinct from G07 because of sprite thumbnail row. Could fold in if thumbnail row becomes a G07 optional element. |
-| **G09 Concept + Task** | F11 Concept Intro + F13 Your Task | Both = small text block + heading. Collapses per-chunk pack by 1 slide. |
-| **G10 Board Example** | F12 | Small code example, centered, monospace. Distinctive — kept separate so it can linger while kid copies. |
-| **G11 Code Screenshot** | F14 In-File Location + F15 As-Typed Code + F20 FC Hole | All three = Godot script-editor screenshot + red highlight + caption. Source PNG varies, layout identical. |
-| **G12 Screenshot + Caption** | F16 After-Works + F17 Walkthrough Step + F21 Export Walkthrough | All three = screenshot + caption. Step-number badge is an optional element (off for F16, on for F17/F21). |
-
-**Survivors:** G01..G12 = 12 formats.
-
-### Format-count change in slide-count terms
-
-Format collapse alone does NOT reduce slide count (user clarified 2026-05-26: format ≠ slide). But two per-chunk merges DO trim slides:
-
-- **G09 (Concept + Task)** collapses F11 + F13 → per-chunk pack drops 1 slide.
-- **G11 (Code Screenshot)** stays 1-slide-per-instance (F14 location screenshot + F15 typed screenshot are still two separate moments in the lesson, they just share a layout). No slide-count change here.
-
-Realistic per-chunk pack with v2: **~3-4 slides** (concept+task · board example · code screenshot location · optional code screenshot result · optional after-works). Confirmed against BIBLE §TODO per-chunk variable-length pack spec.
-
-### Things kept distinct (rejected merges considered, NOT done)
-
-- F11+F12+F13 into one mega "chunk intro" slide — rejected. Too dense; board example needs its own slide so it can linger while kid copies.
-- F08 Asset Pack Card → G07 Table — rejected for now because of sprite thumbnail row. Revisit if thumbnails fit Table layout.
-- F03 → G04 Headline — rejected. GDScript-vs-Python is a two-column code panel, not headline-shaped.
-- F06 Scene Tree → G10 Board Example — rejected. Tree is wider + multi-line + uses box-drawing characters; needs different sizing than centered code snippet.
-
-### Action when next chat lands
-
-If Phase 2.5 day-by-day blueprint stays consistent with the chunk-pack shape above, **rewrite §"Format list" + §"Per-day count estimate" using G01-G12** as the canonical catalog. Until then, F-IDs above remain the working reference.
+- **2026-05-26** — v1 formats authored: F01-F22 (22 formats).
+- **2026-05-26 PM** — v2 collapse proposed: 22 → 12 (G01-G12). Awaited per-day blueprint lock to finalize.
+- **2026-05-31** — L1-L8 locked (8 formats) after D3 + D4 §10 slide blueprints completed. v1 + v2 superseded. `slides/` Python scaffold authored: `theme.py` + `master.py` + `templates.py` + `build_sample.py` + `build_day.py` (stub). First `SAMPLE_DECK.pptx` built successfully.
