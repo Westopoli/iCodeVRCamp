@@ -1,15 +1,27 @@
-[gd_scene load_steps=3 format=4 uid="uid://b8d5p_strt"]
+[gd_scene load_steps=4 format=4 uid="uid://b8d5p_strt"]
 
 [ext_resource type="PackedScene" path="res://assets/kenney_racing/roadStraight.glb" id="1"]
 [ext_resource type="PackedScene" path="res://assets/kenney_racing/bannerTowerGreen.glb" id="2"]
 
+[sub_resource type="BoxShape3D" id="col"]
+size = Vector3(4, 0.4, 4)
+
 [node name="Start" type="Node3D"]
-transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 0, 0)
 
 [node name="Road" parent="." instance=ExtResource("1")]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, -2, 0, 0)
+
+[node name="Body" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, -2)
+shape = SubResource("col")
 
 [node name="BannerL" parent="." instance=ExtResource("2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0, 0)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -2.6, 0, -2)
 
 [node name="BannerR" parent="." instance=ExtResource("2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, 0)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 2.6, 0, -2)
+
+[node name="Exit" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)

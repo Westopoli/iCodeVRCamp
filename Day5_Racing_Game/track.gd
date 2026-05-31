@@ -20,22 +20,20 @@ var race_active: bool = false
 
 
 func _ready() -> void:
-	print("[TRACK] _ready: car_from_group=", car)
+	_load_best_time()
+
+
+# Called by main.gd AFTER TrackBuilder has spawned StartLine + checkpoints
+# (the builder runs in main._ready, which fires after this node's _ready).
+func setup_triggers() -> void:
+	car = get_tree().get_first_node_in_group("car")
 	var start_line := get_node_or_null("StartLine")
-	print("[TRACK] StartLine=", start_line)
 	if start_line and start_line.has_signal("body_entered"):
 		start_line.body_entered.connect(_on_start_line_entered)
 	for i in [1, 2, 3]:
 		var cp := get_node_or_null("Checkpoint%d" % i)
-		print("[TRACK] Checkpoint", i, "=", cp)
 		if cp and cp.has_signal("body_entered"):
 			cp.body_entered.connect(_on_checkpoint_entered.bind(i))
-	_load_best_time()
-	var starter := get_node_or_null("StarterTrack")
-	if starter:
-		print("[TRACK] StarterTrack child_count=", starter.get_child_count())
-		for c in starter.get_children():
-			print("[TRACK]   prefab child: ", c.name, " type=", c.get_class())
 
 
 func _on_start_line_entered(body: Node) -> void:

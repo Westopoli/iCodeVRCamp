@@ -1,95 +1,95 @@
+@tool
 extends Node3D
 
+# Closed loop, right turns only (clockwise rounded square). Four 20m sides + four
+# 90-degree corners return to the start heading. Milestone 1 layout; richer
+# AoR layouts (left turns, sweepers, hairpins, chicanes, S-curves) land once the
+# corner convention is confirmed in-engine.
+const LAYOUT := [
+	"Start", "Straight_Long", "Straight_Long", "90_R",
+	"Straight_Long", "Straight_Long", "Straight_Short", "90_R",
+	"Straight_Long", "Straight_Long", "Straight_Short", "90_R",
+	"Straight_Long", "Straight_Long", "Finish", "90_R",
+]
+
 var paused: bool = false
-var _debug_tick: float = 0.0
+var _car_start := Transform3D.IDENTITY
+var ghost: Node3D = null
 
 @onready var car: Node3D = $Car
 @onready var track: Node3D = $Track
 @onready var camera_rig: Node3D = $CameraRig
 @onready var camera: Camera3D = $CameraRig/Camera3D
+@onready var ghost_container: Node3D = $GhostContainer
+@onready var hud: CanvasLayer = $UI
 @onready var countdown_label: Label = $UI/CountdownLabel
 @onready var race_complete_panel: Panel = $UI/RaceCompletePanel
 @onready var pause_panel: Panel = $UI/PausePanel
 
 
 func _ready() -> void:
-	print("[MAIN] _ready: car=", car, " pos=", car.position if car else "null")
-	print("[MAIN] _ready: track=", track, " children=", track.get_child_count() if track else -1)
-	if track:
-		var starter := track.get_node_or_null("StarterTrack")
-		print("[MAIN] StarterTrack children=", starter.get_child_count() if starter else -1)
-		var obstacles := track.get_node_or_null("Obstacles")
-		print("[MAIN] Obstacles children=", obstacles.get_child_count() if obstacles else -1)
-	print("[MAIN] car_groups=", car.get_groups() if car else "n/a")
+	# Build the track in the editor too, so the layout is visible before play.
+	# Preview pieces are owner-less (not saved into Main.tscn) — they regenerate
+	# on every scene load / script reload.
+	var info := TrackBuilder.build(track, LAYOUT)
+	_car_start = info["car_start"]
+	_place_car()
+
+	if Engine.is_editor_hint():
+		return
+
+	var ghost_scene: PackedScene = load("res://GhostCar.tscn")
+	ghost = ghost_scene.instantiate()
+	ghost_container.add_child(ghost)
+	ghost.visible = false
+
+	if track.has_method("setup_triggers"):
+		track.setup_triggers()
+	if track.has_signal("lap_started"):
+		track.lap_started.connect(on_lap_started)
 	if track.has_signal("lap_completed"):
 		track.lap_completed.connect(on_lap_completed)
 	if track.has_signal("race_complete"):
 		track.race_complete.connect(on_race_complete)
+
 	camera_rig.position = car.position + Vector3(0, 15, 20)
 	camera.look_at(car.position)
 	countdown_label.visible = false
 	race_complete_panel.visible = false
 	pause_panel.visible = false
-	print("[MAIN] _ready done: cam_rig=", camera_rig.position, " cam_global=", camera.global_position)
-	_probe_prefab_aabbs()
+
+	# Timing starts now; crossing the start line after all 3 checkpoints = lap done.
+	if track.has_method("start_race"):
+		track.start_race()
 
 
-func _probe_prefab_aabbs() -> void:
-	var names := ["Start", "Finish", "Straight_Short", "Straight_Long",
-		"Hairpin_L", "Hairpin_R", "Sweeper_L", "Sweeper_R",
-		"Chicane", "90_L", "90_R", "S_curve"]
-	for n in names:
-		var path := "res://prefabs/%s.tscn" % n
-		var packed: PackedScene = load(path)
-		if packed == null:
-			print("[PROBE] ", n, " FAILED load")
-			continue
-		var inst: Node3D = packed.instantiate()
-		add_child(inst)
-		await get_tree().process_frame
-		var aabb := _aggregate_aabb(inst)
-		print("[PROBE] ", n, " AABB pos=", aabb.position, " size=", aabb.size)
-		inst.queue_free()
+func _place_car() -> void:
+	# Sit the car on the middle of the Start tile, facing -Z (into the track).
+	var spawn := _car_start.origin + Vector3(0, 1.0, -2.0)
+	if car.has_method("set_start_point"):
+		car.set_start_point(spawn)
+	if car.has_method("reset_position"):
+		car.reset_position()
+	else:
+		car.global_transform = Transform3D(Basis(), spawn)
 
 
-func _aggregate_aabb(node: Node) -> AABB:
-	var result := AABB()
-	var first := true
-	for child in _iter_descendants(node):
-		if child is VisualInstance3D:
-			var vi: VisualInstance3D = child
-			var a := vi.get_aabb()
-			a = vi.global_transform * a
-			if first:
-				result = a
-				first = false
-			else:
-				result = result.merge(a)
-	return result
-
-
-func _iter_descendants(node: Node) -> Array:
-	var out: Array = [node]
-	for c in node.get_children():
-		out.append_array(_iter_descendants(c))
-	return out
-
-
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
+	if Engine.is_editor_hint():
+		return
 	camera_rig.position = car.position + Vector3(0, 15, 20)
 	camera.look_at(car.position)
-	_debug_tick += delta
-	if _debug_tick >= 1.0:
-		_debug_tick = 0.0
-		print("[MAIN] tick: car.pos=", car.position, " cam_rig.pos=", camera_rig.position)
 
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("reset"):
-		if car.has_method("reset_position"):
-			car.reset_position()
+		_place_car()
 		if track.has_method("reset_race"):
 			track.reset_race()
+		if track.has_method("start_race"):
+			track.start_race()
+		if ghost:
+			ghost.reset()
 		race_complete_panel.visible = false
 	elif event.is_action_pressed("pause"):
 		paused = not paused
@@ -99,7 +99,21 @@ func _unhandled_input(event: InputEvent) -> void:
 		get_tree().quit()
 
 
+func on_lap_started() -> void:
+	if car.has_method("begin_lap"):
+		car.begin_lap()
+	if ghost:
+		ghost.reset()
+	if hud.has_method("on_lap_started"):
+		hud.on_lap_started()
+
+
 func on_lap_completed(time_s: float, is_best: bool) -> void:
+	# Capture the just-finished lap as the ghost line whenever it's a new best.
+	if is_best and ghost and "lap_history" in car:
+		ghost.set_snapshots(car.lap_history.duplicate(true))
+	if hud.has_method("on_lap_completed"):
+		hud.on_lap_completed(time_s, is_best)
 	var lap_text: String = "Lap done - %.2fs" % time_s
 	if is_best:
 		lap_text += " (PB!)"

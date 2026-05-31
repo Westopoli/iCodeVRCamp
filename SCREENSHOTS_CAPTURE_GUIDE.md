@@ -146,6 +146,7 @@ Steps:
 2. Godot pops up a modal: "No main scene defined."
 3. **Take screenshot**.
 Must be visible: the **modal text "No main scene defined"** + the two buttons: **"Select Current"** and **"Cancel"**.
+--not done--
 
 **`WalkC3.png`** — Game window running (using the simplest Day, D1 Pong, so the window is small).
 Steps:
@@ -181,6 +182,7 @@ Steps:
 2. Godot jumps the script editor's cursor to that exact line.
 3. **Take screenshot**.
 Must be visible: the **cursor on the bad line**, the **error icon or red squiggle under the typo**.
+--not done--
 
 **`WalkD3.png`** — Fixed line + save + rerun success.
 Steps:
@@ -190,6 +192,7 @@ Steps:
 4. Game window opens cleanly.
 5. **Take screenshot** of the running game window (clean, no error in editor).
 Must be visible: the **game window running**, the **Output panel below empty / showing only normal "Project starting" lines** (no red errors).
+--not done--
 
 ---
 
@@ -248,6 +251,7 @@ Steps:
 **`D1C5.png`** — Task #5 at `main.gd:107-114`. Ctrl+G → `107` → screenshot showing **`# TODO #5: COMPARISON SCORING`** banner.
 
 **`D1C1bSuffix.png`** — Task #1b suffix at `main.gd:120-122`. Ctrl+G → `120` → screenshot showing the **scoreboard suffix `#@todo` block**.
+-- incorect line number, changed to D1C1c line 78 -> tacking silly variables on to scoreboard -- 
 
 ### D1 — Personalization beats (kid-facing label is "tweaks" / "beats" on slides)
 

@@ -13,40 +13,28 @@ var lap_history: Array = []
 var lap_history_dt: float = 0.1
 var _snapshot_accumulator: float = 0.0
 var _lap_start_time: float = 0.0
-var _dbg_phys_counter: int = 0
+var start_point: Vector3 = Vector3(0, 1, -2)
 
 
 func _ready() -> void:
-	print("[CAR] _ready: in_tree=", is_inside_tree(), " global_pos=", global_position, " groups=", get_groups())
 	var f := FileAccess.open("res://car_tune.json", FileAccess.READ)
 	if f:
 		sim_config = JSON.parse_string(f.get_as_text())
 		f.close()
-		print("[CAR] tune loaded keys=", sim_config.keys())
-	else:
-		print("[CAR] tune FAILED to open res://car_tune.json")
-	if sim_config.has("mass"):
-		self.mass = sim_config["mass"]
 	for wheel_name in ["Wheel_FL", "Wheel_FR", "Wheel_RL", "Wheel_RR"]:
 		var w: VehicleWheel3D = get_node(wheel_name)
 		w.suspension_stiffness = suspension_stiffness
 		w.suspension_travel = suspension_travel
 		w.damping_compression = damping_compression
 		w.damping_relaxation = damping_relaxation
-	var glb_path := "res://assets/kenney_racing/raceCarRed.glb"
-	var glb_res := load(glb_path)
-	print("[CAR] GLB load: path=", glb_path, " res=", glb_res)
-	if has_node("VisualSlot"):
-		var v = preload("res://assets/kenney_racing/raceCarRed.glb").instantiate()
-		$VisualSlot.add_child(v)
-		print("[CAR] GLB added to VisualSlot, child_count=", $VisualSlot.get_child_count())
-	else:
-		var v2 = preload("res://assets/kenney_racing/raceCarRed.glb").instantiate()
-		add_child(v2)
-		print("[CAR] GLB added to self (no VisualSlot)")
+	if sim_config.has("mass"):
+		self.mass = sim_config["mass"]
+	var slot: Node = $VisualSlot if has_node("VisualSlot") else self
+	var visual: Node3D = preload("res://assets/kenney_racing/raceCarRed.glb").instantiate()
+	visual.rotate_y(PI)  # Kenney car mesh faces +Z; body forward is -Z. Flip mesh.
+	slot.add_child(visual)
 	if not is_in_group("car"):
 		add_to_group("car")
-		print("[CAR] joined 'car' group (was missing)")
 
 
 func _physics_process(delta: float) -> void:
@@ -54,14 +42,6 @@ func _physics_process(delta: float) -> void:
 	var brake_input: float = Input.get_action_strength("brake")
 	var steer_input: float = Input.get_action_strength("steer_right") - Input.get_action_strength("steer_left")
 	var handbrake: bool = Input.is_action_pressed("handbrake")
-	_dbg_phys_counter += 1
-	if _dbg_phys_counter >= 30:
-		_dbg_phys_counter = 0
-		var fl_dbg: VehicleWheel3D = $Wheel_FL
-		var rl_dbg: VehicleWheel3D = $Wheel_RL
-		print("[CARPHYS] thr=", throttle, " brk=", brake_input, " steer=", steer_input, " hb=", handbrake,
-			" pos.y=", position.y, " vel=", linear_velocity.length(),
-			" fl_contact=", fl_dbg.is_in_contact(), " rl_contact=", rl_dbg.is_in_contact())
 
 	var max_steer: float = sim_config.get("max_steer_angle", 0.45)
 	var engine_force_val: float = sim_config.get("engine_force", 4500.0)
@@ -119,11 +99,18 @@ func _physics_process(delta: float) -> void:
 		})
 
 
+func set_start_point(p: Vector3) -> void:
+	start_point = p
+
+
 func reset_position() -> void:
 	linear_velocity = Vector3.ZERO
 	angular_velocity = Vector3.ZERO
-	position = Vector3(0, 1, 5)
-	rotation = Vector3.ZERO
+	global_transform = Transform3D(Basis(), start_point)
+	begin_lap()
+
+
+func begin_lap() -> void:
 	lap_history.clear()
 	_snapshot_accumulator = 0.0
 	_lap_start_time = Time.get_ticks_msec() / 1000.0

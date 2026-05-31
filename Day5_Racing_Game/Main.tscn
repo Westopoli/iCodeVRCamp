@@ -1,8 +1,7 @@
-[gd_scene format=3 uid="uid://b8d5mainsc"]
+[gd_scene load_steps=8 format=3 uid="uid://b8d5mainsc"]
 
 [ext_resource type="Script" uid="uid://3lubn0jhyqk2" path="res://main.gd" id="1_main"]
 [ext_resource type="Script" uid="uid://bjf8wq0p5lfjf" path="res://track.gd" id="2_track"]
-[ext_resource type="PackedScene" uid="uid://dyys3fhuyq8c8" path="res://assets/kenney_racing/roadStraightLong.glb" id="3_fos0i"]
 [ext_resource type="Script" uid="uid://bsmuyv6fpcmjb" path="res://hud.gd" id="3_hud"]
 [ext_resource type="PackedScene" uid="uid://b8d5carscene" path="res://Car.tscn" id="4_car"]
 
@@ -17,101 +16,45 @@ sky_material = SubResource("ProceduralSkyMaterial_1")
 background_mode = 2
 sky = SubResource("Sky_1")
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_start"]
-size = Vector3(10, 3, 2)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_cp"]
-size = Vector3(6, 3, 2)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_ground"]
-size = Vector3(80, 1, 80)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ground"]
-albedo_color = Color(0.35, 0.55, 0.3, 1)
-
-[sub_resource type="BoxMesh" id="BoxMesh_ground"]
-size = Vector3(80, 1, 80)
-
-[node name="Main" type="Node3D" unique_id=29289685]
+[node name="Main" type="Node3D"]
 script = ExtResource("1_main")
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1954515507]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_1")
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=2121229121]
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.866025, 0.353553, -0.353553, 0, 0.707107, 0.707107, 0.5, -0.612372, 0.612372, 0, 10, 0)
 
-[node name="Track" type="Node3D" parent="." unique_id=285359122]
+[node name="Track" type="Node3D" parent="."]
 script = ExtResource("2_track")
 
-[node name="StartLine" type="Area3D" parent="Track" unique_id=1345244839]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+[node name="StarterTrack" type="Node3D" parent="Track"]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Track/StartLine" unique_id=598826475]
-shape = SubResource("BoxShape3D_start")
+[node name="Obstacles" type="Node3D" parent="Track"]
 
-[node name="Checkpoint1" type="Area3D" parent="Track" unique_id=60209053]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 50, 1, -50)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Track/Checkpoint1" unique_id=345698756]
-shape = SubResource("BoxShape3D_cp")
-
-[node name="Checkpoint2" type="Area3D" parent="Track" unique_id=355515275]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -100)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Track/Checkpoint2" unique_id=220698599]
-shape = SubResource("BoxShape3D_cp")
-
-[node name="Checkpoint3" type="Area3D" parent="Track" unique_id=568748656]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -50, 1, -50)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Track/Checkpoint3" unique_id=1037146047]
-shape = SubResource("BoxShape3D_cp")
-
-[node name="StarterTrack" type="Node3D" parent="Track" unique_id=1185460199]
-
-[node name="Ground" type="StaticBody3D" parent="Track/StarterTrack" unique_id=1381255383]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Track/StarterTrack/Ground" unique_id=1839573259]
-shape = SubResource("BoxShape3D_ground")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Track/StarterTrack/Ground" unique_id=239527637]
-material_override = SubResource("StandardMaterial3D_ground")
-mesh = SubResource("BoxMesh_ground")
-
-[node name="roadStraightLong2" parent="Track/StarterTrack" unique_id=1008890280 instance=ExtResource("3_fos0i")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -4)
-
-[node name="roadStraightLong3" parent="Track/StarterTrack" unique_id=598845294 instance=ExtResource("3_fos0i")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -6)
-
-[node name="roadStraightLong" parent="Track/StarterTrack" unique_id=1312982356 instance=ExtResource("3_fos0i")]
+[node name="Car" parent="." instance=ExtResource("4_car")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -2)
 
-[node name="Obstacles" type="Node3D" parent="Track" unique_id=1369649442]
-
-[node name="Car" parent="." unique_id=507163020 instance=ExtResource("4_car")]
-transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 1, 5)
-
-[node name="CameraRig" type="Node3D" parent="." unique_id=606171350]
+[node name="CameraRig" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 15, 20)
 
-[node name="Camera3D" type="Camera3D" parent="CameraRig" unique_id=828439663]
+[node name="Camera3D" type="Camera3D" parent="CameraRig"]
 transform = Transform3D(1, 0, 0, 0, 0.866025, 0.5, 0, -0.5, 0.866025, 0, 0, 0)
 
-[node name="GhostContainer" type="Node3D" parent="." unique_id=1820874965]
+[node name="GhostContainer" type="Node3D" parent="."]
 
-[node name="UI" type="CanvasLayer" parent="." unique_id=1869230345]
+[node name="UI" type="CanvasLayer" parent="."]
 script = ExtResource("3_hud")
 
-[node name="HUD" type="Control" parent="UI" unique_id=1754986129]
+[node name="HUD" type="Control" parent="UI"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="SpeedLabel" type="Label" parent="UI/HUD" unique_id=746306511]
+[node name="SpeedLabel" type="Label" parent="UI/HUD"]
 layout_mode = 0
 offset_left = 16.0
 offset_top = 16.0
@@ -119,7 +62,7 @@ offset_right = 300.0
 offset_bottom = 50.0
 text = "Speed: 0"
 
-[node name="LapLabel" type="Label" parent="UI/HUD" unique_id=1353578216]
+[node name="LapLabel" type="Label" parent="UI/HUD"]
 layout_mode = 0
 anchor_left = 0.5
 anchor_right = 0.5
@@ -129,7 +72,7 @@ offset_right = 100.0
 offset_bottom = 50.0
 text = "Lap 1 / 3"
 
-[node name="CurrentTimeLabel" type="Label" parent="UI/HUD" unique_id=1505657815]
+[node name="CurrentTimeLabel" type="Label" parent="UI/HUD"]
 layout_mode = 0
 anchor_left = 1.0
 anchor_right = 1.0
@@ -139,7 +82,7 @@ offset_right = -16.0
 offset_bottom = 50.0
 text = "00.00"
 
-[node name="BestTimeLabel" type="Label" parent="UI/HUD" unique_id=510827393]
+[node name="BestTimeLabel" type="Label" parent="UI/HUD"]
 layout_mode = 0
 anchor_left = 1.0
 anchor_right = 1.0
@@ -149,7 +92,7 @@ offset_right = -16.0
 offset_bottom = 80.0
 text = "Best: --"
 
-[node name="DriftLabel" type="Label" parent="UI/HUD" unique_id=1713684331]
+[node name="DriftLabel" type="Label" parent="UI/HUD"]
 layout_mode = 0
 anchor_top = 1.0
 anchor_bottom = 1.0
@@ -159,7 +102,7 @@ offset_right = 300.0
 offset_bottom = -16.0
 text = "Drift: 0"
 
-[node name="CountdownLabel" type="Label" parent="UI" unique_id=378834343]
+[node name="CountdownLabel" type="Label" parent="UI"]
 visible = false
 anchors_preset = 8
 anchor_left = 0.5
@@ -173,7 +116,7 @@ offset_bottom = 60.0
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="RaceCompletePanel" type="Panel" parent="UI" unique_id=478810177]
+[node name="RaceCompletePanel" type="Panel" parent="UI"]
 visible = false
 anchors_preset = 8
 anchor_left = 0.5
@@ -185,7 +128,7 @@ offset_top = -150.0
 offset_right = 300.0
 offset_bottom = 150.0
 
-[node name="Label" type="Label" parent="UI/RaceCompletePanel" unique_id=1617004173]
+[node name="Label" type="Label" parent="UI/RaceCompletePanel"]
 layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -193,7 +136,7 @@ text = "RACE COMPLETE"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="PausePanel" type="Panel" parent="UI" unique_id=782178102]
+[node name="PausePanel" type="Panel" parent="UI"]
 visible = false
 anchors_preset = 8
 anchor_left = 0.5
@@ -205,7 +148,7 @@ offset_top = -80.0
 offset_right = 250.0
 offset_bottom = 80.0
 
-[node name="Label" type="Label" parent="UI/PausePanel" unique_id=1488335308]
+[node name="Label" type="Label" parent="UI/PausePanel"]
 layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0

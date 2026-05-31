@@ -1,0 +1,50 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Vulkan 1.3.280 - Forward+ - Using Device #0: NVIDIA - NVIDIA GeForce RTX 3060
+
+[TRACK] _ready: car_from_group=<Object#null>
+[TRACK] StartLine=StartLine:<Area3D#36691772933>
+[TRACK] Checkpoint1=Checkpoint1:<Area3D#36725327367>
+[TRACK] Checkpoint2=Checkpoint2:<Area3D#36758881801>
+[TRACK] Checkpoint3=Checkpoint3:<Area3D#36792436235>
+[TRACK] StarterTrack child_count=2
+[TRACK]   prefab child: Ground type=StaticBody3D
+[TRACK]   prefab child: Straight type=Node3D
+[CAR] _ready: in_tree=true global_pos=(0.0, 1.0, 5.0) groups=[]
+[CAR] tune loaded keys=["mass", "engine_force", "brake_force", "max_steer_angle", "front_grip", "rear_grip", "handbrake_grip_multiplier", "throttle_powerslide_threshold"]
+[CAR] GLB load: path=res://assets/kenney_racing/raceCarRed.glb res=(res://assets/kenney_racing/raceCarRed.glb):<PackedScene#-9223372001891056153>
+[CAR] GLB added to VisualSlot, child_count=1
+[CAR] joined 'car' group (was missing)
+[MAIN] _ready: car=Car:<VehicleBody3D#37127980565> pos=(0.0, 1.0, 5.0)
+[PROBE] Start AABB pos=(-3.35, -0.01, -1.65) size=(6.3852, 1.245655, 1.0)
+[PROBE] Finish AABB pos=(-3.35, -0.01, -1.65) size=(6.3852, 3.25, 1.0)
+[PROBE] Straight_Short AABB pos=(-0.35, -0.01, -1.65) size=(1.0, 0.02, 1.0)
+[PROBE] Straight_Long AABB pos=(-0.35, -0.01, -2.65) size=(1.0, 0.02, 2.0)
+[PROBE] Hairpin_L AABB pos=(0.65, -0.01, -0.35) size=(1.0, 0.02, 1.0)
+[PROBE] Hairpin_R AABB pos=(-0.35, -0.01, -1.65) size=(1.0, 0.02, 1.0)
+[PROBE] Sweeper_L AABB pos=(0.65, -0.01, -0.35) size=(3.0, 0.02, 3.0)
+[PROBE] Sweeper_R AABB pos=(-0.35, -0.01, -3.65) size=(3.0, 0.02, 3.0)
+[PROBE] Chicane AABB pos=(-0.85, -0.01, -2.65) size=(2.0, 0.02, 2.0)
+[PROBE] 90_L AABB pos=(0.65, -0.01, -0.35) size=(2.0, 0.02, 2.0)
+[PROBE] 90_R AABB pos=(-0.35, -0.01, -2.65) size=(2.0, 0.02, 2.0)
+[PROBE] S_curve AABB pos=(-0.85, -0.01, -7.35) size=(1.7, 0.02, 6.7)
+[CARPHYS] thr=0.0 brk=0.0 steer=0.0 hb=false pos.y=0.58794474601746 vel=1.29102993011475 fl_contact=true rl_contact=true
+[CARPHYS] thr=1.0 brk=0.0 steer=0.0 hb=false pos.y=0.58491235971451 vel=1.12122869491577 fl_contact=true rl_contact=true
+[MAIN] tick: car.pos=(0.000002, 0.584912, 4.899527) cam_rig.pos=(0.000002, 15.58491, 24.89953)
+[CARPHYS] thr=1.0 brk=0.0 steer=0.0 hb=false pos.y=0.65369701385498 vel=3.35154294967651 fl_contact=true rl_contact=true
+[CARPHYS] thr=1.0 brk=0.0 steer=-1.0 hb=false pos.y=0.6779762506485 vel=5.13104200363159 fl_contact=true rl_contact=true
+[MAIN] tick: car.pos=(0.322756, 0.677976, 1.631882) cam_rig.pos=(0.322756, 15.67798, 21.63188)
+[CARPHYS] thr=1.0 brk=0.0 steer=1.0 hb=false pos.y=0.67922419309616 vel=6.55526113510132 fl_contact=true rl_contact=true
+[CARPHYS] thr=1.0 brk=0.0 steer=1.0 hb=false pos.y=0.67360919713974 vel=7.59679555892944 fl_contact=true rl_contact=true
+[MAIN] tick: car.pos=(-1.314795, 0.673945, -4.777339) cam_rig.pos=(-1.314795, 15.67394, 15.22266)
+[CARPHYS] thr=1.0 brk=0.0 steer=1.0 hb=false pos.y=0.66906696557999 vel=7.7878360748291 fl_contact=true rl_contact=true
+[CARPHYS] thr=1.0 brk=0.0 steer=1.0 hb=false pos.y=0.66730213165283 vel=7.84404420852661 fl_contact=true rl_contact=true
+[MAIN] tick: car.pos=(1.019399, 0.667617, -11.8735) cam_rig.pos=(1.019399, 15.66762, 8.126501)
+[CARPHYS] thr=1.0 brk=0.0 steer=1.0 hb=false pos.y=0.66725778579712 vel=7.86379098892212 fl_contact=true rl_contact=true
+[CARPHYS] thr=1.0 brk=0.0 steer=1.0 hb=false pos.y=0.66773414611816 vel=7.87210273742676 fl_contact=true rl_contact=true
+[MAIN] tick: car.pos=(8.247855, 0.667708, -14.12505) cam_rig.pos=(8.247855, 15.66771, 5.874948)
+[CARPHYS] thr=1.0 brk=0.0 steer=1.0 hb=false pos.y=0.66810411214828 vel=7.87588930130005 fl_contact=true rl_contact=true
+[CARPHYS] thr=1.0 brk=0.0 steer=1.0 hb=false pos.y=0.66824918985367 vel=7.87756156921387 fl_contact=true rl_contact=true
+[MAIN] tick: car.pos=(14.3542, 0.6682, -9.433193) cam_rig.pos=(14.3542, 15.6682, 10.56681)
+[CARPHYS] thr=0.0 brk=0.0 steer=0.0 hb=false pos.y=0.66805374622345 vel=6.97975158691406 fl_contact=true rl_contact=true
+[CARPHYS] thr=0.0 brk=0.0 steer=0.0 hb=false pos.y=0.66806602478027 vel=6.54353189468384 fl_contact=true rl_contact=true
+[MAIN] tick: car.pos=(14.10135, 0.668081, -2.571061) cam_rig.pos=(14.10135, 15.66808, 17.42894)

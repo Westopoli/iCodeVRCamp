@@ -4,7 +4,8 @@ var snapshots: Array = []
 var playback_t: float = 0.0
 
 func _ready() -> void:
-	var v = preload("res://assets/kenney_racing/raceCarRed.glb").instantiate()
+	var v: Node3D = preload("res://assets/kenney_racing/raceCarRed.glb").instantiate()
+	v.rotate_y(PI)  # match car.gd mesh flip (Kenney mesh faces +Z)
 	$VisualSlot.add_child(v)
 	_apply_transparency(v)
 
@@ -30,21 +31,22 @@ func _process(delta: float) -> void:
 	if snapshots.is_empty():
 		visible = false
 		return
-	var last_t: float = snapshots[snapshots.size() - 1].t
+	var last_t: float = snapshots[snapshots.size() - 1]["t"]
 	if playback_t > last_t:
 		visible = false
 		return
+	visible = true
 	var idx: int = 0
 	for i in range(snapshots.size() - 1):
-		if snapshots[i].t <= playback_t and snapshots[i + 1].t >= playback_t:
+		if snapshots[i]["t"] <= playback_t and snapshots[i + 1]["t"] >= playback_t:
 			idx = i
 			break
-	var a = snapshots[idx]
-	var b = snapshots[idx + 1] if idx + 1 < snapshots.size() else a
-	var span: float = b.t - a.t
-	var f: float = 0.0 if span <= 0.0 else (playback_t - a.t) / span
-	position = a.pos.lerp(b.pos, f)
-	rotation = a.rot.lerp(b.rot, f)
+	var a: Dictionary = snapshots[idx]
+	var b: Dictionary = snapshots[idx + 1] if idx + 1 < snapshots.size() else a
+	var span: float = b["t"] - a["t"]
+	var f: float = 0.0 if span <= 0.0 else (playback_t - a["t"]) / span
+	position = a["pos"].lerp(b["pos"], f)
+	rotation = a["rot"].lerp(b["rot"], f)
 
 func reset() -> void:
 	playback_t = 0.0
