@@ -10,15 +10,21 @@ extends RefCounted
 
 const PREFAB_DIR := "res://prefabs/"
 const TRIGGER_SIZE := Vector3(9, 4, 2)   # spans road width (4) + margin, low gate
+const ROAD_SCALE := 3.0   # uniform size multiplier for every road piece (width/length/height + spacing + triggers). Car is NOT scaled.
 
 # track_root: the Track Node3D (track.gd lives here). layout: Array[String] of
-# prefab names. Returns { car_start: Transform3D, pieces: Array, end: Transform3D }.
-static func build(track_root: Node3D, layout: Array) -> Dictionary:
+# prefab names. owner_root: when set, every spawned node is owned by it so the
+# track bakes into the scene as real, selectable, savable nodes (pass the edited
+# scene root). When null, nodes are owner-less preview (not saved).
+# Returns { car_start: Transform3D, pieces: Array, end: Transform3D }.
+static func build(track_root: Node3D, layout: Array, owner_root: Node = null) -> Dictionary:
 	var container: Node3D = track_root.get_node_or_null("StarterTrack")
 	if container == null:
 		container = Node3D.new()
 		container.name = "StarterTrack"
 		track_root.add_child(container)
+		if owner_root:
+			container.owner = owner_root
 	for c in container.get_children():
 		c.free()
 
@@ -34,7 +40,12 @@ static func build(track_root: Node3D, layout: Array) -> Dictionary:
 			continue
 		var inst: Node3D = packed.instantiate()
 		container.add_child(inst)
-		inst.global_transform = cursor
+		# Place at the cursor, uniformly scaled. The scaled basis enlarges the
+		# piece AND (via its Exit marker's scaled local offset) the spacing, so
+		# the whole track grows in every dimension from one constant.
+		inst.global_transform = Transform3D(cursor.basis.scaled(Vector3.ONE * ROAD_SCALE), cursor.origin)
+		if owner_root:
+			inst.owner = owner_root
 		placed.append(inst)
 		if i == 0:
 			car_start = cursor
@@ -53,22 +64,22 @@ static func build(track_root: Node3D, layout: Array) -> Dictionary:
 		else:
 			push_warning("TrackBuilder: '%s' has no Exit marker" % piece_name)
 
-	_spawn_triggers(track_root, placed, car_start)
+	_spawn_triggers(track_root, placed, car_start, owner_root)
 	return { "car_start": car_start, "pieces": placed, "end": cursor }
 
 
-static func _spawn_triggers(track_root: Node3D, placed: Array, car_start: Transform3D) -> void:
-	_make_area(track_root, "StartLine", car_start)
+static func _spawn_triggers(track_root: Node3D, placed: Array, car_start: Transform3D, owner_root: Node) -> void:
+	_make_area(track_root, "StartLine", car_start, owner_root)
 	var n: int = placed.size()
 	if n < 4:
 		return
 	var idxs := [int(n * 0.25), int(n * 0.5), int(n * 0.75)]
 	for j in 3:
 		var p: Node3D = placed[idxs[j]]
-		_make_area(track_root, "Checkpoint%d" % (j + 1), p.global_transform)
+		_make_area(track_root, "Checkpoint%d" % (j + 1), p.global_transform, owner_root)
 
 
-static func _make_area(track_root: Node3D, node_name: String, xform: Transform3D) -> void:
+static func _make_area(track_root: Node3D, node_name: String, xform: Transform3D, owner_root: Node) -> void:
 	var existing := track_root.get_node_or_null(node_name)
 	if existing:
 		existing.free()
@@ -77,12 +88,15 @@ static func _make_area(track_root: Node3D, node_name: String, xform: Transform3D
 	area.collision_layer = 0
 	area.collision_mask = 2   # car is on layer 2 (Car.tscn collision_layer = 2)
 	track_root.add_child(area)
-	# Lift the gate so its box straddles the road surface.
-	var t := xform
-	t.origin += Vector3(0, 1.5, 0)
-	area.global_transform = t
+	# Lift the gate so its box straddles the road surface. Strip any inherited
+	# scale from the source transform; scale the box explicitly instead so the
+	# gate spans the (now wider) road uniformly.
+	area.global_transform = Transform3D(xform.basis.orthonormalized(), xform.origin + Vector3(0, 1.5, 0))
 	var cs := CollisionShape3D.new()
 	var box := BoxShape3D.new()
-	box.size = TRIGGER_SIZE
+	box.size = TRIGGER_SIZE * ROAD_SCALE
 	cs.shape = box
 	area.add_child(cs)
+	if owner_root:
+		area.owner = owner_root
+		cs.owner = owner_root

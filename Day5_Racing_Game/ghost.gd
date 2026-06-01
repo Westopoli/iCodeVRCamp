@@ -4,8 +4,7 @@ var snapshots: Array = []
 var playback_t: float = 0.0
 
 func _ready() -> void:
-	var v: Node3D = preload("res://assets/kenney_racing/raceCarRed.glb").instantiate()
-	v.rotate_y(PI)  # match car.gd mesh flip (Kenney mesh faces +Z)
+	var v = preload("res://assets/kenney_racing/raceCarRed.glb").instantiate()
 	$VisualSlot.add_child(v)
 	_apply_transparency(v)
 

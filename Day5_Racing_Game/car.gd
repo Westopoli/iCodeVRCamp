@@ -30,9 +30,7 @@ func _ready() -> void:
 	if sim_config.has("mass"):
 		self.mass = sim_config["mass"]
 	var slot: Node = $VisualSlot if has_node("VisualSlot") else self
-	var visual: Node3D = preload("res://assets/kenney_racing/raceCarRed.glb").instantiate()
-	visual.rotate_y(PI)  # Kenney car mesh faces +Z; body forward is -Z. Flip mesh.
-	slot.add_child(visual)
+	slot.add_child(preload("res://assets/kenney_racing/raceCarRed.glb").instantiate())
 	if not is_in_group("car"):
 		add_to_group("car")
 
@@ -106,7 +104,9 @@ func set_start_point(p: Vector3) -> void:
 func reset_position() -> void:
 	linear_velocity = Vector3.ZERO
 	angular_velocity = Vector3.ZERO
-	global_transform = Transform3D(Basis(), start_point)
+	# Body forward (throttle drive) is +Z for this wheel setup; rotate the whole
+	# car 180 so forward + mesh both point down the track (-Z) at the start.
+	global_transform = Transform3D(Basis(Vector3.UP, PI), start_point)
 	begin_lap()
 
 

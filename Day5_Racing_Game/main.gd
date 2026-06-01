@@ -12,6 +12,19 @@ const LAYOUT := [
 	"Straight_Long", "Straight_Long", "Finish", "90_R",
 ]
 
+# Toggle in the Inspector to (re)generate the track from LAYOUT as REAL, owned,
+# selectable nodes baked into Main.tscn. After baking you can drag / rotate /
+# delete individual pieces and checkpoints in the editor; edits persist (the game
+# uses whatever is baked). Re-toggle to regenerate a fresh layout.
+var _rebuild_flag: bool = false
+@export var rebuild_track: bool:
+	get:
+		return _rebuild_flag
+	set(value):
+		_rebuild_flag = false  # momentary button — never stays on, never auto-fires on load
+		if value and Engine.is_editor_hint() and is_inside_tree():
+			_bake_track()
+
 var paused: bool = false
 var _car_start := Transform3D.IDENTITY
 var ghost: Node3D = null
@@ -27,16 +40,33 @@ var ghost: Node3D = null
 @onready var pause_panel: Panel = $UI/PausePanel
 
 
+func _bake_track() -> void:
+	# Generate owned nodes that save into the scene.
+	TrackBuilder.build(track, LAYOUT, get_tree().edited_scene_root)
+
+
 func _ready() -> void:
-	# Build the track in the editor too, so the layout is visible before play.
-	# Preview pieces are owner-less (not saved into Main.tscn) — they regenerate
-	# on every scene load / script reload.
-	var info := TrackBuilder.build(track, LAYOUT)
-	_car_start = info["car_start"]
-	_place_car()
+	var starter: Node = track.get_node_or_null("StarterTrack")
+	var already_baked: bool = starter != null and starter.get_child_count() > 0
 
 	if Engine.is_editor_hint():
+		# Show an owner-less preview only if nothing is baked yet, so an untouched
+		# scene isn't blank. Press the Inspector "Rebuild Track" toggle to commit
+		# real editable nodes.
+		if not already_baked:
+			TrackBuilder.build(track, LAYOUT)
+			_car_start = Transform3D.IDENTITY
+			_place_car()
 		return
+
+	# Runtime: drive whatever is in the scene. Use baked pieces if present,
+	# otherwise build a throwaway track so the game still runs.
+	if already_baked:
+		_car_start = starter.get_child(0).global_transform
+	else:
+		var info := TrackBuilder.build(track, LAYOUT)
+		_car_start = info["car_start"]
+	_place_car()
 
 	var ghost_scene: PackedScene = load("res://GhostCar.tscn")
 	ghost = ghost_scene.instantiate()
@@ -65,7 +95,8 @@ func _ready() -> void:
 
 func _place_car() -> void:
 	# Sit the car on the middle of the Start tile, facing -Z (into the track).
-	var spawn := _car_start.origin + Vector3(0, 1.0, -2.0)
+	# -Z offset = half a Start tile, scaled with the road.
+	var spawn := _car_start.origin + Vector3(0, 1.0, -2.0 * TrackBuilder.ROAD_SCALE)
 	if car.has_method("set_start_point"):
 		car.set_start_point(spawn)
 	if car.has_method("reset_position"):

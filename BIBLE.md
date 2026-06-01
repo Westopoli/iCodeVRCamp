@@ -655,7 +655,24 @@ Genre: Art-of-Rally-inspired 3D rally racer. Solo time trial + ghost replay. Cus
 
 **Build status:** `dist/Day5_Racing_Game_{Template,Complete}.zip` generate (275 entries each); headless `--import` clean (112 GLBs reimported); headless `--quit` parse pass clean (1 warning, see above); 10s headed smoke test clean. ZIP scan confirms no `_BUILD_SPEC.md`, `_balance/`, `_stderr.log`, `_stdout.log`, or `.godot/` cache leak. **Not yet verified:** `.exe` export, real in-Godot drive playtest (car feel, track flow, ghost playback, lap detection, customization workflow), sprite/mesh picks.
 
+**Track-build rework — Milestone 1 (2026-05-31, in-engine playtest-driven):**
+
+First real in-Godot playtest exposed the as-built track as broken: road prefabs had **no collision** (car fell through; only a hidden 80×80 ground box held it up), `main.gd` shipped leftover debug (`_probe_prefab_aabbs` spawned all 12 prefabs at origin each launch = the "scattered roads"), ghost/start/finish were never wired, `MeshLibrary.tres` never existed, and the composite corner prefabs (Hairpin/Chicane/S_curve) had untested/broken internal offsets.
+
+**Decisions locked this session (user picks):**
+- **Track-authoring method = data-driven segment list** (not hand-placed transforms, not GridMap, not single baked mesh). A `LAYOUT` array of prefab names; a builder walks it.
+- **Geometry source = builder-owns-geometry + thin single-GLB drag prefabs (Option C).** Supersedes D13's "kid drags 12 composite corner-set scenes." The 5 active prefabs (Start, Finish, Straight_Short, Straight_Long, 90_R) are now **single Kenney GLB + StaticBody3D box collision + an `Exit` Marker3D**, root scale 1, GLB child ×4, **centerline on x=0, entry at root origin, travels −Z**. `track_builder.gd` (`class_name TrackBuilder`) chains pieces by snapping each origin to a moving cursor then advancing to that piece's `Exit` (cursor collapsed to flat y=0 + pure-yaw each step so the track can't tilt/climb). Hairpin/Chicane/S/90_L/Sweeper deferred to Milestone 2 (same measured-connector method).
+- **Editing model = bake to real editable nodes.** Builder takes an `owner_root`; an `@export var rebuild_track` momentary toggle on `Main` regenerates the track as **owned, selectable, savable** nodes (pieces + StartLine + 3 checkpoints). Workflow: select Main → tick Rebuild Track → Ctrl+S → F5. Game uses whatever is baked; hand-edits persist. Re-tick regenerates from `LAYOUT`.
+- **Corner geometry measured, not guessed.** `_balance/Day5/glb_lane.py` decodes GLB vertices: `roadCornerLarge` lane enters at x=0.5 (same as straights), exits z=−1.5, radius 6m (base, ×4). Earlier tile-midpoint guess (x=1) caused a 2m lateral jog — fixed.
+- **Car facing/drive:** Kenney car mesh faces +Z AND throttle drives +Z; body spawns rotated 180° about Y (mesh + drive both point −Z = down track). Mesh-only flip was wrong (drove backward).
+- **`ROAD_SCALE = 3.0`** const in builder — uniform 3× size (width/length/height + spacing + triggers + corner radius). Car NOT scaled (user call). One-number tunable.
+- Triggers spawned as Area3D with **collision_mask = 2** (car is layer 2) — the old static StartLine/checkpoints were mask 1 = invisible to the car.
+
+**Verified in-engine 2026-05-31:** closed loop builds, corners flush, car drives forward, pieces selectable/movable, laps + ghost wired. Full 3-lap + ghost run not yet re-confirmed at 3× scale. `MeshLibrary.tres` / GridMap path is **abandoned** (builder replaces it).
+
 **Open items for next D5 touchpoint:**
+- Milestone 2: 90_L + Sweeper/Hairpin/Chicane/S_curve via `glb_lane.py` measured connectors; real AoR layout (left+right turns).
+- Confirm full 3-lap + ghost playback at 3× scale; camera may need pull-back for the wider track.
 - Real visual playtest (drive a lap, watch ghost play back, complete 3 laps, hit pause/restart). Fix HUD group lookup if blank at start.
 - VR Escape Sim station logistics — which room template, headset rotation timing, room build-ahead (BIBLE §12 territory).
 - User Sloyd pulls for hero car variants + Kenney ugly-object swaps.
