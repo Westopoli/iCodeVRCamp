@@ -11,24 +11,31 @@ extends RefCounted
 const PREFAB_DIR := "res://prefabs/"
 const TRIGGER_SIZE := Vector3(9, 4, 2)   # spans road width (4) + margin, low gate
 const ROAD_SCALE := 3.0   # uniform size multiplier for every road piece (width/length/height + spacing + triggers). Car is NOT scaled.
+# Every Kenney road GLB carries a built-in node translation T=(-0.35,-0.01,-0.65)
+# (measured, identical across all 6 road meshes — see track_sim selftest). Our
+# connector geometry is derived from raw vertices, which ignore that node T, so
+# the rendered mesh sits T off its tile origin. Constant offset → straights tile
+# fine, but it ROTATES at each corner = a seam. Cancel it in the Road's local
+# frame so the mesh lands exactly where the connector math expects.
+const MESH_OFFSET := Vector3(0.35, 0.01, 0.65)   # = -T, applied local to Road
 
 # track_root: the Track Node3D (track.gd lives here). layout: Array[String] of
 # prefab names. owner_root: when set, every spawned node is owned by it so the
 # track bakes into the scene as real, selectable, savable nodes (pass the edited
 # scene root). When null, nodes are owner-less preview (not saved).
 # Returns { car_start: Transform3D, pieces: Array, end: Transform3D }.
-static func build(track_root: Node3D, layout: Array, owner_root: Node = null) -> Dictionary:
-	var container: Node3D = track_root.get_node_or_null("StarterTrack")
+static func build(track_root: Node3D, layout: Array, owner_root: Node = null, container_name: String = "StarterTrack", start_xform: Transform3D = Transform3D.IDENTITY, spawn_triggers: bool = true) -> Dictionary:
+	var container: Node3D = track_root.get_node_or_null(container_name)
 	if container == null:
 		container = Node3D.new()
-		container.name = "StarterTrack"
+		container.name = container_name
 		track_root.add_child(container)
 		if owner_root:
 			container.owner = owner_root
 	for c in container.get_children():
 		c.free()
 
-	var cursor := Transform3D.IDENTITY
+	var cursor := start_xform
 	var placed: Array = []
 	var car_start := Transform3D.IDENTITY
 
@@ -40,6 +47,14 @@ static func build(track_root: Node3D, layout: Array, owner_root: Node = null) ->
 			continue
 		var inst: Node3D = packed.instantiate()
 		container.add_child(inst)
+		inst.name = "%02d_%s" % [i, piece_name]   # unique, ordered name = addressable in Scene dock
+		# Cancel the GLB's built-in node translation so the visible mesh aligns
+		# with the derived connectors (kills the corner seams). translated_local
+		# applies MESH_OFFSET in the Road's own frame, so it auto-handles the
+		# mirrored (-X) basis on left-hand corners.
+		var road: Node3D = inst.get_node_or_null("Road")
+		if road:
+			road.transform = road.transform.translated_local(MESH_OFFSET)
 		# Place at the cursor, uniformly scaled. The scaled basis enlarges the
 		# piece AND (via its Exit marker's scaled local offset) the spacing, so
 		# the whole track grows in every dimension from one constant.
@@ -64,8 +79,25 @@ static func build(track_root: Node3D, layout: Array, owner_root: Node = null) ->
 		else:
 			push_warning("TrackBuilder: '%s' has no Exit marker" % piece_name)
 
-	_spawn_triggers(track_root, placed, car_start, owner_root)
+	if spawn_triggers:
+		_spawn_triggers(track_root, placed, car_start, owner_root)
 	return { "car_start": car_start, "pieces": placed, "end": cursor }
+
+
+# Spawn StartLine + 3 checkpoints onto an ALREADY-baked track (its pieces live
+# under `container`). Used at runtime to make a baked display track playable
+# without rebuilding its geometry. Returns the car-start transform.
+static func spawn_triggers_for(track_root: Node3D, container: Node3D) -> Transform3D:
+	var placed: Array = []
+	for c in container.get_children():
+		# ordered road pieces are named "NN_Name"; skip pylons/markers
+		if c is Node3D and c.name.length() > 2 and c.name[0].is_valid_int() and c.name[2] == "_":
+			placed.append(c)
+	if placed.is_empty():
+		return Transform3D.IDENTITY
+	var car_start: Transform3D = placed[0].global_transform
+	_spawn_triggers(track_root, placed, car_start, null)
+	return car_start
 
 
 static func _spawn_triggers(track_root: Node3D, placed: Array, car_start: Transform3D, owner_root: Node) -> void:

@@ -670,8 +670,15 @@ First real in-Godot playtest exposed the as-built track as broken: road prefabs 
 
 **Verified in-engine 2026-05-31:** closed loop builds, corners flush, car drives forward, pieces selectable/movable, laps + ghost wired. Full 3-lap + ghost run not yet re-confirmed at 3× scale. `MeshLibrary.tres` / GridMap path is **abandoned** (builder replaces it).
 
+**Milestone 2 — track-align harness + corner kit (2026-06-04):**
+- Built pure-Python alignment harness (`_balance/Day5/{gdmath,tscn_io,track_geo,track_sim,design}.py`) that replicates `track_builder.gd` exactly, DERIVES Exit markers from measured GLB openings (no guessing), measures gaps, and renders top-down PNGs the AI reads itself — Godot-free inner loop. `track_sim.py --selftest` gates trust (4×90_R closes; matches verified M1 square). Replaces the screenshot-per-iteration loop; only a FINAL parity check needs a user screenshot.
+- Verified corner kit (all geometry-derived, gap 0.000 in any mix): **90_R, 90_L, Sweeper_R/L (roadCornerLarger), Tight_R/L (roadCornerSmall)**. Convention = root scale 1, Road ×4 (mirror=negative-X for L), box collision, derived `Exit`. Fixed 90_L wrong-handed Exit; rebuilt Sweepers (were scale-on-root/no-Exit/no-collision).
+- Composites (Hairpin/Chicane/S_curve) DROPPED → built as LAYOUT sequences (hairpin=Tight_L,Tight_L; chicane=Tight_L,Tight_R; esses=Sweeper_L,Sweeper_R).
+- 3 closeable tracks designed + rendered (T1 fast-sweeper oval, T2 technical, T3 esses) — awaiting user feedback + bake pick.
+
 **Open items for next D5 touchpoint:**
-- Milestone 2: 90_L + Sweeper/Hairpin/Chicane/S_curve via `glb_lane.py` measured connectors; real AoR layout (left+right turns).
+- AWAITING PICK: feedback on T1/T2/T3 + which to bake into `main.gd` LAYOUT (then one Godot screenshot for parity).
+- CLEANUP owed: revert main.gd TEST_CORNER/Bake-All scaffolding, delete temp 90_L_1/2/3 prefabs, restore LAYOUT to chosen track.
 - Confirm full 3-lap + ghost playback at 3× scale; camera may need pull-back for the wider track.
 - Real visual playtest (drive a lap, watch ghost play back, complete 3 laps, hit pause/restart). Fix HUD group lookup if blank at start.
 - VR Escape Sim station logistics — which room template, headset rotation timing, room build-ahead (BIBLE §12 territory).

@@ -490,13 +490,15 @@ Every slide entry uses this template:
 - **Image filenames** are screenshots the instructor / AI captures during the live Godot session. All D1 screenshots use prefix `d1_`. Red overlays are described in plain text — python-pptx draws the rectangle from the (x, y, w, h) tuple given, OR uses the master red-rectangle shape if no coords are listed.
 - **Notes** field is optional speaker-cue prose. Empty = `—`.
 
-### 10.1 Opener pack (slides 1-5)
+### 10.1 Opener pack (slides 1-5 + inserts S002a / S003a / S003b)
+
+> **Insert note (2026-06-08):** three new opener slides added via suffix IDs to avoid renumbering S003–S105. `S002a` (Pong history) sits between S002 and S003. `S003a` + `S003b` (VR history + Day-5 escape-room foreshadow) sit between S003 (5-day arc) and S004 (Today's concepts). Build order: S001, S002, **S002a**, S003, **S003a**, **S003b**, S004, S005, …
 
 #### Slide D1-S001 — Welcome / Day title
 - Format: G01 Day Title
-- Title: "Day 1 — Pong"
+- Title: "VR Creator - Day 1"
 - Body:
-  - "1972 · Atari"
+  - "Pong · 1972 · Atari"
   - "The game that started the whole industry."
 - Image: optional era arcade-cabinet art (placeholder OK).
 - Notes: instructor reads the day title aloud and points to the year.
@@ -507,6 +509,17 @@ Every slide entry uses this template:
 - Body: "Two paddles. One ball. No art — every visible thing on screen is just a coloured rectangle controlled by code you'll write."
 - Image: `d1_finished_game.png` — screenshot of running Pong with the scoreboard active, both paddles in play, ball mid-flight. No red overlay.
 - Notes: —
+
+#### Slide D1-S002a — Why Pong mattered (historical context, NEW)
+- Format: G04 Headline / Divider
+- Title: "Why Pong mattered"
+- Body:
+  - "1972, Atari. One of the first video games you could play in public."
+  - "Dead simple — two paddles, one ball. Anyone got it in seconds. That simplicity is why it spread."
+  - "Launched the whole arcade industry; 3 years later 'Home Pong' put a video game on the family TV for the first time."
+  - "Proved games could be a business. Pac-Man, Mario, your living-room console — all trace back here."
+- Image: optional period photo — an Atari Pong arcade cabinet or the 1975 Home Pong console (placeholder OK, `d1_pong_history.png`). No red overlay.
+- Notes: "Before Pong, almost nobody had played a video game. This little bouncing square is the great-grandparent of everything you play today."
 
 #### Slide D1-S003 — 5-day arc placement
 - Format: G02 Timeline / Closer
@@ -519,6 +532,26 @@ Every slide entry uses this template:
   - 2020s — Racing
 - Image: rendered timeline strip (python-pptx draws this as a row of 5 rectangles; today's rectangle filled iCode red, others light grey).
 - Notes: "You're going to walk through the whole history of gaming this week. Pong is where it starts."
+
+#### Slide D1-S003a — A quick history of VR (NEW)
+- Format: G04 Headline / Divider
+- Title: "A quick history of VR"
+- Body:
+  - "The dream is old — VR headsets go back to the 1960s, but they were huge, blurry, and wildly expensive."
+  - "2012: the Oculus Rift made VR cheap and good enough to be real. Now standalone headsets (Quest) need no PC at all."
+  - "VR = the screen wraps all the way around you. You don't *look at* the game — you're *inside* it."
+- Image: optional then-vs-now photo — a bulky 1990s headset beside a modern Quest (placeholder OK, `d1_vr_history.png`). No red overlay.
+- Notes: "Day 5 we go 3D and into VR. Here's where that tech came from — set up on day 1 so they're excited all week."
+
+#### Slide D1-S003b — Day 5: you build a VR escape room (NEW)
+- Format: G12 Screenshot + Caption
+- Title: "Day 5: you build a VR escape room"
+- Body:
+  - "Friday we go 3D + VR. You'll use **Escape Simulator** (on Steam) — a game built for making your own escape rooms."
+  - "You design the room, hide the clues, set the puzzles. Then your friends try to escape it."
+  - "Everything you learn this week — variables, logic, loops — is how those puzzles work under the hood."
+- Image: `d1_escape_sim.png` — a screenshot of Escape Simulator (a room with props / puzzle elements). Placeholder OK. No red overlay.
+- Notes: "This is the week's grand finale. Plant the seed now: everything we code Mon–Thu is the engine behind the escape room they build Friday."
 
 #### Slide D1-S004 — Today's concepts
 - Format: G04 Headline / Divider
@@ -556,104 +589,69 @@ Every slide entry uses this template:
 - Image: none
 - Notes: orientation phase begins.
 
-### 10.3 Walkthrough A — Open the project in Godot (slides 7-13)
+### 10.3 Walkthrough A — Open the project in Godot (guide-driven)
 
-> Source: §4 Walkthrough A. One step = one slide (per `slide-source-rules`).
+> **Reconciled to `SCREENSHOTS_CAPTURE_GUIDE.md` 2026-06-08.** Guide is SoT — one slide per actual `WalkA*.png` file (5), guide filenames. Earlier 7-step blueprint version dropped (it fabricated steps the guide didn't have, which mismatched captions to images). Count = files captured.
 
-#### Slide D1-S007 — Walk A.1: Open the Godot 4 launcher
-- Format: G12 Screenshot + Caption (with step badge "A.1")
+#### Slide D1-S007 — Walk A.1: Open the Godot launcher
+- Format: G12 Screenshot + Caption (badge "A.1")
 - Title: "Step A.1 — Open the Godot launcher"
-- Body: "Find the Godot 4 icon on the desktop or Start menu. Double-click to open the Project Manager window."
-- Image: `d1_walkA_step1.png` — Godot launcher / Project Manager window, full visible.
-- Notes: this is the launcher, NOT the editor yet.
+- Body: "Launch Godot 4. The Project Manager window opens. Find the **Import** button at the top-right."
+- Image: `WalkA1.png` — Project Manager open, Import button visible.
+- Notes: the launcher, NOT the editor yet.
 
 #### Slide D1-S008 — Walk A.2: Click Import
 - Format: G12 (badge "A.2")
 - Title: "Step A.2 — Click Import"
-- Body: "In the Project Manager, click the **Import** button at the top-right of the window."
-- Image: `d1_walkA_step2.png` — Project Manager with red overlay around the Import button.
+- Body: "Click the **Import** button at the top-right of the Project Manager."
+- Image: `WalkA2.png` — cursor on the Import button.
 - Notes: —
 
-#### Slide D1-S009 — Walk A.3: Navigate to Day1_Pong_Game
+#### Slide D1-S009 — Walk A.3: Select project.godot
 - Format: G12 (badge "A.3")
-- Title: "Step A.3 — Find the Day1_Pong_Game folder"
-- Body: "A file browser opens. Navigate to the `Day1_Pong_Game` folder wherever it lives on your computer."
-- Image: `d1_walkA_step3.png` — file browser showing the camp folder tree, Day1_Pong_Game highlighted.
+- Title: "Step A.3 — Find and select `project.godot`"
+- Body: "In the file browser, open the `Day1_Pong_Game` folder and click `project.godot` to select it."
+- Image: `WalkA3.png` — file dialog with project.godot highlighted.
 - Notes: instructor calls out the folder location for the room.
 
-#### Slide D1-S010 — Walk A.4: Select project.godot
+#### Slide D1-S010 — Walk A.4: Import & Edit
 - Format: G12 (badge "A.4")
-- Title: "Step A.4 — Select project.godot"
-- Body: "Inside `Day1_Pong_Game`, click the file named `project.godot`. This is the file every Godot project starts with."
-- Image: `d1_walkA_step4.png` — file browser inside Day1_Pong_Game with project.godot highlighted (red overlay).
+- Title: "Step A.4 — Click Import & Edit"
+- Body: "Godot asks to confirm. Click **Import & Edit**."
+- Image: `WalkA4.png` — Import Project confirmation, Import & Edit button.
 - Notes: —
 
-#### Slide D1-S011 — Walk A.5: Import & Edit
+#### Slide D1-S011 — Walk A.5: The editor opens
 - Format: G12 (badge "A.5")
-- Title: "Step A.5 — Click Import & Edit"
-- Body: "Click the **Import & Edit** button at the bottom-right of the import dialog."
-- Image: `d1_walkA_step5.png` — import dialog, Import & Edit button highlighted (red overlay).
-- Notes: —
+- Title: "Step A.5 — The editor opens"
+- Body: "Godot imports the project (first time takes a few seconds) and the editor opens. You're in."
+- Image: `WalkA5.png` — full Godot editor open on the project.
+- Notes: done with Walkthrough A.
 
-#### Slide D1-S012 — Walk A.6: Editor opens
-- Format: G12 (badge "A.6")
-- Title: "Step A.6 — The editor opens"
-- Body: "The Godot editor opens. On the left, the **Scene** panel shows the `Main` node — the top of our scene tree."
-- Image: `d1_walkA_step6.png` — full Godot editor view, Scene panel highlighted (red overlay around the Main node entry).
-- Notes: first time the kid sees the editor.
+### 10.4 Walkthrough B — Open main.gd to edit (guide-driven)
 
-#### Slide D1-S013 — Walk A.7: Check the title bar
-- Format: G12 (badge "A.7")
-- Title: "Step A.7 — Confirm the title bar"
-- Body: "Look at the title bar at the top of the window. It should read: `Day 1 - Pong - Godot Engine`."
-- Image: `d1_walkA_step7.png` — close-up of the title bar.
-- Notes: project is open. Done with Walkthrough A.
+> **Reconciled to the guide 2026-06-08.** One slide per actual `WalkB*.png` (3). Earlier 6-step version dropped.
 
-### 10.4 Walkthrough B — Open main.gd to edit (slides 14-19)
-
-> Source: §4 Walkthrough B.
-
-#### Slide D1-S014 — Walk B.1: Find FileSystem panel
+#### Slide D1-S014 — Walk B.1: Find main.gd in the FileSystem
 - Format: G12 (badge "B.1")
-- Title: "Step B.1 — FileSystem panel"
-- Body: "Look at the **FileSystem** panel at the bottom-left of the editor. It shows all the files in your project."
-- Image: `d1_walkB_step1.png` — editor with FileSystem panel highlighted (red overlay).
+- Title: "Step B.1 — Find `main.gd`"
+- Body: "Look at the **FileSystem** panel (bottom-left). Find the file named `main.gd`."
+- Image: `WalkB1.png` — FileSystem panel, main.gd visible.
 - Notes: —
 
-#### Slide D1-S015 — Walk B.2: Find main.gd
+#### Slide D1-S015 — Walk B.2: Double-click main.gd
 - Format: G12 (badge "B.2")
-- Title: "Step B.2 — Find `main.gd`"
-- Body: "In the FileSystem panel, find the file named `main.gd` at the top level."
-- Image: `d1_walkB_step2.png` — FileSystem panel close-up, main.gd highlighted (red overlay).
+- Title: "Step B.2 — Double-click `main.gd`"
+- Body: "Hover `main.gd`, then double-click to open it."
+- Image: `WalkB2.png` — cursor on main.gd, ready to double-click.
 - Notes: —
 
-#### Slide D1-S016 — Walk B.3: Double-click main.gd
+#### Slide D1-S016 — Walk B.3: The Script editor opens
 - Format: G12 (badge "B.3")
-- Title: "Step B.3 — Double-click `main.gd`"
-- Body: "Double-click `main.gd` to open it."
-- Image: `d1_walkB_step3.png` — same panel, mid-double-click indicator.
-- Notes: —
-
-#### Slide D1-S017 — Walk B.4: Script editor opens
-- Format: G12 (badge "B.4")
-- Title: "Step B.4 — The Script editor opens"
-- Body: "The view switches from the 2D scene to the **Script editor**. You're now looking at the code for `main.gd`."
-- Image: `d1_walkB_step4.png` — Godot Script editor with main.gd open.
-- Notes: —
-
-#### Slide D1-S018 — Walk B.5: 2D button
-- Format: G12 (badge "B.5")
-- Title: "Step B.5 — Back to the 2D view"
-- Body: "To get back to the 2D scene view, click the **2D** button at the top centre of the editor."
-- Image: `d1_walkB_step5.png` — editor with 2D button highlighted (red overlay).
-- Notes: —
-
-#### Slide D1-S019 — Walk B.6: Script button
-- Format: G12 (badge "B.6")
-- Title: "Step B.6 — Back to the script"
-- Body: "To get back to the script while in the 2D view, click the **Script** button at the top centre."
-- Image: `d1_walkB_step6.png` — editor with Script button highlighted (red overlay).
-- Notes: end of Walkthrough B.
+- Title: "Step B.3 — The Script editor opens"
+- Body: "The Script editor opens on `main.gd`. This is the file you'll edit all day."
+- Image: `WalkB3.png` — Script editor showing the top of main.gd.
+- Notes: WalkB3 not captured yet → placeholder until you grab it.
 
 ### 10.5 Section divider — Lesson chunks (slide 20)
 
@@ -689,9 +687,9 @@ Every slide entry uses this template:
 #### Slide D1-S024 — Concept 4/4: Mnemonic reveal
 - Format: G04 Headline / Divider
 - Title: "V in **variable** → **V**ALUE that can **C**HANGE"
-- Body: V and VALUE and CHANGE rendered in iCode red, rest in default colour.
+- Body: none
 - Image: none
-- Notes: lock the mnemonic.
+- Notes: lock the mnemonic. (Styling only — render the words V / VALUE / CHANGE in iCode red within the title; everything else default. Not slide content.)
 
 #### Slide D1-S025 — Example 1/4: Empty cookie jar
 - Format: G12 Screenshot + Caption
@@ -772,28 +770,28 @@ Every slide entry uses this template:
 - Format: G12 (badge "C.1")
 - Title: "Step C.1 — Press F5"
 - Body: "Press the **F5** key on your keyboard. (Or click the **Play ▶** button in the top-right toolbar.)"
-- Image: `d1_walkC_step1.png` — editor with the Play button highlighted (red overlay).
+- Image: `WalkC1.png` — editor with the Play button highlighted (red overlay).
 - Notes: —
 
 #### Slide D1-S035 — Walk C.2: Set Main Scene dialog
 - Format: G12 (badge "C.2")
 - Title: "Step C.2 — Set Main Scene"
 - Body: "If Godot asks 'Set Main Scene?', click **Select Current**. The scene we're running is `Main.tscn`."
-- Image: `d1_walkC_step2.png` — Set Main Scene dialog with Select Current highlighted.
-- Notes: only appears the first run.
+- Image: `WalkC2.png` — Set Main Scene dialog with Select Current highlighted.
+- Notes: only appears the first run. (Guide marks `WalkC2.png` `--not done--` → build skips this slide until captured.)
 
 #### Slide D1-S036 — Walk C.3: Game window opens
 - Format: G12 (badge "C.3")
 - Title: "Step C.3 — The game window opens"
 - Body: "A new window pops up, 1152 × 648 pixels. Dark background, two cyan paddles. The ball will be frozen at the centre until chunk #6b — that's normal."
-- Image: `d1_walkC_step3.png` — running Pong game window, ball at centre, paddles in start position.
+- Image: `WalkC3.png` — running Pong game window, ball at centre, paddles in start position.
 - Notes: —
 
 #### Slide D1-S037 — Walk C.4: Stop the game
 - Format: G12 (badge "C.4")
 - Title: "Step C.4 — Stop the game"
 - Body: "Close the game window, OR press **F8** in the editor to stop it."
-- Image: `d1_walkC_step4.png` — editor with F8 / stop button highlighted.
+- Image: `WalkC4.png` — editor with F8 / stop button highlighted.
 - Notes: —
 
 ### 10.8 Walkthrough D — Reading an error (slides 38-41)
@@ -804,7 +802,7 @@ Every slide entry uses this template:
 - Format: G12 (badge "D.1")
 - Title: "Step D.1 — Find the Output panel"
 - Body: "If your game window doesn't open after F5, look at the **Output** panel at the bottom of the editor. That's where errors print."
-- Image: `d1_walkD_step1.png` — editor with Output panel highlighted (red overlay).
+- Image: `WalkD1.png` — editor with Output panel highlighted (red overlay).
 - Notes: —
 
 #### Slide D1-S039 — Walk D.2: The three errors you'll see
@@ -821,15 +819,15 @@ Every slide entry uses this template:
 - Format: G12 (badge "D.3")
 - Title: "Step D.3 — Click the blue line number"
 - Body: "The error message shows a blue underlined line number. Click it — the script editor jumps you straight to the broken line."
-- Image: `d1_walkD_step3.png` — Output panel showing an example error with the blue line number highlighted (red overlay).
-- Notes: —
+- Image: `WalkD2.png` — Output panel showing an example error with the blue line number highlighted (red overlay).
+- Notes: (Guide maps this to `WalkD2.png`, marked `--not done--` → build skips until captured.)
 
 #### Slide D1-S041 — Walk D.4: Fix and re-run
 - Format: G12 (badge "D.4")
 - Title: "Step D.4 — Fix it, press F5 again"
 - Body: "Fix the line. Save with Ctrl+S. Press F5 again. Repeat until the game window opens."
-- Image: `d1_walkD_step4.png` — script editor with the corrected line + Ctrl+S indicator.
-- Notes: this is the loop they'll do all day.
+- Image: `WalkD3.png` — script editor with the corrected line + Ctrl+S indicator.
+- Notes: this is the loop they'll do all day. (Guide maps this to `WalkD3.png`, marked `--not done--` → build skips until captured.)
 
 ### 10.9 Chunk #1b — Variable naming freedom (slides 42-50, small new-concept arc)
 
@@ -1359,48 +1357,283 @@ Every slide entry uses this template:
 - Image: `d1_chunk1b_suffix_afterworks.png` — Pong running with the scoreboard showing the customized text suffix.
 - Notes: high personalization payoff. Have kids show their neighbour.
 
-### 10.17 Remaining sections — TO BE AUTHORED IN A FOLLOW-UP PASS
+### 10.17 Back-half sections — AUTHORED 2026-06-08 (S106–S140)
 
-> **python-pptx chat: stop emitting slides at S105.** The sections below are placeholders. They reference content that already exists in §6 (Personalization), §7 (Final Challenge), and §8 (Asset reference recap) of this file, but those sections have NOT yet been broken down into per-slide blueprints. A follow-up authoring pass will fill in §10.17a through §10.17d using the same schema as above. Do not invent slides for these sections — leave them out of the v1 deck build, or stub them as section-divider placeholders only.
+> **python-pptx chat: emit slides S106 through S140 below, in order.** Personalization (§10.17a) covers Beats 1–5 of §6; the export walkthrough (Beat 6) is broken out into its own section §10.17d. Body text is final and pasteable. Screenshots use the `d1_` prefix; capture per §10.18.
 
-#### §10.17a — Section divider: Personalization
+### §10.17a — Personalization (Beats 1–5, slides S106–S120)
+
+#### Slide D1-S106 — Section divider: Make it yours
 - Format: G04 Headline / Divider
 - Title: "Make it yours"
-- Subtitle: "Six beats. Pick the ones you want."
-- Slide range when authored: ~S106 — S123 (estimate)
-- Source content: §6 "Personalization layer" of this file.
+- Body: "Five ways to make this Pong YOUR Pong. Pick the ones you want — do them in any order."
+- Image: none
+- Notes: morning chunks are done and the game works. This is the open-ended play block. Kids who want to keep building, build; kids who want to jump to the Final Challenge can.
 
-#### §10.17b — Section divider: Final Challenge
+#### Slide D1-S107 — Beat 1.1: Select the Main node
+- Format: G12 Screenshot + Caption
+- Title: "Beat 1 — Recolour your game"
+- Body: "Click the `Main` node at the top of the Scene panel (top-left)."
+- Image: `d1_beat1_step1.png` — Scene panel with the `Main` node selected/highlighted.
+- Notes: the `@export` colour variables live on `Main`.
+
+#### Slide D1-S108 — Beat 1.2: Find Script Variables in the Inspector
+- Format: G12 Screenshot + Caption
+- Title: "Beat 1 — Open the Inspector"
+- Body: "Look at the **Inspector** on the right. Scroll down to the **Script Variables** section — that's where `Ball Color` and `Paddle Color` live."
+- Image: `d1_beat1_step2.png` — Inspector showing the Script Variables group with Ball Color + Paddle Color.
+- Notes: "Why are these here but the speeds aren't? The magic word `@export` — Beat 2 explains it."
+
+#### Slide D1-S109 — Beat 1.3: Open the colour picker
+- Format: G12 Screenshot + Caption
+- Title: "Beat 1 — Pick a colour"
+- Body: "Click the colour swatch next to `Ball Color`. The colour picker pops up. Pick anything you like."
+- Image: `d1_beat1_step3.png` — colour picker open over the Inspector.
+- Notes: —
+
+#### Slide D1-S110 — Beat 1.4: Repeat for the paddles
+- Format: G12 Screenshot + Caption
+- Title: "Beat 1 — Now the paddles"
+- Body: "Do the same for `Paddle Color`. Press Enter or click outside the picker to close it."
+- Image: `d1_beat1_step4.png` — Paddle Color swatch / picker.
+- Notes: —
+
+#### Slide D1-S111 — Beat 1.5: Save + run
+- Format: G12 Screenshot + Caption
+- Title: "Beat 1 — See your colours"
+- Body: "Press **Ctrl+S** to save the scene, then **F5** to run. Your new colours are live."
+- Image: `d1_beat1_result.png` — running Pong with recoloured ball + paddles.
+- Notes: first visible payoff of the personalization block.
+
+#### Slide D1-S112 — Beat 2.1: Find the speed variable
+- Format: G12 Screenshot + Caption
+- Title: "Beat 2 — Change your speeds"
+- Body: "Open `main.gd`. Find your chunk #1a line: `var ball_speed_x := 6.0`."
+- Image: `d1_beat2_step1.png` — script editor on the `ball_speed_x` line.
+- Notes: —
+
+#### Slide D1-S113 — Beat 2.2: Change the number
+- Format: G12 Screenshot + Caption
+- Title: "Beat 2 — Faster or slower"
+- Body: "Click the `6.0` and change it — higher for a faster ball, lower for slower. Try the 3–12 range. Save (Ctrl+S), run (F5)."
+- Image: `d1_beat2_step2.png` — edited number highlighted.
+- Notes: —
+
+#### Slide D1-S114 — Beat 2.3: The magic word `@export`
+- Format: G04 Headline / Divider
+- Title: "Why colours were in the Inspector but speeds weren't"
+- Body:
+  - "The colour variables have a special word in front: `@export`."
+  - "`@export` means: *show this variable in the Inspector so I can change it without opening the code.*"
+  - "The speeds don't have it — so you change them in the code instead. Same idea, two doors in."
+- Image: none
+- Notes: light-touch concept; don't quiz. Just name the pattern they already saw.
+
+#### Slide D1-S115 — Beat 3.1: Rename your silly variables
+- Format: G12 Screenshot + Caption
+- Title: "Beat 3 — Funnier names"
+- Body: "Open `main.gd`, find your chunk #1b variables (around line 46). Rename either one to something funnier."
+- Image: `d1_beat3_step1.png` — script editor on the #1b variable lines.
+- Notes: callback to the chunk #1b "name it whatever you want" lesson.
+
+#### Slide D1-S116 — Beat 3.2: Update the scoreboard to match
+- Format: G12 Screenshot + Caption
+- Title: "Beat 3 — Keep the names matching"
+- Body: "If you renamed a variable, also fix it on the scoreboard line (around line 121). The name there must match the new name exactly, or the game errors. Save, run."
+- Image: `d1_beat3_step2.png` — the scoreboard-suffix line highlighted.
+- Notes: "This is a great natural moment to hit an error and practice Walkthrough D — a typo'd name throws a clear error."
+
+#### Slide D1-S117 — Beat 4.1: Decorate the scoreboard
+- Format: G12 Screenshot + Caption
+- Title: "Beat 4 — Pimp your scoreboard"
+- Body: "Find the scoreboard-suffix line (around line 121). Swap the `★` characters for any emoji — on Windows press **Win + .** to open the emoji picker."
+- Image: `d1_beat4_step1.png` — scoreboard line with the ★ characters highlighted.
+- Notes: —
+
+#### Slide D1-S118 — Beat 4.2: Add more
+- Format: G12 Screenshot + Caption
+- Title: "Beat 4 — More is more"
+- Body: "Add extra text, more emoji, more variables. Make the scoreboard as loud as you want. Save, run."
+- Image: `d1_beat4_result.png` — running game with a decorated scoreboard.
+- Notes: —
+
+#### Slide D1-S119 — Beat 5.1: Find the paddle spin helper (stretch)
+- Format: G12 Screenshot + Caption
+- Title: "Beat 5 — Tweak the bounce (stretch)"
+- Body: "Scroll to `spin_from_paddle()` (around line 149). This is code we wrote for you — you can read it and tweak it."
+- Image: `d1_beat5_step1.png` — script editor on the `spin_from_paddle()` function.
+- Notes: pre-given helper, not a chunk. Read-and-tweak only.
+
+#### Slide D1-S120 — Beat 5.2: Change the spin amount
+- Format: G12 Screenshot + Caption
+- Title: "Beat 5 — Steeper or softer"
+- Body: "Change the `8.0` at the end of `return hit_offset * 8.0` — higher = steeper bounce off the paddle edge, lower = softer. Save, run, feel the difference."
+- Image: `d1_beat5_step2.png` — the `8.0` value highlighted.
+- Notes: ties back to "numbers you can tune" from chunk #1a.
+
+### §10.17b — Final Challenge: `player2.gd` (slides S121–S127)
+
+#### Slide D1-S121 — Section divider: Final Challenge
 - Format: G04 Headline / Divider
 - Title: "Final Challenge — `player2.gd`"
-- Subtitle: "Kick out the AI. Make Pong 2-player."
-- Slide range when authored: ~S124 — S130 (estimate)
-- Source content: §7 "Stretch goals — Final Challenge" of this file.
+- Body: "Kick out the computer. Make Pong 2-player — your friend plays the right paddle on the I and K keys."
+- Image: none
+- Notes: opt-in. For kids who finished the morning + want the big payoff.
 
-#### §10.17c — Asset reference recap
+#### Slide D1-S122 — You already know how to do this (R3 pointer)
+- Format: G07 Table
+- Title: "You already know how to do this"
+- Body: table — FC step → morning chunk it reuses:
+  - "Step 1 — turn the AI off" → "reading code + `#` to comment out lines"
+  - "Step 2 — I/K keys move the paddle" → "chunk #1a (`paddle_speed`) + chunk #3 (`if`)"
+- Image: none
+- Notes: R3 rule — every FC step is a reworded morning chunk. No new concepts. If stuck, scroll up to that morning chunk and copy the *shape*.
+
+#### Slide D1-S123 — The payoff: 2-player Pong
+- Format: G12 Screenshot + Caption
+- Title: "What you're unlocking"
+- Body: "Right now the right paddle is a computer. After this challenge, a real second player controls it — I = up, K = down. Pong becomes 2-player."
+- Image: `d1_fc_2player.png` — two humans playing, both paddles under human control (placeholder OK).
+- Notes: sell the payoff before the work.
+
+#### Slide D1-S124 — Step 1: Where the AI lives
+- Format: G11 Code Screenshot
+- Title: "Step 1 — Find the computer's brain"
+- Body: "Open `player2.gd` (it's on the `PaddleRight` node). The 5 lines in `_process` that start with `var ball_middle = …` down through `position.y -= ai_speed` — that's the AI playing itself."
+- Image: `d1_fc_step1_where.png` — `player2.gd` in the script editor, the 5 AI lines marked with a red overlay rectangle.
+- Notes: —
+
+#### Slide D1-S125 — Step 1: Turn it off
+- Format: G12 Screenshot + Caption
+- Title: "Step 1 — Silence the AI"
+- Body: "Select those 5 lines and comment them out — put a `#` at the start of each, or select them and press **Ctrl+K**. Run (F5): the right paddle should now sit still."
+- Image: `d1_fc_step1_done.png` — the same 5 lines now greyed-out as comments.
+- Notes: verify = right paddle frozen. AI is off.
+
+#### Slide D1-S126 — Step 2: Where your code goes
+- Format: G11 Code Screenshot
+- Title: "Step 2 — Your turn: add the keys"
+- Body: "Just below the AI block, under the `STEP 2` banner, there's a `#@todo` block. That's where you make the I and K keys move the paddle."
+- Image: `d1_fc_step2_where.png` — `player2.gd` with a red overlay on the `#@todo` block under the STEP 2 banner.
+- Notes: —
+
+#### Slide D1-S127 — Step 2: The shape (Example + TODO side-by-side, MANDATORY)
+- Format: G09 Concept + Task
+- Title: "Step 2 — Make the keys work"
+- Body LHS (the shape, NOT copy-pasteable — render as image / placeholders):
+  ```
+  if Input.is_key_pressed(KEY_?):
+      position.y -= ???
+  if Input.is_key_pressed(KEY_?):
+      position.y += ???
+  ```
+- Body RHS (image): `d1_fc_step2_todo.png` — Godot screenshot of the `#@todo` block, red overlay on the gap.
+- Caption: "I moves up (subtract), K moves down (add). Use your `paddle_speed`. Same `if` shape as this morning."
+- Notes: show the shape, make them retype. Mirrors chunk #3 (`if`) + chunk #1a (`paddle_speed`). KEY_I / KEY_K, `position.y -= paddle_speed` / `+= paddle_speed`.
+
+### §10.17c — Asset recap (slide S128)
+
+#### Slide D1-S128 — Day 1 assets: none
 - Format: G08 Asset Pack Card
 - Title: "Day 1 assets: none"
-- Body: "Day 1 used zero imported art. Every visible thing was a `ColorRect`. From Day 2 on, we use Kenney.nl asset packs."
-- Slide range: ~S131 (single slide)
-- Source content: §8 of this file.
+- Body: "Day 1 used zero imported art. Every visible thing on screen was a `ColorRect` — a coloured box drawn by code. From Day 2 on, we bring in real art with Kenney.nl asset packs."
+- Image: optional — a row of the plain ColorRect shapes vs a teaser of Day 2's Kenney tiles (placeholder OK).
+- Notes: reinforce the "you can build a real game with just maths and coloured boxes" framing before art arrives tomorrow.
 
-#### §10.17d — Export-to-exe walkthrough (Beat 6)
-- Slide range: ~S132 — S141 (estimate ~10 step shots)
-- Source content: §6 Beat 6 of this file.
+### §10.17d — Export your Pong to a Windows `.exe` (Beat 6, slides S129–S139)
 
-#### §10.17e — Day closer
+#### Slide D1-S129 — Section divider: Take it home
+- Format: G04 Headline / Divider
+- Title: "Take it home"
+- Body: "Turn your Pong into a real Windows program — a `.exe` you can run on any PC, no Godot needed. Show your family tonight."
+- Image: none
+- Notes: the day's takeaway artifact. Every kid leaves with a runnable game.
+
+#### Slide D1-S130 — Export 1: Save everything
+- Format: G12 Screenshot + Caption
+- Title: "Step 1 — Save first"
+- Body: "Save the scene with **Ctrl+S**, then click into the script editor and **Ctrl+S** again. No asterisks left next to the tab names = everything's saved."
+- Image: `d1_export_step1.png` — editor tabs with no unsaved-asterisk.
+- Notes: —
+
+#### Slide D1-S131 — Export 2: Open the Export window
+- Format: G12 Screenshot + Caption
+- Title: "Step 2 — Project → Export"
+- Body: "In the top menu bar: **Project → Export…**"
+- Image: `d1_export_step2.png` — Project menu open, Export… highlighted.
+- Notes: —
+
+#### Slide D1-S132 — Export 3: Pick the Windows preset
+- Format: G12 Screenshot + Caption
+- Title: "Step 3 — Choose Windows Desktop"
+- Body: "In the Export window, select the **Windows Desktop** preset. (Your instructor set this up already.)"
+- Image: `d1_export_step3.png` — Export window, Windows Desktop preset selected.
+- Notes: if the preset is missing, instructor build doc has the fix.
+
+#### Slide D1-S133 — Export 4: Click Export Project
+- Format: G12 Screenshot + Caption
+- Title: "Step 4 — Export Project"
+- Body: "Click **Export Project** at the bottom-right of the window."
+- Image: `d1_export_step4.png` — Export Project button highlighted.
+- Notes: —
+
+#### Slide D1-S134 — Export 5: Pick a folder
+- Format: G12 Screenshot + Caption
+- Title: "Step 5 — Where to save it"
+- Body: "Pick a folder for your game — e.g. make a new `MyPong` folder on the Desktop."
+- Image: `d1_export_step5.png` — file dialog at a Desktop/MyPong folder.
+- Notes: —
+
+#### Slide D1-S135 — Export 6: Untick Export With Debug
+- Format: G12 Screenshot + Caption
+- Title: "Step 6 — Untick 'Export With Debug'"
+- Body: "Uncheck **Export With Debug** — it keeps your `.exe` smaller."
+- Image: `d1_export_step6.png` — the Export With Debug checkbox, unticked.
+- Notes: —
+
+#### Slide D1-S136 — Export 7: Save
+- Format: G12 Screenshot + Caption
+- Title: "Step 7 — Save"
+- Body: "Click **Save**. Godot builds your game."
+- Image: `d1_export_step7.png` — Save button.
+- Notes: —
+
+#### Slide D1-S137 — Export 8: Godot writes your files
+- Format: G12 Screenshot + Caption
+- Title: "Step 8 — Your files appear"
+- Body: "Godot writes two files into your folder: `<name>.exe` (the game) and `<name>.pck` (its data). Keep them together."
+- Image: `d1_export_step8.png` — file explorer showing the .exe + .pck.
+- Notes: "The .exe needs the .pck next to it — copy both if you move them."
+
+#### Slide D1-S138 — Export 9: Run it
+- Format: G12 Screenshot + Caption
+- Title: "Step 9 — Double-click your game"
+- Body: "Double-click the `.exe`. Your Pong runs — no Godot, no code editor, just your game."
+- Image: `d1_export_step9.png` — the exported Pong running as a standalone window.
+- Notes: the payoff moment. This is the takeaway.
+
+#### Slide D1-S139 — Export 10: Take it anywhere
+- Format: G04 Headline / Divider
+- Title: "It's really yours now"
+- Body: "Copy that folder to a USB stick or send it to a friend. It runs on any Windows PC. You built and shipped a real game on day one."
+- Image: none
+- Notes: end the day's build on the ownership beat.
+
+### §10.17e — Day closer (slide S140)
+
+#### Slide D1-S140 — Tomorrow: Pac-Man
 - Format: G02 Timeline / Closer
 - Title: "Tomorrow: Pac-Man"
-- Subtitle: "1980. The next leap. We're using tiles instead of rectangles."
-- Slide range: S142 (last slide)
-- Source content: BIBLE §15 narrative arc.
+- Body: "1980. The next leap. We trade coloured rectangles for **tiles** — and learn **loops** and **functions** to bring a whole maze to life."
+- Image: optional Pac-Man teaser (placeholder OK).
+- Notes: close on the arc. Tease tomorrow's genre + concepts.
 
 ### 10.18 Build-time notes for python-pptx chat
 
-- **Master frame**: every slide gets the iCode master (logo top-left, day tab "Day 1" top-right, page-number bottom-right) per `SLIDES_FORMATS.md` "master frame" spec.
-- **Day tab color**: D1 = iCode red. (Confirm against brand pack when it lands.)
+- **Master frame**: every slide gets the iCode master (black bar; logo top-left, red **"DAY 1"** label top-right, page-number bottom-right) per `SLIDES_FORMATS.md` "master frame" spec.
+- **Brand**: red / black / grey minimalist (LOCKED 2026-06-08, `SLIDES_PLAN.md` § Brand). No per-day color tab — the "DAY 1" red label is the only per-day mark. (Earlier "day tab color = iCode red" line is superseded; red is now the single system accent.)
 - **Walkthrough step badges**: G12 slides with a step ID (e.g. "A.1", "C.3") render the badge as a small filled circle top-right of the screenshot, badge text inside. python-pptx implements this as a single `Shape` per slide.
 - **Red highlight overlays**: described in plain text in each `Image:` field. Default shape is a 4px-stroke red rectangle (no fill, slight transparency on edges OK). If multiple targets per slide, list each separately.
 - **Speaker notes**: the `Notes:` field on each slide may be populated into the PPTX speaker-notes pane (optional — instructor can also just reference this file as a cue card per `SLIDES_FORMATS.md` open spec item 5).
-- **Slide count v1 (lesson portion only, S001-S105)**: **105 slides**. Adding §10.17 sections later brings D1 to ~142 slides total.
+- **Slide count (full day, AUTHORED 2026-06-08)**: **140 numbered slides + 3 suffix inserts (S002a, S003a, S003b) = 143 total.** Build order: S001, S002, S002a, S003, S003a, S003b, S004 … S105 (lesson block) … S106–S140 (personalization → FC → asset recap → export → closer). No "stop at S105" — emit the whole day.
 - **Verification before build**: re-run §9 checklist on this file. If `main.gd` line numbers shift, the `where` and `todo` screenshots need re-capturing and the body text in S031, S032, S033, S049, S050, S061, S062, S071, S072, S075, S085, S086, S089, S100, S101, S104 needs updating (every slide that references a `main.gd` line range).

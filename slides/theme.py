@@ -33,32 +33,29 @@ BODY_BOTTOM_MARGIN = Inches(0.4)
 
 
 # ============================================================
-#  Brand colors (eyeballed from iCodeScreenshots/* — refine when raw PPTX lands)
+#  Brand colors — red / black / grey, sleek + minimalist (LOCKED 2026-06-08)
 # ============================================================
+# Brand is a single warm red accent on a black/grey/white neutral base. No
+# gradients, no per-day hues. Red hex drawn from the logo's red end.
 
-# Primary iCode red/orange (logo accent)
-ICODE_ORANGE = RGBColor(0xF2, 0x6B, 0x2B)
+# Primary accent — the ONLY chromatic color in the system. Used sparingly:
+# header "Day N" label, today-marker on timelines, key-term highlights, L8 code
+# overlay rectangle.
 ICODE_RED = RGBColor(0xE5, 0x3A, 0x2C)
 
-# Header gradient stops (left to right): purple → pink → orange → yellow
-HEADER_GRADIENT_STOPS = [
-    (0.00, RGBColor(0x9D, 0x4D, 0xBB)),  # purple
-    (0.35, RGBColor(0xE9, 0x4B, 0x8B)),  # pink
-    (0.65, RGBColor(0xF2, 0x6B, 0x2B)),  # orange
-    (1.00, RGBColor(0xF9, 0xC8, 0x46)),  # yellow
-]
+# Neutral base
+BAR_BLACK = RGBColor(0x11, 0x11, 0x11)   # top header bar + headings on white
+GREY_DARK = RGBColor(0x2B, 0x2B, 0x2B)   # table-header fills, dark panels
+GREY_MID = RGBColor(0x8A, 0x8A, 0x8A)    # captions, rules, page numbers, inactive timeline boxes
+GREY_LIGHT = RGBColor(0xF2, 0xF2, 0xF2)  # callout / prose-box backgrounds
 
-# Accent palette (for L4 decorative blobs, L1 backgrounds, callouts)
-ACCENT_PINK = RGBColor(0xE9, 0x4B, 0x8B)
-ACCENT_PURPLE = RGBColor(0x9D, 0x4D, 0xBB)
-ACCENT_YELLOW = RGBColor(0xF9, 0xC8, 0x46)
-ACCENT_GREEN = RGBColor(0xA8, 0xE0, 0x4C)
-ACCENT_SKY = RGBColor(0x4D, 0xBB, 0xDC)
+# Header bar fill (solid, no gradient)
+HEADER_BG = BAR_BLACK
 
 # Functional colors
 BG_WHITE = RGBColor(0xFF, 0xFF, 0xFF)
 TEXT_BLACK = RGBColor(0x1A, 0x1A, 0x1A)
-TEXT_MUTED = RGBColor(0x66, 0x66, 0x66)
+TEXT_MUTED = GREY_MID
 CODE_BG = RGBColor(0x2D, 0x2D, 0x2D)
 CODE_TEXT = RGBColor(0xE6, 0xE6, 0xE6)
 
@@ -112,13 +109,7 @@ ICONS_DIR = ASSETS_DIR / "icons"
 
 
 # ============================================================
-#  Per-day tab colors (top-right corner of header strip)
+#  Per-day differentiation
 # ============================================================
-
-DAY_TAB_COLORS = {
-    1: ACCENT_SKY,      # Pong = sky blue (D1 simplest, calmest)
-    2: ACCENT_YELLOW,   # Pac-Man = yellow
-    3: ICODE_ORANGE,    # Base Defense = orange
-    4: ACCENT_PINK,     # Fighter = pink (Smash branding)
-    5: ACCENT_GREEN,    # Racing = green (Art of Rally vibe)
-}
+# No per-day color. Every day uses the same red/black/grey master frame; the
+# "Day N" red label in the header bar is the only per-day differentiator.

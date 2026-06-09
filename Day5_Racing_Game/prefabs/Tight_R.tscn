@@ -1,11 +1,11 @@
-[gd_scene load_steps=3 format=4 uid="uid://b8d5p_sw_r"]
+[gd_scene load_steps=3 format=4 uid="uid://b8d5p_tight_r"]
 
-[ext_resource type="PackedScene" path="res://assets/kenney_racing/roadCornerLarger.glb" id="1"]
+[ext_resource type="PackedScene" path="res://assets/kenney_racing/roadCornerSmall.glb" id="1"]
 
 [sub_resource type="BoxShape3D" id="col"]
-size = Vector3(12, 0.4, 12)
+size = Vector3(4, 0.4, 4)
 
-[node name="Sweeper_R" type="Node3D"]
+[node name="Tight_R" type="Node3D"]
 
 [node name="Road" parent="." instance=ExtResource("1")]
 transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, -2, 0, 0)
@@ -13,8 +13,8 @@ transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, -2, 0, 0)
 [node name="Body" type="StaticBody3D" parent="."]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Body"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, -0.2, -6)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, -2)
 shape = SubResource("col")
 
 [node name="Exit" type="Marker3D" parent="."]
-transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 10, 0, -10)
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 2, 0, -2)

@@ -744,7 +744,7 @@ Mirror D1 §10.17 sub-sectioning when authored:
 
 ### 10.6 Build-time notes for python-pptx chat (placeholder)
 
-- **Master frame**: iCode logo top-left, day tab top-right (D2 = TBD color, awaiting brand pack), page-number bottom-right per `SLIDES_FORMATS.md` master frame spec.
+- **Master frame**: black bar; iCode logo top-left, red **"DAY 2"** label top-right, page-number bottom-right per `SLIDES_FORMATS.md` master frame spec. Brand = red/black/grey minimalist (LOCKED 2026-06-08, `SLIDES_PLAN.md` § Brand). No per-day color tab.
 - **Walkthrough step badges**: G12 slides with step IDs (e.g. "T.1") render the badge as a small filled circle top-right of the screenshot.
 - **Red highlight overlays**: described per-slide in `Image:` field, default 4px-stroke red rectangle.
 - **Speaker notes**: `Notes:` field per slide populated into the PPTX speaker-notes pane.
@@ -802,8 +802,41 @@ Per chunk, three options for the plain-English goal statement that sits ABOVE th
 ### 10.8 Pending decisions (blocking per-slide expansion)
 
 - [x] **As-typed code re-verification** — done 2026-05-29 afternoon under R1-R6 triage. `main.gd` rewritten; pre-given helpers added; chunk #6 converted to R5 partial-section hole; FC redesigned to ship with pre-given personality math. §5 + §10.7 RHS code columns refreshed to match.
-- [ ] **RHS prose pick (per chunk)** — A / B / C / remix for each of #1, #2, #3a, #3b, #4, #5, #6. No longer blocked.
-- [ ] **Historical-context slide content** — Pac-Man 1980 revolutionary background. Sourcing pending.
-- [ ] **Day tab color for D2** — brand pack pending.
-- [ ] **D1 retrofit** — add equivalent historical-context slide to D1 Pong opener pack (currently 5-slide pack per D1 §10.1; would become 6).
+- [x] **RHS prose pick (per chunk)** — LOCKED 2026-06-08. See §10.9.
+- [x] **Historical-context slide content** — Pac-Man 1980. LOCKED 2026-06-08, 1 slide. See §10.9.
+- [x] **Day tab color for D2** — RESOLVED 2026-06-08. Brand overridden to red/black/grey minimalist; NO per-day color. D2 carries the standard red "DAY 2" label. Palette locked in `SLIDES_PLAN.md` § Brand; `slides/theme.py` + `master.py` + `templates.py` updated to match.
+- [ ] **D1 retrofit** — EXPANDED 2026-06-08: (a) add Pong historical slide to D1 opener, (b) add NEW D1 section on history of VR + Day-5 Escape Room foreshadow (kids build own escape room on Steam Escape Simulator). Placement/scope pending — see §10.9.
 - [ ] **FC pointer slide content authored** — first slide of §10.5b. Text locked in §7 above; per-slide expansion still pending Phase 2.5b.
+
+### 10.9 LOCKED picks (2026-06-08)
+
+**RHS prose-goal picks** (final text for the side-by-side Action slide, RHS top):
+
+| Chunk | Pick | Final RHS-top prose |
+|---|---|---|
+| #1 | A | Spawn three ghosts in the pen — but write the spawn call only once. |
+| #2 | B | Each frame, walk through all the ghosts and move each one. |
+| #3a | C | Get the dot total from `count_dots()` and store it in `dots_remaining`. |
+| #3b | C+ | Scan the whole maze with a `while` loop. Count the dots. Return the count. |
+| #4 | B− | Send the player back to the starting tile. |
+| #5 | A | Move the player one tile in the direction they pressed — but only if a wall isn't in the way. |
+| #6 | B | Given a cell, hand back `true` if it's blocked, `false` if it's open. *(off-grid + tunnel pre-given)* |
+
+- #3b: appended "with a `while` loop" to make the construct requirement explicit (kid must understand a while loop is required, not optional).
+- #4: truncated after "starting tile" (dropped "and clear any movement they had going") — keeps the goal statement tight; the movement-clearing detail lives in the speaker note, not on-slide.
+
+**Pac-Man historical slide** — LOCKED: **1 slide** (opener pack slide 3, §10.2). Content:
+- Pre-1980 arcades = almost all space shooters (Space Invaders, Asteroids). Pac-Man invented the **maze chase**.
+- First game with a **character that had personality** — Pac-Man + 4 named ghosts, each its own AI brain (Blinky/Pinky/Inky/Clyde).
+- First game with **cutscenes** (the intermissions between levels).
+- First arcade game marketed **beyond boys** — broke the "arcade = boys only" mold.
+- First giant **merchandising** wave — lunchboxes, a cartoon, even a hit song ("Pac-Man Fever").
+- Bottom line: no Pac-Man → maybe no Mario, no Sonic, no mascots at all.
+
+**D1 retrofit (do-now, 2026-06-08 user call)** — two additions to D1 `SLIDE_SOURCE.md`:
+1. **Pong historical slide** — equivalent "why revolutionary" slide for the D1 opener pack (mirrors this D2 slide's shape).
+2. **VR history + Day-5 foreshadow section** — NEW D1 section: brief history of VR, then what the camp does with VR on Day 5 (Steam **Escape Simulator** workshop — kids build their own escape room). Placement + depth pending pick (§10.9 open items below).
+
+**Resolved 2026-06-08:**
+- Brand → red/black/grey minimalist, no per-day color (theme/master/templates updated).
+- D1 VR section placement → **opener mini-section**, inserted after the 5-day arc slide (D1-S003), before "Today's concepts" (D1-S004). Content depth = brief VR history slide + Day-5 escape-room tease slide (Steam Escape Simulator → kids build own escape room).

@@ -17,6 +17,8 @@ Layouts:
 - L8 Action         — top prose + LHS code + RHS screenshot with red overlay
 """
 
+import re
+
 from pptx.util import Inches, Pt, Emu
 from pptx.enum.shapes import MSO_SHAPE
 from pptx.enum.text import PP_ALIGN, MSO_ANCHOR
@@ -27,8 +29,52 @@ from pygments import lex
 from pygments.lexers import GDScriptLexer
 from pygments.token import Token
 
+try:
+    from PIL import Image as _PILImage
+except Exception:  # Pillow optional; aspect-fit degrades to box-fill
+    _PILImage = None
+
 import theme
 from master import apply_master
+
+
+# ============================================================
+#  Inline markdown -> runs (**bold**, *italic*, `code`)
+# ============================================================
+
+_INLINE = re.compile(r"\*\*(.+?)\*\*|\*(.+?)\*|`([^`]+?)`")
+
+
+def _emit_inline(p, text, *, font_name, size, bold=False, italic=False, color=None):
+    """Add runs to paragraph `p`, converting **bold** / *italic* / `code` markdown
+    into real formatting instead of printing the literal asterisks/backticks."""
+    color = color or theme.TEXT_BLACK
+    text = text or ""
+
+    def add(t, b, i, mono):
+        if not t:
+            return
+        r = p.add_run()
+        r.text = t
+        r.font.name = theme.FONT_MONO if mono else font_name
+        r.font.size = size
+        r.font.bold = bold or b
+        r.font.italic = italic or i
+        r.font.color.rgb = color
+
+    pos = 0
+    for m in _INLINE.finditer(text):
+        if m.start() > pos:
+            add(text[pos:m.start()], False, False, False)
+        if m.group(1) is not None:
+            add(m.group(1), True, False, False)
+        elif m.group(2) is not None:
+            add(m.group(2), False, True, False)
+        else:
+            add(m.group(3), False, False, True)
+        pos = m.end()
+    if pos < len(text):
+        add(text[pos:], False, False, False)
 
 
 # ============================================================
@@ -83,12 +129,11 @@ def _add_textbox(slide, left, top, width, height, text, *,
     tf.vertical_anchor = anchor
     p = tf.paragraphs[0]
     p.alignment = alignment
-    run = p.add_run()
-    run.text = text
-    run.font.name = font_name or theme.FONT_BODY
-    run.font.size = font_size or theme.SIZE_BODY
-    run.font.bold = bold
-    run.font.color.rgb = color or theme.TEXT_BLACK
+    _emit_inline(p, text,
+                 font_name=font_name or theme.FONT_BODY,
+                 size=font_size or theme.SIZE_BODY,
+                 bold=bold,
+                 color=color or theme.TEXT_BLACK)
     return box
 
 
@@ -101,11 +146,15 @@ def _add_bullets(slide, left, top, width, height, bullets, *,
     for i, bullet in enumerate(bullets):
         p = tf.paragraphs[0] if i == 0 else tf.add_paragraph()
         p.alignment = PP_ALIGN.LEFT
-        run = p.add_run()
-        run.text = f"•  {bullet}"
-        run.font.name = theme.FONT_BODY
-        run.font.size = font_size or theme.SIZE_BODY
-        run.font.color.rgb = color or theme.TEXT_BLACK
+        prefix = p.add_run()
+        prefix.text = "•  "
+        prefix.font.name = theme.FONT_BODY
+        prefix.font.size = font_size or theme.SIZE_BODY
+        prefix.font.color.rgb = color or theme.TEXT_BLACK
+        _emit_inline(p, bullet,
+                     font_name=theme.FONT_BODY,
+                     size=font_size or theme.SIZE_BODY,
+                     color=color or theme.TEXT_BLACK)
         p.space_after = Pt(8)
     return box
 
@@ -183,11 +232,33 @@ def _add_code_block(slide, left, top, width, height, code_text,
     return shape
 
 
+def _draw_overlay_box(slide, left, top, width, height):
+    """Draw one red overlay rectangle (no fill, 4pt red outline) at exact geometry."""
+    box = slide.shapes.add_shape(MSO_SHAPE.RECTANGLE, int(left), int(top),
+                                  int(width), int(height))
+    box.fill.background()
+    box.line.color.rgb = theme.OVERLAY_RED
+    box.line.width = Pt(4)
+    box.shadow.inherit = False
+    return box
+
+
 def _add_placeholder_image(slide, left, top, width, height, image_path, caption=""):
-    """Insert image, or a dashed-border placeholder box if missing."""
+    """Insert image (aspect-ratio preserved, centred in the box), or a
+    dashed-border placeholder box if missing."""
     if image_path and Path(image_path).exists():
-        return slide.shapes.add_picture(str(image_path), left, top,
-                                          width=width, height=height)
+        w, h = int(width), int(height)
+        if _PILImage is not None:
+            try:
+                iw, ih = _PILImage.open(str(image_path)).size
+                scale = min(width / iw, height / ih)
+                w, h = int(iw * scale), int(ih * scale)
+            except Exception:
+                w, h = int(width), int(height)
+        off_l = left + (int(width) - w) // 2
+        off_t = top + (int(height) - h) // 2
+        return slide.shapes.add_picture(str(image_path), off_l, off_t,
+                                          width=w, height=h)
     # placeholder
     shape = slide.shapes.add_shape(MSO_SHAPE.RECTANGLE, left, top, width, height)
     shape.fill.solid()
@@ -324,7 +395,7 @@ def l3_side_by_side(prs, *, day=None, page=None, heading=None,
         if label:
             _add_textbox(slide, left, col_top, col_width, Inches(0.5), label,
                          font_size=theme.SIZE_SUBHEADING, bold=True,
-                         color=theme.ACCENT_PURPLE)
+                         color=theme.ICODE_RED)
             content_top = col_top + Inches(0.7)
         else:
             content_top = col_top
@@ -413,7 +484,7 @@ def l5_table(prs, *, day=None, page=None, heading=None, header_row, data_rows):
     for col_i, header in enumerate(header_row):
         cell = table.cell(0, col_i)
         cell.fill.solid()
-        cell.fill.fore_color.rgb = theme.ACCENT_PURPLE
+        cell.fill.fore_color.rgb = theme.GREY_DARK
         tf = cell.text_frame
         tf.text = header
         for p in tf.paragraphs:
@@ -488,7 +559,7 @@ def l6_code(prs, *, day=None, page=None, heading=None, code, caption=None):
 # ============================================================
 
 def l7_step(prs, *, day=None, page=None, step_label=None, screenshot=None,
-             caption=None, red_overlay=False):
+             caption=None, red_overlay=False, overlays=None):
     """Screenshot ~60% + step badge + caption ~40%. Used for all walks,
     where-in-game screenshots, personalization steps, export."""
     slide = _new_slide(prs)
@@ -505,7 +576,7 @@ def l7_step(prs, *, day=None, page=None, step_label=None, screenshot=None,
                                          theme.BODY_LEFT_MARGIN, body_top,
                                          badge_size, badge_size)
         badge.fill.solid()
-        badge.fill.fore_color.rgb = theme.ICODE_ORANGE
+        badge.fill.fore_color.rgb = theme.ICODE_RED
         badge.line.fill.background()
         tf = badge.text_frame
         tf.margin_left = Emu(0)
@@ -526,18 +597,17 @@ def l7_step(prs, *, day=None, page=None, step_label=None, screenshot=None,
     img_shape = _add_placeholder_image(slide, img_left, body_top, img_width, img_height,
                                           screenshot)
 
-    if red_overlay:
-        # Drop a default red rectangle overlay on the screenshot (user drags + resizes)
+    if overlays:
+        # Restore hand-positioned overlay boxes at their exact saved geometry
+        for o in overlays:
+            _draw_overlay_box(slide, o["left"], o["top"], o["width"], o["height"])
+    elif red_overlay:
+        # Default red rectangle overlay on the screenshot (user drags + resizes)
         overlay_width = img_width * 0.4
         overlay_height = img_height * 0.2
         overlay_left = img_left + (img_width - overlay_width) / 2
         overlay_top = body_top + (img_height - overlay_height) / 2
-        overlay = slide.shapes.add_shape(MSO_SHAPE.RECTANGLE,
-                                          overlay_left, overlay_top,
-                                          overlay_width, overlay_height)
-        overlay.fill.background()
-        overlay.line.color.rgb = theme.OVERLAY_RED
-        overlay.line.width = Pt(4)
+        _draw_overlay_box(slide, overlay_left, overlay_top, overlay_width, overlay_height)
 
     if caption:
         caption_left = img_left + img_width + Inches(0.3)
@@ -553,7 +623,7 @@ def l7_step(prs, *, day=None, page=None, step_label=None, screenshot=None,
 # ============================================================
 
 def l8_action(prs, *, day=None, page=None, prose, lhs_code, rhs_screenshot,
-               two_tone=False):
+               two_tone=False, overlays=None):
     """The per-chunk Action slide. Top = R6 prose, LHS = board example code,
     RHS = Godot screenshot with red overlay marking kid #@todo region.
     two_tone=True adds a gray overlay underneath the red for R5 partial holes."""
@@ -569,7 +639,7 @@ def l8_action(prs, *, day=None, page=None, prose, lhs_code, rhs_screenshot,
                                           theme.BODY_LEFT_MARGIN, body_top,
                                           body_width, prose_height)
     prose_shape.fill.solid()
-    prose_shape.fill.fore_color.rgb = theme.ACCENT_YELLOW
+    prose_shape.fill.fore_color.rgb = theme.GREY_LIGHT
     prose_shape.line.fill.background()
     tf = prose_shape.text_frame
     tf.word_wrap = True
@@ -580,12 +650,8 @@ def l8_action(prs, *, day=None, page=None, prose, lhs_code, rhs_screenshot,
     tf.vertical_anchor = MSO_ANCHOR.MIDDLE
     p = tf.paragraphs[0]
     p.alignment = PP_ALIGN.LEFT
-    run = p.add_run()
-    run.text = prose
-    run.font.name = theme.FONT_BODY
-    run.font.size = theme.SIZE_BODY
-    run.font.color.rgb = theme.TEXT_BLACK
-    run.font.bold = True
+    _emit_inline(p, prose, font_name=theme.FONT_BODY, size=theme.SIZE_BODY,
+                 bold=True, color=theme.TEXT_BLACK)
 
     # LHS — board example code block
     lhs_top = body_top + prose_height + Inches(0.3)
@@ -596,7 +662,7 @@ def l8_action(prs, *, day=None, page=None, prose, lhs_code, rhs_screenshot,
     # Small label above LHS
     _add_textbox(slide, theme.BODY_LEFT_MARGIN, lhs_top, col_width, Inches(0.35),
                  "Pattern (board example):",
-                 font_size=theme.SIZE_BODY_SMALL, bold=True, color=theme.ACCENT_PURPLE)
+                 font_size=theme.SIZE_BODY_SMALL, bold=True, color=theme.ICODE_RED)
     _add_code_block(slide,
                     theme.BODY_LEFT_MARGIN, lhs_top + Inches(0.4),
                     col_width, lhs_height - Inches(0.4),
@@ -606,7 +672,7 @@ def l8_action(prs, *, day=None, page=None, prose, lhs_code, rhs_screenshot,
     rhs_left = theme.BODY_LEFT_MARGIN + col_width + gutter
     _add_textbox(slide, rhs_left, lhs_top, col_width, Inches(0.35),
                  "Where in your code (Godot):",
-                 font_size=theme.SIZE_BODY_SMALL, bold=True, color=theme.ACCENT_PURPLE)
+                 font_size=theme.SIZE_BODY_SMALL, bold=True, color=theme.ICODE_RED)
     img_top = lhs_top + Inches(0.4)
     img_height = lhs_height - Inches(0.4)
     _add_placeholder_image(slide, rhs_left, img_top, col_width, img_height,
@@ -622,15 +688,16 @@ def l8_action(prs, *, day=None, page=None, prose, lhs_code, rhs_screenshot,
         gray_overlay.fill.transparency = 0.7
         gray_overlay.line.fill.background()
 
-    # Red overlay (user drags + resizes after build)
-    red_width = col_width * 0.7
-    red_height = img_height * 0.25
-    red_left = rhs_left + (col_width - red_width) / 2
-    red_top = img_top + (img_height - red_height) / 2
-    red_overlay = slide.shapes.add_shape(MSO_SHAPE.RECTANGLE,
-                                          red_left, red_top, red_width, red_height)
-    red_overlay.fill.background()
-    red_overlay.line.color.rgb = theme.OVERLAY_RED
-    red_overlay.line.width = Pt(4)
+    if overlays:
+        # Restore hand-positioned overlay boxes at their exact saved geometry
+        for o in overlays:
+            _draw_overlay_box(slide, o["left"], o["top"], o["width"], o["height"])
+    else:
+        # Default red overlay (user drags + resizes after build)
+        red_width = col_width * 0.7
+        red_height = img_height * 0.25
+        red_left = rhs_left + (col_width - red_width) / 2
+        red_top = img_top + (img_height - red_height) / 2
+        _draw_overlay_box(slide, red_left, red_top, red_width, red_height)
 
     return slide

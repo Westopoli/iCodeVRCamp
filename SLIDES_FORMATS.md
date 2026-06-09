@@ -2,7 +2,7 @@
 
 Locked format set for the python-pptx slide-build pipeline. Down from 22 (v1) → 12 (v2 proposed) → **8 (L1-L8, final)**. Format count drives `templates.py` complexity, not deck size. Across D1-D4 we still ship ~520 slides total.
 
-Every format inherits the **master frame** (`slides/master.py`): full-width gradient header strip (purple → pink → orange → yellow) with iCode logo top-left + day tab top-right (color per day) + page number bottom-right.
+Every format inherits the **master frame** (`slides/master.py`): thin full-width **black** (`#111111`) top bar — iCode logo top-left, **"Day N"** label in red top-right, page number bottom-right in mid-grey. Sleek / minimalist; no gradient, no sun motif, no blobs. Brand = **red / black / grey** (palette locked in `SLIDES_PLAN.md` § Brand). Day differentiation is the **"Day N" text only — no per-day color**. Red is the single accent across all days.
 
 ## Format list
 
@@ -69,8 +69,8 @@ R5 partial-hole L8 slides (D2 chunk #6, D3 chunks #5a + #6, D4 chunk #6 sub-hole
 ## Open spec items (deferred — will lock as the sample-deck loop runs)
 
 - **Brand fonts** — `theme.FONT_HEADING` / `FONT_BODY` currently set to `"Poppins"` with Calibri fallback. Confirm or override when raw iCode PPTX brand sample lands.
-- **Brand color sampling** — palette eyeballed from `iCodeScreenshots/` PNG samples. Raw brand pack (PPTX or PDF guide) would tighten exact hex values.
-- **White-on-transparent logo** — current `icode_logo_red.png` reads OK on the gradient header but a true white version would read better. User to provide if available.
+- **Brand color** — LOCKED 2026-06-08: red / black / grey minimalist (palette in `SLIDES_PLAN.md` § Brand). Red hex `#E53A2C` sampled from the logo; tunable when a raw brand pack lands.
+- **White-on-transparent logo** — current `icode_logo_red.png` reads OK on the black bar but a true white version would read marginally cleaner. User to provide if available.
 - **Concept icons** — locked: use **Kenney UI icons** from `slides/assets/icons/`. User to download the Kenney UI Pack + drop relevant icons into that folder before icon-using L2 slides build cleanly.
 - **Speaker notes** — currently NOT populated per slide (instructor uses `SLIDE_SOURCE.md` per-chunk Speaker-notes fields as cue cards). Could add a `notes=` kwarg to every layout function later if desired.
 
