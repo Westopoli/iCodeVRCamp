@@ -16,7 +16,7 @@ A 5-day Godot 4 / GDScript coding camp for ages 10–15 (no prior experience). E
 | 4 | 2-player fighter | Objects + State machine | `Day4_Fighter_Game/` | `INSTRUCTOR_NOTES.md` |
 | 5 | Escape Sim + Rally racer | No new code — showcase | `Day5_Racing_Game/` | `INSTRUCTOR_NOTES.md` |
 
-**Concept arc (Option C slow ramp):** D1 intro → D2 loops → D3 functions deep → D4 objects → D5 apply everything.
+**Concept arc: slow ramp:** D1 intro → D2 loops → D3 functions deep → D4 objects → D5 VR fun.
 
 The camp narrative: kids travel through 50 years of game history — Pong (1972) → Pac-Man (1980) → Tower Defense (90s) → Smash Bros (1999) → Modern (today).
 
