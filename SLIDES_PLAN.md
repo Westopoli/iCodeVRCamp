@@ -109,6 +109,42 @@ See `~/.claude/.../memory/slides-build-pipeline.md` for the cross-chat resume no
 
 ---
 
+## Session Pause — 2026-06-09
+
+**Lane / context:** single context (slide-deck pipeline)
+**Active workstream/task:** Phase 2.5 per-slide blueprints. D2 per-slide expansion DONE this session. **Next: D3 per-slide expansion (Phase 2.5 continues), OR D2 Phase 2.5b (personalization/FC/export/closer stubs).**
+**Status:** D1 done (prior session); D2 done this session (86 slides, clean build). D3-D5 awaiting-start.
+
+### Where we are
+
+This session: expanded D2 `SLIDE_SOURCE.md` §10.2–§10.4 from summary-level bullets to full per-slide `#### Slide D2-S###` entries (86 slides total: opener S001-S007, pre-coding S008-S020 incl. Walk T, lesson chunks S021-S086 across chunks #1-#6 + Walk C/D). Build verified: `slides/.venv/bin/python build_day.py 2` → `out/Day2.pptx` 86 slides, 0 skipped. Guide-canonical image names used throughout (D2C1–D2C6, D2TileSet1–2, D2Pacman1–2); no ad-hoc `d2_*` names.
+
+### Last decision locked
+
+- **D2 per-slide blueprint complete** (§10.2–§10.4): 86 slides authoring-ready. §10.5 (personalization / FC / asset / export / closer) deferred — stub unchanged.
+- **Guide-canonical names enforced from start for D2**: D2C3a/D2C3b (dual chunk-3 holes), D2TileSet1–2, D2Pacman1–2, D2C1–D2C6. Zero ad-hoc names.
+- **Chunk #6 two-tone overlay documented** in blueprint: gray = pre-given off-grid+tunnel guards, red = kid hole. Notes field carries R5 context.
+
+### Next pending picks
+
+- **D3 expansion** (Phase 2.5 main path): read D3 `SLIDE_SOURCE.md` + capture guide §D3 before any work.
+- **D2 Phase 2.5b** (deferred §10.5): personalization beats (D2Beat* shots), FC (D2FC1–3), export, closer. ~25-30 slides.
+- **D1 reconciliation** (still PENDING): chunk shots alias-bridged (`d1_chunk*`→`D1C*`), personalization beats, export steps — backfill when convenient.
+
+### Critical context to carry forward
+
+- Build command: `cd slides && .venv/bin/python build_day.py <N>` (not bare `python` or `python3` — pptx lives in the `.venv`).
+- D2 blueprint line-numbers from capture guide (SoT): C1=69-72, C2=123-126, C3a=77-79, C3b=213-225, C4=153-160, C5=171-178, C6=201-204.
+- `out/Day1.pptx` still holds original hand-edits. Don't overwrite until confirmed captured. `Day1_v4.pptx` is current.
+
+### Files Touched This Session
+
+- `Day2_Maze_Game/SLIDE_SOURCE.md` — §10.2–§10.4 per-slide expansion complete (86 slides, S001–S086). Summary bullets replaced.
+- `slides/out/Day2.pptx` — NEW, 86 slides.
+- `SLIDES_PLAN.md` — this pause-block.
+
+---
+
 ## Session Pause — 2026-06-08
 
 **Lane / context:** single context (slide-deck pipeline)

@@ -979,7 +979,7 @@ None. User said "spec deleted" and was confirming step completion; integration c
 - **Sim test was renamed `types.py` → `contract.py`** because `types` shadows Python stdlib. `.claude-swarm.toml` references `_balance/Day5/contract.py`. Do not rename back.
 - **Type contract dropped `CornerKind` Literal alias + dropped `: float` annotations from UPPER constants** so swarm-review's check_invariants.py symbol regex (which doesn't handle annotated constants or PascalCase aliases) accepts. `ALLOWED_CORNER_KINDS` tuple lives in its place. Advisory was logged: `check_invariants.py` regex would benefit from supporting annotated UPPER constants — separate task, not blocking.
 - **Camp narrative arc locked** (BIBLE §15 Universal slide content): Pong → Pac-Man → Base Defense → Smash → VR/Racing chronological tour. Mention on every day's intro slide.
-- **D3 visual playtest STILL pending** — `Day3_BaseDef_Game/` ZIPs ship + smoke-test clean but real in-Godot visual playtest never happened. Sprite picks may need swapping. Same applies for D4 + (about to apply for) D5.
+- **D3 visual playtest DONE** — verified 2026-06-10. Sprite picks confirmed. **D4 visual playtest DONE** — verified 2026-06-10; real-fight playtest confirmed. D5 in progress.
 - **D5 has NO Final Challenge file** (per D8 lock — customization-day). Do not invent one.
 - **Open VR Escape Sim logistics** = BIBLE §12 territory, NOT a D5 build chat concern.
 - **iCode is now a git repo** (this session, `git init`) with remote `https://github.com/Westopoli/iCodeVRCamp.git`. Initial commit + push not yet done. User has not asked for it. Defer to future user direction.

@@ -550,9 +550,9 @@ Steps: Ctrl+S, F5, wait for wave 1 to start. Screenshot the **game window** with
 
 **`D3C2a.png`** — Task #2a at `main.gd:310-312`. Inside `spawn_enemy()`. Screenshot showing **`# TODO #2a: ADD THIS ENEMY TO THE LIST`** + the `spawn_enemy()` function context above so kids see they're at the end of that function.
 
-**`D3C2bReward.png`** — Task #2b reward branch at `main.gd:337-340`. Inside `kill_enemy()`'s `if give_reward:` branch. Screenshot showing **`# TODO #2b: REMOVE FROM LIST + PAY OUT`** banner + the surrounding `if` branch.
+**`D3C2b.png`** — Task #2b reward branch at `main.gd:337-340`. Inside `kill_enemy()`'s `if give_reward:` branch. Screenshot showing **`# TODO #2b: REMOVE FROM LIST + PAY OUT`** banner + the surrounding `if` branch.
 
-**`D3C2bNoReward.png`** — Task #2b no-reward branch at `main.gd:343-345`. `else` branch of `kill_enemy()`. Screenshot showing the **`else:` line** + the empty `#@todo` block.
+**`D3C2c.png`** — Task #2b no-reward branch at `main.gd:343-345`. `else` branch of `kill_enemy()`. Screenshot showing the **`else:` line** + the empty `#@todo` block.
 
 **`D3C3.png`** — Task #3 at `main.gd:229-234`. Inside `_process(delta)`. Screenshot showing **`# TODO #3: MOVE THE WORLD`** banner.
 

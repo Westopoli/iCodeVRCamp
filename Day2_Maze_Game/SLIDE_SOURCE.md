@@ -629,115 +629,1018 @@ Other render rules:
 
 ---
 
-### 10.2 Opener pack (~7 slides)
+### 10.2 Opener pack (slides S001–S007)
 
-1. Welcome / day title — "Day 2 — Pac-Man · 1980 · Namco"
-2. Today we'll build — finished Pac-Man screenshot + 1-line pitch
-3. **Why Pac-Man was revolutionary** (NEW) — historical context: pre-Pac-Man arcade was almost all space shooters. Pac-Man invented the maze chase, the character-with-personality, the cutscene, the merchandising tie-in. First arcade game massively marketed beyond young men. Without it: no Mario, no Sonic, no character mascots.
-4. Yesterday → Today — Pong recap (vars + conditions) → today adds Loops + Functions
-5. 5-day arc timeline — Day 2 highlighted, Day 1 ticked
-6. Today's concepts — **Loops** + **Functions** (the two)
-7. GDScript vs Python — 4-pattern side-by-side (for-range, for-each, while, `def` → `func`)
+> **Insert note (2026-06-09):** Per-slide expansion complete for opener + pre-coding + chunks #1–#6 (D2-S001–D2-S086). §10.5 (personalization / FC / export / closer) deferred to Phase 2.5b. Guide-canonical image names used throughout (D2C1–D2C6, D2TileSet1–2, D2Pacman1–2). No ad-hoc `d2_*` names.
 
-### 10.3 Pre-coding setup (~12 slides)
+#### Slide D2-S001 — Day title
+- Format: G01 Day Title
+- Title: "VR Creator - Day 2"
+- Body:
+- Image: `D2Pacman1.png` — 1980 Pac-Man arcade cabinet (placeholder OK). No red overlay.
+- Notes: Read the title aloud. Point to the year.
 
-- Section divider — "Pre-coding setup"
-- **Walk A — Open the Day 2 project (jog-memory, 2 slides)**:
-  1. Challenge: "Open the Day 2 Maze project the same way you did yesterday."
-  2. Hint (text + arrows, no screenshots): `Godot launcher → Import → Day2_Maze_Game/project.godot → Import & Edit`
-- **Walk B — Open main.gd (jog-memory, 2 slides)**:
-  1. Challenge: "Open `main.gd` and switch to the Script editor."
-  2. Hint: `FileSystem panel → main.gd → double-click → Script editor`
-- **Walkthrough T — TileMap orientation (NEW, full ~8 slides)**:
-  - 2 concept slides — TileSet (palette) vs TileMapLayer (canvas); today's two layers Walls + Dots share the same TileSet; kid's API surface is `wall_layer.get_cell_source_id(cell)`
-  - 6 click-step slides — click Walls → Inspector Tile Set → Edit → TileSet panel opens → click source row → atlas chops appear → back to 2D button
+#### Slide D2-S002 — Today we're building Pac-Man
+- Format: G12 Screenshot + Caption
+- Title: "Today we're building Pac-Man"
+- Body: "Dots to chomp. Ghosts to dodge. A tunnel that wraps. Every visible thing on screen is a tile painted on a grid — and the code you'll write moves the player and spawns the ghosts."
+- Image: `D2Pacman2.png` — classic Pac-Man maze in-game screenshot. No red overlay.
+- Notes: —
 
-### 10.4 Lesson chunks
+#### Slide D2-S003 — Why Pac-Man was revolutionary
+- Format: G05 Concept Explanation
+- Title: "Why Pac-Man changed everything (1980)"
+- Body:
+  - Pre-1980 arcades = almost all space shooters (Space Invaders, Asteroids). Pac-Man **invented the maze chase**.
+  - First game with a **character that had personality** — Pac-Man + 4 named ghosts (Blinky, Pinky, Inky, Clyde), each its own AI brain.
+  - First game with **cutscenes** (the intermissions between levels).
+  - First arcade game marketed **beyond boys** — broke the "arcade = boys only" mold.
+  - First giant **merchandising wave** — lunchboxes, a cartoon, a hit song ("Pac-Man Fever").
+  - Bottom line: no Pac-Man → maybe no Mario, no Sonic, no character mascots at all.
+- Image: none
+- Notes: "No other game launched as many imitators as fast. When you write a loop to spawn 3 ghosts today — you're writing Pac-Man's DNA."
 
-- Section divider — "Lesson chunks"
+#### Slide D2-S004 — Yesterday → Today
+- Format: G05 Concept Explanation
+- Title: "Yesterday → Today"
+- Body:
+  - **Day 1** — Variables + Conditions. You named things and made choices.
+  - **Day 2** — **Loops + Functions**. You repeat things and package code into reusable recipes.
+  - Same `var`, same `if`. Two new tools on top.
+- Image: none
+- Notes: —
 
-#### Chunk #1 — `for i in range(N)` (FULL ARC, ~11 slides)
-- **Concept root (4 slides)**: word "loop" + meaning prompt ("what does *loop* mean? roller coaster, rope") + root ("loop = repeating") + shape (G10 board ex `for i in range(3): print(i)`)
-- **Example/metaphor (3-4 slides)**: **stairs to your bedroom** — 14 stairs, you know the count, one motion repeated; question slide ("how many runs for `range(5)`?"); trick slide ("`range(0)`?"); takeaway
-- **How-it's-used (2 slides)**: games general (spawn 50 trees / 12 enemies / 4 ghost eyes) + Pac-Man (spawn 3 ghosts in pen)
-- **Where-in-our-game (1 slide)**: screenshot main.gd:63-66 with red overlay on the `#@todo` gap inside `_ready()`
-- **Side-by-side (1, MANDATORY)**:
-  - **LHS**: `for i in range(3):` / `    print(i)` (verbatim §5 board ex)
-  - **RHS top**: PROSE GOAL — *pending pick (options to follow)*
-  - **RHS bottom**: `d2_chunk1_todo.png` — main.gd:63-66 red overlay
-- **No after-works** (payoff deferred to chunk #2)
+#### Slide D2-S005 — 5-day arc timeline
+- Format: G02 Timeline / Closer
+- Title: "The 5-day arc"
+- Body: horizontal 5-step strip, left-to-right, today's box highlighted in iCode red, Day 1 ticked:
+  - Day 1 ✓ Pong — Vars + Conditions
+  - **Day 2 ← Pac-Man — Loops + Functions**
+  - Day 3 Tower Defense — Lists + Objects (preview)
+  - Day 4 Fighter — Objects deep
+  - Day 5 VR Escape Room — Showcase
+- Image: rendered timeline strip (python-pptx draws as 5 rectangles; today = iCode red, others light grey).
+- Notes: "Two new ideas today. Everything else builds on what you already know."
 
-#### Walk C — Run the project (jog-memory, 2 slides)
-1. Challenge: "Run your game."
-2. Hint: `F5 → Set Main Scene? → Select Current → game window opens → F8 to stop`
+#### Slide D2-S006 — Today's concepts
+- Format: G04 Headline / Divider
+- Title: "Today's concepts: Loops + Functions"
+- Body:
+  - **Loops** — make the same code run again and again (spawn 3 ghosts, move every ghost, scan 868 tiles).
+  - **Functions** — give a block of code a name, call it whenever you need it.
+- Image: none
+- Notes: Two umbrellas only. All 6 chunks today live under one of these two.
 
-#### Walk D — Reading an error (jog-memory, 2 slides)
-1. Challenge: "Game didn't open? Find the error."
-2. Hint: `Output panel → click blue line number → fix → Ctrl+S → F5 again`
+#### Slide D2-S007 — GDScript vs Python
+- Format: G03 GDScript vs Python
+- Title: "GDScript is Python — except one word"
+- Body:
+  ```
+  Python:   for i in range(5):         GDScript:   for i in range(5):
+                print(i)                               print(i)
 
-#### Chunk #2 — `for item in list` (PURE SLIM, 3 slides)
-- **Recap (1 slide)**: "Same `for` keyword. New shape. Last time you wrote a number after `range`. This time you write the name of a thing you already have."
-- **Side-by-side (1, MANDATORY)**:
-  - **LHS**: `for colour in ["red", "green", "blue"]:` / `    print(colour)` (verbatim §5)
-  - **RHS top**: PROSE GOAL — *pending pick*
-  - **RHS bottom**: `d2_chunk2_todo.png` — main.gd:102-105 red overlay
-- **After-works (1 slide)**: "Ghosts patrol!" — running screenshot post 2-sec release. First big visible payoff of the day.
+  Python:   for item in stuff:         GDScript:   for item in stuff:
+                print(item)                            print(item)
 
-#### Chunk #3 — `while` (SMALL-ARC + dual hole, ~13 slides)
-- **Recap-bridge (1 slide)**: "Loops have a cousin: `while`."
-- **Concept root (3 slides)**: word "while" = "as long as" + plain-English meaning + shape (G10 board ex `var n := 0; while n < 5: print(n); n += 1`)
-- **For-vs-while disambiguator (1 slide, LOAD-BEARING)**: `for` = you KNOW the count (yesterday, 14 stairs to your bedroom). `while` = you DON'T know (tonight, stairs in the dark). Same motion. Different stopping rule.
-- **Example/metaphor (2-3 slides)**: **stairs in the dark** — step up, step up, stop when foot doesn't find another stair; question slide (how many runs for `n := 3; while n > 0: print(n); n -= 1`?); takeaway
-- **How-it's-used (2 slides)**: games general (scan grid / count coins / fall until ground) + Pac-Man (scan all 28 × 31 = 868 tiles, count dots, that's the win target)
-- **Where-in-our-game (2 slides)**: caller location (main.gd:70-72) + body location (main.gd:202-214)
-- **Side-by-side TWO holes (2 slides, paired)**:
-  - **3a (caller)**: LHS `dots_remaining = count_dots()`. RHS top = PROSE GOAL — *pending pick*. RHS bottom = `d2_chunk3a_todo.png` main.gd:70-72.
-  - **3b (body)**: LHS `var n := 0; while n < 5: print(n); n += 1` (verbatim §5). RHS top = PROSE GOAL — *pending pick*. RHS bottom = `d2_chunk3b_todo.png` main.gd:202-214.
-- **No after-works** (count_dots produces invisible number; payoff is implicit in win-condition existence)
+  Python:   while lives > 0:           GDScript:   while lives > 0:
+                keep_playing()                         keep_playing()
 
-#### Chunk #4 — `func` no params (FULL ARC, ~12 slides)
-- **Concept root (4 slides)**: word "function" — "what's the FUNCTION of a remote? a calculator? a door?" → "the thing it DOES." Function = a NAMED block of code. Shape (G10 `func say_hi(): print("hi!")` + 2 calls)
-- **Example/metaphor (3 slides)**: **pizza order** — say `margherita`, kitchen makes margherita pizza; recipe (cheese + tomato + basil + bake) defined behind counter once, called by name many times. Question slide ("how many `hi!`s if we call `say_hi()` three times?"). Takeaway.
-- **How-it's-used (2 slides)**: games general (`jump()` / `die()` / `spawn_enemy()` — define once, call from many places, no copy-paste) + Pac-Man (ghost catches player → recipe is `reset_player()`)
-- **Where-in-our-game (1 slide)**: screenshot main.gd:132-139 with red overlay on the gap
-- **Side-by-side (1, MANDATORY)**:
-  - **LHS**: `func say_hi():` / `    print("hi!")` (verbatim §5 board ex)
-  - **RHS top**: PROSE GOAL — *pending pick*
-  - **RHS bottom**: `d2_chunk4_todo.png` — main.gd:132-139 red overlay
-- **After-works (1 slide)**: "Ghost catches you → respawn!" — before/after screenshot pair
+  Python:   def add(a, b):             GDScript:   func add(a, b):
+                return a + b                           return a + b
+  ```
+- Image: none
+- Notes: "Day 2 GDScript is **identical** to Python except one word: `def` becomes `func`. If you ever write Python later, you already know today's code."
 
-#### Chunk #5 — `func` with a parameter (SMALL-ARC, ~9 slides)
-- **Recap-bridge (1 slide)**: "Functions can take INPUTS. Same `func`. Now there's something between the parentheses."
-- **Concept root (3 slides)**: word "parameter" — info you HAND TO the function when you call it. Shape (G10 board ex `func add_points(amount): score += amount`).
-- **Example/metaphor (2 slides)**: **pizza extends** — `margherita("large")` vs `margherita("small")`. Same recipe, different input → different output. Takeaway.
-- **How-it's-used (1 slide, Pac-Man)**: `move_player(direction)` — direction is the parameter; player moves wherever the arrow key points.
-- **Where-in-our-game (1 slide)**: screenshot main.gd:154-162, highlight `direction: Vector2i` in the signature
-- **Side-by-side (1, MANDATORY)**:
-  - **LHS**: `func add_points(amount):` / `    score += amount` (verbatim §5)
-  - **RHS top**: PROSE GOAL — *pending pick*
-  - **RHS bottom**: `d2_chunk5_todo.png` — main.gd:154-162 red overlay
-- **After-works (1 slide)**: "Arrow keys move the player!" — player mid-tile slide screenshot
+### 10.3 Pre-coding setup (slides S008–S020)
 
-#### Chunk #6 — `func` returning a bool (SMALL-ARC + boolean refresher, ~10 slides)
-- **Recap-bridge (1 slide)**: "Functions can HAND BACK an answer. That answer has a name: the **return value**."
-- **Concept root (3 slides)**: word "`return`" — function hands X back to the caller. Shape (G10 board ex `func double(n): return n * 2` + `var y = double(5)` → y is 10).
-- **Boolean refresher (1 slide, D1 CALLBACK)**: "Remember booleans from yesterday? Light switch — true or false. Today our function hands back a true/false answer."
-- **Example/metaphor (2 slides)**: **pizza extends** — kitchen doesn't just MAKE the pizza, it HANDS IT BACK. The pizza IS the return value. `var dinner = margherita("large")` → dinner IS the pizza. Takeaway.
-- **How-it's-used (1 slide, games)**: yes/no checks everywhere — `hit_wall(cell)` / `is_alive()` / `in_range(target)`. Every check returns bool.
-- **How-it's-used (1 slide, Pac-Man)**: `hit_wall(cell)` — the player asks the Walls layer: "is there a wall here?" Walls answers true or false.
-- **Where-in-our-game (1 slide)**: screenshot main.gd:172-180, highlight `-> bool` in the signature
-- **Side-by-side (1, MANDATORY)**:
-  - **LHS**: `func is_even(n) -> bool:` / `    return n % 2 == 0` (verbatim §5)
-  - **RHS top**: PROSE GOAL — *pending pick*
-  - **RHS bottom**: `d2_chunk6_todo.png` — main.gd:172-180 red overlay
-- **After-works (1 slide)**: "The maze is alive!" — full-play screenshot. Walls block, tunnel wraps, ghosts patrol, dots chompable. End-of-morning celebration moment.
+#### Slide D2-S008 — Section divider: Pre-coding setup
+- Format: G04 Headline / Divider
+- Title: "Pre-coding setup"
+- Body:
+- Image: none
+- Notes: —
+
+#### Slide D2-S009 — Walk A.1: Open the Day 2 project (Challenge)
+- Format: G04 Headline / Divider
+- Title: "Open the Day 2 Maze project"
+- Body: "Open the Day 2 Maze project the same way you did yesterday."
+- Image: none
+- Notes: Let kids try from memory. ~30 seconds before hint.
+
+#### Slide D2-S010 — Walk A.2: Open the Day 2 project (Hint)
+- Format: G05 Concept Explanation
+- Title: "Walk A — Hint"
+- Body:
+  - `Godot Launcher` → `Import` button
+  - Navigate to `Day2_Maze_Game/project.godot`
+  - Click **Import & Edit**
+- Image: none
+- Notes: Text + arrows only. No screenshot — kids are jogging Day 1 memory.
+
+#### Slide D2-S011 — Walk B.1: Open main.gd (Challenge)
+- Format: G04 Headline / Divider
+- Title: "Open main.gd"
+- Body: "Open `main.gd` and switch to the Script editor — same way as yesterday."
+- Image: none
+- Notes: Let kids try.
+
+#### Slide D2-S012 — Walk B.2: Open main.gd (Hint)
+- Format: G05 Concept Explanation
+- Title: "Walk B — Hint"
+- Body:
+  - `FileSystem` panel (bottom-left) → find `main.gd`
+  - Double-click → Script editor opens
+- Image: none
+- Notes: —
+
+#### Slide D2-S013 — Walk T — TileMap concept 1/2: TileSet vs TileMapLayer
+- Format: G05 Concept Explanation
+- Title: "New today: TileSet and TileMapLayer"
+- Body:
+  - **TileSet** = the **palette**. A resource file that chops the Kenney atlas PNG into named 16×16 tiles.
+  - **TileMapLayer** = a **node** in the scene that paints tiles from the TileSet onto a 2D grid.
+  - Think: TileSet = the box of crayons. TileMapLayer = the coloring page.
+- Image: none
+- Notes: "You don't write TileSet code — it's already set up. Your code just asks the layer 'is there a wall here?'"
+
+#### Slide D2-S014 — Walk T — TileMap concept 2/2: Two layers today
+- Format: G05 Concept Explanation
+- Title: "Two layers share one TileSet"
+- Body:
+  - `Walls` layer — collision tiles that block movement.
+  - `Dots` layer — the pellets to chomp.
+  - Both layers use the **same TileSet** palette. Two painted canvases, one box of crayons.
+  - Your chunk #6 call: `wall_layer.get_cell_source_id(cell)` → returns tile ID or `-1` if empty.
+- Image: none
+- Notes: "That one call is the ONLY TileSet line the kid writes today."
+
+#### Slide D2-S015 — Walk T.1: Click the Walls node
+- Format: G12 Screenshot + Caption
+- Title: "Step T.1 — Click the Walls node"
+- Body: "In the **Scene** panel (top-left), find the `Walls` node and click it."
+- Image: `D2TileSet1.png` — Godot TileSet editor open. No red overlay.
+- Notes: —
+
+#### Slide D2-S016 — Walk T.2: Inspector → Tile Set → Edit
+- Format: G12 Screenshot + Caption
+- Title: "Step T.2 — Tile Set property → Edit"
+- Body: "In the **Inspector** (right panel), find the **Tile Set** property. Click the resource name → **Edit**."
+- Image: `D2TileSet2.png` — Inspector showing TileMapLayer with layer dropdown. No red overlay.
+- Notes: —
+
+#### Slide D2-S017 — Walk T.3: TileSet panel opens
+- Format: G05 Concept Explanation
+- Title: "Step T.3 — TileSet panel at the bottom"
+- Body:
+  - TileSet panel appears at the **bottom** of the editor.
+  - Left side = **Sources** — one source: the Kenney atlas (`tilemap_packed.png`).
+- Image: none
+- Notes: No screenshot for this step — point at projector live.
+
+#### Slide D2-S018 — Walk T.4: Click source row → atlas chops
+- Format: G05 Concept Explanation
+- Title: "Step T.4 — Click the source row"
+- Body:
+  - Click the source row in the Sources list.
+  - The atlas appears on the right, **chopped into 16×16 tiles**.
+  - Each tile has an ID — that's what `get_cell_source_id()` returns.
+- Image: none
+- Notes: —
+
+#### Slide D2-S019 — Walk T.5: Kid's API surface
+- Format: G10 Code Shape
+- Title: "`get_cell_source_id(cell)` — your one TileSet call"
+- Body:
+  ```gdscript
+  # Returns the tile's source ID, or -1 if no tile is painted there.
+  var id = wall_layer.get_cell_source_id(cell)
+  if id == -1:
+      print("open floor")
+  ```
+- Image: none
+- Notes: "This is chunk #6's core. Kids don't need to understand TileSet internals — just this one call."
+
+#### Slide D2-S020 — Walk T.6: Back to 2D view
+- Format: G05 Concept Explanation
+- Title: "Step T.6 — Back to the 2D view"
+- Body:
+  - Click the **2D** button at the top of the editor.
+  - You've seen the full TileSet pipeline. Now you know what the grid is made of.
+- Image: none
+- Notes: —
+
+### 10.4 Lesson chunks (slides S021–S086)
+
+#### Slide D2-S021 — Section divider: Lesson chunks
+- Format: G04 Headline / Divider
+- Title: "Lesson chunks"
+- Body:
+- Image: none
+- Notes: —
+
+---
+
+#### 10.4a Chunk #1 — `for i in range(N)` (slides S022–S032, FULL ARC)
+
+#### Slide D2-S022 — Chunk #1 Concept 1/4: Title
+- Format: G04 Headline / Divider
+- Title: "Loop"
+- Body:
+- Image: none
+- Notes: Say the word out loud. Pause. "What does *loop* mean to you? Roller coaster? Rope?"
+
+#### Slide D2-S023 — Chunk #1 Concept 2/4: Meaning prompt
+- Format: G05 Concept Explanation
+- Title: "What does 'loop' mean?"
+- Body:
+  - Roller coaster loop — the track **comes back around**.
+  - A rope tied in a loop — **no beginning, no end**.
+  - In code: a **loop = code that repeats**.
+- Image: none
+- Notes: Take answers. Land on "repeating" as the core idea.
+
+#### Slide D2-S024 — Chunk #1 Concept 3/4: Loop = repeating
+- Format: G05 Concept Explanation
+- Title: "A loop runs the same code again and again"
+- Body:
+  - You write the action **once**.
+  - The loop runs it as many times as you say.
+  - No copy-paste. No 50 lines of the same thing.
+- Image: none
+- Notes: —
+
+#### Slide D2-S025 — Chunk #1 Concept 4/4: Code shape
+- Format: G10 Code Shape
+- Title: "`for i in range(3):` — the shape"
+- Body:
+  ```gdscript
+  for i in range(3):
+      print(i)
+  # prints: 0  1  2
+  ```
+- Image: none
+- Notes: "for i in range 3: print i. i starts at 0, goes to 2. The block runs 3 times."
+
+#### Slide D2-S026 — Chunk #1 Example 1/3: Stairs to your bedroom
+- Format: G05 Concept Explanation
+- Title: "14 stairs to your bedroom"
+- Body:
+  - Every night: step, step, step — **14 times**. Same motion. Known count.
+  - `for i in range(14):` → `    climb_one_stair()`
+  - You know exactly how many stairs. The loop counts for you.
+- Image: none
+- Notes: "You don't say 'step step step...' 14 times. You say 'go up the stairs.' That's a loop."
+
+#### Slide D2-S027 — Chunk #1 Example 2/3: Question slide
+- Format: G04 Headline / Divider
+- Title: "How many times does `range(5)` run?"
+- Body:
+- Image: none
+- Notes: Kids answer: 5 times (i = 0, 1, 2, 3, 4). Follow-up: "What's the LAST value of i?" → 4.
+
+#### Slide D2-S028 — Chunk #1 Example 3/3: Takeaway
+- Format: G05 Concept Explanation
+- Title: "`range(N)` = N runs"
+- Body:
+  - `range(3)` → runs 3 times (i = 0, 1, 2).
+  - `range(10)` → runs 10 times.
+  - `range(0)` → runs **zero times** — no stairs to climb.
+  - Rule: **`range(N)` gives you N stairs**.
+- Image: none
+- Notes: range(0) is a fun edge case. "Zero stairs, zero runs. The loop just skips."
+
+#### Slide D2-S029 — Chunk #1 How-it's-used 1/2: Games in general
+- Format: G05 Concept Explanation
+- Title: "Games loop all the time"
+- Body:
+  - Spawn **50 trees** in a forest level → `for i in range(50):`
+  - Deal **4 cards** at game start → `for i in range(4):`
+  - Create **12 enemies** in the first wave → `for i in range(12):`
+  - Write the action **once**. The loop handles the rest.
+- Image: none
+- Notes: —
+
+#### Slide D2-S030 — Chunk #1 How-it's-used 2/2: Pac-Man
+- Format: G05 Concept Explanation
+- Title: "In our game: spawn 3 ghosts"
+- Body:
+  - At startup, 3 ghosts need to appear in the pen.
+  - Without a loop: write `spawn_ghost_at(...)` three times. Copy-paste.
+  - With a loop: write it **once**. `for i in range(3):` handles 3.
+- Image: none
+- Notes: "If the designer says 'add a 4th ghost' — you change ONE number."
+
+#### Slide D2-S031 — Chunk #1 Where-in-our-game
+- Format: G12 Screenshot + Caption
+- Title: "Where you'll type it — inside `_ready()`"
+- Body: "At the `# TODO #1` marker inside `_ready()`. This runs once when the game starts."
+- Image: `D2C1.png` — main.gd:69-72, showing `# TODO #1: SPAWN 3 GHOSTS` banner + empty `#@todo`. No red overlay.
+- Notes: —
+
+#### Slide D2-S032 — Chunk #1 Side-by-side MANDATORY
+- Format: G09 Concept + Task
+- Title: "Your task: chunk #1"
+- Body LHS (board example):
+  ```gdscript
+  for i in range(3):
+      print(i)
+  ```
+- Image: `D2C1.png` — main.gd:69-72, red overlay on `#@todo` gap.
+- Caption: "Spawn three ghosts in the pen — but write the spawn call only once."
+- Notes: Kids type `for i in range(3): spawn_ghost_at(ghost_spawn_pos(i))`. Pre-given helper `ghost_spawn_pos(i)` handles position math — kid line stays single-purpose.
+
+---
+
+#### 10.4b Walk C — Run the project (slides S033–S034, jog-memory)
+
+#### Slide D2-S033 — Walk C.1: Run your game (Challenge)
+- Format: G04 Headline / Divider
+- Title: "Run your game"
+- Body: "Press the same key you used yesterday to start the project."
+- Image: none
+- Notes: Kids try from memory. ~15 seconds.
+
+#### Slide D2-S034 — Walk C.2: Run your game (Hint)
+- Format: G05 Concept Explanation
+- Title: "Walk C — Hint"
+- Body:
+  - Press **F5** → "Set Main Scene?" dialog → **Select Current** → game window opens.
+  - Press **F8** to stop.
+- Image: none
+- Notes: Text only. After chunk #1 typing — first time game runs this session.
+
+---
+
+#### 10.4c Walk D — Reading an error (slides S035–S036, jog-memory)
+
+#### Slide D2-S035 — Walk D.1: Find the error (Challenge)
+- Format: G04 Headline / Divider
+- Title: "Game didn't open? Find the error."
+- Body:
+- Image: none
+- Notes: Only advance here if kids hit a parse error after typing.
+
+#### Slide D2-S036 — Walk D.2: Find the error (Hint)
+- Format: G05 Concept Explanation
+- Title: "Walk D — Hint"
+- Body:
+  - Look at the **Output** panel at the bottom of the editor.
+  - Find the error line → click the **blue line number** → editor jumps to it.
+  - Fix the typo → **Ctrl+S** → **F5** again.
+- Image: none
+- Notes: —
+
+---
+
+#### 10.4d Chunk #2 — `for item in list` (slides S037–S039, PURE SLIM)
+
+#### Slide D2-S037 — Chunk #2 Recap
+- Format: G05 Concept Explanation
+- Title: "Same `for`. New shape."
+- Body:
+  - Last chunk: `for i in range(3)` — you wrote a **number** after `range`. Known count.
+  - This chunk: `for ghost in ghosts` — you write the **name of a list** you already have.
+  - The loop visits every item in the list, one by one.
+- Image: none
+- Notes: "You already have a list called `ghosts`. The loop walks through it."
+
+#### Slide D2-S038 — Chunk #2 Side-by-side MANDATORY
+- Format: G09 Concept + Task
+- Title: "Your task: chunk #2"
+- Body LHS (board example):
+  ```gdscript
+  for colour in ["red", "green", "blue"]:
+      print(colour)
+  ```
+- Image: `D2C2.png` — main.gd:123-126, red overlay on `#@todo` gap inside the `else` branch.
+- Caption: "Each frame, walk through all the ghosts and move each one."
+- Notes: Kids type `for ghost in ghosts: step_ghost(ghost)`. Pre-given helper `step_ghost(ghost)` handles movement math.
+
+#### Slide D2-S039 — Chunk #2 After-works: Ghosts patrol!
+- Format: G12 Screenshot + Caption
+- Title: "Ghosts patrol!"
+- Body: "Run the game. After 2 seconds, ghosts start moving."
+- Image: none
+- Notes: First big visible payoff of the day. Let kids celebrate. "Your loop is running 60 times per second — once per frame."
+
+---
+
+#### 10.4e Chunk #3 — `while` loop (slides S040–S053, SMALL-ARC + dual hole)
+
+#### Slide D2-S040 — Chunk #3 Recap-bridge
+- Format: G04 Headline / Divider
+- Title: "Loops have a cousin: `while`"
+- Body:
+- Image: none
+- Notes: —
+
+#### Slide D2-S041 — Chunk #3 Concept 1/3: "while"
+- Format: G04 Headline / Divider
+- Title: "while"
+- Body:
+- Image: none
+- Notes: Say the word. Pause. "What does 'while' mean in plain English?"
+
+#### Slide D2-S042 — Chunk #3 Concept 2/3: Meaning
+- Format: G05 Concept Explanation
+- Title: "while = as long as"
+- Body:
+  - "**While** it's raining, stay inside."
+  - "**While** there's food on the plate, keep eating."
+  - In code: `while` runs the block again and again — **as long as the condition is true**.
+- Image: none
+- Notes: —
+
+#### Slide D2-S043 — Chunk #3 Concept 3/3: Code shape
+- Format: G10 Code Shape
+- Title: "`while` — the shape"
+- Body:
+  ```gdscript
+  var n := 0
+  while n < 5:
+      print(n)
+      n += 1
+  # prints: 0  1  2  3  4
+  ```
+- Image: none
+- Notes: "n starts at 0. Each run: print n, add 1 to n. Stops when n reaches 5."
+
+#### Slide D2-S044 — Chunk #3 For-vs-while disambiguator (LOAD-BEARING)
+- Format: G05 Concept Explanation
+- Title: "`for` vs `while` — same stairs, different light"
+- Body:
+  - **`for`** — you **KNOW** the count. (14 stairs to your bedroom — you've climbed them 1000 times.)
+  - **`while`** — you **DON'T** know the count. (Stairs in the dark — step up, stop when your foot finds no stair.)
+  - Same repeated motion. Different stopping rule.
+- Image: none
+- Notes: Load-bearing. Kids who conflate for and while will trip on chunk #3b and FC. Make sure they get the stopping-rule distinction.
+
+#### Slide D2-S045 — Chunk #3 Example 1/3: Stairs in the dark
+- Format: G05 Concept Explanation
+- Title: "Stairs in the dark"
+- Body:
+  - Power's out. You're climbing stairs. You can't see the top.
+  - Step. Step. Step. Each time: **is there another stair?** Yes → keep going. No → stop.
+  - You don't know the count in advance. You stop when the condition is false.
+- Image: none
+- Notes: "Direct callback to the for-range stairs. Same motion, different stopping rule."
+
+#### Slide D2-S046 — Chunk #3 Example 2/3: Question slide
+- Format: G10 Code Shape
+- Title: "How many times does this run?"
+- Body:
+  ```gdscript
+  var n := 3
+  while n > 0:
+      print(n)
+      n -= 1
+  ```
+- Image: none
+- Notes: Kids answer: 3 times (n = 3, 2, 1). When n = 0, condition is false, loop stops.
+
+#### Slide D2-S047 — Chunk #3 Example 3/3: Takeaway
+- Format: G05 Concept Explanation
+- Title: "`while` = keep going until the condition is false"
+- Body:
+  - `while n < 5:` → stop when n reaches 5.
+  - `while lives > 0:` → stop when lives hit 0.
+  - `while has_more_dots():` → stop when no dots remain.
+- Image: none
+- Notes: —
+
+#### Slide D2-S048 — Chunk #3 How-it's-used 1/2: Games in general
+- Format: G05 Concept Explanation
+- Title: "`while` in games"
+- Body:
+  - Scan a grid for coins: `while x < map_width:`
+  - Fall until you hit the floor: `while not on_ground:`
+  - Keep playing until lives run out: `while lives > 0:`
+  - Anything where you **don't know the count** in advance.
+- Image: none
+- Notes: —
+
+#### Slide D2-S049 — Chunk #3 How-it's-used 2/2: Pac-Man dot scan
+- Format: G05 Concept Explanation
+- Title: "In our game: count every dot"
+- Body:
+  - The maze is 28 × 31 = **868 tiles**.
+  - At startup, count how many tiles have a dot — that's the win target.
+  - Scan every column (x) → every row (y) → count the dots.
+  - Neither loop knows the tile count in advance → `while`.
+- Image: none
+- Notes: "When dots_remaining hits 0, the player wins. This setup makes that work."
+
+#### Slide D2-S050 — Chunk #3 Where-in-our-game 1/2: Caller
+- Format: G12 Screenshot + Caption
+- Title: "Where 3a lives — the caller in `_ready()`"
+- Body: "One line in `_ready()`: call `count_dots()` and store the result."
+- Image: `D2C3a.png` — main.gd:77-79, showing `# TODO #3a: CALL count_dots()` banner. No red overlay.
+- Notes: —
+
+#### Slide D2-S051 — Chunk #3 Where-in-our-game 2/2: Body
+- Format: G12 Screenshot + Caption
+- Title: "Where 3b lives — the `count_dots()` function"
+- Body: "The whole `count_dots()` function body. You'll write the nested `while` loops inside."
+- Image: `D2C3b.png` — main.gd:213-225, showing `func count_dots()` signature + empty `#@todo` block. No red overlay.
+- Notes: —
+
+#### Slide D2-S052 — Chunk #3a Side-by-side: Caller
+- Format: G09 Concept + Task
+- Title: "Your task: chunk #3a — the caller"
+- Body LHS (board example):
+  ```gdscript
+  dots_remaining = count_dots()
+  ```
+- Image: `D2C3a.png` — main.gd:77-79, red overlay on `#@todo` gap.
+- Caption: "Get the dot total from `count_dots()` and store it in `dots_remaining`."
+- Notes: One line. Kids type `dots_remaining = count_dots()`. This calls the function they'll write next.
+
+#### Slide D2-S053 — Chunk #3b Side-by-side: Body
+- Format: G09 Concept + Task
+- Title: "Your task: chunk #3b — `count_dots()` body"
+- Body LHS (board example):
+  ```gdscript
+  var n := 0
+  while n < 5:
+      print(n)
+      n += 1
+  ```
+- Image: `D2C3b.png` — main.gd:213-225, red overlay on `#@todo` gap.
+- Caption: "Scan the whole maze with a `while` loop. Count the dots. Return the count."
+- Notes: Kids write nested while loops: scan x (0..MAZE_W), scan y (0..MAZE_H), call pre-given `cell_has_dot(x, y)`. Harder chunk — circulate actively.
+
+---
+
+#### 10.4f Chunk #4 — `func` no params (slides S054–S065, FULL ARC)
+
+#### Slide D2-S054 — Chunk #4 Concept 1/4: Title
+- Format: G04 Headline / Divider
+- Title: "Function"
+- Body:
+- Image: none
+- Notes: Say the word. Pause. "What's the *function* of a remote control?"
+
+#### Slide D2-S055 — Chunk #4 Concept 2/4: Meaning prompt
+- Format: G05 Concept Explanation
+- Title: "What's the function of…?"
+- Body:
+  - A **remote control** → change the channel. That's its function.
+  - A **calculator** → do math. That's its function.
+  - A **door** → let you through (or keep you out). That's its function.
+  - Function = **the thing it DOES**.
+- Image: none
+- Notes: "In code, a function is the same idea — a named block of code that DOES one thing."
+
+#### Slide D2-S056 — Chunk #4 Concept 3/4: Named block of code
+- Format: G05 Concept Explanation
+- Title: "Function = a name for a block of code"
+- Body:
+  - `func say_hi():` → defines the function named `say_hi`.
+  - `say_hi()` → *calls* it — runs the block.
+  - Define the recipe once. Call it any number of times.
+- Image: none
+- Notes: —
+
+#### Slide D2-S057 — Chunk #4 Concept 4/4: Code shape
+- Format: G10 Code Shape
+- Title: "`func say_hi():` — the shape"
+- Body:
+  ```gdscript
+  func say_hi():
+      print("hi!")
+
+  say_hi()   # → "hi!"
+  say_hi()   # → "hi!"
+  ```
+- Image: none
+- Notes: "Two calls, two lines of output. The function body exists only once in the file."
+
+#### Slide D2-S058 — Chunk #4 Example 1/3: Pizza order
+- Format: G05 Concept Explanation
+- Title: "The pizza order"
+- Body:
+  - You walk into a pizza shop. You say: **"Margherita."**
+  - The kitchen makes dough → adds tomato → adds cheese → bakes → cuts → boxes.
+  - You didn't say any of that. You just said the **name**. The recipe ran.
+- Image: none
+- Notes: "That's a function. You define the recipe once. You call it by name. The kitchen does the work."
+
+#### Slide D2-S059 — Chunk #4 Example 2/3: Question slide
+- Format: G04 Headline / Divider
+- Title: "How many times does `say_hi()` print if you call it 3 times?"
+- Body:
+- Image: none
+- Notes: Kids answer: 3 times. "The function *definition* doesn't print anything. *Calling* it does."
+
+#### Slide D2-S060 — Chunk #4 Example 3/3: Takeaway
+- Format: G05 Concept Explanation
+- Title: "Define once. Call anywhere."
+- Body:
+  - Without functions: copy-paste the same 5 lines every time you need them.
+  - With functions: **write once**, call by name from anywhere in the file.
+  - Change the recipe once → every call gets the update automatically.
+- Image: none
+- Notes: —
+
+#### Slide D2-S061 — Chunk #4 How-it's-used 1/2: Games in general
+- Format: G05 Concept Explanation
+- Title: "Functions are everywhere in games"
+- Body:
+  - `jump()` — called whenever player presses space.
+  - `die()` — called when health hits 0.
+  - `spawn_enemy()` — called at the start of each wave.
+  - Define once. Call from many places. No copy-paste.
+- Image: none
+- Notes: —
+
+#### Slide D2-S062 — Chunk #4 How-it's-used 2/2: Pac-Man
+- Format: G05 Concept Explanation
+- Title: "In our game: `reset_player()`"
+- Body:
+  - When a ghost catches the player, we need to: send them home, clear movement, wipe direction.
+  - That's 5 lines. We wrap them in a function called `reset_player()`.
+  - The game calls `reset_player()` every time a ghost catches the player.
+- Image: none
+- Notes: "One function, many call sites — ghost AI, test resets, future respawn logic."
+
+#### Slide D2-S063 — Chunk #4 Where-in-our-game
+- Format: G12 Screenshot + Caption
+- Title: "Where you'll type it — `reset_player()`"
+- Body: "The function body is at main.gd:153-160. You'll write the contents."
+- Image: `D2C4.png` — main.gd:153-160, showing `func reset_player()` signature + empty `#@todo`. No red overlay.
+- Notes: —
+
+#### Slide D2-S064 — Chunk #4 Side-by-side MANDATORY
+- Format: G09 Concept + Task
+- Title: "Your task: chunk #4"
+- Body LHS (board example):
+  ```gdscript
+  func say_hi():
+      print("hi!")
+  ```
+- Image: `D2C4.png` — main.gd:153-160, red overlay on `#@todo` gap.
+- Caption: "Send the player back to the starting tile."
+- Notes: Kids write `reset_player()` body: set player_cell, position, player_moving, current_dir, queued_dir. See §5 for exact code.
+
+#### Slide D2-S065 — Chunk #4 After-works: Ghost catches you → respawn!
+- Format: G12 Screenshot + Caption
+- Title: "Ghost catches you → you respawn!"
+- Body: "Run the game. Walk into a ghost. You pop back to the start."
+- Image: none
+- Notes: "Your function just ran — called from deep inside the ghost collision code."
+
+---
+
+#### 10.4g Chunk #5 — `func` with parameter (slides S066–S075, SMALL-ARC)
+
+#### Slide D2-S066 — Chunk #5 Recap-bridge
+- Format: G05 Concept Explanation
+- Title: "Functions can take INPUTS"
+- Body:
+  - Last chunk: `func reset_player()` — no inputs. Same thing every time.
+  - This chunk: `func move_player(direction)` — something **between the parentheses**.
+  - That thing is called a **parameter** — an input you hand to the function.
+- Image: none
+- Notes: —
+
+#### Slide D2-S067 — Chunk #5 Concept 1/3: "parameter"
+- Format: G04 Headline / Divider
+- Title: "Parameter"
+- Body:
+- Image: none
+- Notes: Say the word. "Info you hand to the function when you call it."
+
+#### Slide D2-S068 — Chunk #5 Concept 2/3: Info you hand in
+- Format: G05 Concept Explanation
+- Title: "A parameter is info you hand to the function"
+- Body:
+  - `func add_points(amount):` — `amount` is the parameter.
+  - Call `add_points(10)` → `amount` is `10` inside the function.
+  - Call `add_points(50)` → `amount` is `50`.
+  - Same function. Different input each time.
+- Image: none
+- Notes: —
+
+#### Slide D2-S069 — Chunk #5 Concept 3/3: Code shape
+- Format: G10 Code Shape
+- Title: "`func add_points(amount):` — the shape"
+- Body:
+  ```gdscript
+  func add_points(amount):
+      score += amount
+
+  add_points(10)   # score goes up 10
+  add_points(50)   # score goes up 50
+  ```
+- Image: none
+- Notes: "One function definition. Two calls with different amounts."
+
+#### Slide D2-S070 — Chunk #5 Example 1/2: Pizza extends
+- Format: G05 Concept Explanation
+- Title: "Margherita — large or small?"
+- Body:
+  - You say: **"Margherita large."** Kitchen runs the same recipe. Big ball of dough.
+  - You say: **"Margherita small."** Same recipe. Small ball of dough.
+  - The **size** is the parameter. One recipe, different inputs.
+- Image: none
+- Notes: "Same function. Same steps. The input changes what it does."
+
+#### Slide D2-S071 — Chunk #5 Example 2/2: Takeaway
+- Format: G05 Concept Explanation
+- Title: "One function. Different inputs each time."
+- Body:
+  - `move_player(Vector2i.UP)` → moves up.
+  - `move_player(Vector2i.DOWN)` → moves down.
+  - Same function, called 4 times a second with whatever key is pressed.
+- Image: none
+- Notes: —
+
+#### Slide D2-S072 — Chunk #5 How-it's-used: Pac-Man
+- Format: G05 Concept Explanation
+- Title: "In our game: `move_player(direction)`"
+- Body:
+  - `direction` is the parameter — a `Vector2i` for up, down, left, or right.
+  - Arrow key pressed → `direction` is set → `move_player(direction)` is called.
+  - The function moves the player one tile in that direction (if no wall is in the way).
+- Image: none
+- Notes: "The input determines *which* direction. The function decides *whether* to actually move."
+
+#### Slide D2-S073 — Chunk #5 Where-in-our-game
+- Format: G12 Screenshot + Caption
+- Title: "Where you'll type it — `move_player(direction)`"
+- Body: "Inside `move_player(direction)` at main.gd:171-178. The `direction: Vector2i` in the signature is today's lesson — that's the parameter."
+- Image: `D2C5.png` — main.gd:171-178, showing `direction: Vector2i` parameter in the signature. No red overlay.
+- Notes: —
+
+#### Slide D2-S074 — Chunk #5 Side-by-side MANDATORY
+- Format: G09 Concept + Task
+- Title: "Your task: chunk #5"
+- Body LHS (board example):
+  ```gdscript
+  func add_points(amount):
+      score += amount
+  ```
+- Image: `D2C5.png` — main.gd:171-178, red overlay on `#@todo` gap.
+- Caption: "Move the player one tile in the direction they pressed — but only if a wall isn't in the way."
+- Notes: Kids write `move_player(direction)` body. Pattern: compute next_cell, check `hit_wall`, wrap via `wrap_cell`, move via pre-given `step_player_to`. See §5 for exact code.
+
+#### Slide D2-S075 — Chunk #5 After-works: Arrow keys move!
+- Format: G12 Screenshot + Caption
+- Title: "Arrow keys move the player!"
+- Body: "Run the game. Press arrow keys. Player slides one tile at a time."
+- Image: none
+- Notes: "Your function is called every time an arrow key is held. The parameter carries the direction."
+
+---
+
+#### 10.4h Chunk #6 — `func` returning a bool (slides S076–S086, SMALL-ARC + boolean refresher)
+
+#### Slide D2-S076 — Chunk #6 Recap-bridge
+- Format: G05 Concept Explanation
+- Title: "Functions can HAND BACK an answer"
+- Body:
+  - So far: functions **do** something. `reset_player()` moves the player. `move_player(dir)` slides them.
+  - New idea: a function can also **return a value** — hand an answer back to the caller.
+  - That answer has a name: the **return value**.
+- Image: none
+- Notes: —
+
+#### Slide D2-S077 — Chunk #6 Concept 1/3: "return"
+- Format: G04 Headline / Divider
+- Title: "return"
+- Body:
+- Image: none
+- Notes: Say the word. "Functions can send something back."
+
+#### Slide D2-S078 — Chunk #6 Concept 2/3: Hands back to caller
+- Format: G05 Concept Explanation
+- Title: "`return` hands a value back to the caller"
+- Body:
+  - `return` = "here's your answer."
+  - The caller gets the value and can use it.
+  - `var y = double(5)` → `double` returns 10 → `y` is 10.
+- Image: none
+- Notes: —
+
+#### Slide D2-S079 — Chunk #6 Concept 3/3: Code shape
+- Format: G10 Code Shape
+- Title: "`func double(n) -> int:` — the shape"
+- Body:
+  ```gdscript
+  func double(n) -> int:
+      return n * 2
+
+  var y = double(5)   # y = 10
+  var z = double(3)   # z = 6
+  ```
+- Image: none
+- Notes: "`-> int` means 'this function hands back an int.' `return` is what actually sends it."
+
+#### Slide D2-S080 — Chunk #6 Boolean refresher (D1 callback)
+- Format: G05 Concept Explanation
+- Title: "Remember booleans from Day 1?"
+- Body:
+  - A **boolean** is a true/false value — the light switch.
+  - `true` = on. `false` = off.
+  - Today: our function hands back a **boolean** — "yes this is a wall" or "no it isn't."
+- Image: none
+- Notes: "One-slide callback. If kids don't remember, don't reteach — just move forward. Context makes it click."
+
+#### Slide D2-S081 — Chunk #6 Example 1/2: Pizza hands back
+- Format: G05 Concept Explanation
+- Title: "The kitchen hands the pizza BACK"
+- Body:
+  - Old version: you say "margherita", kitchen makes it. No pizza in your hands.
+  - New version: `var dinner = margherita("large")` — kitchen makes it AND **hands it to you**.
+  - `dinner` IS the pizza. That's the return value.
+- Image: none
+- Notes: "Extension of the pizza metaphor. Now the function produces something you can hold."
+
+#### Slide D2-S082 — Chunk #6 Example 2/2: Takeaway
+- Format: G05 Concept Explanation
+- Title: "`-> bool` = this function answers yes or no"
+- Body:
+  - `hit_wall(cell) -> bool` — "is there a wall at this cell?"
+  - `is_alive() -> bool` — "is the player still alive?"
+  - `in_range(target) -> bool` — "is the enemy close enough to shoot?"
+  - Every yes/no check in a game is a bool-returning function.
+- Image: none
+- Notes: —
+
+#### Slide D2-S083 — Chunk #6 How-it's-used: Pac-Man
+- Format: G05 Concept Explanation
+- Title: "In our game: `hit_wall(cell)`"
+- Body:
+  - `move_player(direction)` needs to know: "is the next tile a wall?"
+  - It calls `hit_wall(next_cell)` → gets back `true` or `false`.
+  - If `true` → don't move. If `false` → move.
+  - One question. One yes/no answer.
+- Image: none
+- Notes: "Kids already wrote `move_player`. They used `hit_wall` without knowing it. Now they write it."
+
+#### Slide D2-S084 — Chunk #6 Where-in-our-game
+- Format: G12 Screenshot + Caption
+- Title: "Where you'll type it — `hit_wall(cell)` (R5 partial hole)"
+- Body: "Inside `hit_wall(cell)` at main.gd:201-204. Off-grid + tunnel guards are pre-given. You write only the in-grid wall query."
+- Image: `D2C6.png` — main.gd:201-204, showing the R5 partial-section hole. No red overlay.
+- Notes: —
+
+#### Slide D2-S085 — Chunk #6 Side-by-side MANDATORY (R5 partial hole)
+- Format: G09 Concept + Task
+- Title: "Your task: chunk #6"
+- Body LHS (board example):
+  ```gdscript
+  func is_even(n) -> bool:
+      return n % 2 == 0
+  ```
+- Image: `D2C6.png` — main.gd:201-204. Two-tone overlay: gray = pre-given off-grid + tunnel guards; red = your hole.
+- Caption: "Given a cell, hand back `true` if it's blocked, `false` if it's open. *(off-grid + tunnel pre-given)*"
+- Notes: R5 partial hole. Kid types only: `var source_id := wall_layer.get_cell_source_id(cell)` + `return source_id != -1`. Gray overlay marks pre-given lines; red marks the hole. Caption flags what's pre-given.
+
+#### Slide D2-S086 — Chunk #6 After-works: The maze is alive!
+- Format: G12 Screenshot + Caption
+- Title: "The maze is alive!"
+- Body: "Run the game. Walls block. Tunnel wraps. Ghosts patrol. Dots are chompable."
+- Image: none
+- Notes: End-of-morning celebration. All 6 chunks working together. "Every mechanic running right now came from code YOU wrote this morning."
 
 ### 10.5 Remaining sections — STUB (deferred to Phase 2.5b)
 
 Mirror D1 §10.17 sub-sectioning when authored:
 
 - **§10.5a** Section divider — Personalization. 7 beats from §6. Estimated ~25-30 slides.
-- **§10.5b** Section divider — Final Challenge (`ghost_personalities.gd`). Required first slide: **R3 pointer slide** (FC TODO → morning chunk mirror map, exact text in §7 above). Then: 4 personality flavor cards (Blinky / Pinky / Inky / Clyde) framed as *what each ghost does in-game* — not as targeting math. Then: 6 hole packs (FC-1 through FC-6) each pointing back to its mirrored morning chunk before showing the new context. The math is pre-given so the slide pack is leaner than v1. Estimated ~25-30 slides.
+- **§10.5b** Final Challenge (`ghost_personalities.gd`) — **expanded below (slides S087–S098, 12 slides)**.
+
+#### 10.5b Final Challenge (slides S087–S098)
+
+#### Slide D2-S087 — Section divider: Final Challenge
+- Format: G04 Headline / Divider
+- Title: "Final Challenge"
+- Body:
+- Image: none
+- Notes: —
+
+#### Slide D2-S088 — FC pointer slide (R3 REQUIRED)
+- Format: G05 Concept Explanation
+- Title: "You already know how to do this."
+- Body:
+  - Each TODO in `ghost_personalities.gd` mirrors a chunk you wrote this morning. If you get stuck, scroll up to that chunk in `main.gd` and copy the **shape** (not the words).
+  - **FC-1** ← Chunk **#1** (`for i in range(N)`)
+  - **FC-2** ← Chunk **#2** (`for item in list`)
+  - **FC-3** ← Chunk **#3** (`while` loop + count + return)
+  - **FC-4** ← Chunk **#4** (`func` no params)
+  - **FC-5** ← Chunk **#5** (`func` with a parameter)
+  - **FC-6** ← Chunk **#6** (`func` returning a bool)
+- Image: none
+- Notes: R3 requirement — this slide must appear before any FC hole. Read aloud. Let kids find the mirror chunks in their file before starting.
+
+#### Slide D2-S089 — What you're unlocking
+- Format: G12 Screenshot + Caption
+- Title: "What you're unlocking"
+- Body: "Replace 3 identical ghosts with 4 authentic Pac-Man personalities — Blinky, Pinky, Inky, Clyde. Each one targets the player differently."
+- Image: `D2FC3.png` — game running with multiple personality ghosts visible. No red overlay.
+- Notes: Show this before the personalities table so kids know the payoff before reading the specs.
+
+#### Slide D2-S090 — The 4 personalities
+- Format: G06 Table
+- Title: "The 4 personalities"
+- Body:
+  | Ghost | Colour | What it does |
+  |---|---|---|
+  | **Blinky** | Red | Heads straight for the player. Most aggressive. |
+  | **Pinky** | Pink | Aims 4 tiles ahead of the player to ambush. |
+  | **Inky** | Cyan | Uses Blinky's position to flank from the opposite side. |
+  | **Clyde** | Orange | Chases when far. Scatters to the corner when close. |
+- Image: none
+- Notes: "The targeting math is pre-given — you're wiring the personalities together, not computing vectors."
+
+#### Slide D2-S091 — Enable FC step 1: open final_challenge.gd
+- Format: G12 Screenshot + Caption
+- Title: "Step 1 — Open `final_challenge.gd`"
+- Body: "Open `final_challenge.gd`. Find `const FC_ENABLED := false` near the top."
+- Image: `D2FC1.png` — `final_challenge.gd` open, showing `const FC_ENABLED := false`. No red overlay.
+- Notes: —
+
+#### Slide D2-S092 — Enable FC step 2: flip to true
+- Format: G12 Screenshot + Caption
+- Title: "Step 2 — Change `false` to `true`"
+- Body: "Edit the line to `const FC_ENABLED := true`. Save with Ctrl+S. The personality mode is now live."
+- Image: `D2FC2.png` — same line edited to `const FC_ENABLED := true`. No red overlay.
+- Notes: "This flips the flag in main.gd's if-branches. All pre-given wiring activates. Now fill the 6 holes."
+
+#### Slide D2-S093 — FC-1 hole: `spawn_personality_ghosts()`
+- Format: G09 Concept + Task
+- Title: "FC-1 — mirrors Chunk #1"
+- Body LHS (board example — morning chunk #1 shape):
+  ```gdscript
+  for i in range(3):
+      print(i)
+  ```
+- Image: none
+- Caption: "Spawn one ghost per personality — use `range(PERSONALITY_COUNT)` and call `spawn_one_personality(i)` each time."
+- Notes: Identical shape to morning chunk #1. `spawn_one_personality(i)` is pre-given. Kid writes 2 lines.
+
+#### Slide D2-S094 — FC-2 hole: `step_all_personality_ghosts()`
+- Format: G09 Concept + Task
+- Title: "FC-2 — mirrors Chunk #2"
+- Body LHS (board example — morning chunk #2 shape):
+  ```gdscript
+  for colour in ["red", "green", "blue"]:
+      print(colour)
+  ```
+- Image: none
+- Caption: "Every frame, give every personality ghost one step — loop over `ghosts` and call `step_personality(ghost)`."
+- Notes: Literally same shape as morning chunk #2. Kid writes 2 lines.
+
+#### Slide D2-S095 — FC-3 hole: `count_ghosts_of(personality) -> int`
+- Format: G09 Concept + Task
+- Title: "FC-3 — mirrors Chunk #3"
+- Body LHS (board example — morning chunk #3 counter shape):
+  ```gdscript
+  var n := 0
+  while n < 5:
+      print(n)
+      n += 1
+  ```
+- Image: none
+- Caption: "Count how many ghosts in `ghosts` have the given personality tag. Return the count."
+- Notes: Counter pattern from morning #3. For-each or while both accepted (R6 note in §7). `ghost.get_meta("personality")` reads the tag. Kid writes ~5 lines.
+
+#### Slide D2-S096 — FC-4 hole: `reset_personality_ghosts()`
+- Format: G09 Concept + Task
+- Title: "FC-4 — mirrors Chunk #4"
+- Body LHS (board example — morning chunk #4 shape):
+  ```gdscript
+  func say_hi():
+      print("hi!")
+  ```
+- Image: none
+- Caption: "Send every personality ghost back to the pen. Loop over `ghosts` with an index counter and call `respawn_personality_ghost(ghost, i)`."
+- Notes: Reset pattern from morning #4. Pre-given `respawn_personality_ghost(ghost, i)` handles one ghost. Kid writes ~4 lines (for-each + index counter).
+
+#### Slide D2-S097 — FC-5 hole: `target_for(ghost) -> Vector2i`
+- Format: G09 Concept + Task
+- Title: "FC-5 — mirrors Chunk #5"
+- Body LHS (board example — morning chunk #5 shape):
+  ```gdscript
+  func add_points(amount):
+      score += amount
+  ```
+- Image: none
+- Caption: "Given a ghost, return its target tile. Read its personality, then return the right pre-given target helper."
+- Notes: func-with-param + return. Pre-given helpers: `blinky_target`, `pinky_target`, `inky_target`, `clyde_target`. Kid reads the personality meta and routes to the right helper. ~9 lines (4 if-branches).
+
+#### Slide D2-S098 — FC-6 hole: `is_clyde_close(ghost) -> bool`
+- Format: G09 Concept + Task
+- Title: "FC-6 — mirrors Chunk #6"
+- Body LHS (board example — morning chunk #6 shape):
+  ```gdscript
+  func is_even(n) -> bool:
+      return n % 2 == 0
+  ```
+- Image: none
+- Caption: "Return `true` if the ghost is closer than 8 tiles to the player — call `distance_to_player(ghost)` and compare."
+- Notes: Mirrors `is_even` shape exactly. Pre-given `distance_to_player(ghost)` does the math. Kid writes 2 lines.
 - **§10.5c** Asset recap — Kenney Tiny Dungeon atlas card (G08). Estimated ~3-5 slides.
 - **§10.5d** Export-to-exe walkthrough (Beat 6 of §6). Estimated ~6-8 slides.
 - **§10.5e** Day closer — "Tomorrow: Tower Defense." Estimated ~1-2 slides.
@@ -805,8 +1708,8 @@ Per chunk, three options for the plain-English goal statement that sits ABOVE th
 - [x] **RHS prose pick (per chunk)** — LOCKED 2026-06-08. See §10.9.
 - [x] **Historical-context slide content** — Pac-Man 1980. LOCKED 2026-06-08, 1 slide. See §10.9.
 - [x] **Day tab color for D2** — RESOLVED 2026-06-08. Brand overridden to red/black/grey minimalist; NO per-day color. D2 carries the standard red "DAY 2" label. Palette locked in `SLIDES_PLAN.md` § Brand; `slides/theme.py` + `master.py` + `templates.py` updated to match.
-- [ ] **D1 retrofit** — EXPANDED 2026-06-08: (a) add Pong historical slide to D1 opener, (b) add NEW D1 section on history of VR + Day-5 Escape Room foreshadow (kids build own escape room on Steam Escape Simulator). Placement/scope pending — see §10.9.
-- [ ] **FC pointer slide content authored** — first slide of §10.5b. Text locked in §7 above; per-slide expansion still pending Phase 2.5b.
+- [x] **D1 retrofit** — DONE 2026-06-08 (same session): S002a (Pong history), S003a (VR history), S003b (escape-room tease) authored in D1 SLIDE_SOURCE.md §10. Checkbox was stale.
+- [x] **FC pointer slide content authored** — DONE 2026-06-09. §10.5b fully expanded (S087–S098, 12 slides).
 
 ### 10.9 LOCKED picks (2026-06-08)
 

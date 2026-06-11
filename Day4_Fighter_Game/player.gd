@@ -189,8 +189,10 @@ func attack() -> void:
 			if opponent.is_dead():
 				return
 			var to_opp = opponent.position - position
+			# Pre-given:
 			var in_range = abs(to_opp.x) <= character_data["attack_range"]
 			var facing_opponent = sign(to_opp.x) == facing
+			# Pre-given:
 			var same_height = abs(to_opp.y) <= 60
 			if in_range and facing_opponent and same_height:
 				opponent.take_damage(attack_damage)

@@ -704,7 +704,7 @@ None currently. All tuning lives in `const TOWER_STATS`, `const ENEMY_STATS`, `c
 - [x] FC mirrors all 8 morning chunks (R3.1) — see §7 pointer slide content + mirror map.
 - [x] FC hook wired in `main.gd` `_ready` (`if ENDLESS_MODE: preload + new + add_child`) + `_process` (`fc_node.endless_tick(delta)` branch) + `update_hud` (endless-aware label).
 - [x] Each walkthrough (Pre-coding demo + per-chunk "After this chunk works" + Personalization + FC enable) appears exactly once at its lesson position.
-- [ ] Sprite picks confirmed correct on visual playtest — **PENDING**.
+- [x] Sprite picks confirmed correct on visual playtest — **verified 2026-06-10**.
 - [ ] Obstacles + tower physics: rework decision pending — refresh §8 once locked.
 
 End-to-end smoke test: hand `BIBLE.md` + this file to a fresh Claude session, ask "draft slide bullets for Day 3." Output should require no follow-up clarification on chunk content. Visual playtest screenshots are a separate user-driven pass.
@@ -1153,7 +1153,7 @@ Total: 1 divider + 1 payoff card + 1 R3 pointer + 3 enable walk + 9 hole action 
 
 ### 10.16 Build-time notes for python-pptx chat
 
-- **Master frame**: iCode logo top-left, D3 day tab top-right (color TBD — pending brand pack), page number bottom-right per `SLIDES_FORMATS.md` master frame spec.
+- **Master frame**: iCode logo top-left, "Day 3" red text label top-right (no per-day color — red/black/grey same every day), page number bottom-right per `SLIDES_FORMATS.md` master frame spec.
 - **Walkthrough step badges**: jog-memory Challenge/Hint slides use small step badges (A.1, A.2, B.1, B.2, DK.1-4, C.1, C.2, D.1, D.2) top-right.
 - **Red overlay** on RHS Godot screenshots: 4px stroke, fully transparent fill, drawn over the kid `#@todo` region.
 - **Gray overlay** for R5 partial holes (#5a, #6, FC-5a): semi-transparent fill (alpha ~0.3), no stroke, over pre-given lines.
@@ -1165,11 +1165,1497 @@ Total: 1 divider + 1 payoff card + 1 R3 pointer + 3 enable walk + 9 hole action 
 
 ### 10.17 Pending decisions (blocking final build)
 
-- [ ] **Day tab color for D3** — brand pack pending.
+- [x] **Day tab color for D3** — resolved 2026-06-09: no per-day color exists. `theme.py` uses red/black/grey master frame for all days; "Day N" red text label is the only per-day differentiator.
 - [ ] **Historical context slide content** — Tower defense lineage sourcing pending (Rampart 1990, WC3 maps 2002-2007, PvZ 2009, Bloons/Kingdom Rush).
 - [ ] **D1 retrofit** — add equivalent historical-context slide to D1 Pong opener per D2 precedent.
 - [ ] **Sprite picks confirmed on visual playtest** — pending; flag any swaps that affect §8.
 - [x] **R5 framing slide deduplication** — resolved 2026-05-30: matched D2 precedent. R5 framing is now folded into each chunk's Where-in-game slide caption ("Gray = pre-given. Red = your hole"), no standalone R5 framing slide.
+
+---
+
+## 10. Slide-by-slide expansion (FULL)
+
+---
+
+### 10.2 Opener pack (slides S001–S007)
+
+#### Slide D3-S001 — Day title
+- Format: G01 Title
+- Title: "Day 3 — Base Defense"
+- Body: "1990 → 2009 · Tower Defense Era · Rampart, WC3 TD maps, Plants vs Zombies, Bloons, Kingdom Rush"
+- Image: `D3Defense1.png` — Plants vs Zombies screenshot -- not done --
+- Caption: none
+- Notes: Open with the image on screen. Let kids name tower defense games they know before clicking forward.
+
+#### Slide D3-S002 — Today we're building Base Defense
+- Format: G12 Screenshot + Caption
+- Title: "Today we're building Base Defense"
+- Body: "Enemies pour in from the edges. You spend coins on towers. Survive 8 waves."
+- Image: `D3TD1.png` — finished Base Defense game running, wave 1 in progress -- not done --
+- Caption: "Enemies pour in from the edges. Towers fire. Survive 8 waves."
+- Notes: Quick one — let the screenshot do the selling. Move on fast.
+
+#### Slide D3-S003 — Why tower defense matters
+- Format: G05 Concept Explanation
+- Title: "A whole genre — invented by modders"
+- Body:
+  - **Rampart** (1990) — hybrid first attempt. Castle walls + cannonballs.
+  - **Warcraft III custom maps** (2002–2007) — entire genre invented by players tweaking someone else's game.
+  - **Plants vs Zombies** (2009) — mainstream breakout. 6 million copies in a year.
+  - **Bloons / Kingdom Rush** — mobile-era boom. Still going.
+  - Takeaway: every tower defense game you've ever played traces back to a Warcraft III modder.
+- Image: `D3Defense2.png` — Warcraft III tower-defense custom map screenshot -- not done --
+- Caption: "An entire genre came out of modders tweaking another game."
+- Notes: Historical context. Emphasis on the modder origin — kids are writing code that puts them in that lineage.
+
+#### Slide D3-S004 — Yesterday → Today
+- Format: G05 Concept Explanation
+- Title: "Yesterday → Today"
+- Body:
+  - **Day 2** — Loops + intro Functions. You made `for` loops and named blocks of code.
+  - **Day 3** — **Lists + Deeper Functions**. Same `for`-loop shape, new things to loop over.
+  - Today's two new ideas: a list is a collection of things. A deeper function scans a list, returns something, and calls other functions.
+- Image: none
+- Caption: none
+- Notes: Keep it brief. Kids already know loops.
+
+#### Slide D3-S005 — 5-day arc timeline
+- Format: G02 Timeline / Closer
+- Title: "The 5-day arc"
+- Body: horizontal 5-step strip, today's box highlighted in iCode red, Days 1 and 2 ticked:
+  - Day 1 ✓ Pong — Vars + Conditions
+  - Day 2 ✓ Pac-Man — Loops + Functions
+  - **Day 3 ← Base Defense — Lists + Deeper Functions**
+  - Day 4 Fighter — Objects + State
+  - Day 5 Escape Room — Showcase
+- Image: none (python-pptx renders as 5 rectangles; today = iCode red, done = green tick, future = light grey)
+- Caption: none
+- Notes: "Three down after today. Two new ideas. Everything else builds on what you know."
+
+#### Slide D3-S006 — Today's two concepts
+- Format: G04 Headline / Divider
+- Title: "Today: **Lists** + **Deeper Functions**"
+- Body:
+  - **Lists** — a collection of things your code can remember, walk through, add to, or remove from.
+  - **Deeper Functions** — functions that scan lists, return something useful, and chain into each other.
+- Image: none
+- Caption: none
+- Notes: One breath per bullet. These two ideas power the whole game.
+
+#### Slide D3-S007 — GDScript vs Python: list ops
+- Format: G09 Concept + Task
+- Title: "GDScript vs Python — list ops"
+- Body LHS:
+  ```
+  Python:   enemies = []
+  GDScript: var enemies = []
+
+  Python:   enemies.append("grunt")
+  GDScript: enemies.append("grunt")
+
+  Python:   enemies.remove("grunt")
+  GDScript: enemies.erase("grunt")
+
+  Python:   len(enemies)
+  GDScript: enemies.size()
+
+  Python:   def total(numbers):
+  GDScript: func total(numbers):
+  ```
+- Image: none
+- Caption: "Lists work the same. Functions look the same. The only two-word change: `.remove` → `.erase` and `len()` → `.size()`."
+- Notes: Pull verbatim from §1. Point to the `.erase` / `.size()` differences explicitly — kids will type them today.
+
+---
+
+### 10.3 Pre-coding setup (slides S008–S017)
+
+#### Slide D3-S008 — Section divider: Pre-coding setup
+- Format: G04 Headline / Divider
+- Title: "Pre-coding setup"
+- Body: none
+- Image: none
+- Caption: none
+- Notes: Pacing divider.
+
+#### Slide D3-S009 — Walk A.1: Open the Day 3 project (Challenge)
+- Format: G07 Step / Challenge
+- Title: "Walk A — Open the Day 3 project"
+- Body: "Open the Base Defense project the same way you did yesterday."
+- Image: none
+- Caption: none
+- Notes: Let kids try. Step badge: A.1.
+
+#### Slide D3-S010 — Walk A.2: Open the Day 3 project (Hint)
+- Format: G08 Step / Hint
+- Title: "Walk A — Hint"
+- Body:
+  - Godot Launcher → Import button
+  - Navigate to `Day3_BaseDef_Game/project.godot`
+  - Click **Import & Edit**
+- Image: none
+- Caption: none
+- Notes: Text + arrows only. No screenshot — kids are jogging memory. Step badge: A.2.
+
+#### Slide D3-S011 — Walk B.1: Open main.gd (Challenge)
+- Format: G07 Step / Challenge
+- Title: "Open main.gd"
+- Body: "Open `main.gd` in the Script editor — same way as yesterday."
+- Image: none
+- Caption: none
+- Notes: Let kids try. Step badge: B.1.
+
+#### Slide D3-S012 — Walk B.2: Open main.gd (Hint)
+- Format: G08 Step / Hint
+- Title: "Walk B — Hint"
+- Body:
+  - FileSystem panel (bottom-left) → find `main.gd`
+  - Double-click → Script editor opens
+- Image: none
+- Caption: none
+- Notes: Step badge: B.2.
+
+#### Slide D3-S013 — Walk DK.1: Find the difficulty knob
+- Format: G07 Step / Challenge
+- Title: "Walk DK — One number. Whole different game."
+- Body: "Find the difficulty constant in `main.gd`. Hint: look near the top."
+- Image: `D3Beat5Step1.png` — `main.gd:43` showing `const DIFFICULTY := 2`
+- Caption: none
+- Notes: Instructor-driven — show this on the projector. Step badge: DK.1. This is the D3-specific orientation before any coding.
+
+#### Slide D3-S014 — Walk DK.2: Change to EASY
+- Format: G08 Step / Hint
+- Title: "Walk DK — Change it to 0"
+- Body:
+  - Find `const DIFFICULTY := 2`
+  - Change `2` → `0`
+  - Ctrl+S to save
+- Image: `D3Beat5Step2.png` — same line edited to `const DIFFICULTY := 0`
+- Caption: none
+- Notes: Instructor does this live. Step badge: DK.2.
+
+#### Slide D3-S015 — Walk DK.3: Run — same code, different feel
+- Format: G12 Screenshot + Caption
+- Title: "Walk DK — Run it"
+- Body: "F5. Watch wave 1."
+- Image: `D3Beat5Step3.png` — game running with EASY label visible
+- Caption: "Same code. Different feel."
+- Notes: Step badge: DK.3. Let it run for ~10 seconds. Kids see enemies are clearly weaker.
+
+#### Slide D3-S016 — Walk DK.4: Takeaway — list indexed by state
+- Format: G05 Concept Explanation
+- Title: "Walk DK — What just happened?"
+- Body:
+  - That's a **list used as a lookup table**: `DIFF_HP_MULT[DIFFICULTY]` picks the multiplier at index 0, 1, or 2.
+  - You'll learn how lists work in a minute. Change `DIFFICULTY` back to `2` for now.
+- Image: none
+- Caption: none
+- Notes: Step badge: DK.4. Change `DIFFICULTY` back to 2, save, move on. This seeds curiosity for Chunk #1.
+
+#### Slide D3-S017 — Section divider: Lesson chunks
+- Format: G04 Headline / Divider
+- Title: "Lesson chunks"
+- Body: none
+- Image: none
+- Caption: none
+- Notes: Pacing divider.
+
+---
+
+### 10.4 Chunk #1 — Game state lists + counters (slides S018–S030)
+
+#### Slide D3-S018 — Chunk #1 Concept 1/4: "List"
+- Format: G01 Title
+- Title: "**List**"
+- Body: "What does *list* mean to you? Grocery list. Top-10 list. Attendance sheet."
+- Image: none
+- Caption: none
+- Notes: Prompt the room. Wait for 2-3 answers. Then move.
+
+#### Slide D3-S019 — Chunk #1 Concept 2/4: Things in order
+- Format: G05 Concept Explanation
+- Title: "A list is things in a line"
+- Body: Diagram: a row of five numbered boxes labeled 0, 1, 2, 3, 4 — each box holds an item.
+  - Position 0 is the first slot. Position 4 is the last.
+  - "Each thing has a number — its *index*."
+- Image: none
+- Caption: "A list is *things in a line*. Each thing has a position."
+- Notes: Draw this on the whiteboard if time allows. The index-zero concept will come up when kids hit `.size()` checks.
+
+#### Slide D3-S020 — Chunk #1 Concept 3/4: Things you do to a list
+- Format: G05 Concept Explanation
+- Title: "Five things you can do to a list"
+- Body:
+  - **add** something to the end — `.append()`
+  - **remove** something — `.erase()`
+  - **count** how many — `.size()`
+  - **walk through** them one at a time — `for x in list:`
+  - **filter** for only the ones you care about — write a function
+  - "Each of these has a code word. You'll use all of them today."
+- Image: none
+- Caption: "Each of these has a code word. You'll use them today."
+- Notes: Don't teach each one now — just plant the vocabulary. The metaphors and chunks will fill it in.
+
+#### Slide D3-S021 — Chunk #1 Concept 4/4: Code shape
+- Format: G05 Concept Explanation
+- Title: "What a list looks like in code"
+- Body:
+  ```gdscript
+  var games := []                      # empty list
+  var fruits := ["apple", "banana"]    # list with two items
+  var score := 0                       # not a list — just a counter
+  ```
+- Image: none
+- Caption: "Square brackets = list. Empty brackets = empty list."
+- Notes: Point to the difference between `[]` and `0`. Counters and lists are different things that often live side by side.
+
+#### Slide D3-S022 — Chunk #1 Metaphor 1/3: PS5 game library
+- Format: G11 Image + Caption
+- Title: "Your PS5 library"
+- Body: "Every game you own is in a list. Zero games on day one. You add one. You add another. You delete the bad ones."
+- Image: `D3TD2.png` — PS5 home screen showing game tiles -- not done --
+- Caption: "A list that grows and shrinks as you play."
+- Notes: This is the D3 metaphor anchor for all list operations. Reuse it every time `.append()` / `.erase()` / `.size()` comes up.
+
+#### Slide D3-S023 — Chunk #1 Metaphor 2/3: Adding a game
+- Format: G05 Concept Explanation
+- Title: "Adding to the library"
+- Body:
+  ```gdscript
+  library.append("Hogwarts Legacy")
+  ```
+  - "New game. Slides into the next open slot."
+  - "In Base Defense: every time an enemy spawns, it slides into `enemies`."
+- Image: none
+- Caption: "`library.append(\"Hogwarts Legacy\")` — adds to the end."
+- Notes: Short slide. Pairs with the next.
+
+#### Slide D3-S024 — Chunk #1 Metaphor 3/3: How-it's-used in games
+- Format: G05 Concept Explanation
+- Title: "Lists in every game"
+- Body:
+  - Pac-Man: a list of ghost positions — already used this in D2.
+  - Every RPG: inventory list, quest list, party list.
+  - Base Defense: `enemies` (who's alive), `towers` (what's placed), `enemies_to_spawn` (spawn queue for this wave).
+- Image: none
+- Caption: none
+- Notes: Connect to D2 work. They already walked a list; today they own the list itself.
+
+#### Slide D3-S025 — Chunk #1 How-it's-used 1/2: Two lists + two counters
+- Format: G05 Concept Explanation
+- Title: "Base Defense needs four things to remember"
+- Body:
+  - `enemies` — a list of every enemy currently on the field
+  - `towers` — a list of every tower the player has placed
+  - `coins` — how many coins the player has right now
+  - `base_hp` — how much health the base has left
+  - "Nothing else in the file works without these four. They're the memory of the whole game."
+- Image: none
+- Caption: none
+- Notes: "Think of them as the scoreboard before the game starts — empty, but the hooks are set."
+
+#### Slide D3-S026 — Chunk #1 How-it's-used 2/2: Why they're at the top
+- Format: G05 Concept Explanation
+- Title: "Why these live at the top of the file"
+- Body:
+  - Variables declared outside any function are *file-level*. Every function can read and change them.
+  - `spawn_enemy()` will push into `enemies`. `kill_enemy()` will pull from it. `_process()` will walk it.
+  - "If they weren't at the top, each function would have its own private copy — and they'd never talk to each other."
+- Image: none
+- Caption: none
+- Notes: This addresses the scoping confusion kids hit in D2. Belt-and-suspenders now saves a lot of debug time later.
+
+#### Slide D3-S027 — Chunk #1 Where-in-game
+- Format: G09 Concept + Task
+- Title: "Where they live in the file"
+- Body LHS:
+  ```gdscript
+  var games := []
+  var coins := 100
+  ```
+- Image: `D3C1.png` — main.gd:117-122 showing `# TODO #1: GAME STATE LISTS + COUNTERS` banner + empty 4-var block, red overlay on lines 117-122
+- Caption: "Four declarations. Nothing else in the file works without these."
+- Notes: Point to the banner. Tell kids: "This is where you're working for the next few minutes."
+
+#### Slide D3-S028 — ACTION SLIDE — Task #1
+- Format: G09 Concept + Task
+- Title: "Your task: chunk #1 — game state"
+- Body LHS (board example):
+  ```gdscript
+  var games := []
+  var coins := 100
+  ```
+- Image: `D3C1.png` — main.gd:117-122, red overlay on `#@todo` gap
+- Caption: "Two empty libraries and two counters. The whole game hangs on these four lines."
+- Notes: Task #1 exact wording — "Set up the game's memory: two empty lists (`enemies` and `towers`) and two counters — coins at `START_COINS` and base health at `START_BASE_HP`. Nothing else in the file works without these." Kids type: `var enemies := []`, `var towers := []`, `var coins: int = START_COINS`, `var base_hp: int = START_BASE_HP`. Circulate and check variable names match exactly — typos here cascade to every later chunk.
+
+#### Slide D3-S029 — After-works: skipped (no visible payoff yet)
+- Format: G04 Headline / Divider
+- Title: "Declarations done — no fireworks yet"
+- Body: "These variables are invisible until the rest of the chunks wire them up. Trust the process."
+- Image: none
+- Caption: none
+- Notes: One beat. Keep momentum going into Walks C/D.
+
+#### Slide D3-S030 — Chunk #1 recap check
+- Format: G05 Concept Explanation
+- Title: "Quick check before running"
+- Body:
+  - Four vars declared at file level?
+  - `enemies` and `towers` are empty lists `[]`?
+  - `coins` = `START_COINS`, `base_hp` = `START_BASE_HP`?
+  - "Yes to all three → let's run."
+- Image: none
+- Caption: none
+- Notes: Instructor verbal check. Catch any kid who used `= 0` for the lists or misspelled the constants.
+
+---
+
+### 10.5 Walks C/D — Run + Read errors (slides S031–S034)
+
+#### Slide D3-S031 — Walk C.1: Run the project (Challenge)
+- Format: G07 Step / Challenge
+- Title: "Walk C — Run your game"
+- Body: "Run the game and confirm it opens without errors."
+- Image: none
+- Caption: none
+- Notes: F5. Even though nothing visible happens from Chunk #1, this confirms the declarations compile. Step badge: C.1.
+
+#### Slide D3-S032 — Walk C.2: Run the project (Hint)
+- Format: G08 Step / Hint
+- Title: "Walk C — Hint"
+- Body:
+  - F5 → "Set Main Scene?" → Select Current → game window opens
+  - F8 to stop
+- Image: none
+- Caption: none
+- Notes: Step badge: C.2. If the game opens, great. If not, go to Walk D.
+
+#### Slide D3-S033 — Walk D.1: Find the error (Challenge)
+- Format: G07 Step / Challenge
+- Title: "Walk D — Game didn't open?"
+- Body: "Find the error in the Output panel."
+- Image: none
+- Caption: none
+- Notes: Step badge: D.1.
+
+#### Slide D3-S034 — Walk D.2: Find the error (Hint)
+- Format: G08 Step / Hint
+- Title: "Walk D — Hint"
+- Body:
+  - Output panel (bottom of editor) → look for red text
+  - Click the blue line number → editor jumps to the problem
+  - Fix the typo → Ctrl+S → F5 again
+- Image: none
+- Caption: none
+- Notes: Step badge: D.2. Common mistake: `START_COIN` instead of `START_COINS`, or `var enemies = {}` (curly = dict, not list).
+
+---
+
+### 10.6 Chunk #2 — `.append()` and `.erase()` (slides S035–S040)
+
+#### Slide D3-S035 — Chunk #2 Recap-bridge
+- Format: G05 Concept Explanation
+- Title: "You've got two empty libraries — time to fill and drain them"
+- Body:
+  - `enemies` starts empty. The game needs to add enemies when they spawn, and remove them when they die or reach the base.
+  - `towers` starts empty. The game adds a tower when the player places one.
+  - "Two operations. One word each: `.append()` adds. `.erase()` removes."
+- Image: none
+- Caption: none
+- Notes: Bridge from Chunk #1. The metaphor callback is PS5 library.
+
+#### Slide D3-S036 — Chunk #2 Concept: `.append()` + `.erase()`
+- Format: G05 Concept Explanation
+- Title: "`.append()` and `.erase()`"
+- Body:
+  - **Left**: row of 4 tiles, 5th tile slides in from right.
+    `library.append("Hogwarts Legacy")` — adds to the end.
+  - **Right**: row of 5 tiles, one fades out, others shift left.
+    `library.erase("Old Game")` — takes it out.
+  - "In Base Defense: `enemies.append(e)` when a new enemy spawns. `enemies.erase(e)` when it dies or gets through."
+- Image: none
+- Caption: none
+- Notes: Diagram on the board if time allows. The shift-left behavior is important — `.size()` decreases by 1.
+
+#### Slide D3-S037 — Chunk #2 Quiz
+- Format: G05 Concept Explanation
+- Title: "Quiz — what's at position 2?"
+- Body:
+  - Library: `["Spider-Man", "FIFA", "Minecraft", "Stardew"]`
+  - You delete `"Minecraft"`.
+  - What's at position 2 now?
+  - Answer: `"Stardew"`. Erasing shifts everything after it forward by one.
+- Image: none
+- Caption: "Erasing shifts everything after it forward by one."
+- Notes: Quick audience question. Point: erasing is safe but changes positions. Kids don't need to track positions manually — they loop by item, not by index.
+
+#### Slide D3-S038 — Chunk #2 How-it's-used
+- Format: G05 Concept Explanation
+- Title: "Three places in Base Defense"
+- Body:
+  - Enemy spawns → `.append` to `enemies`.
+  - Tower kills enemy → `.erase` from `enemies` + add `reward` coins.
+  - Enemy reaches base → `.erase` from `enemies` (no bounty — the enemy got through).
+- Image: none
+- Caption: none
+- Notes: These are the three `#@todo` sites kids are about to fill. Setting up the mental model first.
+
+#### Slide D3-S039 — Chunk #2 Where-in-game (triptych)
+- Format: G09 Concept + Task
+- Title: "Three holes — same lesson"
+- Body LHS:
+  ```gdscript
+  # append:
+  library.append("Hogwarts Legacy")
+
+  # erase + pay:
+  library.erase("Old Game")
+  coins += 50
+
+  # erase only:
+  library.erase("Bad Game")
+  ```
+- Image: `D3C2a.png` — main.gd:310-312, `# TODO #2a: ADD THIS ENEMY TO THE LIST` banner + spawn_enemy context, red overlay on lines 310-312
+- Caption: "Three holes. Same idea."
+- Notes: Show D3C2a on screen. Point out the three separate locations kids will visit. Mention D3C2b and D3C2c exist at lines 337-340 and 343-345.
+
+#### Slide D3-S040 — ACTION SLIDE — Task #2 (combined)
+- Format: G09 Concept + Task
+- Title: "Your task: chunk #2 — three holes, same idea"
+- Body LHS (board examples stacked):
+  ```gdscript
+  # #2a — append:
+  library.append("Hogwarts Legacy")
+
+  # #2b reward — erase + pay:
+  library.erase("Old Game")
+  coins += 50
+
+  # #2b no-reward — erase only:
+  library.erase("Bad Game")
+  ```
+- Image: `D3C2b.png` — main.gd:337-340, `# TODO #2b: REMOVE FROM LIST + PAY OUT` banner inside kill_enemy if-branch, red overlay on lines 337-340
+- Caption: "Three holes. Same idea."
+- Notes: Task #2 exact wording — three bullets: (1) "Enemy spawned. `enemies` should know about it." (2) "Tower killed an enemy. Remove it from `enemies`, add `reward` to `coins`." (3) "Enemy leaked to the base. Remove it from `enemies` — no payout." Without #2a, every spawned enemy is invisible to the game. Without #2b, dead enemies stay in the list and towers keep shooting at ghosts. No after-works here — payoff is Chunk #3.
+
+---
+
+### 10.7 Chunk #3 — Iterate two lists each frame (slides S041–S046)
+
+#### Slide D3-S041 — Chunk #3 Recap-bridge
+- Format: G05 Concept Explanation
+- Title: "Same `for`. Same shape. New lists."
+- Body:
+  - D2: `for ghost in ghosts:` — you walked every ghost.
+  - D3: `for enemy in enemies:` — same. `for tower in towers:` — same again.
+  - "The only new thing: you're doing it twice, once for each list."
+- Image: none
+- Caption: none
+- Notes: D2 callback. Shouldn't need much time here.
+
+#### Slide D3-S042 — Chunk #3 D2 callback
+- Format: G05 Concept Explanation
+- Title: "D2 shape — you already wrote this"
+- Body:
+  ```gdscript
+  for colour in ["red", "green", "blue"]:
+      print(colour)
+  ```
+  "Same shape you wrote yesterday. Today the list is `enemies`. The action is `step_enemy(e)`."
+- Image: none
+- Caption: "Same shape you wrote yesterday."
+- Notes: Point to the board example. No new concept here — just recognition.
+
+#### Slide D3-S043 — Chunk #3 How-it's-used
+- Format: G05 Concept Explanation
+- Title: "Every frame: two sweeps"
+- Body:
+  - "Every frame: walk every enemy → step it forward by `delta`. It moves one tick toward the base."
+  - "Every frame: walk every tower → tick its cooldown. If cooldown hits zero, it tries to fire."
+  - "Without both loops: the field is frozen. Nothing moves, nothing shoots."
+- Image: none
+- Caption: none
+- Notes: `delta` is the time since the last frame. Kids don't need to understand it — just pass it through.
+
+#### Slide D3-S044 — Chunk #3 Where-in-game
+- Format: G09 Concept + Task
+- Title: "Where these loops live"
+- Body LHS:
+  ```gdscript
+  for game in library:
+      print(game)
+  ```
+- Image: `D3C3.png` — main.gd:229-234, `# TODO #3: MOVE THE WORLD` banner inside _process(delta), red overlay on lines 229-234
+- Caption: "Two for-loops, back to back. Each sweeps one list."
+- Notes: Point to the `_process(delta)` function context. This is the heartbeat of the game.
+
+#### Slide D3-S045 — ACTION SLIDE — Task #3
+- Format: G09 Concept + Task
+- Title: "Your task: chunk #3 — the world moves"
+- Body LHS (board example):
+  ```gdscript
+  for game in library:
+      print(game)
+  ```
+- Image: `D3C3.png` — main.gd:217-234, red overlay on lines 229-234
+- Caption: "Two loops. Without these, the field is frozen."
+- Notes: Task #3 exact wording — "Loop through `enemies` calling `step_enemy` on each. Then loop through `towers` calling `tower_tick` on each. Without these, the field is frozen." Kids type two `for` loops: `for e in enemies: step_enemy(e, delta)` then `for t in towers: tower_tick(t, delta)`. After this chunk, enemies walk — big visible payoff.
+
+#### Slide D3-S046 — After-works: enemies walk!
+- Format: G12 Screenshot + Caption
+- Title: "After-works: the field is alive"
+- Body: "F5. Wave 1 auto-starts. Enemies walk toward the base. Towers don't fire yet — that's chunk #6."
+- Image: `D3TD2.png` — game running with enemies moving, no towers placed yet -- not done --
+- Caption: "Movement is alive! Towers come in chunk #6."
+- Notes: Run it. Let kids place a few enemies by pressing the sniper key just to see them move. Big morale boost.
+
+---
+
+### 10.8 Chunk #4 — Function takes a list as parameter (slides S047–S052)
+
+#### Slide D3-S047 — Chunk #4 Recap-bridge
+- Format: G05 Concept Explanation
+- Title: "Yesterday: one value in. Today: a whole list in."
+- Body:
+  - D2: `func add_points(amount):` — you handed in one number.
+  - D3: `func move_all(enemy_list, delta):` — you hand in a whole list.
+  - "A function can take *anything* as input — including a list you've already built."
+- Image: none
+- Caption: none
+- Notes: Connect to D2 Chunk #5 (func with parameter). The bridge is the pizza analogy: yesterday `make_pizza("large")` took a size string; today `import_library(games)` takes a whole list.
+
+#### Slide D3-S048 — Chunk #4 D2 pizza callback
+- Format: G05 Concept Explanation
+- Title: "D2: one thing in"
+- Body:
+  ```gdscript
+  func add_points(amount):
+      score += amount
+  ```
+  "Yesterday: `amount` was a number. Today: it can be a list."
+- Image: none
+- Caption: "Yesterday: amount was a number. Today: it can be a list."
+- Notes: Quick anchor. Move fast.
+
+#### Slide D3-S049 — Chunk #4 PS5 callback
+- Format: G05 Concept Explanation
+- Title: "Imagine `import_library(games)`"
+- Body:
+  - "You hand the function your whole PS5 library at once."
+  - "Inside the function, it does something to every game in that list."
+  - "`move_all(enemy_list, delta)` is the same idea — hand it the list, it steps every item."
+- Image: none
+- Caption: "The list is the *input*. The function decides what to do."
+- Notes: This is chunk #4's mental model. Nothing calls `move_all()` automatically — it's a reusable tool in the toolbox.
+
+#### Slide D3-S050 — Chunk #4 Where-in-game
+- Format: G09 Concept + Task
+- Title: "Where `move_all` lives"
+- Body LHS:
+  ```gdscript
+  func total(numbers):
+      var s = 0
+      for n in numbers:
+          s += n
+      return s
+  ```
+- Image: `D3C4.png` — main.gd:376-379, func move_all(enemy_list: Array, delta: float) signature visible, red overlay on lines 376-379
+- Caption: "Same shape as chunk #3 — just using the list that was handed in."
+- Notes: Point to the parameter name: `enemy_list`, not `enemies`. Inside the function, use `enemy_list`.
+
+#### Slide D3-S051 — ACTION SLIDE — Task #4
+- Format: G09 Concept + Task
+- Title: "Your task: chunk #4 — `move_all`"
+- Body LHS (board example):
+  ```gdscript
+  func total(numbers):
+      var s = 0
+      for n in numbers:
+          s += n
+      return s
+  ```
+- Image: `D3C4.png` — main.gd:362-379, red overlay on lines 376-379
+- Caption: "Same loop shape as chunk #3 — the list comes in through the door."
+- Notes: Task #4 exact wording — "Complete `move_all` so it steps every enemy in `enemy_list`. Same behavior as task #3's loop — this time the list arrives as a parameter instead of from the file." Kids type: `for e in enemy_list: step_enemy(e, delta)`. Nothing calls `move_all()` by default — no visible payoff here.
+
+#### Slide D3-S052 — Chunk #4 bridge note
+- Format: G05 Concept Explanation
+- Title: "Tool in the toolbox"
+- Body:
+  - "`move_all()` is done but nothing calls it yet."
+  - "You *could* refactor your chunk #3 enemy loop to `move_all(enemies, delta)` — same result."
+  - "Concept: the same loop logic, but packaged so anyone can hand in *any* list, not just `enemies`."
+- Image: none
+- Caption: none
+- Notes: Optional stretch for fast finishers. Main point: the function exists, it works, and it demonstrates the list-as-parameter pattern that #5a and #5b will extend.
+
+---
+
+### 10.9 Chunk #5a — Function returns ONE from a list (slides S053–S065)
+
+#### Slide D3-S053 — Chunk #5a Concept 1/3: "Deeper Functions"
+- Format: G01 Title
+- Title: "**Deeper Functions**"
+- Body: "Functions can do more than follow instructions. They can *find things* — scan a list, pick the best match, and hand it back."
+- Image: none
+- Caption: none
+- Notes: Second concept root of the day. Carries the vending machine + backpack metaphor.
+
+#### Slide D3-S054 — Chunk #5a Concept 2/3: What "return" means
+- Format: G05 Concept Explanation
+- Title: "A function that hands something back"
+- Body:
+  - So far: functions *do* things. `step_enemy()`, `spawn_enemy()`, `move_all()` — all *do*.
+  - New: a function can also *answer a question*. You call it → it gives you something back.
+  - That "something back" is called the **return value**.
+  - ```gdscript
+    func double(n):
+        return n * 2
+
+    var x = double(5)   # x is now 10
+    ```
+- Image: none
+- Caption: "The function runs, does work, then hands the result back with `return`."
+- Notes: This is the D2 Chunk #6 callback (they wrote `hit_wall` which returned a bool). Lean on it: "You already did this — `hit_wall` returned `true` or `false`. Today the function returns a game node."
+
+#### Slide D3-S055 — Chunk #5a Concept 3/3: Code shape
+- Format: G05 Concept Explanation
+- Title: "Return — code shape"
+- Body:
+  ```gdscript
+  func find_best(list):
+      var best = null
+      for item in list:
+          # check if item is better than best
+          best = item
+      return best
+  ```
+  "Three parts: start with nothing (`null`), scan the list, hand back the winner."
+- Image: none
+- Caption: "`null` = nothing yet. `return` = here's your answer."
+- Notes: The "best so far" pattern. Kids will see this exact shape in #5a.
+
+#### Slide D3-S056 — Chunk #5a Metaphor 1/4: Vending machine
+- Format: G11 Image + Caption
+- Title: "The vending machine"
+- Body: "Type in B4. Machine drops Doritos. The machine is a *function*: input = the code, output = a snack."
+- Image: `D3TD3.png` — vending machine with B4 keypad lit -- not done --
+- Caption: "Input = the code. Output = a snack."
+- Notes: This is the metaphor anchor for return values. Every time a function returns something today, callback to the vending machine.
+
+#### Slide D3-S057 — Chunk #5a Metaphor 2/4: Backpack
+- Format: G11 Image + Caption
+- Title: "The backpack"
+- Body: "You grab the snack. You put it in your backpack. `add_to_backpack(snack)`. Another function. Input = snack, output = nothing (your backpack just changed)."
+- Image: none
+- Caption: "Grab the output. Pass it somewhere else."
+- Notes: Sets up the chaining concept. The backpack is `fire_at` in chunk #6.
+
+#### Slide D3-S058 — Chunk #5a Metaphor 3/4: Output feeds input
+- Format: G05 Concept Explanation
+- Title: "Output of one feeds input of the next"
+- Body: Diagram with arrow:
+  `vend("B4")` → returns snack → `add_to_backpack(snack)`
+  "The first function's *answer* is the second function's *question*."
+- Image: none
+- Caption: "The first function's answer is the second function's question."
+- Notes: This is the core concept for chunk #6 (nested calls). Plant it here, harvest it there.
+
+#### Slide D3-S059 — Chunk #5a Metaphor 4/4: Two ways to say it
+- Format: G05 Concept Explanation
+- Title: "Two ways to write the same thing"
+- Body:
+  ```gdscript
+  # Long form (two lines):
+  var snack = vend("B4")
+  add_to_backpack(snack)
+
+  # Short / nested form (one line):
+  add_to_backpack(vend("B4"))
+  ```
+  "Same exact result. The inside function runs first."
+- Image: none
+- Caption: "Same exact result. The inside function runs first."
+- Notes: Vending + backpack lesson lands here. Chunks #5b + #6 lean on this without re-teaching.
+
+#### Slide D3-S060 — Chunk #5a Best-so-far tracker shape
+- Format: G05 Concept Explanation
+- Title: "Best-so-far — the shape of `get_nearest`"
+- Body:
+  ```gdscript
+  var best = null
+  var best_d = 999999.0
+  for item in list:
+      var d = pos.distance_to(item.position)
+      if d < best_d:
+          best = item
+          best_d = d
+  return best
+  ```
+  "Start with no winner. Walk the list. If this one is closer than the current best, it's the new best."
+- Image: none
+- Caption: "Start with nothing. Walk. Update. Return the winner."
+- Notes: This is the board example for task #5a. Read it aloud, step by step.
+
+#### Slide D3-S061 — Chunk #5a How-it's-used
+- Format: G05 Concept Explanation
+- Title: "Base Defense — which enemy to shoot?"
+- Body:
+  - "Cannon and Sniper both ask: which enemy is closest AND still in range?"
+  - "`get_nearest_enemy_in_range(pos, tower_range)` walks `enemies`, tracks the closest one within range, and returns it."
+  - "The vending machine drops *that* enemy. The backpack (`fire_at`) will be chunk #6's job."
+- Image: none
+- Caption: none
+- Notes: Don't go into `fire_at` yet. Just connect the function's purpose to the vending metaphor.
+
+#### Slide D3-S062 — Chunk #5a Where-in-game
+- Format: G09 Concept + Task
+- Title: "Where `get_nearest_enemy_in_range` lives"
+- Body LHS (best-so-far recap):
+  ```gdscript
+  func nearest(list, pos):
+      var best = null
+      var best_d = 999999.0
+      for item in list:
+          var d = pos.distance_to(item.position)
+          if d < best_d:
+              best = item
+              best_d = d
+      return best
+  ```
+- Image: `D3C5a.png` — main.gd:392-418, showing pre-given init lines (gray overlay) + `#@todo` kid hole at 409-415 (red overlay) + pre-given return line. Two-tone overlay: gray on pre-given, red on kid hole.
+- Caption: "Gray = pre-given (init + return). Red = your loop."
+- Notes: R5 partial hole. The `var nearest = null` and `var best_dist = ...` init lines are pre-given above the kid's hole. The `return nearest` at the end is also pre-given. Kid fills only the loop body.
+
+#### Slide D3-S063 — ACTION SLIDE — Task #5a
+- Format: G09 Concept + Task
+- Title: "Your task: chunk #5a — find the nearest"
+- Body LHS (board example):
+  ```gdscript
+  func nearest(list, pos):
+      var best = null
+      var best_d = 999999.0
+      for item in list:
+          var d = pos.distance_to(item.position)
+          if d < best_d:
+              best = item
+              best_d = d
+      return best
+  ```
+- Image: `D3C5a.png` — main.gd:409-415 (R5 partial hole), gray overlay on pre-given init and return lines, red overlay on kid hole
+- Caption: "Walk every enemy. Track the closest one in range. The init and return are already written."
+- Notes: Task #5a exact wording — "Walk every enemy in `enemies`. For each one, measure its distance from `pos`. If it's inside `tower_range` AND closer than `best_dist`, it's the new winner — update `nearest` and `best_dist`." Pre-given lines above and below are grayed. Kid writes only the for-loop body: `for e in enemies:`, distance check, double condition with `and`, update both `nearest` and `best_dist`.
+
+#### Slide D3-S064 — Chunk #5a bridge note
+- Format: G05 Concept Explanation
+- Title: "What #5a just gave you"
+- Body:
+  - "`get_nearest_enemy_in_range` is the vending machine."
+  - "You call it with a position and a range. It hands back the closest enemy — or `null` if no one's in range."
+  - "Chunk #6 will be the backpack: take that enemy and fire at it."
+- Image: none
+- Caption: none
+- Notes: Bridge to chunk #6. No payoff here — the function exists but nothing calls it yet.
+
+#### Slide D3-S065 — Chunk #5a: After-works (skipped)
+- Format: G04 Headline / Divider
+- Title: "No payoff yet — towers fire in chunk #6"
+- Body: "The function is built. The vending machine is stocked. Next: plug it into the tower loop."
+- Image: none
+- Caption: none
+- Notes: Keep momentum. Move to #5b quickly.
+
+---
+
+### 10.10 Chunk #5b — Function returns LIST from list (slides S066–S069)
+
+#### Slide D3-S066 — Chunk #5b Recap-bridge
+- Format: G05 Concept Explanation
+- Title: "#5a returned *one* enemy. #5b returns *all* enemies in range."
+- Body:
+  - "Cannon: finds the nearest enemy. Returns one node."
+  - "Splash: finds every enemy in a radius. Returns a *list* of nodes."
+  - "Same vending machine idea — different output size."
+- Image: none
+- Caption: none
+- Notes: Quick bridge. One or many — same pattern, different return type.
+
+#### Slide D3-S067 — Chunk #5b Concept: building a filtered list
+- Format: G05 Concept Explanation
+- Title: "Filter the list — keep only what you want"
+- Body:
+  ```gdscript
+  func filter_close(list, pos, radius):
+      var result := []
+      for item in list:
+          if pos.distance_to(item.position) <= radius:
+              result.append(item)
+      return result
+  ```
+  "Start with an empty list. Walk. If this item passes the test, add it to `result`. Return the full result at the end."
+- Image: none
+- Caption: "Start empty. Add what passes. Return the whole list."
+- Notes: The board example for #5b. Contrast with #5a: instead of tracking one best candidate, you accumulate all matches.
+
+#### Slide D3-S068 — Chunk #5b Where-in-game
+- Format: G09 Concept + Task
+- Title: "Where `get_enemies_in_radius` lives"
+- Body LHS:
+  ```gdscript
+  var result := []
+  for e in enemies:
+      if pos.distance_to(e.position) <= radius:
+          result.append(e)
+  return result
+  ```
+- Image: `D3C5b.png` — main.gd:444-450, get_enemies_in_radius function signature visible + empty `#@todo`, red overlay on lines 444-450
+- Caption: "Same filter pattern — builds a list, returns it."
+- Notes: No partial hole here — kid writes the full body including the `var result := []` init and the `return result` at the end.
+
+#### Slide D3-S069 — ACTION SLIDE — Task #5b
+- Format: G09 Concept + Task
+- Title: "Your task: chunk #5b — find the crowd"
+- Body LHS (board example):
+  ```gdscript
+  var result := []
+  for e in enemies:
+      if pos.distance_to(e.position) <= radius:
+          result.append(e)
+  return result
+  ```
+- Image: `D3C5b.png` — main.gd:444-450, red overlay on `#@todo` body
+- Caption: "Build a fresh list. Add every enemy within radius. Return it."
+- Notes: Task #5b exact wording — "Build a brand-new empty list. Walk every enemy in `enemies`. If its distance to `pos` is within `radius`, add it to the new list. Return the list at the end." Four lines. Two vending machines are now stocked — chunk #6 plugs them both in.
+
+---
+
+### 10.11 Chunk #6 — `match` + nested function calls (slides S070–S078)
+
+#### Slide D3-S070 — Chunk #6 Recap-bridge
+- Format: G05 Concept Explanation
+- Title: "Three functions built. Time to plug them in."
+- Body:
+  - "`move_all` — steps every enemy. ✓"
+  - "`get_nearest_enemy_in_range` — finds the closest target. ✓"
+  - "`get_enemies_in_radius` — finds everyone in a blast zone. ✓"
+  - "Chunk #6: connect the vending machines to the backpacks. This is the chunk that makes the game playable."
+- Image: none
+- Caption: none
+- Notes: The big-payoff chunk. Build the energy.
+
+#### Slide D3-S071 — Chunk #6 Match pre-given note
+- Format: G05 Concept Explanation
+- Title: "The `match` dispatcher is pre-given"
+- Body:
+  - "`match` is a Day 4 concept — it routes based on what something equals."
+  - "Today: it's already written for you. It checks the tower type and jumps to the right branch."
+  - "You fill in *what each branch does*."
+  - Diagram: tower type → `match t_type:` → two paths: `"cannon"/"sniper"` branch → #6a, `"splash"` branch → #6b
+- Image: none
+- Caption: "Gray = pre-given dispatcher. Red = your two holes."
+- Notes: Demystify `match` without teaching it. "Think of it as a traffic light — it decides which road you go down. You just fill in what to do at the destination."
+
+#### Slide D3-S072 — Chunk #6 How-it's-used table
+- Format: G05 Concept Explanation
+- Title: "Two tower types, two targeting functions"
+- Body:
+  | Tower | Targeting | Function |
+  |---|---|---|
+  | Cannon, Sniper | Single nearest enemy | `get_nearest_enemy_in_range` (#5a) |
+  | Splash | All enemies in radius | `get_enemies_in_radius` (#5b) |
+  "Each branch: pick the target, fire if something's there, reset the cooldown."
+- Image: none
+- Caption: none
+- Notes: Table overview. The vending+backpack chain: vend(target) → if something → fire_at(target).
+
+#### Slide D3-S073 — Chunk #6 Where-in-game (two-tone overview)
+- Format: G09 Concept + Task
+- Title: "Both holes — inside `tower_tick`"
+- Body LHS:
+  ```gdscript
+  shoot(get_target(enemies))
+  ```
+- Image: `D3C6Full.png` — main.gd:493-512, full match block showing: pre-given match line (gray overlay), "cannon"/"sniper" branch label (gray), #6a body (red overlay), "splash" branch label (gray), #6b body (red overlay)
+- Caption: "Gray = already written. Red = your two holes — one per branch."
+- Notes: Two-tone overlay. Point out what's gray and what's red. The kids' job is only the red parts.
+
+#### Slide D3-S074 — ACTION SLIDE — Task #6a (Cannon + Sniper)
+- Format: G09 Concept + Task
+- Title: "Your task: chunk #6a — single-target towers"
+- Body LHS (vending + backpack with null guard):
+  ```gdscript
+  var snack = vend("B4")
+  if snack != null:
+      add_to_backpack(snack)
+  ```
+- Image: `D3C6a.png` — main.gd:498-503, red overlay on cannon/sniper branch body. Gray overlay on surrounding pre-given match structure.
+- Caption: "Vending machine drops the target. If something dropped, fire at it."
+- Notes: Task #6a exact wording — "For single-target towers: use `get_nearest_enemy_in_range` to find a victim. If there is one, call `fire_at` on it for `t_damage`, then reset the tower's cooldown to `t_rate`." `get_nearest_enemy_in_range` is the vending machine. `fire_at` is the backpack. Null guard is the "machine ate your money" case.
+
+#### Slide D3-S075 — ACTION SLIDE — Task #6b (Splash)
+- Format: G09 Concept + Task
+- Title: "Your task: chunk #6b — splash towers"
+- Body LHS:
+  ```gdscript
+  var snacks = vend_combo("B4")
+  if snacks.size() > 0:
+      add_to_backpack(snacks)
+  ```
+- Image: `D3C6b.png` — main.gd:506-511, red overlay on splash branch body. Gray overlay on surrounding pre-given match structure.
+- Caption: "Same idea — but now the vending machine drops a whole list."
+- Notes: Task #6b exact wording — "For Splash towers: use `get_enemies_in_radius` to grab everyone in range. If at least one enemy is there, call `fire_at` on the whole list for `t_damage`, then reset cooldown to `t_rate`." `size() > 0` mirrors the null guard from #6a — same idea, different return type (list vs single).
+
+#### Slide D3-S076 — Chunk #6 after-works: TOWERS FIRE (BIG PAYOFF)
+- Format: G12 Screenshot + Caption
+- Title: "TOWERS FIRE"
+- Body: "Place a tower. Watch enemies fall. Wave 1 starts clearing. This is the moment the game becomes a *game*."
+- Image: `D3TD1.png` — Base Defense running with towers firing, wave 1 clearing -- not done --
+- Caption: "TOWERS FIRE! Place a tower, watch the wave clear."
+- Notes: Big moment. F5. Have kids press `1` to select a Cannon, click to place it, then hit Start Wave (`Enter` or `S`). Pause for celebration.
+
+#### Slide D3-S077 — Section divider: after chunk #6 playtest
+- Format: G04 Headline / Divider
+- Title: "Quick playtest — place towers, start a wave"
+- Body: "Press `1` (Cannon), `2` (Sniper), `3` (Splash). Click to place. `Enter` to start the wave."
+- Image: none
+- Caption: none
+- Notes: Give kids 3-4 minutes to play. Let them try all three tower types. This is the emotional peak of the morning.
+
+#### Slide D3-S078 — Post-playtest bridge to #7
+- Format: G05 Concept Explanation
+- Title: "One more thing — how does the game know a wave is done?"
+- Body:
+  - "You just beat wave 1 (maybe). How did the game know it was over?"
+  - "That's chunk #7 — the wave trigger check. Last chunk."
+- Image: none
+- Caption: none
+- Notes: Quick bridge. Don't let the post-playtest energy die — pivot to the finish line.
+
+---
+
+### 10.12 Chunk #7 — Size check + wave trigger (slides S079–S084)
+
+#### Slide D3-S079 — Chunk #7 Recap-bridge
+- Format: G05 Concept Explanation
+- Title: "How does the game know a wave is done?"
+- Body:
+  - "`enemies.size()` = how many enemies are alive on the field right now.
+  - "`library.size()` = how many games you own. Same `.size()` — same idea."
+  - "When `enemies.size() == 0` — the field is empty. But is the wave actually done?"
+- Image: none
+- Caption: none
+- Notes: PS5 callback. Quick.
+
+#### Slide D3-S080 — Chunk #7 Quiz: is the wave actually done?
+- Format: G05 Concept Explanation
+- Title: "Quiz — is the wave done?"
+- Body:
+  - "`enemies.size() == 0` — is the wave done?
+  - Trick question. **Maybe not.** There could still be enemies waiting to spawn (`enemies_to_spawn.size() > 0`).
+  - "Both lists must be empty AND a wave must actually be in progress."
+  - Answer: check three conditions together with `and`.
+- Image: none
+- Caption: "`enemies.size() == 0 and enemies_to_spawn.size() == 0 and wave_in_progress`"
+- Notes: The triple-condition `if` is the key idea. `wave_in_progress` stops this from firing repeatedly between waves.
+
+#### Slide D3-S081 — Chunk #7 How-it's-used
+- Format: G05 Concept Explanation
+- Title: "Wave done → what happens next"
+- Body:
+  - Flip `wave_in_progress` off.
+  - Bump `wave_index`.
+  - If `wave_index` is past the last wave → `you_win()`.
+  - Otherwise → `start_next_wave()`.
+- Image: none
+- Caption: none
+- Notes: Simple state transition. Kids have seen `if/else` since Day 1 — this is just new vocabulary words.
+
+#### Slide D3-S082 — Chunk #7 Where-in-game
+- Format: G09 Concept + Task
+- Title: "Where the wave check lives"
+- Body LHS:
+  ```gdscript
+  if library.size() == 0:
+      print("buy a game!")
+  ```
+- Image: `D3C7.png` — main.gd:254-262, `# TODO #7: SIZE CHECK + WAVE TRIGGER` banner inside _process loop, red overlay on lines 254-262
+- Caption: "Two size checks, one progress flag, one branch."
+- Notes: Show the location. Point to the `wave_in_progress` guard.
+
+#### Slide D3-S083 — ACTION SLIDE — Task #7
+- Format: G09 Concept + Task
+- Title: "Your task: chunk #7 — wave trigger"
+- Body LHS (board example):
+  ```gdscript
+  if library.size() == 0:
+      print("buy a game!")
+  ```
+- Image: `D3C7.png` — main.gd:237-262, red overlay on lines 254-262
+- Caption: "Both lists empty AND wave in progress → end the wave."
+- Notes: Task #7 exact wording — "When the field is empty AND the spawn queue is empty AND a wave is in progress, the wave is done. Flip `wave_in_progress` off, bump `wave_index`, and either call `you_win()` (if no waves left) or `start_next_wave()`." Triple `and` condition. `wave_in_progress` guard is critical — without it, the check fires every frame between waves.
+
+#### Slide D3-S084 — After-works: YOU WIN (HUGE PAYOFF)
+- Format: G12 Screenshot + Caption
+- Title: "After-works: all 8 waves"
+- Body: "F5. Survive all 8 waves. After the last enemy falls — YOU WIN panel appears."
+- Image: `D3TD3.png` — YOU WIN panel visible on screen -- not done --
+- Caption: "Beat all 8 waves. End-of-day celebration moment."
+- Notes: Run the game to completion if time allows. Even if kids only make it to wave 3 during normal play, the instructor can demo a full win with EASY difficulty. Big end-of-coding celebration.
+
+---
+
+### 10.13 Personalization layer (slides S085–S107)
+
+#### Slide D3-S085 — Section divider: Make it yours
+- Format: G04 Headline / Divider
+- Title: "Make it yours"
+- Body: none
+- Image: none
+- Caption: none
+- Notes: Pacing divider. Kids are done with required coding — this is the creative stretch.
+
+#### Slide D3-S086 — Personalization overview
+- Format: G05 Concept Explanation
+- Title: "Seven ways to make Base Defense yours"
+- Body:
+  1. Tune tower stats in code
+  2. Re-tint a tower with Modulate
+  3. Swap a tower's sprite tile
+  4. Drag a Kenney scenery prop into the scene
+  5. Flip the difficulty knob
+  6. (stretch) Edit the wave list
+  7. (stretch) Add a new wave entry
+- Image: none
+- Caption: none
+- Notes: Overview slide. Let kids pick their beats. Beats 1-4 are the main session; 5-7 for fast finishers.
+
+#### Slide D3-S087 — Beat 1 Step 1: Open TOWER_STATS
+- Format: G07 Step / Challenge
+- Title: "Beat 1 — Tune tower stats: find the dictionary"
+- Body: "Find `TOWER_STATS` in `main.gd`. It's near the top."
+- Image: `D3Beat1Step1.png` — main.gd showing the TOWER_STATS dict with default values
+- Caption: none
+- Notes: Point them to lines ~49-71. The dict has Cannon, Sniper, Splash entries.
+
+#### Slide D3-S088 — Beat 1 Step 2: Change a number
+- Format: G08 Step / Hint
+- Title: "Beat 1 — Change the damage"
+- Body:
+  - Find the `"damage"` key for Cannon (default: `3`).
+  - Change it to something wild — try `30`.
+  - Ctrl+S.
+- Image: `D3Beat1Step2.png` — TOWER_STATS dict with `"damage": 30` edited for Cannon
+- Caption: "One number. Whole different tower."
+- Notes: Emphasize: this is real game design tuning. Same thing studios do in playtesting.
+
+#### Slide D3-S089 — Beat 1 Step 3: Run and see
+- Format: G12 Screenshot + Caption
+- Title: "Beat 1 — Run it"
+- Body: "F5. Start a wave. Watch how fast enemies die."
+- Image: `D3Beat1Step3.png` — game running with enemies dying fast from overpowered cannon
+- Caption: "Overpowered cannon. Fix it or keep it — it's your game."
+- Notes: Let kids laugh at the broken balance. This is the point: you control the numbers.
+
+#### Slide D3-S090 — Beat 2 Step 1: Re-tint — current color
+- Format: G07 Step / Challenge
+- Title: "Beat 2 — Re-tint a tower"
+- Body: "The Cannon is orange by default. Find the color value in `TOWER_STATS`."
+- Image: `D3Beat2Step1.png` — default Cannon (orange) in-game
+- Caption: none
+- Notes: Look for the `"color"` or `"modulate"` key in the Cannon entry.
+
+#### Slide D3-S091 — Beat 2 Step 2: Change the color
+- Format: G08 Step / Hint
+- Title: "Beat 2 — Change the color"
+- Body:
+  - Find the `Color(R, G, B)` value in the Cannon entry.
+  - Try `Color(0.2, 0.5, 1.0)` for blue, or `Color(0, 1, 0)` for green.
+  - Ctrl+S, F5.
+- Image: `D3Beat2Step2.png` — editor showing the Modulate / Color line edited for blue
+- Caption: "R, G, B — all between 0.0 and 1.0."
+- Notes: If a kid asks how to get purple: `Color(0.6, 0, 0.9)`. Any floats in [0,1] work.
+
+#### Slide D3-S092 — Beat 2 Step 3: Blue cannon in-game
+- Format: G12 Screenshot + Caption
+- Title: "Beat 2 — Blue cannons!"
+- Body: none
+- Image: `D3Beat2Step3.png` — game running with blue Cannons placed
+- Caption: "Your towers, your colors."
+- Notes: Quick payoff. Move to Beat 3.
+
+#### Slide D3-S093 — Beat 3 Step 1: Browse the asset folder
+- Format: G07 Step / Challenge
+- Title: "Beat 3 — Swap a tower sprite"
+- Body: "Browse `assets/kenney_td/` in the FileSystem panel. Pick a tile number you like."
+- Image: `D3Beat3Step1.png` — FileSystem panel showing assets/kenney_td/ folder open with tile thumbnails
+- Caption: none
+- Notes: The Kenney TD pack has 299 tiles. Tile names follow the pattern `towerDefense_tileNNN.png`.
+
+#### Slide D3-S094 — Beat 3 Step 2: Find the tile number
+- Format: G08 Step / Hint
+- Title: "Beat 3 — Edit the tile number"
+- Body:
+  - In `TOWER_STATS`, find the Cannon's `"tile"` key (default: `250`).
+  - Change it to the number of the tile you liked.
+  - Ctrl+S, F5.
+- Image: `D3Beat3Step2.png` — TOWER_STATS dict showing `"tile": 250` default
+- Caption: "Every Kenney tile has a number. Change the number, change the sprite."
+- Notes: Tile numbers 0–299. Some won't look like towers — part of the fun.
+
+#### Slide D3-S095 — Beat 3 Step 3: Tile number edited
+- Format: G05 Concept Explanation
+- Title: "Beat 3 — New tile number"
+- Body: "Ctrl+S → F5. Your Cannon now has a different sprite."
+- Image: `D3Beat3Step3.png` — TOWER_STATS dict with tile number changed to e.g. 280
+- Caption: none
+- Notes: Quick step.
+
+#### Slide D3-S096 — Beat 3 Step 4: New sprite in-game
+- Format: G12 Screenshot + Caption
+- Title: "Beat 3 — New sprite!"
+- Body: none
+- Image: `D3Beat3Step4.png` — game running showing Cannon with new sprite
+- Caption: "Your Cannon. Your sprite."
+- Notes: If the sprite looks wrong (wrong size, wrong orientation), try a neighboring tile number.
+
+#### Slide D3-S097 — Beat 4 Step 1: Select the Scenery node
+- Format: G07 Step / Challenge
+- Title: "Beat 4 — Add a scenery prop"
+- Body: "In the Scene dock, find and click the `Scenery` node."
+- Image: `D3Beat4Step1.png` — Scene dock showing the Scenery node selected
+- Caption: none
+- Notes: The Scenery node is a plain Node2D that acts as a container for decorative sprites. It doesn't affect gameplay.
+
+#### Slide D3-S098 — Beat 4 Step 2: Pick a prop
+- Format: G08 Step / Hint
+- Title: "Beat 4 — Drag a prop from FileSystem"
+- Body:
+  - In the FileSystem panel, browse `assets/kenney_td/`.
+  - Find a tree, rock, or decorative tile you like.
+  - Drag it from FileSystem into the viewport (while Scenery is selected).
+- Image: `D3Beat4Step2.png` — FileSystem panel with a scenery prop file selected
+- Caption: none
+- Notes: The dragged image becomes a Sprite2D child of the Scenery node. Position and scale in the Inspector.
+
+#### Slide D3-S099 — Beat 4 Step 3: Drag into scene
+- Format: G08 Step / Hint
+- Title: "Beat 4 — Position and scale"
+- Body:
+  - Click the new Sprite2D in the scene tree.
+  - In the Inspector: adjust **Position** (drag in viewport) and **Scale** if it's too big.
+  - Ctrl+S.
+- Image: `D3Beat4Step3.png` — editor viewport showing prop mid-drag from FileSystem into scene
+- Caption: none
+- Notes: Most Kenney tiles are 64×64 — they'll look fine at scale 1.0. Scale 0.5 if too large.
+
+#### Slide D3-S100 — Beat 4 Step 4: Prop in-game
+- Format: G12 Screenshot + Caption
+- Title: "Beat 4 — Your prop!"
+- Body: none
+- Image: `D3Beat4Step4.png` — game running with new prop visible on playfield
+- Caption: "A small touch that makes it feel like *your* map."
+- Notes: Let kids add 2-3 props if they want. They don't block pathing unless they cover the enemy path area (which the pre-given path avoids).
+
+#### Slide D3-S101 — Beat 5 Step 1: Flip the difficulty knob
+- Format: G07 Step / Challenge
+- Title: "Beat 5 — Make it brutally hard (or easy)"
+- Body: "Remember `DIFFICULTY` from Walk DK? Change it again. Try 0 (easy), 1 (medium), 2 (hard)."
+- Image: `D3Beat5Step1.png` — main.gd:43 showing `const DIFFICULTY := 2`
+- Caption: none
+- Notes: Callback to the opener demo. Kids now understand *why* it works — lists. DIFFICULTY indexes into `DIFF_HP_MULT`.
+
+#### Slide D3-S102 — Beat 5 Step 2: Easy mode!
+- Format: G12 Screenshot + Caption
+- Title: "Beat 5 — Try difficulty 0"
+- Body: none
+- Image: `D3Beat5Step3.png` — game running with EASY label visible
+- Caption: "Same code. One number change."
+- Notes: Short beat. The point is reinforcing the lists-as-lookup concept from Walk DK.
+
+#### Slide D3-S103 — Beat 6 Step 1: Edit the wave list (stretch)
+- Format: G07 Step / Challenge
+- Title: "Beat 6 — Edit the wave list (stretch)"
+- Body: "Find the `WAVES` array near the top of `main.gd`. Add a wave, change a count, change a type."
+- Image: `D3Beat6Step1.png` — main.gd showing the WAVES array with default 8 wave tuples
+- Caption: none
+- Notes: Stretch beat for fast finishers. `WAVES` is a list of `[count, "type"]` tuples.
+
+#### Slide D3-S104 — Beat 6 Step 2: Edit an entry
+- Format: G08 Step / Hint
+- Title: "Beat 6 — Change a wave"
+- Body:
+  - Find a wave entry like `[5, "basic"]`.
+  - Change the count: `[20, "basic"]` — twenty basics!
+  - Or change the type: `[5, "runner"]` — fast runners.
+  - Ctrl+S, F5.
+- Image: `D3Beat6Step2.png` — WAVES array with one entry edited
+- Caption: "Each entry: [count, type]. Change either number."
+- Notes: Enemy types are `"basic"`, `"runner"`, `"tank"` — use the exact strings.
+
+#### Slide D3-S105 — Beat 6 Step 3: Modified wave in-game
+- Format: G12 Screenshot + Caption
+- Title: "Beat 6 — Your wave!"
+- Body: none
+- Image: `D3Beat6Step3.png` — game running showing modified wave in progress
+- Caption: "You are the game designer."
+- Notes: Let it breathe. This is the creative peak of personalization.
+
+#### Slide D3-S106 — Beat 7 Step 1: Add a new wave entry (stretch)
+- Format: G07 Step / Challenge
+- Title: "Beat 7 — Add a boss wave (stretch)"
+- Body: "At the end of the `WAVES` array, add a new entry: `[20, \"runner\"]`. That's your boss wave."
+- Image: `D3Beat7Step1.png` -- not done --
+- Caption: none
+- Notes: Beat 7 screenshot filename `D3Beat7Step1.png` — not done. Instruction: open WAVES array, append a new `[20, "runner"]` entry on a new line inside the brackets.
+
+#### Slide D3-S107 — Beat 7 payoff
+- Format: G12 Screenshot + Caption
+- Title: "Beat 7 — Wave 9: runner swarm"
+- Body: "Save. Run. Survive."
+- Image: `D3Beat7Step2.png` -- not done --
+- Caption: "Your final boss wave. 20 runners. Good luck."
+- Notes: Beat 7 screenshot `D3Beat7Step2.png` — not done. This is the furthest personalization stretch. Kids who get here are writing real game design.
+
+---
+
+### 10.14 Final Challenge — `endless_mode.gd` (slides S108–S124)
+
+#### Slide D3-S108 — Section divider: Final Challenge
+- Format: G04 Headline / Divider
+- Title: "Final Challenge — Endless Mode"
+- Body: none
+- Image: none
+- Caption: none
+- Notes: Pacing divider. FC is opt-in for fast finishers.
+
+#### Slide D3-S109 — FC payoff card
+- Format: G05 Concept Explanation
+- Title: "What endless mode looks like"
+- Body:
+  - "Rip out the 8 waves. Spawn forever. Everything ramps."
+  - "No win screen. The game ends only when the base falls."
+  - "Waves get harder every time you clear the field. The gap between spawns shrinks. Enemies get faster."
+- Image: none
+- Caption: "Survive as long as you can."
+- Notes: Sell the stakes. This is the FC payoff frame — why it's worth doing.
+
+#### Slide D3-S110 — R3 Pointer slide (REQUIRED)
+- Format: G05 Concept Explanation
+- Title: "You already know how to do this"
+- Body:
+  > Each `#@todo` in `endless_mode.gd` is a near-mirror of a chunk you wrote this morning. If you get stuck, scroll up to that morning chunk in `main.gd` and copy the *shape* (not the words).
+
+  - **FC-1** ← Chunk **#1** (declare state vars)
+  - **FC-2a** ← Chunk **#2a** (`.append()` to a list)
+  - **FC-2b** ← Chunk **#2b** (`.erase()` from a list + reward)
+  - **FC-3** ← Chunk **#3** (iterate two lists each frame)
+  - **FC-4** ← Chunk **#4** (function takes a list as a parameter)
+  - **FC-5a** ← Chunk **#5a** (function returns ONE from a list)
+  - **FC-5b** ← Chunk **#5b** (function returns a LIST from a list)
+  - **FC-6** ← Chunk **#6** (`match` + per-branch nested calls)
+  - **FC-7** ← Chunk **#7** (`list.size()` check + state transition)
+- Image: none
+- Caption: "Each FC hole is a reword of a chunk you already wrote."
+- Notes: REQUIRED per BIBLE §4 R3. Show the full mirror map. Kids read across: FC hole → morning chunk it mirrors.
+
+#### Slide D3-S111 — FC Enable step 1: Open main.gd
+- Format: G07 Step / Challenge
+- Title: "Enable endless mode — step 1"
+- Body: "Open `main.gd` and scroll to the `ENDLESS_MODE` constant near the top."
+- Image: `D3FC1.png` — main.gd:76 showing `const ENDLESS_MODE := false`
+- Caption: none
+- Notes: Line 76. Show it on the projector.
+
+#### Slide D3-S112 — FC Enable step 2: Flip to true
+- Format: G08 Step / Hint
+- Title: "Enable endless mode — step 2"
+- Body:
+  - Change `const ENDLESS_MODE := false` → `const ENDLESS_MODE := true`
+  - Ctrl+S
+- Image: `D3FC2.png` — same line edited to `const ENDLESS_MODE := true`
+- Caption: none
+- Notes: One word change. The game now routes through `endless_mode.gd` via `fc_node.endless_tick(delta)`.
+
+#### Slide D3-S113 — FC Enable step 3: Run — endless banner
+- Format: G12 Screenshot + Caption
+- Title: "Enable endless mode — step 3"
+- Body: "F5. The HUD shows 'Endless Mode'. Enemies spawn. The game never ends."
+- Image: `D3FC3.png` — game running in endless mode with 'Endless Mode' HUD banner visible
+- Caption: "Endless Mode is active. Now fill the holes."
+- Notes: If FC holes aren't filled yet, the game will still run (pre-given init shell handles it). Kids will see the banner but no escalation — that comes as they fill the holes.
+
+#### Slide D3-S114 — FC-1: State vars (mirrors chunk #1)
+- Format: G09 Concept + Task
+- Title: "FC-1 ← chunk #1: state variables"
+- Body LHS (board example from chunk #1):
+  ```gdscript
+  var games := []
+  var coins := 100
+  ```
+- Image: `D3FC1.png` -- not done --
+- Caption: "FC-1 ← chunk #1. Same pattern: declare variables at the top of the file."
+- Notes: FC-1 mirrors morning chunk #1. Kid declares 5 vars: `var spawn_timer: float = 0.0`, `var difficulty: int = 0`, `var spawn_interval: float = SPAWN_INTERVAL_START`, `var spawn_queue: Array = []`, `var clear_streak: int = 0`. Pre-given constants above define the starting values.
+
+#### Slide D3-S115 — FC-2a: `queue_spawn(t)` (mirrors chunk #2a)
+- Format: G09 Concept + Task
+- Title: "FC-2a ← chunk #2a: append to the queue"
+- Body LHS:
+  ```gdscript
+  library.append("Hogwarts Legacy")
+  ```
+- Image: none
+- Caption: "FC-2a ← chunk #2a. One line: `.append()` the enemy type into the spawn queue."
+- Notes: Kid types: `spawn_queue.append(t)`. One line — same as morning #2a but the list is `spawn_queue` instead of `enemies`.
+
+#### Slide D3-S116 — FC-2b: `take_next_spawn()` (mirrors chunk #2b)
+- Format: G09 Concept + Task
+- Title: "FC-2b ← chunk #2b: pop and spawn"
+- Body LHS:
+  ```gdscript
+  library.erase("Old Game")
+  coins += 50
+  ```
+- Image: none
+- Caption: "FC-2b ← chunk #2b. Take the next enemy from the queue, spawn it, pay a streak bonus."
+- Notes: Kid types three lines: `var t: String = spawn_queue.pop_front()`, `main.spawn_enemy(t)`, `main.coins += STREAK_BONUS`. `pop_front()` removes and returns the first item — inverse of `.append()`.
+
+#### Slide D3-S117 — FC-3: Per-frame buff sweep (mirrors chunk #3)
+- Format: G09 Concept + Task
+- Title: "FC-3 ← chunk #3: two loops every frame"
+- Body LHS:
+  ```gdscript
+  for game in library:
+      print(game)
+  ```
+- Image: none
+- Caption: "FC-3 ← chunk #3. Same two-loop shape — buff every enemy, buff every tower."
+- Notes: Kid writes two for-loops: `for e in main.enemies: endless_buff(e, delta)` and `for t in main.towers: buff_tower(t, delta)`. Inline in `endless_tick` — no wrapper function. Identical arc shape to morning #3.
+
+#### Slide D3-S118 — FC-4: `buff_all(enemy_list, delta)` (mirrors chunk #4)
+- Format: G09 Concept + Task
+- Title: "FC-4 ← chunk #4: function takes a list"
+- Body LHS:
+  ```gdscript
+  func total(numbers):
+      var s = 0
+      for n in numbers:
+          s += n
+      return s
+  ```
+- Image: none
+- Caption: "FC-4 ← chunk #4. Same list-as-parameter pattern — loop the list, call a function on each."
+- Notes: Kid writes: `for e in enemy_list: endless_buff(e, delta)`. Two lines. Optional refactor: swap the FC-3 enemy half to `buff_all(main.enemies, delta)` — same result.
+
+#### Slide D3-S119 — FC-5a: `get_fastest_enemy()` (mirrors chunk #5a, R5 partial)
+- Format: G09 Concept + Task
+- Title: "FC-5a ← chunk #5a: find the fastest"
+- Body LHS (best-so-far pattern):
+  ```gdscript
+  func nearest(list, pos):
+      var best = null
+      var best_d = 999999.0
+      for item in list:
+          var d = pos.distance_to(item.position)
+          if d < best_d:
+              best = item
+              best_d = d
+      return best
+  ```
+- Image: none
+- Caption: "FC-5a ← chunk #5a. Same best-so-far loop — this time tracking highest `.speed` instead of smallest distance."
+- Notes: R5 partial hole — init (`var fastest = null`, `var best_speed = 0.0`) and `return fastest` are pre-given. Kid writes only the loop body: `for e in main.enemies:`, check `e.speed > best_speed`, update both. Two-tone overlay in the file: gray on pre-given lines, red on kid hole.
+
+#### Slide D3-S120 — FC-5b: `get_wounded_enemies()` (mirrors chunk #5b)
+- Format: G09 Concept + Task
+- Title: "FC-5b ← chunk #5b: filter the list"
+- Body LHS:
+  ```gdscript
+  var result := []
+  for e in enemies:
+      if pos.distance_to(e.position) <= radius:
+          result.append(e)
+  return result
+  ```
+- Image: none
+- Caption: "FC-5b ← chunk #5b. Same filter pattern — build a list of enemies below the health threshold."
+- Notes: Kid writes: `var result: Array = []`, loop `main.enemies`, check `e.hp < WOUNDED_HP_THRESHOLD`, append, return. Four lines. Mirrors morning #5b exactly.
+
+#### Slide D3-S121 — FC-6: `escalate()` four-band match (mirrors chunk #6)
+- Format: G09 Concept + Task
+- Title: "FC-6 ← chunk #6: fill the match branches"
+- Body LHS:
+  ```gdscript
+  # One branch — same shape, different repetition:
+  "medium":
+      var t: String = pick_type_for_band(band)
+      queue_spawn(t)
+      queue_spawn(t)
+  ```
+- Image: none
+- Caption: "FC-6 ← chunk #6. Four branches. Each: pick a type, queue it 1–4 times. Banner: FC-6 ← chunk #6 (same shape, four times)."
+- Notes: Pre-given `match band:` dispatcher and four branch labels (`"easy"`, `"medium"`, `"hard"`, `"insane"`). Kid fills each body: 1 `queue_spawn` call for easy, 2 for medium, 3 for hard, 4 for insane. Nested form also accepted: `queue_spawn(pick_type_for_band(band))`.
+
+#### Slide D3-S122 — FC-7: `check_for_screen_clear()` (mirrors chunk #7)
+- Format: G09 Concept + Task
+- Title: "FC-7 ← chunk #7: size check + escalate"
+- Body LHS:
+  ```gdscript
+  if library.size() == 0:
+      print("buy a game!")
+  ```
+- Image: none
+- Caption: "FC-7 ← chunk #7. Both lists empty → bump streak and difficulty, call `escalate()`."
+- Notes: Kid writes 6 lines: check `main.enemies.size() == 0 and spawn_queue.size() == 0`, then `clear_streak += 1`, `difficulty = min(difficulty + 1, 3)`, `spawn_interval = max(SPAWN_INTERVAL_MIN, spawn_interval - SPAWN_INTERVAL_SHRINK)`, `main.base_hp += BASE_HP_REGEN_PER_CLEAR`, `escalate()`. No `wave_in_progress` guard here — endless mode has no waves.
+
+#### Slide D3-S123 — FC payoff: endless mode in motion
+- Format: G12 Screenshot + Caption
+- Title: "Endless mode — how far can you get?"
+- Body: none
+- Image: `D3FC3.png` — game running in endless mode with escalating wave count visible in HUD
+- Caption: "Survive as long as you can."
+- Notes: Final FC payoff. If time allows, run it on the projector and let kids watch the difficulty ramp.
+
+#### Slide D3-S124 — FC done — build instructions pointer
+- Format: G04 Headline / Divider
+- Title: "Done? Ask your instructor for the export pack."
+- Body: "To ship your Base Defense as a Windows `.exe`, follow the export walkthrough in the instructor pack."
+- Image: none
+- Caption: none
+- Notes: This is the build-time / export slide placeholder per §10.15 item 3. Actual export walkthrough is in a separate instructor pack.
+
+---
+
+### 10.15 Day closer (slides S125–S127)
+
+#### Slide D3-S125 — Recap
+- Format: G05 Concept Explanation
+- Title: "Today: Lists + Deeper Functions"
+- Body:
+  - **Lists** — a collection your code can grow, shrink, walk, and filter. `.append()`, `.erase()`, `.size()`, `for x in list`.
+  - **Deeper Functions** — functions that scan lists, return something, and chain into each other. Vending machine + backpack.
+  - "Two ideas. Whole game."
+- Image: none
+- Caption: none
+- Notes: Callback to the opener. Keep it short.
+
+#### Slide D3-S126 — Tomorrow teaser
+- Format: G04 Headline / Divider
+- Title: "Tomorrow — Day 4: 2-Player Fighter"
+- Body:
+  - "Objects + State. Your code starts to feel like a *blueprint* instead of a script."
+  - "Two players. Four characters. One fight."
+- Image: none
+- Caption: none
+- Notes: Tease D4. Don't over-explain.
+
+#### Slide D3-S127 — Export pointer
+- Format: G04 Headline / Divider
+- Title: "Export your game"
+- Body: "Ask your instructor for the export pack to ship your Base Defense as a Windows `.exe` — and take it home."
+- Image: none
+- Caption: none
+- Notes: End-of-day logistics. Export pack is a separate instructor document.
 
 ---
 
