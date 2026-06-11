@@ -14,7 +14,7 @@ GDScript is Python-flavored (similar syntax, different runtime). All code is GDS
 
 ## The 5 games
 
-### Day 1 — Top-down racer (`Day1_Pong_Game/`)
+### Day 1 — Pong (`Day1_Pong_Game/`)
 - Single file: `main.gd`
 - Concepts: variables, `if/elif/else`
 - Kids declare car stats (speed, turn speed) and write the movement + boundary conditions

@@ -10,7 +10,7 @@ A 5-day Godot 4 / GDScript coding camp for ages 10–15 (no prior experience). E
 
 | Day | Genre | Concept taught | Folder | Instructor notes |
 |-----|-------|---------------|--------|-----------------|
-| 1 | Top-down racer | Variables + Conditions | `Day1_Pong_Game/` | _(see BIBLE.md §6)_ |
+| 1 | Pong | Variables + Conditions | `Day1_Pong_Game/` | _(see BIBLE.md §6)_ |
 | 2 | Tile maze | Loops + Functions (intro) | `Day2_Maze_Game/` | `INSTRUCTOR_NOTES.md` |
 | 3 | Base defense | Functions (deep) + Lists | `Day3_BaseDef_Game/` | `INSTRUCTOR_NOTES.md` |
 | 4 | 2-player fighter | Objects + State machine | `Day4_Fighter_Game/` | `INSTRUCTOR_NOTES.md` |
