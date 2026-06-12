@@ -653,6 +653,7 @@ are all visible. The build overlays gray on pre-given, red on kid hole.
 **`D3FC1.png`** — `main.gd:76` showing **`const ENDLESS_MODE := false`**.
 **`D3FC2.png`** — Same line edited to **`const ENDLESS_MODE := true`**.
 **`D3FC3.png`** — Game running in endless mode with **"Endless Mode" banner in the HUD** + escalating wave count visible.
+--named D3FC1, skipped the next two--
 
 ---
 
@@ -666,6 +667,7 @@ are all visible. The build overlays gray on pre-given, red on kid hole.
 
 ### D4 — Walk MF (Menu Flow demo)
 
+-- skip all but #1 for this walk, game can't run as template, can't even show what screenshots asked for --
 **`D4WalkMF1.png`** — Char-select panel for P1.
 Steps:
 1. Open `Day4_Fighter_Game/project.godot`.
@@ -737,6 +739,7 @@ Steps:
 - All **6 branches** (idle, walk, jump, fall, attack, hit) with their pre-given velocity lines AND the 4 kid sub-holes visible (#6a/#6b/#6c/#6d).
 You may need to zoom out to fit the whole block — that's fine for this overview shot.
 
+-- these instructions contain pointers to code that doesn't exist, I'm ignoring the sub C6s and just took one screenshot of the C6 section in the code, we only need that one --
 **`D4C6a.png`** — Zoom on the `idle` branch at `player.gd:114-122`. Screenshot showing **`"idle":` label** + the **`velocity.x = 0`** pre-given line + the **#6a `#@todo` block**.
 
 **`D4C6b.png`** — Zoom on the `walk` branch at `player.gd:124-132`. Screenshot showing **`"walk":` label** + the **`velocity.x = walk_speed * get_move_direction()`** pre-given line + the **#6b `#@todo` block**.
@@ -791,6 +794,7 @@ You may need to zoom out to fit the whole block — that's fine for this overvie
 **`D4FC3.png`** — `main.gd` `_ready()` showing the **`CHARACTERS["custom"] = CUSTOM_CHARACTER` line added**.
 **`D4FC4.png`** — Char-select panel running showing **"5 = MyCharacter"** in the prompt text.
 **`D4FC5.png`** — Game running showing the **custom character doing a custom attack** (instructor picks one example to demo — e.g., 3 projectiles in a spread).
+-- instructions within the code are a touch vauge, the outline of the code gives them the shape, but than it says use "take_damage()" and some other methods, we should clarify HOW those need to be used, if at all, and where exactly. --
 
 ---
 
