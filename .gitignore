@@ -4,9 +4,6 @@
 # Only the regenerated .godot/imported/ cache is excluded.
 .godot/
 
-# Generated student ZIPs
-dist/
-
 # Build-script staging
 .tmp/
 
