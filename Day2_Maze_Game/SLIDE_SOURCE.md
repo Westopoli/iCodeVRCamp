@@ -1514,8 +1514,10 @@ Order: personalization (S086a) → Final Challenge (S087–S098) → export (S09
 - Format: G04 Headline / Divider
 - Title: "Final Challenge"
 - Body:
+  - "Unlock the real Pac-Man ghosts. Open `ghost_personalities.gd` — six `#@todo` holes, each a reskin of a morning chunk."
+  - "When all six are filled: open `main.gd`, flip `PERSONALITY_MODE_ENABLED` to `true`, and run. Four personality ghosts replace the three plain ones."
 - Image: none
-- Notes: —
+- Notes: opt-in stretch. The enable toggle + all wiring are pre-given — kids only fill the six holes. (Per camp rule: no game-running or toggle-flip slides; the "turn it on" line lives here on the divider.)
 
 #### Slide D2-S088 — FC pointer slide (R3 REQUIRED)
 - Format: G05 Concept Explanation
@@ -1531,13 +1533,6 @@ Order: personalization (S086a) → Final Challenge (S087–S098) → export (S09
 - Image: none
 - Notes: R3 requirement — this slide must appear before any FC hole. Read aloud. Let kids find the mirror chunks in their file before starting.
 
-#### Slide D2-S089 — What you're unlocking
-- Format: G12 Screenshot + Caption
-- Title: "What you're unlocking"
-- Body: "Replace 3 identical ghosts with 4 authentic Pac-Man personalities — Blinky, Pinky, Inky, Clyde. Each one targets the player differently."
-- Image: `D2FC3.png` — game running with multiple personality ghosts visible. No red overlay.
-- Notes: Show this before the personalities table so kids know the payoff before reading the specs.
-
 #### Slide D2-S090 — The 4 personalities
 - Format: G06 Table
 - Title: "The 4 personalities"
@@ -1551,20 +1546,6 @@ Order: personalization (S086a) → Final Challenge (S087–S098) → export (S09
 - Image: none
 - Notes: "The targeting math is pre-given — you're wiring the personalities together, not computing vectors."
 
-#### Slide D2-S091 — Enable FC step 1: open main.gd
-- Format: G12 Screenshot + Caption
-- Title: "Step 1 — Open `main.gd`"
-- Body: "Open `main.gd`. Find `const PERSONALITY_MODE_ENABLED := false` near the top (around line 36)."
-- Image: `D2FC1.png` — `main.gd` open, showing `const PERSONALITY_MODE_ENABLED := false`. No red overlay.
-- Notes: —
-
-#### Slide D2-S092 — Enable FC step 2: flip to true
-- Format: G12 Screenshot + Caption
-- Title: "Step 2 — Change `false` to `true`"
-- Body: "Edit the line to `const PERSONALITY_MODE_ENABLED := true`. Save with Ctrl+S. The personality mode is now live."
-- Image: `D2FC2.png` — same line edited to `const PERSONALITY_MODE_ENABLED := true`. No red overlay.
-- Notes: "This flips the flag in main.gd's if-branches. All pre-given wiring activates. Now fill the 6 holes."
-
 #### Slide D2-S093 — FC-1 hole: `spawn_personality_ghosts()`
 - Format: G09 Concept + Task
 - Title: "FC-1 — mirrors Chunk #1"
@@ -1573,7 +1554,7 @@ Order: personalization (S086a) → Final Challenge (S087–S098) → export (S09
   for i in range(3):
       print(i)
   ```
-- Image: none
+- Image: `D2FC1.png` — `ghost_personalities.gd` FC-1 hole (lines 216-224), red overlay on the `#@todo` block.
 - Caption: "Spawn one ghost per personality — use `range(PERSONALITY_COUNT)` and call `spawn_one_personality(i)` each time."
 - Notes: Identical shape to morning chunk #1. `spawn_one_personality(i)` is pre-given. Kid writes 2 lines.
 
@@ -1585,7 +1566,7 @@ Order: personalization (S086a) → Final Challenge (S087–S098) → export (S09
   for colour in ["red", "green", "blue"]:
       print(colour)
   ```
-- Image: none
+- Image: `D2FC2.png` — `ghost_personalities.gd` FC-2 hole (lines 227-234), red overlay on the `#@todo` block.
 - Caption: "Every frame, give every personality ghost one step — loop over `ghosts` and call `step_personality(ghost)`."
 - Notes: Literally same shape as morning chunk #2. Kid writes 2 lines.
 
@@ -1599,7 +1580,7 @@ Order: personalization (S086a) → Final Challenge (S087–S098) → export (S09
       print(n)
       n += 1
   ```
-- Image: none
+- Image: `D2FC3.png` — `ghost_personalities.gd` FC-3 hole (lines 237-248), red overlay on the `#@todo` block.
 - Caption: "Count how many ghosts in `ghosts` have the given personality tag. Return the count."
 - Notes: Counter pattern from morning #3. For-each or while both accepted (R6 note in §7). `ghost.get_meta("personality")` reads the tag. Kid writes ~5 lines.
 
@@ -1611,7 +1592,7 @@ Order: personalization (S086a) → Final Challenge (S087–S098) → export (S09
   func say_hi():
       print("hi!")
   ```
-- Image: none
+- Image: `D2FC4.png` — `ghost_personalities.gd` FC-4 hole (lines 251-261), red overlay on the `#@todo` block.
 - Caption: "Send every personality ghost back to the pen. Loop over `ghosts` with an index counter and call `respawn_personality_ghost(ghost, i)`."
 - Notes: Reset pattern from morning #4. Pre-given `respawn_personality_ghost(ghost, i)` handles one ghost. Kid writes ~4 lines (for-each + index counter).
 
@@ -1623,7 +1604,7 @@ Order: personalization (S086a) → Final Challenge (S087–S098) → export (S09
   func add_points(amount):
       score += amount
   ```
-- Image: none
+- Image: `D2FC5.png` — `ghost_personalities.gd` FC-5 hole (lines 264-283), red overlay on the `#@todo` block.
 - Caption: "Given a ghost, return its target tile. Read its personality, then return the right pre-given target helper."
 - Notes: func-with-param + return. Pre-given helpers: `blinky_target`, `pinky_target`, `inky_target`, `clyde_target`. Kid reads the personality meta and routes to the right helper. ~9 lines (4 if-branches).
 
@@ -1635,7 +1616,7 @@ Order: personalization (S086a) → Final Challenge (S087–S098) → export (S09
   func is_even(n) -> bool:
       return n % 2 == 0
   ```
-- Image: none
+- Image: `D2FC6.png` — `ghost_personalities.gd` FC-6 hole (lines 286-294), red overlay on the `#@todo` block.
 - Caption: "Return `true` if the ghost is closer than 8 tiles to the player — call `distance_to_player(ghost)` and compare."
 - Notes: Mirrors `is_even` shape exactly. Pre-given `distance_to_player(ghost)` does the math. Kid writes 2 lines.
 #### 10.5d Export to .exe — take it home (slides S099–S107)
