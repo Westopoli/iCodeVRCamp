@@ -2045,7 +2045,7 @@ Other render rules:
 - Format: G12 Screenshot + Caption
 - Title: "PANDA MOVES."
 - Body: none
-- Image: `D4Beat2Step4.png -- not done --` — game running mid-jump, fighter airborne
+- Image: `D4B2S4.png -- not done --` — game running mid-jump, fighter airborne
 - Caption: "PANDA MOVES. Press A/D to walk. W to jump. Watch the Output panel — walk / jump / fall / idle print as states change. Attack key fires but does no damage yet — that's chunk #7."
 - Notes: SECOND VISIBLE PAYOFF. Make this a moment. Kids test movement for 2-3 minutes. Instructor circulates. If the Output panel isn't printing, the `set_state()` print line is missing — quick fix. Attack animations may fire (pre-given trigger) but no damage yet.
 
@@ -2152,7 +2152,7 @@ Other render rules:
 - Format: G12 Screenshot + Caption
 - Title: "Beat 1 — Tune a character's stats"
 - Body: none
-- Image: `D4Beat1Step1.png -- not done --` — main.gd CHARACTERS dict showing Knight's walk_speed: 220.0
+- Image: `D4B1S1.png -- not done --` — main.gd CHARACTERS dict showing Knight's walk_speed: 220.0
 - Caption: "Make Knight stupidly fast or Ninja deal twice the damage. Open main.gd lines 6-59 and change any number."
 - Notes: Beat 1 intro. Instructor: "Stats are just numbers in the CHARACTERS dict. Change one, save, F5 — done." This beat takes 60 seconds and produces visible results immediately.
 
@@ -2160,7 +2160,7 @@ Other render rules:
 - Format: G12 Screenshot + Caption
 - Title: "Beat 1 — Change the value"
 - Body: none
-- Image: `D4Beat1Step2.png -- not done --` — same line edited to walk_speed: 600.0
+- Image: `D4B1S2.png -- not done --` — same line edited to walk_speed: 600.0
 - Caption: "walk_speed: 220.0 → walk_speed: 600.0. Save → F5 → watch Knight zoom."
 - Notes: Show the single-line edit. Properties to try: walk_speed, jump_impulse, attack_damage, attack_cooldown, attack_range, projectile_speed.
 
@@ -2168,7 +2168,7 @@ Other render rules:
 - Format: G12 Screenshot + Caption
 - Title: "Beat 1 — In-game result"
 - Body: none
-- Image: `D4Beat1Step3.png -- not done --` — game running with Knight visibly faster than P2
+- Image: `D4B1S3.png -- not done --` — game running with Knight visibly faster than P2
 - Caption: "Knight is now faster than Ninja. Both fighters updated automatically — same class, different setup() values."
 - Notes: Reinforce the object lesson: one dict change affects that character everywhere — because `setup()` loads from the dict into the object.
 
@@ -2176,7 +2176,7 @@ Other render rules:
 - Format: G12 Screenshot + Caption
 - Title: "Beat 2 — Re-tint a character"
 - Body: none
-- Image: `D4Beat2Step1.png -- not done --` — Ninja in default pink tint in-game
+- Image: `D4B2S1.png -- not done --` — Ninja in default pink tint in-game
 - Caption: "The CHARACTERS dict has a \"tint\" entry: Color(R, G, B). Change it to any colour you want."
 - Notes: Beat 2 intro. Very quick win — one Color() change.
 
@@ -2184,7 +2184,7 @@ Other render rules:
 - Format: G12 Screenshot + Caption
 - Title: "Beat 2 — Edit the tint"
 - Body: none
-- Image: `D4Beat2Step2.png -- not done --` — CHARACTERS dict showing Ninja's tint line being edited
+- Image: `D4B2S2.png -- not done --` — CHARACTERS dict showing Ninja's tint line being edited
 - Caption: "\"tint\": Color(1.0, 0.85, 0.85) → Color(0.4, 1.0, 0.4). RGB values: 0.0 = dark, 1.0 = full."
 - Notes: R, G, B each 0.0–1.0. Example colour suggestions: red Knight `Color(1.0, 0.4, 0.4)`, blue Mage `Color(0.4, 0.6, 1.0)`, green Ninja `Color(0.4, 1.0, 0.4)`.
 
@@ -2192,7 +2192,7 @@ Other render rules:
 - Format: G12 Screenshot + Caption
 - Title: "Beat 2 — Green Ninja"
 - Body: none
-- Image: `D4Beat2Step3.png -- not done --` — CHARACTERS dict with tint edited to Color(0.4, 1.0, 0.4)
+- Image: `D4B2S3.png -- not done --` — CHARACTERS dict with tint edited to Color(0.4, 1.0, 0.4)
 - Caption: "Save → F5 → green Ninja. The tint applies via Modulate on the Sprite2D node — no art assets needed."
 - Notes: none
 
@@ -2200,7 +2200,7 @@ Other render rules:
 - Format: G12 Screenshot + Caption
 - Title: "Beat 2 — In-game result"
 - Body: none
-- Image: `D4Beat2Step4.png -- not done --` — game running with green Ninja vs default Knight
+- Image: `D4B2S4.png -- not done --` — game running with green Ninja vs default Knight
 - Caption: "Green Ninja vs default Knight. Your tint, your fighter."
 - Notes: Quick payoff. Move on.
 
@@ -2208,7 +2208,7 @@ Other render rules:
 - Format: G12 Screenshot + Caption
 - Title: "Beat 3 — Swap a character's sprite"
 - Body: none
-- Image: `D4Beat3Step1.png -- not done --` — FileSystem panel open showing assets/kenney_pp/characters/ folder
+- Image: `D4B3S1.png -- not done --` — FileSystem panel open showing assets/kenney_pp/characters/ folder
 - Caption: "Browse the Kenney character tiles. Anything from tile_0004.png upward is fair game."
 - Notes: Beat 3. Steps: FileSystem → assets/kenney_pp/characters/ → pick tile_0004.png or higher → change the "sprite" line in CHARACTERS → save → F5.
 
@@ -2216,7 +2216,7 @@ Other render rules:
 - Format: G12 Screenshot + Caption
 - Title: "Beat 3 — New sprite loaded"
 - Body: none
-- Image: `D4Beat3Step2.png -- not done --` — CHARACTERS dict with sprite path edited to tile_0005.png
+- Image: `D4B3S2.png -- not done --` — CHARACTERS dict with sprite path edited to tile_0005.png
 - Caption: "\"sprite\": \"res://assets/kenney_pp/characters/tile_0005.png\". Save → F5 → new fighter face."
 - Notes: Remind: keep the `res://` prefix and the full path. Common mistake: dropping the `res://` prefix or using a Windows backslash.
 
@@ -2224,7 +2224,7 @@ Other render rules:
 - Format: G12 Screenshot + Caption
 - Title: "Beat 3 — In-game result"
 - Body: none
-- Image: `D4Beat3Step3.png -- not done --` — game running with the new sprite visible
+- Image: `D4B3S3.png -- not done --` — game running with the new sprite visible
 - Caption: "Different character art, same fighter logic. The sprite is just a property — swap it and everything else stays."
 - Notes: none
 
@@ -2232,7 +2232,7 @@ Other render rules:
 - Format: G12 Screenshot + Caption
 - Title: "Beat 4 — Edit a map's platforms"
 - Body: none
-- Image: `D4Beat4Step1.png -- not done --` — default Pokémon Stadium layout with 2 platforms
+- Image: `D4B4S1.png -- not done --` — default Pokémon Stadium layout with 2 platforms
 - Caption: "Each map's platforms are an array in the MAPS dict: [x, y, width, height, one_way]. Add one."
 - Notes: Beat 4. Steps: open main.gd lines 61-85 → find MAPS dict → pick a map → add a new platform tuple.
 
@@ -2240,7 +2240,7 @@ Other render rules:
 - Format: G12 Screenshot + Caption
 - Title: "Beat 4 — Add a platform"
 - Body: none
-- Image: `D4Beat4Step2.png -- not done --` — MAPS dict platforms array with new entry appended
+- Image: `D4B4S2.png -- not done --` — MAPS dict platforms array with new entry appended
 - Caption: "Add [600, 320, 100, 16, true] — a small one-way platform at the centre. true = one-way (jump through from below)."
 - Notes: Format: [x, y, width, height, one_way_bool]. one_way = true means you can jump through from below but land on top. false = solid wall/floor.
 
@@ -2248,7 +2248,7 @@ Other render rules:
 - Format: G12 Screenshot + Caption
 - Title: "Beat 4 — Platform in the array"
 - Body: none
-- Image: `D4Beat4Step3.png -- not done --` — same array showing the new tuple added
+- Image: `D4B4S3.png -- not done --` — same array showing the new tuple added
 - Caption: "Save → F5 → pick that map. Your platform is there."
 - Notes: none
 
@@ -2256,7 +2256,7 @@ Other render rules:
 - Format: G12 Screenshot + Caption
 - Title: "Beat 4 — New platform visible"
 - Body: none
-- Image: `D4Beat4Step4.png -- not done --` — game running on the edited map with new platform visible
+- Image: `D4B4S4.png -- not done --` — game running on the edited map with new platform visible
 - Caption: "New platform visible mid-stage. Fighters can jump onto it — because one_way is true."
 - Notes: none
 
@@ -2264,7 +2264,7 @@ Other render rules:
 - Format: G12 Screenshot + Caption
 - Title: "Beat 5 — Add a fifth map"
 - Body: none
-- Image: `D4Beat5Step1.png -- not done --` — MAPS dict with 4 existing entries
+- Image: `D4B5S1.png -- not done --` — MAPS dict with 4 existing entries
 - Caption: "The MAPS dict has 4 entries. Add a fifth with your own platform layout."
 - Notes: Beat 5 (most involved personalisation beat). Steps: add a `"my_map": {...}` entry to MAPS → add `"my_map"` to the keys array in `_unhandled_input` → update the map-select label text.
 
@@ -2272,7 +2272,7 @@ Other render rules:
 - Format: G12 Screenshot + Caption
 - Title: "Beat 5 — New map in the dict"
 - Body: none
-- Image: `D4Beat5Step2.png -- not done --` — MAPS dict with new my_map entry added
+- Image: `D4B5S2.png -- not done --` — MAPS dict with new my_map entry added
 - Caption: "Add a \"my_map\" key with display_name and platforms array. Design your own stage layout."
 - Notes: Template:
   ```
@@ -2290,17 +2290,17 @@ Other render rules:
 - Format: G12 Screenshot + Caption
 - Title: "Beat 5 — Hook it into the menu"
 - Body: none
-- Image: `D4Beat5Step3.png -- not done --` — _unhandled_input showing keys array with "my_map" added
+- Image: `D4B5S3.png -- not done --` — _unhandled_input showing keys array with "my_map" added
 - Caption: "Add \"my_map\" to the keys array in _unhandled_input. Update the map-select label: \"4 = My Map\"."
-- Notes: After this, F5 → char-select → map-select → press 4 → kid's custom map loads. The beat5 payoff screenshot (D4Beat5Step5.png) is shown on the next slide.
+- Notes: After this, F5 → char-select → map-select → press 4 → kid's custom map loads. The beat5 payoff screenshot (D4B5S5.png) is shown on the next slide.
 
 #### Slide D4-S099 — Beat 5 in-game result
 - Format: G12 Screenshot + Caption
 - Title: "Beat 5 — Your map in the game"
 - Body: none
-- Image: `D4Beat5Step4.png -- not done --` — map-select panel showing "4 = My Map"
+- Image: `D4B5S4.png -- not done --` — map-select panel showing "4 = My Map"
 - Caption: "Press 4 in map-select — your map is playable."
-- Notes: If time allows, show D4Beat5Step5.png (game running on custom map). This beat often takes 5-10 minutes — it's the deepest personalisation option.
+- Notes: If time allows, show D4B5S5.png (game running on custom map). This beat often takes 5-10 minutes — it's the deepest personalisation option.
 
 #### Slide D4-S100 — Beat 6: Take on the Final Challenge
 - Format: G04 Headline / Divider

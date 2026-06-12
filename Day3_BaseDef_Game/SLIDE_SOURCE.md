@@ -1319,7 +1319,7 @@ Total: 1 divider + 1 payoff card + 1 R3 pointer + 3 enable walk + 9 hole action 
 - Format: G07 Step / Challenge
 - Title: "Walk DK — One number. Whole different game."
 - Body: "Find the difficulty constant in `main.gd`. Hint: look near the top."
-- Image: `D3Beat5Step1.png` — `main.gd:43` showing `const DIFFICULTY := 2`
+- Image: `D3B5S1.png` — `main.gd:43` showing `const DIFFICULTY := 2`
 - Caption: none
 - Notes: Instructor-driven — show this on the projector. Step badge: DK.1. This is the D3-specific orientation before any coding.
 
@@ -1330,7 +1330,7 @@ Total: 1 divider + 1 payoff card + 1 R3 pointer + 3 enable walk + 9 hole action 
   - Find `const DIFFICULTY := 2`
   - Change `2` → `0`
   - Ctrl+S to save
-- Image: `D3Beat5Step2.png` — same line edited to `const DIFFICULTY := 0`
+- Image: `D3B5S2.png` — same line edited to `const DIFFICULTY := 0`
 - Caption: none
 - Notes: Instructor does this live. Step badge: DK.2.
 
@@ -1338,7 +1338,7 @@ Total: 1 divider + 1 payoff card + 1 R3 pointer + 3 enable walk + 9 hole action 
 - Format: G12 Screenshot + Caption
 - Title: "Walk DK — Run it"
 - Body: "F5. Watch wave 1."
-- Image: `D3Beat5Step3.png` — game running with EASY label visible
+- Image: `D3B5S3.png` — game running with EASY label visible
 - Caption: "Same code. Different feel."
 - Notes: Step badge: DK.3. Let it run for ~10 seconds. Kids see enemies are clearly weaker.
 
@@ -2234,7 +2234,7 @@ Total: 1 divider + 1 payoff card + 1 R3 pointer + 3 enable walk + 9 hole action 
 - Format: G07 Step / Challenge
 - Title: "Beat 1 — Tune tower stats: find the dictionary"
 - Body: "Find `TOWER_STATS` in `main.gd`. It's near the top."
-- Image: `D3Beat1Step1.png` — main.gd showing the TOWER_STATS dict with default values
+- Image: `D3B1S1.png` — main.gd showing the TOWER_STATS dict with default values
 - Caption: none
 - Notes: Point them to lines ~49-71. The dict has Cannon, Sniper, Splash entries.
 
@@ -2245,7 +2245,7 @@ Total: 1 divider + 1 payoff card + 1 R3 pointer + 3 enable walk + 9 hole action 
   - Find the `"damage"` key for Cannon (default: `3`).
   - Change it to something wild — try `30`.
   - Ctrl+S.
-- Image: `D3Beat1Step2.png` — TOWER_STATS dict with `"damage": 30` edited for Cannon
+- Image: `D3B1S2.png` — TOWER_STATS dict with `"damage": 30` edited for Cannon
 - Caption: "One number. Whole different tower."
 - Notes: Emphasize: this is real game design tuning. Same thing studios do in playtesting.
 
@@ -2253,7 +2253,7 @@ Total: 1 divider + 1 payoff card + 1 R3 pointer + 3 enable walk + 9 hole action 
 - Format: G12 Screenshot + Caption
 - Title: "Beat 1 — Run it"
 - Body: "F5. Start a wave. Watch how fast enemies die."
-- Image: `D3Beat1Step3.png` — game running with enemies dying fast from overpowered cannon
+- Image: `D3B1S3.png` — game running with enemies dying fast from overpowered cannon
 - Caption: "Overpowered cannon. Fix it or keep it — it's your game."
 - Notes: Let kids laugh at the broken balance. This is the point: you control the numbers.
 
@@ -2261,7 +2261,7 @@ Total: 1 divider + 1 payoff card + 1 R3 pointer + 3 enable walk + 9 hole action 
 - Format: G07 Step / Challenge
 - Title: "Beat 2 — Re-tint a tower"
 - Body: "The Cannon is orange by default. Find the color value in `TOWER_STATS`."
-- Image: `D3Beat2Step1.png` — default Cannon (orange) in-game
+- Image: `D3B2S1.png` — default Cannon (orange) in-game
 - Caption: none
 - Notes: Look for the `"color"` or `"modulate"` key in the Cannon entry.
 
@@ -2272,7 +2272,7 @@ Total: 1 divider + 1 payoff card + 1 R3 pointer + 3 enable walk + 9 hole action 
   - Find the `Color(R, G, B)` value in the Cannon entry.
   - Try `Color(0.2, 0.5, 1.0)` for blue, or `Color(0, 1, 0)` for green.
   - Ctrl+S, F5.
-- Image: `D3Beat2Step2.png` — editor showing the Modulate / Color line edited for blue
+- Image: `D3B2S2.png` — editor showing the Modulate / Color line edited for blue
 - Caption: "R, G, B — all between 0.0 and 1.0."
 - Notes: If a kid asks how to get purple: `Color(0.6, 0, 0.9)`. Any floats in [0,1] work.
 
@@ -2280,7 +2280,7 @@ Total: 1 divider + 1 payoff card + 1 R3 pointer + 3 enable walk + 9 hole action 
 - Format: G12 Screenshot + Caption
 - Title: "Beat 2 — Blue cannons!"
 - Body: none
-- Image: `D3Beat2Step3.png` — game running with blue Cannons placed
+- Image: `D3B2S3.png` — game running with blue Cannons placed
 - Caption: "Your towers, your colors."
 - Notes: Quick payoff. Move to Beat 3.
 
@@ -2288,7 +2288,7 @@ Total: 1 divider + 1 payoff card + 1 R3 pointer + 3 enable walk + 9 hole action 
 - Format: G07 Step / Challenge
 - Title: "Beat 3 — Swap a tower sprite"
 - Body: "Browse `assets/kenney_td/` in the FileSystem panel. Pick a tile number you like."
-- Image: `D3Beat3Step1.png` — FileSystem panel showing assets/kenney_td/ folder open with tile thumbnails
+- Image: `D3B3S1.png` — FileSystem panel showing assets/kenney_td/ folder open with tile thumbnails
 - Caption: none
 - Notes: The Kenney TD pack has 299 tiles. Tile names follow the pattern `towerDefense_tileNNN.png`.
 
@@ -2299,7 +2299,7 @@ Total: 1 divider + 1 payoff card + 1 R3 pointer + 3 enable walk + 9 hole action 
   - In `TOWER_STATS`, find the Cannon's `"tile"` key (default: `250`).
   - Change it to the number of the tile you liked.
   - Ctrl+S, F5.
-- Image: `D3Beat3Step2.png` — TOWER_STATS dict showing `"tile": 250` default
+- Image: `D3B3S2.png` — TOWER_STATS dict showing `"tile": 250` default
 - Caption: "Every Kenney tile has a number. Change the number, change the sprite."
 - Notes: Tile numbers 0–299. Some won't look like towers — part of the fun.
 
@@ -2307,7 +2307,7 @@ Total: 1 divider + 1 payoff card + 1 R3 pointer + 3 enable walk + 9 hole action 
 - Format: G05 Concept Explanation
 - Title: "Beat 3 — New tile number"
 - Body: "Ctrl+S → F5. Your Cannon now has a different sprite."
-- Image: `D3Beat3Step3.png` — TOWER_STATS dict with tile number changed to e.g. 280
+- Image: `D3B3S3.png` — TOWER_STATS dict with tile number changed to e.g. 280
 - Caption: none
 - Notes: Quick step.
 
@@ -2315,7 +2315,7 @@ Total: 1 divider + 1 payoff card + 1 R3 pointer + 3 enable walk + 9 hole action 
 - Format: G12 Screenshot + Caption
 - Title: "Beat 3 — New sprite!"
 - Body: none
-- Image: `D3Beat3Step4.png` — game running showing Cannon with new sprite
+- Image: `D3B3S4.png` — game running showing Cannon with new sprite
 - Caption: "Your Cannon. Your sprite."
 - Notes: If the sprite looks wrong (wrong size, wrong orientation), try a neighboring tile number.
 
@@ -2323,7 +2323,7 @@ Total: 1 divider + 1 payoff card + 1 R3 pointer + 3 enable walk + 9 hole action 
 - Format: G07 Step / Challenge
 - Title: "Beat 4 — Add a scenery prop"
 - Body: "In the Scene dock, find and click the `Scenery` node."
-- Image: `D3Beat4Step1.png` — Scene dock showing the Scenery node selected
+- Image: `D3B4S1.png` — Scene dock showing the Scenery node selected
 - Caption: none
 - Notes: The Scenery node is a plain Node2D that acts as a container for decorative sprites. It doesn't affect gameplay.
 
@@ -2334,7 +2334,7 @@ Total: 1 divider + 1 payoff card + 1 R3 pointer + 3 enable walk + 9 hole action 
   - In the FileSystem panel, browse `assets/kenney_td/`.
   - Find a tree, rock, or decorative tile you like.
   - Drag it from FileSystem into the viewport (while Scenery is selected).
-- Image: `D3Beat4Step2.png` — FileSystem panel with a scenery prop file selected
+- Image: `D3B4S2.png` — FileSystem panel with a scenery prop file selected
 - Caption: none
 - Notes: The dragged image becomes a Sprite2D child of the Scenery node. Position and scale in the Inspector.
 
@@ -2345,7 +2345,7 @@ Total: 1 divider + 1 payoff card + 1 R3 pointer + 3 enable walk + 9 hole action 
   - Click the new Sprite2D in the scene tree.
   - In the Inspector: adjust **Position** (drag in viewport) and **Scale** if it's too big.
   - Ctrl+S.
-- Image: `D3Beat4Step3.png` — editor viewport showing prop mid-drag from FileSystem into scene
+- Image: `D3B4S3.png` — editor viewport showing prop mid-drag from FileSystem into scene
 - Caption: none
 - Notes: Most Kenney tiles are 64×64 — they'll look fine at scale 1.0. Scale 0.5 if too large.
 
@@ -2353,7 +2353,7 @@ Total: 1 divider + 1 payoff card + 1 R3 pointer + 3 enable walk + 9 hole action 
 - Format: G12 Screenshot + Caption
 - Title: "Beat 4 — Your prop!"
 - Body: none
-- Image: `D3Beat4Step4.png` — game running with new prop visible on playfield
+- Image: `D3B4S4.png` — game running with new prop visible on playfield
 - Caption: "A small touch that makes it feel like *your* map."
 - Notes: Let kids add 2-3 props if they want. They don't block pathing unless they cover the enemy path area (which the pre-given path avoids).
 
@@ -2361,7 +2361,7 @@ Total: 1 divider + 1 payoff card + 1 R3 pointer + 3 enable walk + 9 hole action 
 - Format: G07 Step / Challenge
 - Title: "Beat 5 — Make it brutally hard (or easy)"
 - Body: "Remember `DIFFICULTY` from Walk DK? Change it again. Try 0 (easy), 1 (medium), 2 (hard)."
-- Image: `D3Beat5Step1.png` — main.gd:43 showing `const DIFFICULTY := 2`
+- Image: `D3B5S1.png` — main.gd:43 showing `const DIFFICULTY := 2`
 - Caption: none
 - Notes: Callback to the opener demo. Kids now understand *why* it works — lists. DIFFICULTY indexes into `DIFF_HP_MULT`.
 
@@ -2369,7 +2369,7 @@ Total: 1 divider + 1 payoff card + 1 R3 pointer + 3 enable walk + 9 hole action 
 - Format: G12 Screenshot + Caption
 - Title: "Beat 5 — Try difficulty 0"
 - Body: none
-- Image: `D3Beat5Step3.png` — game running with EASY label visible
+- Image: `D3B5S3.png` — game running with EASY label visible
 - Caption: "Same code. One number change."
 - Notes: Short beat. The point is reinforcing the lists-as-lookup concept from Walk DK.
 
@@ -2377,7 +2377,7 @@ Total: 1 divider + 1 payoff card + 1 R3 pointer + 3 enable walk + 9 hole action 
 - Format: G07 Step / Challenge
 - Title: "Beat 6 — Edit the wave list (stretch)"
 - Body: "Find the `WAVES` array near the top of `main.gd`. Add a wave, change a count, change a type."
-- Image: `D3Beat6Step1.png` — main.gd showing the WAVES array with default 8 wave tuples
+- Image: `D3B6S1.png` — main.gd showing the WAVES array with default 8 wave tuples
 - Caption: none
 - Notes: Stretch beat for fast finishers. `WAVES` is a list of `[count, "type"]` tuples.
 
@@ -2389,7 +2389,7 @@ Total: 1 divider + 1 payoff card + 1 R3 pointer + 3 enable walk + 9 hole action 
   - Change the count: `[20, "basic"]` — twenty basics!
   - Or change the type: `[5, "runner"]` — fast runners.
   - Ctrl+S, F5.
-- Image: `D3Beat6Step2.png` — WAVES array with one entry edited
+- Image: `D3B6S2.png` — WAVES array with one entry edited
 - Caption: "Each entry: [count, type]. Change either number."
 - Notes: Enemy types are `"basic"`, `"runner"`, `"tank"` — use the exact strings.
 
@@ -2397,7 +2397,7 @@ Total: 1 divider + 1 payoff card + 1 R3 pointer + 3 enable walk + 9 hole action 
 - Format: G12 Screenshot + Caption
 - Title: "Beat 6 — Your wave!"
 - Body: none
-- Image: `D3Beat6Step3.png` — game running showing modified wave in progress
+- Image: `D3B6S3.png` — game running showing modified wave in progress
 - Caption: "You are the game designer."
 - Notes: Let it breathe. This is the creative peak of personalization.
 
@@ -2405,17 +2405,17 @@ Total: 1 divider + 1 payoff card + 1 R3 pointer + 3 enable walk + 9 hole action 
 - Format: G07 Step / Challenge
 - Title: "Beat 7 — Add a boss wave (stretch)"
 - Body: "At the end of the `WAVES` array, add a new entry: `[20, \"runner\"]`. That's your boss wave."
-- Image: `D3Beat7Step1.png` -- not done --
+- Image: `D3B7S1.png` -- not done --
 - Caption: none
-- Notes: Beat 7 screenshot filename `D3Beat7Step1.png` — not done. Instruction: open WAVES array, append a new `[20, "runner"]` entry on a new line inside the brackets.
+- Notes: Beat 7 screenshot filename `D3B7S1.png` — not done. Instruction: open WAVES array, append a new `[20, "runner"]` entry on a new line inside the brackets.
 
 #### Slide D3-S107 — Beat 7 payoff
 - Format: G12 Screenshot + Caption
 - Title: "Beat 7 — Wave 9: runner swarm"
 - Body: "Save. Run. Survive."
-- Image: `D3Beat7Step2.png` -- not done --
+- Image: `D3B7S2.png` -- not done --
 - Caption: "Your final boss wave. 20 runners. Good luck."
-- Notes: Beat 7 screenshot `D3Beat7Step2.png` — not done. This is the furthest personalization stretch. Kids who get here are writing real game design.
+- Notes: Beat 7 screenshot `D3B7S2.png` — not done. This is the furthest personalization stretch. Kids who get here are writing real game design.
 
 ---
 

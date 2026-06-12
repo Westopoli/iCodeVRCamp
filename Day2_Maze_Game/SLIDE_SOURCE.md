@@ -631,7 +631,7 @@ Other render rules:
 
 ### 10.2 Opener pack (slides S001–S007)
 
-> **Insert note (2026-06-09):** Per-slide expansion complete for opener + pre-coding + chunks #1–#6 (D2-S001–D2-S086). §10.5 (personalization / FC / export / closer) deferred to Phase 2.5b. Guide-canonical image names used throughout (D2C1–D2C6, D2TileSet1–2, D2Pacman1–2). No ad-hoc `d2_*` names.
+> **Insert note (2026-06-09, completed 2026-06-11):** Per-slide expansion complete for the whole day — opener + pre-coding + chunks #1–#6 (S001–S086), personalization (S086a, self-directed, no shots), FC (S087–S098), export (S099–S107, reuses shared `D1B6S*`), closer (S108). Guide-canonical image names throughout (D2C1–D2C6, D2TS1–2, D2Pacman1–2, D2FC1–3). No ad-hoc `d2_*` names.
 
 #### Slide D2-S001 — Day title
 - Format: G01 Day Title
@@ -773,20 +773,6 @@ Other render rules:
   - Your chunk #6 call: `wall_layer.get_cell_source_id(cell)` → returns tile ID or `-1` if empty.
 - Image: none
 - Notes: "That one call is the ONLY TileSet line the kid writes today."
-
-#### Slide D2-S015 — Walk T.1: Click the Walls node
-- Format: G12 Screenshot + Caption
-- Title: "Step T.1 — Click the Walls node"
-- Body: "In the **Scene** panel (top-left), find the `Walls` node and click it."
-- Image: `D2TileSet1.png` — Godot TileSet editor open. No red overlay.
-- Notes: —
-
-#### Slide D2-S016 — Walk T.2: Inspector → Tile Set → Edit
-- Format: G12 Screenshot + Caption
-- Title: "Step T.2 — Tile Set property → Edit"
-- Body: "In the **Inspector** (right panel), find the **Tile Set** property. Click the resource name → **Edit**."
-- Image: `D2TileSet2.png` — Inspector showing TileMapLayer with layer dropdown. No red overlay.
-- Notes: —
 
 #### Slide D2-S017 — Walk T.3: TileSet panel opens
 - Format: G05 Concept Explanation
@@ -1504,12 +1490,23 @@ Other render rules:
 - Image: none
 - Notes: End-of-morning celebration. All 6 chunks working together. "Every mechanic running right now came from code YOU wrote this morning."
 
-### 10.5 Remaining sections — STUB (deferred to Phase 2.5b)
+### 10.5 Personalization, FC, export & closer (AUTHORED 2026-06-11)
 
-Mirror D1 §10.17 sub-sectioning when authored:
+Order: personalization (S086a) → Final Challenge (S087–S098) → export (S099–S107) → closer (S108). No asset-recap slide (D2 art is the Kenney atlas already introduced in Walk T). Personalization is a single self-directed slide — no screenshots.
 
-- **§10.5a** Section divider — Personalization. 7 beats from §6. Estimated ~25-30 slides.
-- **§10.5b** Final Challenge (`ghost_personalities.gd`) — **expanded below (slides S087–S098, 12 slides)**.
+#### 10.5a Personalization (slide S086a)
+
+#### Slide D2-S086a — Make it yours
+- Format: G04 Headline / Divider
+- Title: "Make it yours"
+- Body:
+  - "The game works — now make it YOURS. Use the skills you've learned to personalize it however you like."
+  - "Repaint the walls and dots, move the tunnel row, tweak the ghost timing, swap the player for a different sprite."
+  - "Download free art from **kenney.nl** and drop it in. No wrong answers — make it your own."
+- Image: none
+- Notes: open-ended play block, no walkthrough. Kids who want to keep tinkering, tinker; kids who want the Final Challenge can jump straight to it. They already have every skill they need.
+
+#### 10.5b Final Challenge (slides S087–S098)
 
 #### 10.5b Final Challenge (slides S087–S098)
 
@@ -1554,18 +1551,18 @@ Mirror D1 §10.17 sub-sectioning when authored:
 - Image: none
 - Notes: "The targeting math is pre-given — you're wiring the personalities together, not computing vectors."
 
-#### Slide D2-S091 — Enable FC step 1: open final_challenge.gd
+#### Slide D2-S091 — Enable FC step 1: open main.gd
 - Format: G12 Screenshot + Caption
-- Title: "Step 1 — Open `final_challenge.gd`"
-- Body: "Open `final_challenge.gd`. Find `const FC_ENABLED := false` near the top."
-- Image: `D2FC1.png` — `final_challenge.gd` open, showing `const FC_ENABLED := false`. No red overlay.
+- Title: "Step 1 — Open `main.gd`"
+- Body: "Open `main.gd`. Find `const PERSONALITY_MODE_ENABLED := false` near the top (around line 36)."
+- Image: `D2FC1.png` — `main.gd` open, showing `const PERSONALITY_MODE_ENABLED := false`. No red overlay.
 - Notes: —
 
 #### Slide D2-S092 — Enable FC step 2: flip to true
 - Format: G12 Screenshot + Caption
 - Title: "Step 2 — Change `false` to `true`"
-- Body: "Edit the line to `const FC_ENABLED := true`. Save with Ctrl+S. The personality mode is now live."
-- Image: `D2FC2.png` — same line edited to `const FC_ENABLED := true`. No red overlay.
+- Body: "Edit the line to `const PERSONALITY_MODE_ENABLED := true`. Save with Ctrl+S. The personality mode is now live."
+- Image: `D2FC2.png` — same line edited to `const PERSONALITY_MODE_ENABLED := true`. No red overlay.
 - Notes: "This flips the flag in main.gd's if-branches. All pre-given wiring activates. Now fill the 6 holes."
 
 #### Slide D2-S093 — FC-1 hole: `spawn_personality_ghosts()`
@@ -1641,9 +1638,81 @@ Mirror D1 §10.17 sub-sectioning when authored:
 - Image: none
 - Caption: "Return `true` if the ghost is closer than 8 tiles to the player — call `distance_to_player(ghost)` and compare."
 - Notes: Mirrors `is_even` shape exactly. Pre-given `distance_to_player(ghost)` does the math. Kid writes 2 lines.
-- **§10.5c** Asset recap — Kenney Tiny Dungeon atlas card (G08). Estimated ~3-5 slides.
-- **§10.5d** Export-to-exe walkthrough (Beat 6 of §6). Estimated ~6-8 slides.
-- **§10.5e** Day closer — "Tomorrow: Tower Defense." Estimated ~1-2 slides.
+#### 10.5d Export to .exe — take it home (slides S099–S107)
+
+> Reuses the D1 export screenshots (`D1B6S1`–`D1B6S8`) — the Godot export flow is identical every day. They live in `slides/screenshots/shared/`. The shots show the D1 "Pong" example; captions stay game-neutral.
+
+#### Slide D2-S099 — Section divider: Take it home
+- Format: G04 Headline / Divider
+- Title: "Take it home"
+- Body: "Turn your maze game into a real Windows program — a `.exe` you can run on any PC, no Godot needed. Show your family tonight."
+- Image: none
+- Notes: the day's takeaway artifact. Every kid leaves with a runnable game.
+
+#### Slide D2-S100 — Export 1: Project → Export
+- Format: G12 Screenshot + Caption
+- Title: "Step 1 — Project → Export…"
+- Body: "In the top menu bar, click **Project**, then **Export…**"
+- Image: `D1B6S1.png` — the Project menu open, Export… visible. (Shared D1 export shot.)
+- Notes: save first (Ctrl+S in scene + script) so the latest code ships.
+
+#### Slide D2-S101 — Export 2: the Export window
+- Format: G12 Screenshot + Caption
+- Title: "Step 2 — The Export window"
+- Body: "The Export window opens. It's empty the first time — click **Add…** at the top to add a target."
+- Image: `D1B6S2.png` — empty Export window, "No presets found", Add… button. (Shared D1 export shot.)
+- Notes: —
+
+#### Slide D2-S102 — Export 3: pick Windows Desktop
+- Format: G12 Screenshot + Caption
+- Title: "Step 3 — Choose Windows Desktop"
+- Body: "From the list, pick **Windows Desktop** — that's the kind of program Windows PCs run."
+- Image: `D1B6S3.png` — the Add… platform list, Windows Desktop in it. (Shared D1 export shot.)
+- Notes: —
+
+#### Slide D2-S103 — Export 4: the preset is ready
+- Format: G12 Screenshot + Caption
+- Title: "Step 4 — Your Windows preset"
+- Body: "Godot adds a Windows Desktop preset on the left. Leave the options as they are — **Runnable** on, Architecture **x86_64**."
+- Image: `D1B6S4.png` — the Windows Desktop preset selected, Options tab showing Runnable + Architecture x86_64. (Shared D1 export shot.)
+- Notes: —
+
+#### Slide D2-S104 — Export 5: if you see a red error
+- Format: G12 Screenshot + Caption
+- Title: "Step 5 — If a red error shows up"
+- Body: "The first time on a new PC you may see a red **'No export template found'** message. Click **Manage Export Templates** to fix it."
+- Image: `D1B6S5.png` — the red "No export template found" error + the Manage Export Templates link. (Shared D1 export shot.)
+- Notes: INSTRUCTOR — export templates are a one-time per-machine install. If you pre-installed them, kids won't hit this; keep this + the next slide only as a 'just in case', or drop both.
+
+#### Slide D2-S105 — Export 6: install the templates
+- Format: G12 Screenshot + Caption
+- Title: "Step 6 — Download the templates"
+- Body: "In the Export Template Manager, click **Download and Install**. Let it finish, then close. (One-time setup per computer.)"
+- Image: `D1B6S6.png` — Export Template Manager, version 4.6.3.stable, "Download and Install" button. (Shared D1 export shot.)
+- Notes: INSTRUCTOR setup step — see previous slide.
+
+#### Slide D2-S106 — Export 7: name it and save
+- Format: G12 Screenshot + Caption
+- Title: "Step 7 — Name it and Save"
+- Body: "Click **Export Project**, type a name (e.g. `Day 2 - Maze`), pick your folder, and click **Save**. Godot builds your game."
+- Image: `D1B6S7.png` — the Save a File dialog with a filename typed in, in the project folder. (Shared D1 export shot — shows the D1 example name.)
+- Notes: —
+
+#### Slide D2-S107 — Export 8: your game is a real program
+- Format: G12 Screenshot + Caption
+- Title: "Step 8 — Double-click and play"
+- Body: "Godot writes your `.exe` plus a `.pck` data file into your folder. Double-click the `.exe` — your maze game runs with no Godot needed. Keep the two files together."
+- Image: `D1B6S8.png` — File Explorer showing the exported .exe + .pck. (Shared D1 export shot.)
+- Notes: the takeaway moment. The .exe needs the .pck beside it — copy both if you move them.
+
+#### 10.5e Day closer (slide S108)
+
+#### Slide D2-S108 — Tomorrow: defend your base
+- Format: G02 Timeline / Closer
+- Title: "Tomorrow: defend your base"
+- Body: "1990s. Tower & base defense. We go deeper on **functions** and meet **lists** — to spawn waves of enemies and the towers that stop them."
+- Image: optional tower-defense teaser (placeholder OK).
+- Notes: close on the arc. Tease Day 3's genre (base defense) + concepts (functions deep + lists).
 
 ### 10.6 Build-time notes for python-pptx chat (placeholder)
 

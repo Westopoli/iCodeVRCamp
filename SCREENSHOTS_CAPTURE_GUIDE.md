@@ -1,22 +1,36 @@
 # Screenshot Capture Guide — D1-D4 Camp Slide Decks
 
+> **Reading this file (slide-build chat):** This guide is the single source of truth for D1-D4 screenshot filenames, counts, and skips when generating the decks in python. Before emitting any slide:
+> - **`-- text --`** (single dash each side) = a transcription note the user left for **you**. Read it and act: if it instructs (rename, reuse a file, skip, caption), obey it verbatim; if observational, use as context. Full rules in §"Inline notes".
+> - **`--not done--`** (reserved marker, no other words) = screenshot intentionally skipped → omit that slide entirely, no placeholder. See §"Skip marker".
+> - **Filename count = actual files on disk.** Add/skip shots freely; the build adapts. Filenames here are authoritative — never invent your own.
+
 ## Filename + folder conventions (locked 2026-05-31)
 
 - **Universal walks** (Walks A/B/C/D — reused across all days): name as `WalkA1.png`, `WalkA2.png`, `WalkA3.png` … `WalkB1.png` … etc. Drop in `slides/screenshots/shared/`.
 - **Per-day walks** (Walk DK for D3, Walk MF + Walk CD for D4): `D3WalkDK1.png`, `D4WalkMF1.png`, `D4WalkCD1.png` … Drop in `slides/screenshots/dayN/`.
 - **Per-day tasks (chunks → kid `#@todo` blocks)**: `D1C1a.png`, `D1C1b.png`, `D1C6a.png` … `D2C3b.png` … `D3C5a.png` … `D4C6a.png`. One per kid `#@todo` block. Drop in `slides/screenshots/dayN/`.
-- **Per-day personalization beats**: `D1Beat1Step1.png`, `D1Beat1Step2.png`, … `D1Beat2Step1.png` …. One per "step" inside a beat. Drop in `slides/screenshots/dayN/`.
+- **Per-day personalization beats**: `D1B1S1.png`, `D1B1S2.png`, … `D1B2S1.png` …. One per "step" inside a beat. Drop in `slides/screenshots/dayN/`.
 - **Per-day Final Challenge**: `D2FC1.png`, `D3FC1.png`, `D4FC1.png` … Drop in `slides/screenshots/dayN/`.
 - **No after-works payoff screenshots** — those slides are text-only on the slide deck side. Skip.
 
-**Variable count is OK** — if you decide a walk needs 5 shots instead of 4, just name them `WalkA1`-`WalkA5` and the build will emit 5 slides for that walk. If you add `WalkA6.png` later, the build picks it up automatically (one slide added). Same for beats — `D1Beat1Step1`-`D1Beat1Step4` → 4 slides for beat 1.
+**Naming legend (decode the prefixes — for the slide-build chat):**
+- `D{n}C{x}` = **Day n, Chunk x** — a kid `#@todo` task. **Chunks ARE the todos.** e.g. `D1C1`, `D2C3b`, `D3C5a`.
+- `D{n}B{x}S{y}` = **Day n, Beat x, Step y** — a personalization step. e.g. `D1B1S2`.
+- `D{n}FC{x}` = **Day n, Final Challenge** shot x. e.g. `D2FC1`.
+- `Walk{A-D}{n}` = shared walkthrough (open project / open script / run / read error), reused every day → `shared/`. e.g. `WalkB3`.
+- `D{n}Walk{XX}{y}` = per-day walkthrough (e.g. `D3WalkDK`, `D4WalkMF`, `D4WalkCD`) → `dayN/`.
+- `D{n}TS{x}` = **Day n, TileSet editor** shot (D2 only). e.g. `D2TS1`.
+- `D{n}{Title}{x}` = historical / era image. e.g. `D1Pong1`, `D2Pacman1`, `D3Defense1`, `D4Smash1`.
+
+**Variable count is OK** — if you decide a walk needs 5 shots instead of 4, just name them `WalkA1`-`WalkA5` and the build will emit 5 slides for that walk. If you add `WalkA6.png` later, the build picks it up automatically (one slide added). Same for beats — `D1B1S1`-`D1B1S4` → 4 slides for beat 1.
 
 ### Skip marker: `--not done--`
 
 If you decide to skip a screenshot listed in this guide, **add the literal text `--not done--` on a new line directly under that screenshot's entry**. Example:
 
 ```
-**`D1Beat3Step2.png`** — Editor showing the line edited to a much higher value.
+**`D1B3S2.png`** — Editor showing the line edited to a much higher value.
 --not done--
 Steps:
 1. ...
@@ -27,7 +41,7 @@ Steps:
 1. Treat `--not done--` as authoritative: **the file does not exist and the corresponding slide must be omitted from the deck entirely.** Do not emit a placeholder, do not generate a slide with a "MISSING:" box, do not warn the user. Just skip.
 2. For per-task tasks (`D1C1a`, `D2C3b`, etc.) marked `--not done--`: skip the Action slide for that task. Adjacent slides (Concept root, How-used, Where-in-game) stay — only the Action slide that needs the screenshot is dropped.
 3. For walks (`WalkA1`, `WalkA2`, ...) marked `--not done--`: skip just that walk-step slide. The remaining walk-step slides keep their original order.
-4. For personalization beats (`D1Beat1Step1`, `D1Beat1Step2`, ...) marked `--not done--`: skip just that step slide.
+4. For personalization beats (`D1B1S1`, `D1B1S2`, ...) marked `--not done--`: skip just that step slide.
 5. For FC (`D2FC1`, ...) marked `--not done--`: skip just that slide.
 6. `--not done--` is NOT the same as a missing file with no marker. If the marker is absent and the file is missing, treat as **pending capture** — emit a visible placeholder so the user can spot it. If the marker is present, treat as **intentionally skipped** — emit nothing.
 
@@ -36,7 +50,7 @@ Steps:
 User adds freeform notes about specific screenshots inline within this guide, using **two dashes on each side**:
 
 ```
-**`D1Beat3Step2.png`** — Editor showing the line edited to a much higher value.
+**`D1B3S2.png`** — Editor showing the line edited to a much higher value.
 -- I cropped this one to remove a window-title that showed my username --
 Steps:
 1. ...
@@ -259,14 +273,14 @@ Steps:
 
 #### Beat 1 — Change the paddle color
 
-**`D1Beat1Step1.png`** — Default game running, default paddle color.
+**`D1B1S1.png`** — Default game running, default paddle color.
 Steps:
 1. Open `main.gd` (Walk B done).
 2. Press **F5** to run with default code.
 3. **Take screenshot of the game window** running.
 Must be visible: the **default paddle color** clearly visible on screen, **clean game window**.
 
-**`D1Beat1Step2.png`** — Editor showing the paddle-color line being edited.
+**`D1B1S2.png`** — Editor showing the paddle-color line being edited.
 Steps:
 1. Stop the game (F8 or close window).
 2. In `main.gd`, find the line that sets the paddle color (likely a `Color(...)` call or a `ColorRect.color = ...` assignment).
@@ -274,21 +288,22 @@ Steps:
 4. **Take screenshot of the editor** showing the edited line **highlighted with cursor on it**.
 Must be visible: the **edited Color(...) line** clearly visible, with the **new RGB numbers**.
 
-**`D1Beat1Step3.png`** — Game running with the new paddle color.
+**`D1B1S3.png`** — Game running with the new paddle color.
 Steps:
 1. Press **Ctrl+S** to save.
 2. Press **F5** to run.
 3. **Take screenshot of the game window** showing the **new paddle color**.
 Must be visible: the **paddle in the new color**, same arena otherwise.
 
+--skip this in slides--
 #### Beat 2 — Make the paddle bigger / smaller
 
-**`D1Beat2Step1.png`** — Default game running with default paddle size.
+**`D1B2S1.png`** — Default game running with default paddle size.
 Steps:
 1. Run game (F5).
 2. **Take screenshot of the game window** showing the **default paddle size**.
 
-**`D1Beat2Step2.png`** — Editor showing the paddle-size line being edited.
+**`D1B2S2.png`** — Editor showing the paddle-size line being edited.
 Steps:
 1. Stop the game.
 2. Find the line that sets paddle size (likely a `paddle_height` constant or a `size = Vector2(...)` line on the paddle ColorRect).
@@ -296,53 +311,58 @@ Steps:
 4. **Take screenshot of the editor** with the cursor on the edited line.
 Must be visible: the **edited size line**, **the new number clearly visible**.
 
-**`D1Beat2Step3.png`** — Game running with the smaller paddle.
+
+**`D1B2S3.png`** — Game running with the smaller paddle.
 Steps:
 1. Save + F5.
 2. **Take screenshot of the game window** with the **paddle visibly smaller**.
 
 #### Beat 3 — Make the ball faster
 
-**`D1Beat3Step1.png`** — Editor showing the ball-speed constant.
+**`D1B3S1.png`** — Editor showing the ball-speed constant.
 Steps:
 1. Stop any running game.
 2. Find the ball speed constant (likely `BALL_SPEED` or similar near the top of `main.gd`).
 3. **Take screenshot of the editor** showing the **default ball-speed line** highlighted.
+--use D1B1S1--
 
-**`D1Beat3Step2.png`** — Editor showing the line edited to a much higher value.
+**`D1B3S2.png`** — Editor showing the line edited to a much higher value.
 Steps:
 1. Change `BALL_SPEED = 300` → `BALL_SPEED = 900` (or whatever your scaffold defaults to → roughly triple).
 2. **Take screenshot of the editor** with cursor on the edited line.
 Must be visible: **`BALL_SPEED = 900`** (or your tripled value) clearly readable.
+--for the future, skip the screenshots where I'm showing the game running with the changed value--
 
-**`D1Beat3Step3.png`** — Game running with the faster ball.
+**`D1B3S3.png`** — Game running with the faster ball.
 Steps:
 1. Save + F5.
 2. Wait until the ball is mid-arena bouncing.
 3. **Take screenshot of the game window**. Some motion blur is fine and actually helps sell "it's faster."
 
+-- skip this in slides--
 #### Beat 4 — Change the wall color
 
 > Same shape as Beat 1 but for walls instead of paddles. 3 steps each:
 
-**`D1Beat4Step1.png`** — Default game running with default walls.
-**`D1Beat4Step2.png`** — Editor with the wall color line edited.
-**`D1Beat4Step3.png`** — Game running with new wall color.
+**`D1B4S1.png`** — Default game running with default walls.
+**`D1B4S2.png`** — Editor with the wall color line edited.
+**`D1B4S3.png`** — Game running with new wall color.
 
+-- skip this in slides--
 #### Beat 5 — Change the arena aspect ratio
 
-**`D1Beat5Step1.png`** — Default arena running.
+**`D1B5S1.png`** — Default arena running.
 Steps: F5, screenshot.
-**`D1Beat5Step2.png`** — Project Settings open showing viewport size.
+**`D1B5S2.png`** — Project Settings open showing viewport size.
 Steps:
 1. **Project → Project Settings → Display → Window**.
 2. Find **Viewport Width** + **Viewport Height** fields.
 3. **Take screenshot of the settings window** with these two fields visible.
-**`D1Beat5Step3.png`** — Settings edited (e.g., 1280×720 → 800×1000 for a taller arena).
+**`D1B5S3.png`** — Settings edited (e.g., 1280×720 → 800×1000 for a taller arena).
 Steps:
 1. Change width to 800, height to 1000.
 2. **Take screenshot of the settings window** with the new values entered, before closing.
-**`D1Beat5Step4.png`** — Game running with the new aspect ratio.
+**`D1B5S4.png`** — Game running with the new aspect ratio.
 Steps:
 1. Close settings (saves automatically).
 2. F5.
@@ -350,30 +370,30 @@ Steps:
 
 #### Beat 6 — Export to .exe (used D1-D4)
 
-**`D1Beat6Step1.png`** — Godot menu: **Project → Export...**
+**`D1B6S1.png`** — Godot menu: **Project → Export...**
 Steps:
 1. Top menu: click **Project**.
 2. Hover **Export...**
 3. **Take screenshot** with the menu open.
 
-**`D1Beat6Step2.png`** — Export dialog with "Add..." button visible.
+**`D1B6S2.png`** — Export dialog with "Add..." button visible.
 Steps:
 1. Click **Export...** to open the dialog.
 2. **Take screenshot** of the empty Export dialog showing the **"Add..."** button.
 
-**`D1Beat6Step3.png`** — Preset list showing "Windows Desktop".
+**`D1B6S3.png`** — Preset list showing "Windows Desktop".
 Steps:
 1. Click **Add...**
 2. A dropdown appears with platform options.
 3. **Take screenshot** with **"Windows Desktop"** visible in the list.
 
-**`D1Beat6Step4.png`** — Export dialog with Windows Desktop preset selected, ready to export.
+**`D1B6S4.png`** — Export dialog with Windows Desktop preset selected, ready to export.
 Steps:
 1. Click **Windows Desktop**.
 2. The preset is added to the left panel.
 3. **Take screenshot** showing the **"Export Project..." button** in the bottom-right of the dialog.
 
-**`D1Beat6Step5.png`** — File-save dialog with `Day1_Pong.exe` typed in.
+**`D1B6S5.png`** — File-save dialog with `Day1_Pong.exe` typed in.
 Steps:
 1. Click **Export Project...**
 2. A save dialog appears.
@@ -381,14 +401,15 @@ Steps:
 4. Type `Day1_Pong` in the filename field (extension `.exe` added automatically).
 5. **Take screenshot** before clicking Save.
 Must be visible: **`Day1_Pong`** in the filename field, **the .exe extension hint**.
+-- special instructions here, 4 through 6 go through going online and installing the correct template, extra slides, just place them in order and add more slides if needed, blank text where ambiguous, just the image itself in the center with "text" box for me to modify manually --
 
-**`D1Beat6Step6.png`** — File Explorer showing the exported `.exe` file.
+**`D1B6S6.png`** — File Explorer showing the exported `.exe` file.
 Steps:
 1. Click **Save** in the export dialog.
 2. Open File Explorer / Finder and navigate to the folder you exported to.
 3. **Take screenshot** showing the **`Day1_Pong.exe`** file in the folder.
 
-**`D1Beat6Step7.png`** — The exported `.exe` running outside Godot.
+**`D1B6S7.png`** — The exported `.exe` running outside Godot.
 Steps:
 1. Double-click `Day1_Pong.exe`.
 2. The game window opens.
@@ -406,7 +427,7 @@ Must be visible: the **clean Pong game window** with no editor visible behind it
 
 ### D2 §2 — TileSet editor (Godot-specific, instructor demo)
 
-**`D2TileSet1.png`** — Godot's TileSet editor open.
+**`D2TS1.png`** — Godot's TileSet editor open.
 Steps:
 1. Open `Day2_Maze_Game/project.godot`.
 2. In the FileSystem panel, find the **`maze_tileset.tres`** resource (or whatever the project's tileset is named).
@@ -415,7 +436,7 @@ Steps:
 5. **Take screenshot of the editor with the TileSet editor visible**.
 Must be visible: the **TileSet editor panel** at the bottom of Godot, **the atlas of tile thumbnails** visible.
 
-**`D2TileSet2.png`** — Inspector showing TileMapLayer with the layer dropdown.
+**`D2TS2.png`** — Inspector showing TileMapLayer with the layer dropdown.
 Steps:
 1. In the Scene dock, click on a **TileMapLayer** node (e.g., the Walls layer).
 2. The Inspector on the right populates.
@@ -450,74 +471,77 @@ The build will overlay gray on pre-given lines and red on the kid hole — make 
 
 #### Beat 1 — Repaint walls in your own shape
 
-**`D2Beat1Step1.png`** — Default maze running. F5, screenshot of the **default wall layout**.
-**`D2Beat1Step2.png`** — Editor with the TileMapLayer "Walls" selected, in paint mode.
+**`D2B1S1.png`** — Default maze running. F5, screenshot of the **default wall layout**.
+**`D2B1S2.png`** — Editor with the TileMapLayer "Walls" selected, in paint mode.
 Steps: in the editor, click the Walls TileMapLayer, open the TileMap editor in the bottom dock, screenshot showing the **paint brush** cursor + the **wall atlas selected**.
-**`D2Beat1Step3.png`** — A modified wall pattern being painted in the editor.
+**`D2B1S3.png`** — A modified wall pattern being painted in the editor.
 Steps: paint a few new wall tiles in a visibly different shape, screenshot the **editor viewport showing the modified maze**.
-**`D2Beat1Step4.png`** — Game running with the new wall shape.
+**`D2B1S4.png`** — Game running with the new wall shape.
 Steps: F5, screenshot showing the **kid's new wall layout in-game**.
+-- as before, skip the "game running with" screenshots, from here forward, won't do a note for every one, I'm expecting that you'll skip those in slides moving forward --
 
 #### Beat 2 — Paint dots on the Dots layer
 
-**`D2Beat2Step1.png`** — TileMapLayer dropdown showing both Walls and Dots layers.
+**`D2B2S1.png`** — TileMapLayer dropdown showing both Walls and Dots layers.
 Steps: in the Inspector or the editor's layer panel, find the layer toggle, screenshot showing **both layer names visible**.
-**`D2Beat2Step2.png`** — Editor with the Dots layer selected (Walls dimmed).
+-- SKIP --
+**`D2B2S2.png`** — Editor with the Dots layer selected (Walls dimmed).
 Steps: click Dots, screenshot the **layer selection state**.
-**`D2Beat2Step3.png`** — A dot being painted via the atlas.
+**`D2B2S3.png`** — A dot being painted via the atlas.
 Steps: in the Dots atlas, pick a dot tile, click in the viewport to paint, screenshot the **freshly painted dot**.
-**`D2Beat2Step4.png`** — Game running with the kid's dots.
+-- skip and say with just text on it's own slide "click one of the base tiles and click + drag to paint dots" --
+**`D2B2S4.png`** — Game running with the kid's dots.
 Steps: F5, screenshot showing **the new dot pattern in-game**.
 
 #### Beat 3 — Toggle layer visibility while painting
-
-**`D2Beat3Step1.png`** — Editor showing both layers visible (default).
-**`D2Beat3Step2.png`** — Same view with the Walls layer's **eye icon clicked off**, so dots paint without walls in the way.
-**`D2Beat3Step3.png`** — Eye icon clicked back on.
+-- skip this whole beat--
+**`D2B3S1.png`** — Editor showing both layers visible (default).
+**`D2B3S2.png`** — Same view with the Walls layer's **eye icon clicked off**, so dots paint without walls in the way.
+**`D2B3S3.png`** — Eye icon clicked back on.
 
 #### Beat 4 — Pick a different dot tile from the atlas
-
-**`D2Beat4Step1.png`** — Dots atlas browser showing the **default dot tile selected**.
-**`D2Beat4Step2.png`** — Dots atlas with a **different tile (e.g., a fruit or pellet) selected**.
-**`D2Beat4Step3.png`** — Game running showing the **new dot tile in the maze**.
+-- skip this whole beat --
+**`D2B4S1.png`** — Dots atlas browser showing the **default dot tile selected**.
+**`D2B4S2.png`** — Dots atlas with a **different tile (e.g., a fruit or pellet) selected**.
+**`D2B4S3.png`** — Game running showing the **new dot tile in the maze**.
 
 #### Beat 5 — Repaint the tunnel row
-
-**`D2Beat5Step1.png`** — Editor showing the **default tunnel row** in the maze layout.
-**`D2Beat5Step2.png`** — Editor with the tunnel row repainted (e.g., a different wall pattern or open passage extended).
-**`D2Beat5Step3.png`** — Game running through the modified tunnel.
+-- skip this whole beat --
+**`D2B5S1.png`** — Editor showing the **default tunnel row** in the maze layout.
+**`D2B5S2.png`** — Editor with the tunnel row repainted (e.g., a different wall pattern or open passage extended).
+**`D2B5S3.png`** — Game running through the modified tunnel.
 
 #### Beat 6 — Tweak the timing constants
 
-**`D2Beat6Step1.png`** — `main.gd` open, scrolled to the **timing constants** near the top (e.g., `GHOST_RELEASE_DELAY`, `GHOST_SPEED`). Screenshot showing **default values**.
-**`D2Beat6Step2.png`** — Same constants edited (e.g., `GHOST_SPEED = 80` → `GHOST_SPEED = 200`). Screenshot showing **edited values**.
-**`D2Beat6Step3.png`** — Game running with **visibly faster ghosts**.
+**`D2B6S1.png`** — `main.gd` open, scrolled to the **timing constants** near the top (e.g., `GHOST_RELEASE_DELAY`, `GHOST_SPEED`). Screenshot showing **default values**.
+**`D2B6S2.png`** — Same constants edited (e.g., `GHOST_SPEED = 80` → `GHOST_SPEED = 200`). Screenshot showing **edited values**.
+**`D2B6S3.png`** — Game running with **visibly faster ghosts**.
 
 #### Beat 7 — Swap the player's yellow ColorRect for a Kenney sprite
 
-**`D2Beat7Step1.png`** — FileSystem panel showing the **`assets/kenney_*/` folder** open with sprite options visible.
-**`D2Beat7Step2.png`** — Editor with the **Player node selected**, Inspector showing the **ColorRect or Sprite2D** property where the sprite/color is set.
-**`D2Beat7Step3.png`** — Editor with the **new sprite assigned** (Inspector shows the texture).
-**`D2Beat7Step4.png`** — Game running with the **kid's chosen Kenney sprite** as the player.
+**`D2B7S1.png`** — FileSystem panel showing the **`assets/kenney_*/` folder** open with sprite options visible.
+**`D2B7S2.png`** — Editor with the **Player node selected**, Inspector showing the **ColorRect or Sprite2D** property where the sprite/color is set.
+**`D2B7S3.png`** — Editor with the **new sprite assigned** (Inspector shows the texture).
+**`D2B7S4.png`** — Game running with the **kid's chosen Kenney sprite** as the player.
 
 ### D2 — Final Challenge
 
-**`D2FC1.png`** — `final_challenge.gd` open, showing the **`const FC_ENABLED := false`** line.
+**`D2FC1.png`** — `main.gd` open, showing the **`const PERSONALITY_MODE_ENABLED := false`** line.
 Steps:
-1. Open `Day2_Maze_Game/final_challenge.gd`.
-2. Scroll to the const line near the top.
+1. Open `Day2_Maze_Game/main.gd`.
+2. Scroll to the const line near the top (around line 36).
 3. **Take screenshot** showing the const line + a few lines of context.
 
-**`D2FC2.png`** — Same line edited to **`const FC_ENABLED := true`**.
+**`D2FC2.png`** — Same line edited to **`const PERSONALITY_MODE_ENABLED := true`**.
 Steps: edit, save, screenshot.
 
 **`D2FC3.png`** — Game running showing **multiple ghost personalities visible** (different colors / behaviors patrolling the maze).
-Steps: F5 with FC_ENABLED true, wait for personalities to be visible, screenshot.
+Steps: F5 with PERSONALITY_MODE_ENABLED true, wait for personalities to be visible, screenshot.
 
 ---
 
 ## Day 3 — Base Defense (`slides/screenshots/day3/`)
-
+-- "STRETCH" term still leaked into code, thought this was removed, stretch is entirely AFTER all chuncks, not before. Regular todos are not stretch. Stretch = final challenge. do not let stretch term leak into slides, todos continue as normal --
 ### D3 §1 — Historical images
 
 **`D3Defense1.png`** — Plants vs Zombies screenshot (press kit / fair use).
@@ -541,6 +565,7 @@ Steps: change `2` → `0`, screenshot.
 Steps: Ctrl+S, F5, wait for wave 1 to start. Screenshot the **game window** with the **wave label in the top-left HUD showing "EASY"**.
 
 **`D3WalkDK4.png`** — Back to `const DIFFICULTY := 2`. Screenshot the **edited line restored to 2**.
+-- skip screenshots of in-game, like before, just show text instructions in next slide for "edit it and verify easy wave label is visible" --
 
 ### D3 — Per-task `#@todo` screenshots
 
@@ -578,50 +603,50 @@ are all visible. The build overlays gray on pre-given, red on kid hole.
 **`D3C7.png`** — Task #7 at `main.gd:254-262`. Screenshot showing **`# TODO #7: SIZE CHECK + WAVE TRIGGER`** banner.
 
 ### D3 — Personalization beats
-
+-- anytime something is skipped or missing from files, assume I deemed it unneeded and remove it's section in the slides --
 #### Beat 1 — Tune tower stats
 
-**`D3Beat1Step1.png`** — `main.gd` showing the **TOWER_STATS dict** (near top, around lines 49-71). Screenshot the **default values**.
-**`D3Beat1Step2.png`** — The same dict edited (e.g., **`"damage": 3` → `"damage": 30`** for the Cannon).
-**`D3Beat1Step3.png`** — Game running, **wave 1 with enemies dying fast** because cannons one-shot them now.
+**`D3B1S1.png`** — `main.gd` showing the **TOWER_STATS dict** (near top, around lines 49-71). Screenshot the **default values**.
+**`D3B1S2.png`** — The same dict edited (e.g., **`"damage": 3` → `"damage": 30`** for the Cannon).
+**`D3B1S3.png`** — Game running, **wave 1 with enemies dying fast** because cannons one-shot them now.
 
 #### Beat 2 — Re-tint with Modulate
 
-**`D3Beat2Step1.png`** — Default Cannon (orange) in-game.
-**`D3Beat2Step2.png`** — Editor showing the **Modulate / Color line** edited for the Cannon (e.g., `Color(0.2, 0.5, 1.0)` for blue).
-**`D3Beat2Step3.png`** — Game running with **blue Cannons** placed.
+**`D3B2S1.png`** — Default Cannon (orange) in-game.
+**`D3B2S2.png`** — Editor showing the **Modulate / Color line** edited for the Cannon (e.g., `Color(0.2, 0.5, 1.0)` for blue).
+**`D3B2S3.png`** — Game running with **blue Cannons** placed.
 
 #### Beat 3 — Swap a tower sprite
 
-**`D3Beat3Step1.png`** — FileSystem panel showing **`assets/kenney_td/`** open with multiple tile thumbnails visible.
-**`D3Beat3Step2.png`** — The **TOWER_STATS dict** showing the default `"tile": 250` value.
-**`D3Beat3Step3.png`** — Same line edited to a different tile (e.g., `"tile": 280`).
-**`D3Beat3Step4.png`** — Game running showing the **Cannon with the new sprite**.
+**`D3B3S1.png`** — FileSystem panel showing **`assets/kenney_td/`** open with multiple tile thumbnails visible.
+**`D3B3S2.png`** — The **TOWER_STATS dict** showing the default `"tile": 250` value.
+**`D3B3S3.png`** — Same line edited to a different tile (e.g., `"tile": 280`).
+**`D3B3S4.png`** — Game running showing the **Cannon with the new sprite**.
 
 #### Beat 4 — Drag a Kenney scenery prop into the scene
 
-**`D3Beat4Step1.png`** — Scene dock showing the **Scenery node selected**.
-**`D3Beat4Step2.png`** — FileSystem panel with a **scenery prop file selected** (e.g., a tree tile).
-**`D3Beat4Step3.png`** — Editor viewport showing the **prop mid-drag from FileSystem into the scene**.
-**`D3Beat4Step4.png`** — Game running with the **new prop visible** on the playfield.
+**`D3B4S1.png`** — Scene dock showing the **Scenery node selected**.
+**`D3B4S2.png`** — FileSystem panel with a **scenery prop file selected** (e.g., a tree tile).
+**`D3B4S3.png`** — Editor viewport showing the **prop mid-drag from FileSystem into the scene**.
+**`D3B4S4.png`** — Game running with the **new prop visible** on the playfield.
 
 #### Beat 5 — Flip the difficulty knob
 
-**`D3Beat5Step1.png`** — `main.gd:43` showing `const DIFFICULTY := 2`.
-**`D3Beat5Step2.png`** — Edited to `const DIFFICULTY := 0`.
-**`D3Beat5Step3.png`** — Game running, **EASY label visible**.
+**`D3B5S1.png`** — `main.gd:43` showing `const DIFFICULTY := 2`.
+**`D3B5S2.png`** — Edited to `const DIFFICULTY := 0`.
+**`D3B5S3.png`** — Game running, **EASY label visible**.
 
 #### Beat 6 — Edit the wave list
 
-**`D3Beat6Step1.png`** — `main.gd` showing the **WAVES array** with default 8 wave tuples.
-**`D3Beat6Step2.png`** — The same array with **one entry edited** (e.g., wave count doubled).
-**`D3Beat6Step3.png`** — Game running showing the **modified wave** in progress.
+**`D3B6S1.png`** — `main.gd` showing the **WAVES array** with default 8 wave tuples.
+**`D3B6S2.png`** — The same array with **one entry edited** (e.g., wave count doubled).
+**`D3B6S3.png`** — Game running showing the **modified wave** in progress.
 
 #### Beat 7 — Add a new wave entry
 
-**`D3Beat7Step1.png`** — WAVES array showing default 8 entries.
-**`D3Beat7Step2.png`** — Array with a **9th entry appended** (e.g., `[20, "runner"]`).
-**`D3Beat7Step3.png`** — Game running showing **"WAVE 9" in the HUD** during the kid's new wave.
+**`D3B7S1.png`** — WAVES array showing default 8 entries.
+**`D3B7S2.png`** — Array with a **9th entry appended** (e.g., `[20, "runner"]`).
+**`D3B7S3.png`** — Game running showing **"WAVE 9" in the HUD** during the kid's new wave.
 
 ### D3 — Final Challenge
 
@@ -726,38 +751,38 @@ You may need to zoom out to fit the whole block — that's fine for this overvie
 
 #### Beat 1 — Tune a character's stats
 
-**`D4Beat1Step1.png`** — `main.gd` CHARACTERS dict showing **Knight's default `"walk_speed": 220.0`**.
-**`D4Beat1Step2.png`** — Same line edited to `"walk_speed": 600.0`.
-**`D4Beat1Step3.png`** — Game running with **Knight moving visibly faster** than P2.
+**`D4B1S1.png`** — `main.gd` CHARACTERS dict showing **Knight's default `"walk_speed": 220.0`**.
+**`D4B1S2.png`** — Same line edited to `"walk_speed": 600.0`.
+**`D4B1S3.png`** — Game running with **Knight moving visibly faster** than P2.
 
 #### Beat 2 — Re-tint with Modulate
 
-**`D4Beat2Step1.png`** — Ninja in default pink tint, in-game.
-**`D4Beat2Step2.png`** — CHARACTERS dict showing **Ninja's `"tint": Color(1.0, 0.85, 0.85)`** line.
-**`D4Beat2Step3.png`** — Same edited to **`Color(0.4, 1.0, 0.4)` (bright green)**.
-**`D4Beat2Step4.png`** — Game running with **green Ninja**.
+**`D4B2S1.png`** — Ninja in default pink tint, in-game.
+**`D4B2S2.png`** — CHARACTERS dict showing **Ninja's `"tint": Color(1.0, 0.85, 0.85)`** line.
+**`D4B2S3.png`** — Same edited to **`Color(0.4, 1.0, 0.4)` (bright green)**.
+**`D4B2S4.png`** — Game running with **green Ninja**.
 
 #### Beat 3 — Swap a character's sprite
 
-**`D4Beat3Step1.png`** — FileSystem showing **`assets/kenney_pp/characters/`** open with `tile_0004.png` through `tile_0010.png` thumbnails visible.
-**`D4Beat3Step2.png`** — CHARACTERS dict showing **Knight's `"sprite": "res://.../tile_0000.png"`** line.
-**`D4Beat3Step3.png`** — Same edited to `tile_0007.png` (or whatever the kid picked).
-**`D4Beat3Step4.png`** — Game running with **the new sprite as Knight**.
+**`D4B3S1.png`** — FileSystem showing **`assets/kenney_pp/characters/`** open with `tile_0004.png` through `tile_0010.png` thumbnails visible.
+**`D4B3S2.png`** — CHARACTERS dict showing **Knight's `"sprite": "res://.../tile_0000.png"`** line.
+**`D4B3S3.png`** — Same edited to `tile_0007.png` (or whatever the kid picked).
+**`D4B3S4.png`** — Game running with **the new sprite as Knight**.
 
 #### Beat 4 — Edit a map's platform layout
 
-**`D4Beat4Step1.png`** — Default Pokémon Stadium running, showing **the default 2 asymmetric platforms**.
-**`D4Beat4Step2.png`** — `main.gd` MAPS dict showing **Pokémon Stadium's `"platforms": [...]` array**.
-**`D4Beat4Step3.png`** — Same array with **a new platform tuple appended** (e.g., `[600, 320, 100, 16, true]`).
-**`D4Beat4Step4.png`** — Game running showing **the new platform visible** mid-stage.
+**`D4B4S1.png`** — Default Pokémon Stadium running, showing **the default 2 asymmetric platforms**.
+**`D4B4S2.png`** — `main.gd` MAPS dict showing **Pokémon Stadium's `"platforms": [...]` array**.
+**`D4B4S3.png`** — Same array with **a new platform tuple appended** (e.g., `[600, 320, 100, 16, true]`).
+**`D4B4S4.png`** — Game running showing **the new platform visible** mid-stage.
 
 #### Beat 5 — Add a fifth map
 
-**`D4Beat5Step1.png`** — MAPS dict with **4 existing map entries visible**.
-**`D4Beat5Step2.png`** — Same dict with **a new `"my_map": { ... }` entry added**.
-**`D4Beat5Step3.png`** — `_unhandled_input` showing the **keys array edited** to include `"my_map"`.
-**`D4Beat5Step4.png`** — Map-select panel running with **"4 = My Map"** visible in the prompt text.
-**`D4Beat5Step5.png`** — Game running on the kid's new map.
+**`D4B5S1.png`** — MAPS dict with **4 existing map entries visible**.
+**`D4B5S2.png`** — Same dict with **a new `"my_map": { ... }` entry added**.
+**`D4B5S3.png`** — `_unhandled_input` showing the **keys array edited** to include `"my_map"`.
+**`D4B5S4.png`** — Map-select panel running with **"4 = My Map"** visible in the prompt text.
+**`D4B5S5.png`** — Game running on the kid's new map.
 
 ### D4 — Final Challenge
 

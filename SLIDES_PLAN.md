@@ -117,12 +117,12 @@ See `~/.claude/.../memory/slides-build-pipeline.md` for the cross-chat resume no
 
 ### Where we are
 
-This session: expanded D2 `SLIDE_SOURCE.md` §10.2–§10.4 from summary-level bullets to full per-slide `#### Slide D2-S###` entries (86 slides total: opener S001-S007, pre-coding S008-S020 incl. Walk T, lesson chunks S021-S086 across chunks #1-#6 + Walk C/D). Build verified: `slides/.venv/bin/python build_day.py 2` → `out/Day2.pptx` 86 slides, 0 skipped. Guide-canonical image names used throughout (D2C1–D2C6, D2TileSet1–2, D2Pacman1–2); no ad-hoc `d2_*` names.
+This session: expanded D2 `SLIDE_SOURCE.md` §10.2–§10.4 from summary-level bullets to full per-slide `#### Slide D2-S###` entries (86 slides total: opener S001-S007, pre-coding S008-S020 incl. Walk T, lesson chunks S021-S086 across chunks #1-#6 + Walk C/D). Build verified: `slides/.venv/bin/python build_day.py 2` → `out/Day2.pptx` 86 slides, 0 skipped. Guide-canonical image names used throughout (D2C1–D2C6, D2TS1–2, D2Pacman1–2); no ad-hoc `d2_*` names.
 
 ### Last decision locked
 
 - **D2 per-slide blueprint complete** (§10.2–§10.4): 86 slides authoring-ready. §10.5 (personalization / FC / asset / export / closer) deferred — stub unchanged.
-- **Guide-canonical names enforced from start for D2**: D2C3a/D2C3b (dual chunk-3 holes), D2TileSet1–2, D2Pacman1–2, D2C1–D2C6. Zero ad-hoc names.
+- **Guide-canonical names enforced from start for D2**: D2C3a/D2C3b (dual chunk-3 holes), D2TS1–2, D2Pacman1–2, D2C1–D2C6. Zero ad-hoc names.
 - **Chunk #6 two-tone overlay documented** in blueprint: gray = pre-given off-grid+tunnel guards, red = kid hole. Notes field carries R5 context.
 
 ### Next pending picks

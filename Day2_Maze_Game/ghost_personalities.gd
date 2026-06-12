@@ -83,14 +83,14 @@ func blinky_target(_ghost) -> Vector2i:
 
 func pinky_target(_ghost) -> Vector2i:
 	# Pinky: aim 4 tiles ahead of where the player is facing.
-	var ahead := main.player_cell + main.current_dir * 4
+	var ahead: Vector2i = main.player_cell + main.current_dir * 4
 	return ahead
 
 
 func inky_target(_ghost) -> Vector2i:
 	# Inky: take the tile 2 ahead of the player, then bounce it
 	# through Blinky's position to flank from the opposite side.
-	var two_ahead := main.player_cell + main.current_dir * 2
+	var two_ahead: Vector2i = main.player_cell + main.current_dir * 2
 	var blinky := find_blinky()
 	var blinky_cell: Vector2i
 	if blinky == null:
@@ -146,12 +146,12 @@ func step_ghost_toward(ghost, target_cell: Vector2i) -> void:
 		if dist < best_dist:
 			best_dist = dist
 			best = d
-	var next_cell := main.wrap_cell(cell + best)
+	var next_cell: Vector2i = main.wrap_cell(cell + best)
 	ghost.set_meta("cell", next_cell)
 	ghost.set_meta("dir", best)
 	ghost.set_meta("moving", true)
 	var tween := create_tween()
-	var target_pos := main.cell_to_world(next_cell) - Vector2(main.TILE / 2.0, main.TILE / 2.0)
+	var target_pos: Vector2 = main.cell_to_world(next_cell) - Vector2(main.TILE / 2.0, main.TILE / 2.0)
 	tween.tween_property(ghost, "position", target_pos, main.GHOST_STEP_TIME)
 	tween.tween_callback(_on_ghost_arrived.bind(ghost))
 
@@ -188,13 +188,13 @@ func spawn_one_personality(index: int) -> void:
 	# Spawn the index-th personality ghost in the pen.
 	# Wraps make_personality_ghost so your TODO FC-1 stays a clean loop.
 	var personality: String = PERSONALITIES[index]
-	var world_pos := main.pen_marker.position + Vector2(index * main.TILE, 0)
+	var world_pos: Vector2 = main.pen_marker.position + Vector2(index * main.TILE, 0)
 	make_personality_ghost(world_pos, personality)
 
 
 func respawn_personality_ghost(ghost, index: int) -> void:
 	# Send one ghost back to pen slot `index`. Personality tag stays.
-	var spawn_pos := main.pen_marker.position + Vector2(index * main.TILE, 0)
+	var spawn_pos: Vector2 = main.pen_marker.position + Vector2(index * main.TILE, 0)
 	ghost.position = spawn_pos - Vector2(main.TILE / 2.0, main.TILE / 2.0)
 	ghost.set_meta("cell", main.world_to_cell(spawn_pos))
 	ghost.set_meta("dir", Vector2i.UP)

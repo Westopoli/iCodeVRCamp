@@ -692,17 +692,17 @@ Every slide entry uses this template:
 - Notes: lock the mnemonic. (Styling only — render the words V / VALUE / CHANGE in iCode red within the title; everything else default. Not slide content.)
 
 #### Slide D1-S025 — Example 1/4: Empty cookie jar
-- Format: G12 Screenshot + Caption
+- Format: G04 Headline / Divider
 - Title: "The cookie jar"
 - Body: "`CookiesInJar = 0`"
-- Image: `d1_chunk1a_jar_empty.png` — illustration / clip art of an empty cookie jar.
+- Image: none
 - Notes: —
 
 #### Slide D1-S026 — Example 2/4: Cookie jar with 8 cookies
-- Format: G12
+- Format: G04 Headline / Divider
 - Title: "A week later…"
 - Body: "`CookiesInJar = 8`"
-- Image: `d1_chunk1a_jar_full.png` — same jar, now with 8 cookies inside.
+- Image: none
 - Notes: same jar, same name, value changed.
 
 #### Slide D1-S027 — Example 3/4: Question
@@ -934,17 +934,17 @@ Every slide entry uses this template:
 - Notes: —
 
 #### Slide D1-S055 — Example 1/4: Light switch ON
-- Format: G12 Screenshot + Caption
+- Format: G04 Headline / Divider
 - Title: "The light switch"
 - Body: "`light_on = true`"
-- Image: `d1_chunk6a_switch_on.png` — clip art of a light switch in ON position.
+- Image: none
 - Notes: —
 
 #### Slide D1-S056 — Example 2/4: Light switch OFF
-- Format: G12
+- Format: G04 Headline / Divider
 - Title: "Flip it."
 - Body: "`light_on = false`"
-- Image: `d1_chunk6a_switch_off.png` — same switch in OFF position.
+- Image: none
 - Notes: "There's no 'sort of on'. ON or OFF. That's it."
 
 #### Slide D1-S057 — Example 3/4: Question
@@ -1024,10 +1024,10 @@ Every slide entry uses this template:
 - Notes: —
 
 #### Slide D1-S066 — Example 1/3: If you're hungry → eat
-- Format: G12 Screenshot + Caption
+- Format: G04 Headline / Divider
 - Title: "IF you're hungry → eat."
 - Body: "Real life is full of `if` rules."
-- Image: `d1_chunk6b_hungry.png` — cartoon clip art of a stomach growling / kid reaching for snack.
+- Image: none
 - Notes: instructor lists more: "If it's bedtime → brush teeth. If it's Saturday → no school. All `if`s."
 
 #### Slide D1-S067 — Example 2/3: Question
@@ -1081,10 +1081,10 @@ Every slide entry uses this template:
 - Notes: —
 
 #### Slide D1-S073 — After-works payoff
-- Format: G12 Screenshot + Caption
+- Format: G04 Headline / Divider
 - Title: "It works! The ball waits for Space."
 - Body: "Press F5. The ball sits frozen at the centre until you tap **Space**. Then it moves."
-- Image: `d1_chunk6b_afterworks.png` — running Pong showing the ball at centre (pre-Space) and a second smaller inset showing the ball mid-flight (post-Space). Caption arrow between them.
+- Image: none
 - Notes: first visible game-behavior moment. Celebrate it.
 
 ### 10.12 Chunk #2 — `+=` shortcut (slides 74-76, slim extension)
@@ -1105,15 +1105,15 @@ Every slide entry uses this template:
   # …same thing, shorter:
   score += 1
   ```
-- Body RHS (image): `d1_chunk2_todo.png` — Godot screenshot of main.gd lines 80-84, red overlay on the gap between `#@todo` (line 81) and `#@end` (line 84).
+- Body RHS (image): `D1C2.png` — Godot screenshot of main.gd lines 80-84, red overlay on the gap between `#@todo` (line 81) and `#@end` (line 84).
 - Caption below RHS: "Add `ball_speed_x` to `ball.position.x` every frame. Same for y. The ball will start moving (and drift off-screen — we'll catch it next)."
 - Notes: —
 
 #### Slide D1-S076 — After-works payoff (small)
-- Format: G12 Screenshot + Caption
+- Format: G04 Headline / Divider
 - Title: "The ball moves now"
 - Body: "Press F5, then Space. The ball drifts off the right side of the screen. That's expected — chunk #4 catches it."
-- Image: `d1_chunk2_afterworks.png` — short clip / still showing the ball mid-drift.
+- Image: none
 - Notes: —
 
 ### 10.13 Chunk #4 — `if / else` (slides 77-89, full new-concept arc + after-works)
@@ -1138,10 +1138,10 @@ Every slide entry uses this template:
 - Notes: —
 
 #### Slide D1-S080 — Example 1/3: Fork in the road
-- Format: G12 Screenshot + Caption
+- Format: G04 Headline / Divider
 - Title: "Fork in the road"
 - Body: "Sign reads: IF it's daytime → go left. ELSE → go right."
-- Image: `d1_chunk4_fork.png` — clip art of a road sign at a forked path.
+- Image: none
 - Notes: —
 
 #### Slide D1-S081 — Example 2/3: Question
@@ -1178,7 +1178,7 @@ Every slide entry uses this template:
 - Format: G11 Code Screenshot
 - Title: "Where in `main.gd`?"
 - Body: "Inside `_process`, right after we move the ball."
-- Image: `d1_chunk4_where.png` — screenshot of main.gd lines 87-94 with red overlay covering lines 90-93 (gap between `#@todo` on line 89 and `#@end` on line 94).
+- Image: `D1C4.png` — screenshot of main.gd lines 87-94 with red overlay covering lines 90-93 (gap between `#@todo` on line 89 and `#@end` on line 94).
 - Notes: —
 
 #### Slide D1-S086 — Example + TODO side-by-side
@@ -1191,15 +1191,15 @@ Every slide entry uses this template:
   else:
       sleep()
   ```
-- Body RHS (image): `d1_chunk4_todo.png` — Godot screenshot of main.gd lines 87-94, red overlay on the gap.
+- Body RHS (image): `D1C4.png` — Godot screenshot of main.gd lines 87-94, red overlay on the gap.
 - Caption below RHS: "When the ball goes off the top OR bottom → flip `ball_speed_y`. Else → keep going (use `pass` for now)."
 - Notes: —
 
 #### Slide D1-S087 — After-works payoff
-- Format: G12 Screenshot + Caption
+- Format: G04 Headline / Divider
 - Title: "The ball bounces"
 - Body: "Press F5, then Space. The ball ricochets off the top and bottom walls now. It still flies off the LEFT and RIGHT sides — chunk #5 fixes that."
-- Image: `d1_chunk4_afterworks.png` — Pong screenshot showing the ball mid-bounce off a wall.
+- Image: none
 - Notes: —
 
 ### 10.14 Chunk #3 — `if` (single condition, slides 88-90, slim extension)
@@ -1219,15 +1219,15 @@ Every slide entry uses this template:
   if score > 5:
       print("winning")
   ```
-- Body RHS (image): `d1_chunk3_todo.png` — Godot screenshot of main.gd lines 99-103, red overlay on the gap between `#@todo` (line 100) and `#@end` (line 103).
+- Body RHS (image): `D1C3.png` — Godot screenshot of main.gd lines 99-103, red overlay on the gap between `#@todo` (line 100) and `#@end` (line 103).
 - Caption below RHS: "When the ball goes past the right edge → `print(\"point!\")` to the Output panel. (Real scoring comes in #5.)"
 - Notes: —
 
 #### Slide D1-S090 — After-works payoff (small)
-- Format: G12 Screenshot + Caption
+- Format: G04 Headline / Divider
 - Title: "'point!' shows up"
 - Body: "Press F5. Let the ball go past the right edge. Look at the Output panel — `point!` prints."
-- Image: `d1_chunk3_afterworks.png` — close-up of the Output panel showing the `point!` line.
+- Image: none
 - Notes: —
 
 ### 10.15 Chunk #5 — Comparison operators (slides 91-102, full new-concept arc + after-works)
@@ -1239,7 +1239,7 @@ Every slide entry uses this template:
 - Notes: —
 
 #### Slide D1-S092 — Concept 2/3: Symbols
-- Format: G10 Board Example
+- Format: G04 Headline / Divider
 - Title: "`>` and `<`"
 - Body (large, centred):
   - "`>` means GREATER THAN"
@@ -1260,10 +1260,10 @@ Every slide entry uses this template:
 - Notes: —
 
 #### Slide D1-S094 — Example 1/4: Rollercoaster height
-- Format: G12 Screenshot + Caption
+- Format: G04 Headline / Divider
 - Title: "The rollercoaster"
 - Body: "YOU MUST BE THIS TALL → 48 inches"
-- Image: `d1_chunk5_rollercoaster.png` — clip art of a rollercoaster height chart, red line at 48 in.
+- Image: none
 - Notes: classic kid-life example.
 
 #### Slide D1-S095 — Example 2/4: Question
@@ -1272,13 +1272,6 @@ Every slide entry uses this template:
 - Subtitle: "Can you ride? What's the check? `your_height > 48` — true or false?"
 - Image: none
 - Notes: kids answer aloud. Right answer: true. They get on.
-
-#### Slide D1-S096 — Example 3/4: Scoreboard comparison
-- Format: G12 Screenshot + Caption
-- Title: "Who wins?"
-- Body: "Player 1: **7**   vs   Player 2: **4**"
-- Image: `d1_chunk5_scoreboard.png` — clip art of a two-player scoreboard. Caption underneath: "`7 > 4` → Player 1 wins."
-- Notes: —
 
 #### Slide D1-S097 — Example 4/4: Takeaway
 - Format: G04 Headline / Divider
@@ -1308,7 +1301,7 @@ Every slide entry uses this template:
 - Format: G11 Code Screenshot
 - Title: "Where in `main.gd`?"
 - Body: "Same area you put the `print(\"point!\")` test. We're upgrading it to real scoring."
-- Image: `d1_chunk5_where.png` — screenshot of main.gd lines 105-114 with red overlay covering lines 108-113 (gap between `#@todo` on line 107 and `#@end` on line 114).
+- Image: `D1C5.png` — screenshot of main.gd lines 105-114 with red overlay covering lines 108-113 (gap between `#@todo` on line 107 and `#@end` on line 114).
 - Notes: —
 
 #### Slide D1-S101 — Example + TODO side-by-side
@@ -1319,15 +1312,15 @@ Every slide entry uses this template:
   if lives == 0:
       game_over()
   ```
-- Body RHS (image): `d1_chunk5_todo.png` — Godot screenshot of main.gd lines 105-114, red overlay on the gap.
+- Body RHS (image): `D1C5.png` — Godot screenshot of main.gd lines 105-114, red overlay on the gap.
 - Caption below RHS: "Use `>` for the right edge and `<` for the left edge. Bump the correct score and call `reset_ball()`."
 - Notes: —
 
 #### Slide D1-S102 — After-works payoff
-- Format: G12 Screenshot + Caption
+- Format: G04 Headline / Divider
 - Title: "The scoreboard counts!"
 - Body: "Press F5, then Space. Score a point past either edge. The number at the top of the screen jumps up."
-- Image: `d1_chunk5_afterworks.png` — Pong running with the scoreboard reading e.g. `1 : 0` after a point.
+- Image: none
 - Notes: payoff moment — game now has real stakes.
 
 ### 10.16 Chunk #1b-suffix — Display silly vars on scoreboard (slides 103-105, slim extension)
@@ -1346,15 +1339,15 @@ Every slide entry uses this template:
   ```gdscript
   label.text = "Speed: " + str(skibidi_speed)
   ```
-- Body RHS (image): `d1_chunk1b_suffix_todo.png` — Godot screenshot of main.gd lines 119-122, red overlay on line 121 (gap between `#@todo` on line 120 and `#@end` on line 122).
+- Body RHS (image): `D1C1c.png` — Godot screenshot of main.gd lines 119-122, red overlay on line 121 (gap between `#@todo` on line 120 and `#@end` on line 122).
 - Caption below RHS: "Append your two silly variables onto `score_label.text`. Decorate with stars, emojis, whatever you want."
 - Notes: —
 
 #### Slide D1-S105 — After-works payoff
-- Format: G12 Screenshot + Caption
+- Format: G04 Headline / Divider
 - Title: "Your variables, live on the scoreboard"
 - Body: "Run it. The scoreboard now shows your skibidi_speed (or whatever you called it) right next to the score."
-- Image: `d1_chunk1b_suffix_afterworks.png` — Pong running with the scoreboard showing the customized text suffix.
+- Image: none
 - Notes: high personalization payoff. Have kids show their neighbour.
 
 ### 10.17 Back-half sections — AUTHORED 2026-06-08 (S106–S140)
@@ -1370,166 +1363,39 @@ Every slide entry uses this template:
 - Image: none
 - Notes: morning chunks are done and the game works. This is the open-ended play block. Kids who want to keep building, build; kids who want to jump to the Final Challenge can.
 
-#### Slide D1-S107 — Beat 1.1: Select the Main node
+#### Slide D1-S107 — Recolour 1: colours live in the Inspector
 - Format: G12 Screenshot + Caption
-- Title: "Beat 1 — Recolour your game"
-- Body: "Click the `Main` node at the top of the Scene panel (top-left)."
-- Image: `d1_beat1_step1.png` — Scene panel with the `Main` node selected/highlighted.
-- Notes: the `@export` colour variables live on `Main`.
+- Title: "Make it yours — recolour your game"
+- Body: "Run the game, then look at the **Inspector** on the right. `Ball Color` and `Paddle Color` are right there — click a swatch, pick any colour, then Save (Ctrl+S) and run (F5)."
+- Image: `D1B1S1.png` — editor with the game running and the Inspector showing the Ball Color + Paddle Color swatches.
+- Notes: the colours are `@export` variables, which is why they appear in the Inspector. Next slide shows where they live in code.
 
-#### Slide D1-S108 — Beat 1.2: Find Script Variables in the Inspector
+#### Slide D1-S108 — Recolour 2: where the colours live in code
 - Format: G12 Screenshot + Caption
-- Title: "Beat 1 — Open the Inspector"
-- Body: "Look at the **Inspector** on the right. Scroll down to the **Script Variables** section — that's where `Ball Color` and `Paddle Color` live."
-- Image: `d1_beat1_step2.png` — Inspector showing the Script Variables group with Ball Color + Paddle Color.
-- Notes: "Why are these here but the speeds aren't? The magic word `@export` — Beat 2 explains it."
+- Title: "Where your colours come from"
+- Body: "At the top of `main.gd`, two lines define them: `@export var ball_color` and `@export var paddle_color`. The magic word `@export` is what makes a variable show up in the Inspector."
+- Image: `D1B1S2.png` — main.gd lines 13-14, the two `@export var ...color := Color(...)` lines.
+- Notes: light-touch — name the `@export` pattern, don't quiz. Change colours in the Inspector OR here; same thing, two doors in.
 
-#### Slide D1-S109 — Beat 1.3: Open the colour picker
+#### Slide D1-S109 — Speeds: tune the numbers
 - Format: G12 Screenshot + Caption
-- Title: "Beat 1 — Pick a colour"
-- Body: "Click the colour swatch next to `Ball Color`. The colour picker pops up. Pick anything you like."
-- Image: `d1_beat1_step3.png` — colour picker open over the Inspector.
-- Notes: —
+- Title: "Make it yours — faster or slower"
+- Body: "In `main.gd`, find your chunk #1a lines: `ball_speed_x`, `ball_speed_y`, and `paddle_speed`. Bump the numbers — higher = faster, lower = slower. Try the 3–12 range. Save, run, feel the difference."
+- Image: `D1B3S2.png` — main.gd TODO #1a block showing the `ball_speed_x`, `ball_speed_y`, `paddle_speed` var lines.
+- Notes: callback to chunk #1a "numbers you can tune." These speeds are NOT `@export`, so you change them in code — the contrast with the colours is the lesson.
 
-#### Slide D1-S110 — Beat 1.4: Repeat for the paddles
-- Format: G12 Screenshot + Caption
-- Title: "Beat 1 — Now the paddles"
-- Body: "Do the same for `Paddle Color`. Press Enter or click outside the picker to close it."
-- Image: `d1_beat1_step4.png` — Paddle Color swatch / picker.
-- Notes: —
+### §10.17b — Final Challenge: `player2.gd` (slide S121, self-directed)
 
-#### Slide D1-S111 — Beat 1.5: Save + run
-- Format: G12 Screenshot + Caption
-- Title: "Beat 1 — See your colours"
-- Body: "Press **Ctrl+S** to save the scene, then **F5** to run. Your new colours are live."
-- Image: `d1_beat1_result.png` — running Pong with recoloured ball + paddles.
-- Notes: first visible payoff of the personalization block.
-
-#### Slide D1-S112 — Beat 2.1: Find the speed variable
-- Format: G12 Screenshot + Caption
-- Title: "Beat 2 — Change your speeds"
-- Body: "Open `main.gd`. Find your chunk #1a line: `var ball_speed_x := 6.0`."
-- Image: `d1_beat2_step1.png` — script editor on the `ball_speed_x` line.
-- Notes: —
-
-#### Slide D1-S113 — Beat 2.2: Change the number
-- Format: G12 Screenshot + Caption
-- Title: "Beat 2 — Faster or slower"
-- Body: "Click the `6.0` and change it — higher for a faster ball, lower for slower. Try the 3–12 range. Save (Ctrl+S), run (F5)."
-- Image: `d1_beat2_step2.png` — edited number highlighted.
-- Notes: —
-
-#### Slide D1-S114 — Beat 2.3: The magic word `@export`
+#### Slide D1-S121 — Final Challenge (self-directed, single pointer)
 - Format: G04 Headline / Divider
-- Title: "Why colours were in the Inspector but speeds weren't"
+- Title: "Final Challenge — make Pong 2-player"
 - Body:
-  - "The colour variables have a special word in front: `@export`."
-  - "`@export` means: *show this variable in the Inspector so I can change it without opening the code.*"
-  - "The speeds don't have it — so you change them in the code instead. Same idea, two doors in."
+  - "Open `player2.gd` (it's on the `PaddleRight` node). Two banners inside mark the work:"
+  - "**STEP 1** — comment out the 5 AI lines in `_process` (`#` each, or select + Ctrl+K). The right paddle goes still."
+  - "**STEP 2** — fill the `#@todo` block so the **I** and **K** keys move the paddle."
+  - "No walkthrough. You already did every piece this morning — `paddle_speed`, `if`, key input. Give it a whirl on your own."
 - Image: none
-- Notes: light-touch concept; don't quiz. Just name the pattern they already saw.
-
-#### Slide D1-S115 — Beat 3.1: Rename your silly variables
-- Format: G12 Screenshot + Caption
-- Title: "Beat 3 — Funnier names"
-- Body: "Open `main.gd`, find your chunk #1b variables (around line 46). Rename either one to something funnier."
-- Image: `d1_beat3_step1.png` — script editor on the #1b variable lines.
-- Notes: callback to the chunk #1b "name it whatever you want" lesson.
-
-#### Slide D1-S116 — Beat 3.2: Update the scoreboard to match
-- Format: G12 Screenshot + Caption
-- Title: "Beat 3 — Keep the names matching"
-- Body: "If you renamed a variable, also fix it on the scoreboard line (around line 121). The name there must match the new name exactly, or the game errors. Save, run."
-- Image: `d1_beat3_step2.png` — the scoreboard-suffix line highlighted.
-- Notes: "This is a great natural moment to hit an error and practice Walkthrough D — a typo'd name throws a clear error."
-
-#### Slide D1-S117 — Beat 4.1: Decorate the scoreboard
-- Format: G12 Screenshot + Caption
-- Title: "Beat 4 — Pimp your scoreboard"
-- Body: "Find the scoreboard-suffix line (around line 121). Swap the `★` characters for any emoji — on Windows press **Win + .** to open the emoji picker."
-- Image: `d1_beat4_step1.png` — scoreboard line with the ★ characters highlighted.
-- Notes: —
-
-#### Slide D1-S118 — Beat 4.2: Add more
-- Format: G12 Screenshot + Caption
-- Title: "Beat 4 — More is more"
-- Body: "Add extra text, more emoji, more variables. Make the scoreboard as loud as you want. Save, run."
-- Image: `d1_beat4_result.png` — running game with a decorated scoreboard.
-- Notes: —
-
-#### Slide D1-S119 — Beat 5.1: Find the paddle spin helper (stretch)
-- Format: G12 Screenshot + Caption
-- Title: "Beat 5 — Tweak the bounce (stretch)"
-- Body: "Scroll to `spin_from_paddle()` (around line 149). This is code we wrote for you — you can read it and tweak it."
-- Image: `d1_beat5_step1.png` — script editor on the `spin_from_paddle()` function.
-- Notes: pre-given helper, not a chunk. Read-and-tweak only.
-
-#### Slide D1-S120 — Beat 5.2: Change the spin amount
-- Format: G12 Screenshot + Caption
-- Title: "Beat 5 — Steeper or softer"
-- Body: "Change the `8.0` at the end of `return hit_offset * 8.0` — higher = steeper bounce off the paddle edge, lower = softer. Save, run, feel the difference."
-- Image: `d1_beat5_step2.png` — the `8.0` value highlighted.
-- Notes: ties back to "numbers you can tune" from chunk #1a.
-
-### §10.17b — Final Challenge: `player2.gd` (slides S121–S127)
-
-#### Slide D1-S121 — Section divider: Final Challenge
-- Format: G04 Headline / Divider
-- Title: "Final Challenge — `player2.gd`"
-- Body: "Kick out the computer. Make Pong 2-player — your friend plays the right paddle on the I and K keys."
-- Image: none
-- Notes: opt-in. For kids who finished the morning + want the big payoff.
-
-#### Slide D1-S122 — You already know how to do this (R3 pointer)
-- Format: G07 Table
-- Title: "You already know how to do this"
-- Body: table — FC step → morning chunk it reuses:
-  - "Step 1 — turn the AI off" → "reading code + `#` to comment out lines"
-  - "Step 2 — I/K keys move the paddle" → "chunk #1a (`paddle_speed`) + chunk #3 (`if`)"
-- Image: none
-- Notes: R3 rule — every FC step is a reworded morning chunk. No new concepts. If stuck, scroll up to that morning chunk and copy the *shape*.
-
-#### Slide D1-S123 — The payoff: 2-player Pong
-- Format: G12 Screenshot + Caption
-- Title: "What you're unlocking"
-- Body: "Right now the right paddle is a computer. After this challenge, a real second player controls it — I = up, K = down. Pong becomes 2-player."
-- Image: `d1_fc_2player.png` — two humans playing, both paddles under human control (placeholder OK).
-- Notes: sell the payoff before the work.
-
-#### Slide D1-S124 — Step 1: Where the AI lives
-- Format: G11 Code Screenshot
-- Title: "Step 1 — Find the computer's brain"
-- Body: "Open `player2.gd` (it's on the `PaddleRight` node). The 5 lines in `_process` that start with `var ball_middle = …` down through `position.y -= ai_speed` — that's the AI playing itself."
-- Image: `d1_fc_step1_where.png` — `player2.gd` in the script editor, the 5 AI lines marked with a red overlay rectangle.
-- Notes: —
-
-#### Slide D1-S125 — Step 1: Turn it off
-- Format: G12 Screenshot + Caption
-- Title: "Step 1 — Silence the AI"
-- Body: "Select those 5 lines and comment them out — put a `#` at the start of each, or select them and press **Ctrl+K**. Run (F5): the right paddle should now sit still."
-- Image: `d1_fc_step1_done.png` — the same 5 lines now greyed-out as comments.
-- Notes: verify = right paddle frozen. AI is off.
-
-#### Slide D1-S126 — Step 2: Where your code goes
-- Format: G11 Code Screenshot
-- Title: "Step 2 — Your turn: add the keys"
-- Body: "Just below the AI block, under the `STEP 2` banner, there's a `#@todo` block. That's where you make the I and K keys move the paddle."
-- Image: `d1_fc_step2_where.png` — `player2.gd` with a red overlay on the `#@todo` block under the STEP 2 banner.
-- Notes: —
-
-#### Slide D1-S127 — Step 2: The shape (Example + TODO side-by-side, MANDATORY)
-- Format: G09 Concept + Task
-- Title: "Step 2 — Make the keys work"
-- Body LHS (the shape, NOT copy-pasteable — render as image / placeholders):
-  ```
-  if Input.is_key_pressed(KEY_?):
-      position.y -= ???
-  if Input.is_key_pressed(KEY_?):
-      position.y += ???
-  ```
-- Body RHS (image): `d1_fc_step2_todo.png` — Godot screenshot of the `#@todo` block, red overlay on the gap.
-- Caption: "I moves up (subtract), K moves down (add). Use your `paddle_speed`. Same `if` shape as this morning."
-- Notes: show the shape, make them retype. Mirrors chunk #3 (`if`) + chunk #1a (`paddle_speed`). KEY_I / KEY_K, `position.y -= paddle_speed` / `+= paddle_speed`.
+- Notes: opt-in payoff for kids who finished the morning. On the projector, just open player2.gd and point at the STEP 1 + STEP 2 banners, then let them go. No per-step slides, no FC screenshots.
 
 ### §10.17c — Asset recap (slide S128)
 
@@ -1549,68 +1415,61 @@ Every slide entry uses this template:
 - Image: none
 - Notes: the day's takeaway artifact. Every kid leaves with a runnable game.
 
-#### Slide D1-S130 — Export 1: Save everything
+#### Slide D1-S130 — Export 1: Project → Export
 - Format: G12 Screenshot + Caption
-- Title: "Step 1 — Save first"
-- Body: "Save the scene with **Ctrl+S**, then click into the script editor and **Ctrl+S** again. No asterisks left next to the tab names = everything's saved."
-- Image: `d1_export_step1.png` — editor tabs with no unsaved-asterisk.
+- Title: "Step 1 — Project → Export…"
+- Body: "In the top menu bar, click **Project**, then **Export…**"
+- Image: `D1B6S1.png` — the Project menu open, Export… visible.
+- Notes: save first (Ctrl+S in scene + script) so the latest code ships.
+
+#### Slide D1-S131 — Export 2: the Export window
+- Format: G12 Screenshot + Caption
+- Title: "Step 2 — The Export window"
+- Body: "The Export window opens. It's empty the first time — click **Add…** at the top to add a target."
+- Image: `D1B6S2.png` — empty Export window, "No presets found", Add… button.
 - Notes: —
 
-#### Slide D1-S131 — Export 2: Open the Export window
-- Format: G12 Screenshot + Caption
-- Title: "Step 2 — Project → Export"
-- Body: "In the top menu bar: **Project → Export…**"
-- Image: `d1_export_step2.png` — Project menu open, Export… highlighted.
-- Notes: —
-
-#### Slide D1-S132 — Export 3: Pick the Windows preset
+#### Slide D1-S132 — Export 3: pick Windows Desktop
 - Format: G12 Screenshot + Caption
 - Title: "Step 3 — Choose Windows Desktop"
-- Body: "In the Export window, select the **Windows Desktop** preset. (Your instructor set this up already.)"
-- Image: `d1_export_step3.png` — Export window, Windows Desktop preset selected.
-- Notes: if the preset is missing, instructor build doc has the fix.
-
-#### Slide D1-S133 — Export 4: Click Export Project
-- Format: G12 Screenshot + Caption
-- Title: "Step 4 — Export Project"
-- Body: "Click **Export Project** at the bottom-right of the window."
-- Image: `d1_export_step4.png` — Export Project button highlighted.
+- Body: "From the list, pick **Windows Desktop** — that's the kind of program Windows PCs run."
+- Image: `D1B6S3.png` — the Add… platform list, Windows Desktop in it.
 - Notes: —
 
-#### Slide D1-S134 — Export 5: Pick a folder
+#### Slide D1-S133 — Export 4: the preset is ready
 - Format: G12 Screenshot + Caption
-- Title: "Step 5 — Where to save it"
-- Body: "Pick a folder for your game — e.g. make a new `MyPong` folder on the Desktop."
-- Image: `d1_export_step5.png` — file dialog at a Desktop/MyPong folder.
+- Title: "Step 4 — Your Windows preset"
+- Body: "Godot adds a Windows Desktop preset on the left. Leave the options as they are — **Runnable** on, Architecture **x86_64**."
+- Image: `D1B6S4.png` — the Windows Desktop preset selected, Options tab showing Runnable + Architecture x86_64.
 - Notes: —
 
-#### Slide D1-S135 — Export 6: Untick Export With Debug
+#### Slide D1-S134 — Export 5: if you see a red error
 - Format: G12 Screenshot + Caption
-- Title: "Step 6 — Untick 'Export With Debug'"
-- Body: "Uncheck **Export With Debug** — it keeps your `.exe` smaller."
-- Image: `d1_export_step6.png` — the Export With Debug checkbox, unticked.
+- Title: "Step 5 — If a red error shows up"
+- Body: "The first time on a new PC you may see a red **'No export template found'** message. Click **Manage Export Templates** to fix it."
+- Image: `D1B6S5.png` — the red "No export template found" error + the Manage Export Templates link.
+- Notes: INSTRUCTOR — export templates are a one-time per-machine install. If you pre-installed them, kids won't hit this; keep this + the next slide only as a 'just in case', or drop both.
+
+#### Slide D1-S135 — Export 6: install the templates
+- Format: G12 Screenshot + Caption
+- Title: "Step 6 — Download the templates"
+- Body: "In the Export Template Manager, click **Download and Install**. Let it finish, then close. (One-time setup per computer.)"
+- Image: `D1B6S6.png` — Export Template Manager, version 4.6.3.stable, "Download and Install" button.
+- Notes: INSTRUCTOR setup step — see previous slide.
+
+#### Slide D1-S136 — Export 7: name it and save
+- Format: G12 Screenshot + Caption
+- Title: "Step 7 — Name it and Save"
+- Body: "Click **Export Project**, type a name (e.g. `Day 1 - Pong`), pick your folder, and click **Save**. Godot builds your game."
+- Image: `D1B6S7.png` — the Save a File dialog, filename "Day 1 - Pong.exe", in the project folder.
 - Notes: —
 
-#### Slide D1-S136 — Export 7: Save
+#### Slide D1-S137 — Export 8: your game is a real program
 - Format: G12 Screenshot + Caption
-- Title: "Step 7 — Save"
-- Body: "Click **Save**. Godot builds your game."
-- Image: `d1_export_step7.png` — Save button.
-- Notes: —
-
-#### Slide D1-S137 — Export 8: Godot writes your files
-- Format: G12 Screenshot + Caption
-- Title: "Step 8 — Your files appear"
-- Body: "Godot writes two files into your folder: `<name>.exe` (the game) and `<name>.pck` (its data). Keep them together."
-- Image: `d1_export_step8.png` — file explorer showing the .exe + .pck.
-- Notes: "The .exe needs the .pck next to it — copy both if you move them."
-
-#### Slide D1-S138 — Export 9: Run it
-- Format: G12 Screenshot + Caption
-- Title: "Step 9 — Double-click your game"
-- Body: "Double-click the `.exe`. Your Pong runs — no Godot, no code editor, just your game."
-- Image: `d1_export_step9.png` — the exported Pong running as a standalone window.
-- Notes: the payoff moment. This is the takeaway.
+- Title: "Step 8 — Double-click and play"
+- Body: "Godot writes `Day 1 - Pong.exe` plus a `.pck` data file into your folder. Double-click the `.exe` — your Pong runs with no Godot needed. Keep the two files together."
+- Image: `D1B6S8.png` — File Explorer showing Day 1 - Pong.exe + Day 1 - Pong.pck.
+- Notes: the takeaway moment. The .exe needs the .pck beside it — copy both if you move them.
 
 #### Slide D1-S139 — Export 10: Take it anywhere
 - Format: G04 Headline / Divider
