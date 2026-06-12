@@ -590,6 +590,13 @@ def l7_step(prs, *, day=None, page=None, step_label=None, screenshot=None,
         run.font.bold = True
         run.font.color.rgb = theme.BG_WHITE
 
+    # No screenshot: render the caption full-width as a text slide (no placeholder box).
+    if not screenshot:
+        if caption:
+            _add_textbox(slide, theme.BODY_LEFT_MARGIN, body_top, body_width, body_height,
+                         caption, font_size=theme.SIZE_BODY, anchor=MSO_ANCHOR.MIDDLE)
+        return slide
+
     # Screenshot left ~60%, caption right ~40%
     img_left = theme.BODY_LEFT_MARGIN + Inches(1.1) if step_label else theme.BODY_LEFT_MARGIN
     img_width = body_width * 0.60
@@ -657,6 +664,20 @@ def l8_action(prs, *, day=None, page=None, prose, lhs_code, rhs_screenshot,
     lhs_top = body_top + prose_height + Inches(0.3)
     lhs_height = theme.SLIDE_HEIGHT - lhs_top - theme.BODY_BOTTOM_MARGIN
     gutter = Inches(0.3)
+
+    # No screenshot (e.g. Final-Challenge action slides whose answer is shown
+    # only as a board example, never as a Godot capture): render the board
+    # example full-width and skip the RHS column + overlay entirely.
+    if not rhs_screenshot:
+        _add_textbox(slide, theme.BODY_LEFT_MARGIN, lhs_top, body_width, Inches(0.35),
+                     "Pattern (board example):",
+                     font_size=theme.SIZE_BODY_SMALL, bold=True, color=theme.ICODE_RED)
+        _add_code_block(slide,
+                        theme.BODY_LEFT_MARGIN, lhs_top + Inches(0.4),
+                        body_width, lhs_height - Inches(0.4),
+                        lhs_code)
+        return slide
+
     col_width = (body_width - gutter) / 2
 
     # Small label above LHS

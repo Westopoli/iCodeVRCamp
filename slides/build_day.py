@@ -66,7 +66,10 @@ SUBSECTION = re.compile(r"^###\s+")
 # "Body LHS (board example, big monospace centred in left half):" still parse).
 FIELD = re.compile(r"^-\s+([A-Za-z][^:]*?):\s?(.*)$")
 GTAG = re.compile(r"\b(G\d{2})\b")
-PNG = re.compile(r"`([\w./\-]+\.png)`")
+# Match a `....png` token inside backticks WITHOUT requiring a closing backtick
+# right after — some blueprints write `D4C1.png -- not done --` (marker inside the
+# backticks), and the old strict form silently failed to find the screenshot.
+PNG = re.compile(r"`([\w./\-]+\.png)")
 
 
 # ------------------------------------------------------------
@@ -311,6 +314,28 @@ def _resolved_guide_name(slide, day):
     return p.name if p else None
 
 
+# Formats whose whole point is the screenshot. If one of these declares a shot
+# that was never captured (file absent OR marked `-- not done --` inline in the
+# blueprint), the slide is dropped — the deck must match the real captures
+# one-for-one (user rule 2026-06-11: captured files are the supreme authority).
+IMG_FORMATS = {"G09", "G11", "G12"}
+
+
+def _img_status(fields, day):
+    """Classify a slide's screenshot by what is ACTUALLY ON DISK (captured files
+    are the supreme authority — user 2026-06-11): 'none' (no png declared — text
+    slide), 'ok' (declared + file present), or 'missing' (declared but absent).
+
+    Stale inline `-- not done --` markers in the blueprint are deliberately
+    ignored: a blueprint may mark a shot not-done that was captured afterward.
+    Existence on disk wins both ways."""
+    blob = " ".join(fields.get("Image", []) + fields.get("Body", []))
+    if not PNG.search(blob):
+        return "none"
+    p = _image_path(fields, day)
+    return "ok" if (p and p.exists()) else "missing"
+
+
 def main():
     if len(sys.argv) != 2:
         print("Usage: python build_day.py <day_number 1-5>")
@@ -351,6 +376,11 @@ def main():
         gname = _resolved_guide_name(slide, day)
         if gname and gname in not_done:
             skipped.append((slide["id"], gname))
+            continue
+        # Image-format slide whose declared screenshot was never captured -> drop
+        # entirely (no placeholder), so slide count == real captures.
+        if _gtag(slide["fields"]) in IMG_FORMATS and _img_status(slide["fields"], day) == "missing":
+            skipped.append((slide["id"], gname or "(missing shot)"))
             continue
         page += 1
         try:

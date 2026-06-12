@@ -1328,7 +1328,7 @@ Other render rules:
 - Format: G12 Screenshot + Caption
 - Title: "The menus already work"
 - Body: none
-- Image: `D4WalkMF1.png -- not done --` — title screen with char-select prompt visible
+- Image: `D4WMF1.png` — title screen with char-select prompt visible
 - Caption: "Even with all your chunks empty, you can walk the full menu flow right now. The game logic is pre-built — you're adding the fighters."
 - Notes: Instructor drives. Press F5 and show the class live while the slide is up. If projector isn't available, narrate the flow from the screenshot.
 
@@ -1368,7 +1368,7 @@ Other render rules:
 - Format: G12 Screenshot + Caption
 - Title: "The CHARACTERS dict"
 - Body: none
-- Image: `D4WalkCD1.png -- not done --` — main.gd open at lines 6-59, CHARACTERS block visible
+- Image: `D4WCD1.png` — main.gd open at lines 6-59, CHARACTERS block visible
 - Caption: "Every character is one dictionary of 11 property values. This dict drives the whole game."
 - Notes: Instructor: open main.gd, Ctrl+G → 6. Show the block. Point out the four keys: "knight", "ninja", "mage", "archer". The next slide zooms in on one entry.
 
@@ -1975,7 +1975,7 @@ Other render rules:
 - Format: G12 Screenshot + Caption
 - Title: "The full state machine — your four holes"
 - Body: none
-- Image: `D4C6Full.png -- not done --` — player.gd:109-159 with two-tone overlay (gray pre-given lines, red kid-hole lines)
+- Image: `D4C6.png` — player.gd:109-159 with two-tone overlay (gray pre-given lines, red kid-hole lines)
 - Caption: "Gray = already written for you. Red = your four holes — one per state."
 - Notes: Two-tone overlay. Instructor: point to each red section in turn. "Idle → you write two if-blocks. Walk → two more. Jump → one. Fall → one." Per-hole action slides follow.
 
@@ -1995,7 +1995,7 @@ Other render rules:
       velocity.y = -jump_impulse
       set_state("jump")
   ```
-- Image: `D4C6a.png -- not done --` — player.gd:116-122, idle branch red overlay
+- Image: `D4C6.png` — player.gd:116-122, idle branch red overlay
 - Caption: "We know idle exists — inside the idle branch: switch to \"walk\" when get_move_direction() is non-zero, and switch to \"jump\" (with upward velocity.y) when jump is pressed on the floor."
 - Notes: T6a verbatim. `jump_pressed` = `Input.is_action_just_pressed("p%d_jump" % player_num)` — already computed earlier in `_physics_process()` (pre-given). `is_on_floor()` is a built-in CharacterBody2D method.
 
@@ -2011,7 +2011,7 @@ Other render rules:
       velocity.y = -jump_impulse
       set_state("jump")
   ```
-- Image: `D4C6b.png -- not done --` — player.gd:126-132, walk branch red overlay
+- Image: `D4C6.png` — player.gd:126-132, walk branch red overlay
 - Caption: "Inside the walk branch: when get_move_direction() is zero, switch back to \"idle\". When jump is pressed on the floor, set velocity.y = -jump_impulse and switch to \"jump\"."
 - Notes: T6b verbatim. Mirror of idle — symmetric structure reinforces the pattern. The jump block is identical to the idle branch; instructor can ask "what's the same? what's different?" (Only the first condition differs: `!= 0` vs `== 0`.)
 
@@ -2024,7 +2024,7 @@ Other render rules:
   if velocity.y > 0:
       set_state("fall")
   ```
-- Image: `D4C6c.png -- not done --` — player.gd:136-139, jump branch red overlay
+- Image: `D4C6.png` — player.gd:136-139, jump branch red overlay
 - Caption: "Inside the jump branch: when velocity.y > 0 (upward velocity has run out), switch to \"fall\"."
 - Notes: T6c verbatim. Gravity (pre-given) pulls velocity.y toward positive every frame. Once it crosses zero, the panda is falling. Smallest hole — two lines. Quick win.
 
@@ -2037,7 +2037,7 @@ Other render rules:
   if is_on_floor():
       set_state("idle")
   ```
-- Image: `D4C6d.png -- not done --` — player.gd:143-146, fall branch red overlay
+- Image: `D4C6.png` — player.gd:143-146, fall branch red overlay
 - Caption: "When is_on_floor() is true, the player has landed — switch back to \"idle\"."
 - Notes: T6d verbatim. Smallest hole — two lines. After this, the Output panel prints `walk`, `jump`, `fall`, `idle` as the fighter moves — major feedback moment even before the payoff screenshot.
 
@@ -2405,7 +2405,7 @@ Other render rules:
   # Update char-select label to include:
   # "5 = MyFighter"
   ```
-- Image: `D4FC2.png -- not done --` — main.gd _ready() showing the CHARACTERS["custom"] line added
+- Image: none
 - Caption: "Register your character in main.gd so the game knows about it. Add it to the keys array and update the char-select label to show key 5."
 - Notes: Mirror of chunk #4. Three touch-points: `_ready()` for the dict assignment, `_unhandled_input` for the keys array, the char-select label string. If the kid forgets the label update, the panel just shows 4 options — character still selectable by pressing 5 blindly, but less polished.
 

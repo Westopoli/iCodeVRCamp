@@ -1316,10 +1316,10 @@ Total: 1 divider + 1 payoff card + 1 R3 pointer + 3 enable walk + 9 hole action 
 - Notes: Step badge: B.2.
 
 #### Slide D3-S013 — Walk DK.1: Find the difficulty knob
-- Format: G07 Step / Challenge
+- Format: G11 Image + Caption
 - Title: "Walk DK — One number. Whole different game."
 - Body: "Find the difficulty constant in `main.gd`. Hint: look near the top."
-- Image: `D3B5S1.png` — `main.gd:43` showing `const DIFFICULTY := 2`
+- Image: `D3WDK1.png` — `main.gd:43` showing `const DIFFICULTY := 2`, red overlay on the const line
 - Caption: none
 - Notes: Instructor-driven — show this on the projector. Step badge: DK.1. This is the D3-specific orientation before any coding.
 
@@ -1845,7 +1845,7 @@ Total: 1 divider + 1 payoff card + 1 R3 pointer + 3 enable walk + 9 hole action 
 - Notes: This is the metaphor anchor for return values. Every time a function returns something today, callback to the vending machine.
 
 #### Slide D3-S057 — Chunk #5a Metaphor 2/4: Backpack
-- Format: G11 Image + Caption
+- Format: G05 Concept Explanation
 - Title: "The backpack"
 - Body: "You grab the snack. You put it in your backpack. `add_to_backpack(snack)`. Another function. Input = snack, output = nothing (your backpack just changed)."
 - Image: none
@@ -2076,7 +2076,7 @@ Total: 1 divider + 1 payoff card + 1 R3 pointer + 3 enable walk + 9 hole action 
   ```gdscript
   shoot(get_target(enemies))
   ```
-- Image: `D3C6Full.png` — main.gd:493-512, full match block showing: pre-given match line (gray overlay), "cannon"/"sniper" branch label (gray), #6a body (red overlay), "splash" branch label (gray), #6b body (red overlay)
+- Image: `D3C6.png` — main.gd:493-512, full match block showing: pre-given match line (gray overlay), "cannon"/"sniper" branch label (gray), #6a body (red overlay), "splash" branch label (gray), #6b body (red overlay)
 - Caption: "Gray = already written. Red = your two holes — one per branch."
 - Notes: Two-tone overlay. Point out what's gray and what's red. The kids' job is only the red parts.
 
@@ -2089,7 +2089,7 @@ Total: 1 divider + 1 payoff card + 1 R3 pointer + 3 enable walk + 9 hole action 
   if snack != null:
       add_to_backpack(snack)
   ```
-- Image: `D3C6a.png` — main.gd:498-503, red overlay on cannon/sniper branch body. Gray overlay on surrounding pre-given match structure.
+- Image: `D3C6.png` — main.gd:498-503, red overlay on cannon/sniper branch body. Gray overlay on surrounding pre-given match structure.
 - Caption: "Vending machine drops the target. If something dropped, fire at it."
 - Notes: Task #6a exact wording — "For single-target towers: use `get_nearest_enemy_in_range` to find a victim. If there is one, call `fire_at` on it for `t_damage`, then reset the tower's cooldown to `t_rate`." `get_nearest_enemy_in_range` is the vending machine. `fire_at` is the backpack. Null guard is the "machine ate your money" case.
 
@@ -2102,7 +2102,7 @@ Total: 1 divider + 1 payoff card + 1 R3 pointer + 3 enable walk + 9 hole action 
   if snacks.size() > 0:
       add_to_backpack(snacks)
   ```
-- Image: `D3C6b.png` — main.gd:506-511, red overlay on splash branch body. Gray overlay on surrounding pre-given match structure.
+- Image: `D3C6.png` — main.gd:506-511, red overlay on splash branch body. Gray overlay on surrounding pre-given match structure.
 - Caption: "Same idea — but now the vending machine drops a whole list."
 - Notes: Task #6b exact wording — "For Splash towers: use `get_enemies_in_radius` to grab everyone in range. If at least one enemy is there, call `fire_at` on the whole list for `t_damage`, then reset cooldown to `t_rate`." `size() > 0` mirrors the null guard from #6a — same idea, different return type (list vs single).
 
@@ -2231,7 +2231,7 @@ Total: 1 divider + 1 payoff card + 1 R3 pointer + 3 enable walk + 9 hole action 
 - Notes: Overview slide. Let kids pick their beats. Beats 1-4 are the main session; 5-7 for fast finishers.
 
 #### Slide D3-S087 — Beat 1 Step 1: Open TOWER_STATS
-- Format: G07 Step / Challenge
+- Format: G11 Image + Caption
 - Title: "Beat 1 — Tune tower stats: find the dictionary"
 - Body: "Find `TOWER_STATS` in `main.gd`. It's near the top."
 - Image: `D3B1S1.png` — main.gd showing the TOWER_STATS dict with default values
@@ -2266,7 +2266,7 @@ Total: 1 divider + 1 payoff card + 1 R3 pointer + 3 enable walk + 9 hole action 
 - Notes: Look for the `"color"` or `"modulate"` key in the Cannon entry.
 
 #### Slide D3-S091 — Beat 2 Step 2: Change the color
-- Format: G08 Step / Hint
+- Format: G11 Image + Caption
 - Title: "Beat 2 — Change the color"
 - Body:
   - Find the `Color(R, G, B)` value in the Cannon entry.
@@ -2285,7 +2285,7 @@ Total: 1 divider + 1 payoff card + 1 R3 pointer + 3 enable walk + 9 hole action 
 - Notes: Quick payoff. Move to Beat 3.
 
 #### Slide D3-S093 — Beat 3 Step 1: Browse the asset folder
-- Format: G07 Step / Challenge
+- Format: G11 Image + Caption
 - Title: "Beat 3 — Swap a tower sprite"
 - Body: "Browse `assets/kenney_td/` in the FileSystem panel. Pick a tile number you like."
 - Image: `D3B3S1.png` — FileSystem panel showing assets/kenney_td/ folder open with tile thumbnails
@@ -2293,7 +2293,7 @@ Total: 1 divider + 1 payoff card + 1 R3 pointer + 3 enable walk + 9 hole action 
 - Notes: The Kenney TD pack has 299 tiles. Tile names follow the pattern `towerDefense_tileNNN.png`.
 
 #### Slide D3-S094 — Beat 3 Step 2: Find the tile number
-- Format: G08 Step / Hint
+- Format: G11 Image + Caption
 - Title: "Beat 3 — Edit the tile number"
 - Body:
   - In `TOWER_STATS`, find the Cannon's `"tile"` key (default: `250`).
@@ -2320,7 +2320,7 @@ Total: 1 divider + 1 payoff card + 1 R3 pointer + 3 enable walk + 9 hole action 
 - Notes: If the sprite looks wrong (wrong size, wrong orientation), try a neighboring tile number.
 
 #### Slide D3-S097 — Beat 4 Step 1: Select the Scenery node
-- Format: G07 Step / Challenge
+- Format: G11 Image + Caption
 - Title: "Beat 4 — Add a scenery prop"
 - Body: "In the Scene dock, find and click the `Scenery` node."
 - Image: `D3B4S1.png` — Scene dock showing the Scenery node selected
@@ -2460,7 +2460,7 @@ Total: 1 divider + 1 payoff card + 1 R3 pointer + 3 enable walk + 9 hole action 
 - Notes: REQUIRED per BIBLE §4 R3. Show the full mirror map. Kids read across: FC hole → morning chunk it mirrors.
 
 #### Slide D3-S111 — FC Enable step 1: Open main.gd
-- Format: G07 Step / Challenge
+- Format: G11 Image + Caption
 - Title: "Enable endless mode — step 1"
 - Body: "Open `main.gd` and scroll to the `ENDLESS_MODE` constant near the top."
 - Image: `D3FC1.png` — main.gd:76 showing `const ENDLESS_MODE := false`
@@ -2493,7 +2493,7 @@ Total: 1 divider + 1 payoff card + 1 R3 pointer + 3 enable walk + 9 hole action 
   var games := []
   var coins := 100
   ```
-- Image: `D3FC1.png` -- not done --
+- Image: none
 - Caption: "FC-1 ← chunk #1. Same pattern: declare variables at the top of the file."
 - Notes: FC-1 mirrors morning chunk #1. Kid declares 5 vars: `var spawn_timer: float = 0.0`, `var difficulty: int = 0`, `var spawn_interval: float = SPAWN_INTERVAL_START`, `var spawn_queue: Array = []`, `var clear_streak: int = 0`. Pre-given constants above define the starting values.
 
