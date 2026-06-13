@@ -28,6 +28,14 @@ __pycache__/
 Thumbs.db
 desktop.ini
 
+# Office temp lock files
+~$*.pptx
+~$*.docx
+~$*.xlsx
+
+# dist/ ZIPs are bundled inside AllYouNeedBro.zip — no need to track separately
+dist/
+
 # Editor
 .vscode/
 .idea/

@@ -1,162 +1,171 @@
-# iCode GDScript Camp — Instructor Guide
+# iCode GDScript Camp
 
-A 5-day Godot 4 / GDScript coding camp for ages 10–15 (no prior experience). Each day produces one complete game; Day 5 is a creative showcase. This doc is for instructors running the camp — not students.
+A 5-day Godot 4 / GDScript coding camp for ages 10–15 with no prior coding experience. Each day students build a complete game from a scaffold. Day 5 is a creative showcase.
 
-[The week](#the-week-at-a-glance) · [Running games](#running-the-games) · [Slides](#the-slides) · [Debugging](#debugging-with-students) · [USB take-home](#usb-take-home) · [Issues](#reporting-issues)
+## ⬇️ [Download AllYouNeedBro.zip](./AllYouNeedBro.zip)
+
+Everything you need to run the camp is in that one ZIP. Send `Student_Materials/` to each student computer, open `Instructor_Materials/Slides/Day1.pptx`, and you're ready.
+
+### Push it straight to student Downloads (optional)
+
+If student machines already have a terminal available, run this on each one to drop the ZIP directly into their Downloads folder:
+
+**Mac / Linux:**
+```bash
+curl -L https://github.com/Westopoli/iCodeVRCamp/raw/master/AllYouNeedBro.zip -o ~/Downloads/AllYouNeedBro.zip
+```
+
+**Windows (PowerShell):**
+```powershell
+Invoke-WebRequest -Uri "https://github.com/Westopoli/iCodeVRCamp/raw/master/AllYouNeedBro.zip" -OutFile "$env:USERPROFILE\Downloads\AllYouNeedBro.zip"
+```
+
+Then unzip and open `Student_Materials/` on each machine.
 
 ---
 
-## The week at a glance
+## The week
 
-| Day | Genre | Concept taught | Folder | Instructor notes |
-|-----|-------|---------------|--------|-----------------|
-| 1 | Pong | Variables + Conditions | `Day1_Pong_Game/` | _(see BIBLE.md §6)_ |
-| 2 | Tile maze | Loops + Functions (intro) | `Day2_Maze_Game/` | `INSTRUCTOR_NOTES.md` |
-| 3 | Base defense | Functions (deep) + Lists | `Day3_BaseDef_Game/` | `INSTRUCTOR_NOTES.md` |
-| 4 | 2-player fighter | Objects + State machine | `Day4_Fighter_Game/` | `INSTRUCTOR_NOTES.md` |
-| 5 | Escape Sim + Rally racer | No new code — showcase | `Day5_Racing_Game/` | `INSTRUCTOR_NOTES.md` |
+| Day | Game | Concepts | Folder |
+|-----|------|----------|--------|
+| 1 | Pong | Variables + Conditions | `Day1_Pong_Game/` |
+| 2 | Tile maze (Pac-Man style) | Loops + Functions (intro) | `Day2_Maze_Game/` |
+| 3 | Base defense | Functions (deep) + Lists | `Day3_BaseDef_Game/` |
+| 4 | 2-player fighter | Objects + State machine | `Day4_Fighter_Game/` |
+| 5 | Rally racer + Escape Simulator | No new code — showcase | `Day5_Racing_Game/` |
 
-**Concept arc: slow ramp:** D1 intro → D2 loops → D3 functions deep → D4 objects → D5 VR fun.
-
-The camp narrative: kids travel through 50 years of game history — Pong (1972) → Pac-Man (1980) → Tower Defense (90s) → Smash Bros (1999) → Modern (today).
+Camp narrative: kids travel through 50 years of game history — Pong (1972) → Pac-Man (1980) → Tower Defense (90s) → Smash Bros (1999) → today.
 
 ---
 
-## Running the games
+## Quickstart
 
-**Prereq:** [Godot 4](https://godotengine.org/download/) installed on the machine.
+**Requirements:** [Godot 4](https://godotengine.org/download/) on every machine. Free, ~100 MB.
 
-### Open a day's project
-1. Launch Godot → **Import** → navigate to the day folder (e.g. `Day2_Maze_Game/`) → select `project.godot`
-2. Press **F5** (or the Play button) to run
+### 1. Get the files
 
-Each day folder is self-contained. No cross-day dependencies.
+Build the instructor ZIP:
+```bash
+bash package.sh
+```
 
-### Template vs Complete
+This produces `AllYouNeedBro.zip`. Unzip it — you'll find:
+
+```
+AllYouNeedBro/
+├── Student_Materials/     ← send this folder to every student computer
+└── Instructor_Materials/  ← keep this for yourself
+```
+
+Send `Student_Materials/` to each student via USB, network share, or however your lab transfers files.
+
+### 2. Open a game
+
+1. Launch Godot → **Import** → navigate to the day's Template ZIP, unzip it first, then select `project.godot`
+2. Press **F5** to run
+
+### 3. Template vs Complete
+
 Every day ships two versions:
 
-| Version | Contents | Who gets it |
+| Version | Contents | Who uses it |
 |---------|----------|-------------|
-| **Template** | `#@todo` / `#@end` holes where student code goes | Students |
-| **Complete** | Fully filled-in code | Instructor reference |
+| **Template** | `#@todo` / `#@end` holes where students write code | Students |
+| **Complete** | Fully filled-in code | Instructor (answer key) |
 
-Ship the Template to students at the start of each day. Keep Complete open on your machine as the answer key. If a student's code goes sideways, compare to Complete line-by-line.
-
-### Finding the holes
 Student code always lives between marker comments:
 ```gdscript
-# === KID CHUNK #3 — take_damage ===
+# === KID CHUNK #2 — move_enemies ===
 #@todo
 # ← students write here
 #@end
 ```
-Lines outside these markers are pre-given — students don't touch them.
+
+Everything outside markers is pre-given. Students don't touch it.
 
 ---
 
-## The slides
+## Slides
 
-Prebuilt decks live in `slides/out/`:
+Open `.pptx` files from `Instructor_Materials/Slides/` in PowerPoint, Google Slides, or Keynote.
 
-```
-slides/out/
-  Day1.pptx
-  Day2.pptx
-  Day3.pptx
-  Day4.pptx
-  Day5.pptx
-```
-
-Open in PowerPoint, Google Slides, or Keynote. **Speaker notes are on every slide** — those are your talking points.
-
-### Rebuild slides (if needed)
-```bash
-cd slides
-.venv/bin/python build_day.py 2   # replace 2 with 1–5
-```
-Requires `.venv` — bare `python` or `python3` won't have the `pptx` package.
+**Speaker notes are on every slide** — those are your talking points. You don't need to memorize anything; just read the notes.
 
 ---
 
 ## Debugging with students
 
-Check in this order:
+### Top errors kids hit
 
-### 1 — Per-day instructor notes
-Each day folder (D2–D5) has `INSTRUCTOR_NOTES.md`. It covers:
-- What each chunk teaches and common mistakes at that chunk
-- Godot editor steps that are non-obvious (TileMap, Inspector, Input Map)
-- What to do when a kid is stuck
-
-> Day 1 notes aren't written yet — for D1 edge cases refer to `BIBLE.md §6`.
-
-### 2 — Top-5 errors kids actually hit
-
-| Error message | Cause | Fix |
-|---|---|---|
-| `IndentationError: unexpected indent` | Tab/space mismatch | Delete the indent and retype it (don't copy-paste) |
-| `Invalid get index '...' on base 'Nil'` | `@onready` node path wrong | Check scene tree: is the node name spelled exactly right? |
-| `Nonexistent function 'foo' called` | Typo in function name | GDScript is case-sensitive — check spelling and capitalization |
+| Error | Cause | Fix |
+|-------|-------|-----|
+| `IndentationError: unexpected indent` | Tab/space mismatch | Delete the indent, retype it — never copy-paste from a browser |
+| `Invalid get index '...' on base 'Nil'` | `@onready` node path wrong | Right-click node in Scene panel → Copy Node Path → paste into script |
+| `Nonexistent function 'foo' called` | Typo in function name | GDScript is case-sensitive — check spelling exactly |
 | `parse error: expected ','` | Missing comma in array or dict | Find the line, count the commas |
 | `Input action not found: 'p1_jump'` | Action not in Input Map | Project → Project Settings → Input Map → add the action |
 
-### 3 — AI assistant
-For anything the notes and table don't cover:
+### AI debug assistant
 
-1. Open `AI_CONTEXT.md` in this repo
+1. Open `GDScript_Reference.md` (in `Student_Materials/` or `Instructor_Materials/Reference/`)
 2. Copy its full contents
 3. Paste into [Claude](https://claude.ai) or ChatGPT
 4. Describe the bug: what the student typed, what error appeared, what they expected
 
-The AI will have enough context about the games, GDScript, and the scaffold pattern to help diagnose it.
+The AI will have enough context about GDScript and the scaffold pattern to diagnose it quickly.
+
+### Per-day instructor notes
+
+Each day folder (D2–D5) contains `INSTRUCTOR_NOTES.md` inside the game ZIP. It covers common mistakes per chunk, Godot editor steps that are non-obvious, and what to do when a kid is stuck.
+
+---
+
+## Repo structure
+
+```
+iCodeVRCamp/
+├── Day1_Pong_Game/        ← Godot source (complete version)
+├── Day2_Maze_Game/
+├── Day3_BaseDef_Game/
+├── Day4_Fighter_Game/
+├── Day5_Racing_Game/
+├── dist/                  ← packaged Godot projects (Template + Complete ZIPs)
+├── slides/
+│   └── Final Slides/      ← Day1–Day5.pptx (final deliverable decks)
+├── AI_CONTEXT.md          ← paste-to-AI debug reference
+├── BIBLE.md               ← full camp spec and locked decisions
+├── CROSS_PLATFORM.md      ← export and platform notes
+├── package.sh             ← builds AllYouNeedBro.zip
+└── _dev/                  ← internal dev files (not needed to run the camp)
+```
 
 ---
 
 ## USB take-home
 
-Each student leaves with a USB containing all 5 games they built.
-
-What goes on the USB:
+Each student leaves with the games **they built** — their own filled-in templates, not the instructor answer key. At end of camp, copy each student's Godot project folders from their machine onto a USB:
 
 ```
 USB/
-  Day1_Pong_Game_Complete/
-  Day2_Maze_Game_Complete/
-  Day3_BaseDef_Game_Complete/
-  Day4_Fighter_Game_Complete/
-  Day5_Racing_Game_Complete/
+  Day1_Pong_Game/    ← their filled-in template
+  Day2_Maze_Game/
+  Day3_BaseDef_Game/
+  Day4_Fighter_Game/
+  Day5_Racing_Game/
 ```
 
-All exports target Windows (`.exe`, double-click to run — no Godot needed).
-
-> **Export workflow:** Use Godot's **Project → Export → Windows Desktop** for each day folder. Full step-by-step export instructions are in `BIBLE.md §11`. A scripted bulk-export pass is planned but not yet complete.
+Students unzip and open in Godot to play and show off their own code.
 
 ---
 
 ## Reporting issues
 
-Found a bug in game code, slides, or these docs?
+Found a bug in game code, slides, or docs?
 
 **Open an issue:** https://github.com/Westopoli/iCodeVRCamp/issues
 
-Include:
-- Which day and which file (`Day3_BaseDef_Game/main.gd`, etc.)
-- What the student typed vs. what was expected
-- Godot version (**Help → About Godot**)
-- The error text or a screenshot
+Include: which day and file, what the student typed vs. what was expected, Godot version (**Help → About Godot**), and the error text or screenshot.
 
 ---
 
-## Reference docs
-
-| File | What's in it |
-|------|-------------|
-| `BIBLE.md` | Master spec — locked decisions, concept map, per-day scaffold detail, hint policy |
-| `DayN_*/INSTRUCTOR_NOTES.md` | Per-day bug guide and Godot editor walkthrough |
-| `AI_CONTEXT.md` | Paste-to-AI reference for getting bug help |
-| `slides/out/DayN.pptx` | Prebuilt slide decks |
-| `SCREENSHOTS_CAPTURE_GUIDE.md` | Screenshot manifest (for rebuilding slides) |
-
----
-
-`Godot 4` · `GDScript` · `python-pptx` · `Kenney.nl CC0` · `Escape Simulator`
+`Godot 4` · `GDScript` · `Kenney.nl CC0 assets` · `python-pptx`

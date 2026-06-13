@@ -29,18 +29,15 @@ extends Node
 @onready var main: Node = get_parent()
 
 
-# ============================================================
-#  FINAL CHALLENGE 1 — STATE VARIABLES
+# FC-1: Declare 5 top-level variables for endless mode state.
+# Mirrors morning chunk #1 (variable declarations).
 #
-#  Endless mode needs to remember three things:
-#    spawn_timer        a float starting at 0.0   — counts up
-#    difficulty         an integer starting at 1  — escalates over time
-#    spawn_interval     a float starting at 2.0   — seconds between spawns
+# Given:
+#   - SPAWN_INTERVAL_START   — the starting spawn interval constant
 #
-#  Declare them as plain top-level `var`s, just like the four
-#  you declared in main.gd's TODO #1 this morning.
-# ============================================================
-# FINAL CHALLENGE 1
+# Syntax:
+#   - var name: float = value
+#@todo
 
 
 # ============================================================
@@ -53,61 +50,40 @@ func endless_tick(delta: float) -> void:
 		on_screen_clear()
 
 
-# ============================================================
-#  FINAL CHALLENGE 2 — SPAWN ON A TIMER
+# FC-2a: Append `t` (a type string) to `spawn_queue`.
+# Mirrors morning chunk #2a (.append).
 #
-#  Every frame:
-#    1. increase `spawn_timer` by `delta`.
-#    2. if it has caught up to `spawn_interval`, time to spawn:
-#         a) figure out what type to spawn (call pick_enemy_type()
-#            from FC-3)
-#         b) spawn it: main.spawn_enemy(random_edge(), the_type)
-#         c) reset spawn_timer back to 0.0
+# Given:
+#   - spawn_queue   — the pending-spawn list
 #
-#  This is the same shape as TODO #2a from this morning, just
-#  triggered by a timer instead of by a wave list.
-# ============================================================
+# Syntax:
+#   - list.append(item)
 func spawn_timer_tick(delta: float) -> void:
-	# FINAL CHALLENGE 2
+	#@todo
 
 
-# ============================================================
-#  FINAL CHALLENGE 3 — RETURN ONE THING BASED ON DIFFICULTY
+# FC-5a: Return the enemy with the highest `.speed`. The pre-given init
+# (fastest = null, best_speed = 0.0) and the pre-given `return fastest`
+# sandwich your hole — write only the loop-and-update section.
+# Mirrors morning chunk #5a (function returns ONE from a list).
 #
-#  Function returns a String:  either "grunt" or "runner".
-#
-#  Rule of thumb (you can change this if you want a different
-#  feel):
-#    - at low difficulty, mostly grunts.
-#    - at high difficulty, more runners (faster, scarier).
-#  e.g.:
-#       if difficulty > 3:
-#           return "runner"
-#       else:
-#           return "grunt"
-#
-#  This is the same shape as TODO #5a — pick ONE thing, return
-#  it.  No looping needed for this one.
-# ============================================================
+# Given:
+#   - main.enemies   — list of active enemies
+#   - fastest        — pre-initialized to null (update as you scan)
+#   - best_speed     — pre-initialized to 0.0 (update as you scan)
+#   - e.speed        — an enemy's current speed
 func pick_enemy_type() -> String:
-	# FINAL CHALLENGE 3
+	#@todo
 
 
-# ============================================================
-#  FINAL CHALLENGE 4 — SIZE CHECK + ESCALATION
+# FC-4: Loop the parameter list, calling `endless_buff(e, delta)` on each.
+# Mirrors morning chunk #4 (function takes a list as parameter).
 #
-#  Whenever the screen clears (no enemies left), we want the
-#  game to get HARDER:
-#    - bump difficulty by 1
-#    - shrink spawn_interval to 90% of its current value
-#      (`spawn_interval *= 0.9`) — so spawns come faster.
-#
-#  This is the same `enemies.size() == 0` check you wrote in
-#  TODO #7 — just with a different consequence (escalation
-#  instead of "next wave").
-# ============================================================
+# Given:
+#   - enemy_list              — a list of enemies passed in as a parameter
+#   - endless_buff(e, delta)  — applies endless scaling to one enemy
 func on_screen_clear() -> void:
-	# FINAL CHALLENGE 4
+	#@todo
 
 
 # ============================================================

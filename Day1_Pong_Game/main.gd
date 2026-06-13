@@ -29,9 +29,12 @@ var left_score := 0
 var right_score := 0
 
 
-# TODO #1a: Make our game variables. Every variable starts with "var".
-# Give the ball a left-right speed (x) and an up-down speed (y),
-# and give the paddle its own speed. Pick any numbers you like.
+# TODO #1a: Create three variables that hold the ball's left-right speed, the
+# ball's up-down speed, and the paddle's speed. When the game runs later, these
+# numbers decide how fast everything moves.
+#
+# Syntax:
+#   - var name := value
 #@todo
 var ball_speed_x := 6.0
 var ball_speed_y := 3.0
@@ -39,18 +42,21 @@ var paddle_speed := 6.0
 #@end
 
 
-# TODO #1b: Make 2 variables OF YOUR OWN. Pick any silly names you want
-# (skibidi_speed, gyatt_factor, sigma_level, ohio_rizz, whatever) and
-# give each one a number. We'll show them off on the scoreboard later.
+# TODO #1b: Invent two variables with names of your choosing — silly, serious,
+# whatever you want — and give each one a starting number. You'll see them on
+# the scoreboard later (chunk #1b-suffix).
 #@todo
 var skibidi_speed := 99
 var gyatt_factor := 42
 #@end
 
 
-# TODO #6a: Make a TRUE/FALSE variable called ball_moving.
-# Start it as false — the ball should sit still until we say go.
-# (We finish TODO #6 last, after everything else works.)
+# TODO #6a: Make a true/false variable called `ball_moving`, starting as `false`.
+# This switch decides whether the ball is allowed to move; we flip it to `true`
+# when the player presses Space (chunk #6b).
+#
+# Syntax:
+#   - var name := false
 #@todo
 var ball_moving := false
 #@end
@@ -66,9 +72,17 @@ func _ready():
 func _process(_delta):
 	move_left_paddle()
 
-	# TODO #6b: When the player presses Space, the ball wakes up.
-	# Set ball_moving to true. Then below, if ball_moving is still
-	# false, we "return" — that means stop here and don't move it.
+	# TODO #6b: When the player presses Space, flip `ball_moving` to `true`. Until
+	# that happens, the ball must sit still — use `return` to skip the rest of
+	# `_process` while `ball_moving` is `false`. When you run the game, the ball
+	# should freeze at the centre until Space is pressed.
+	#
+	# Given:
+	#   - Input.is_action_just_pressed("ui_accept")   — true one frame when Space pressed
+	#   - ball_moving                                  — the flag declared in #6a
+	#
+	# Syntax:
+	#   - if condition == false: return
 	#@todo
 	if Input.is_action_just_pressed("ui_accept"):
 		ball_moving = true
@@ -76,16 +90,33 @@ func _process(_delta):
 		return
 	#@end
 
-	# TODO #2: Move the ball. Add its x-speed to its x position,
-	# and its y-speed to its y position. ( += means "add to" )
+	# TODO #2: Every frame, add the ball's speeds to its position so it actually
+	# moves. After this chunk, the ball should drift off the screen (until later
+	# chunks bounce it back).
+	#
+	# Given:
+	#   - ball.position.x / ball.position.y   — the ball's current position
+	#   - ball_speed_x / ball_speed_y         — speeds declared in #1a
+	#
+	# Syntax:
+	#   - +=   (adds to: x += 5  is the same as  x = x + 5)
 	#@todo
 	ball.position.x += ball_speed_x
 	ball.position.y += ball_speed_y
 	#@end
 
-	# TODO #4: if / else — bounce off the top and bottom walls.
-	# IF the ball reached the top or bottom, flip its y-speed so
-	# it goes back the other way. ELSE, do nothing and keep going.
+	# TODO #4: When the ball hits the top or bottom of the screen, flip its vertical
+	# speed so it bounces. Otherwise let it keep going. After this chunk, the ball
+	# ricochets off the top and bottom walls instead of flying off.
+	#
+	# Given:
+	#   - SCREEN_H       — screen height in pixels
+	#   - BALL_SIZE      — ball size in pixels
+	#   - ball_speed_y   — the vertical speed to flip
+	#
+	# Syntax:
+	#   - or            (checks two conditions: if A or B:)
+	#   - -ball_speed_y   (negate = flip the sign)
 	#@todo
 	if ball.position.y < 0 or ball.position.y > SCREEN_H - BALL_SIZE:
 		ball_speed_y = -ball_speed_y
@@ -95,15 +126,31 @@ func _process(_delta):
 
 	bounce_off_paddles()
 
-	# TODO #3: an "if" statement. IF the ball goes past the RIGHT
-	# edge of the screen, print the word "point!" to the Output.
+	# TODO #3: When the ball gets past the right edge of the screen, print the word
+	# `point!` to the Output panel. This is a "does the if even work?" check before
+	# we add real scoring in chunk #5.
+	#
+	# Given:
+	#   - SCREEN_W         — screen width in pixels
+	#   - ball.position.x  — the ball's current x position
+	#
+	# Syntax:
+	#   - print("text")
 	#@todo
 	if ball.position.x > SCREEN_W:
 		print("point!")
 	#@end
 
-	# TODO #5: comparison operators ( > and < ). If the ball passed
-	# an edge, add 1 to that player's score, then reset the ball.
+	# TODO #5: Turn "ball off the right edge" and "ball off the left edge" into real
+	# scoring. When the ball goes past the right, give the left player a point and
+	# reset the ball. Mirror it for the left edge. After this chunk, the scoreboard
+	# at the top of the screen actually counts.
+	#
+	# Given:
+	#   - SCREEN_W      — screen width in pixels
+	#   - left_score    — left player's score (add 1 when ball exits right)
+	#   - right_score   — right player's score (add 1 when ball exits left)
+	#   - reset_ball()  — resets the ball to centre
 	#@todo
 	if ball.position.x > SCREEN_W:
 		left_score += 1
@@ -115,8 +162,15 @@ func _process(_delta):
 
 	score_label.text = str(left_score) + "   :   " + str(right_score)
 
-	# TODO #1b (showing off): tack your 2 silly variables onto the
-	# scoreboard so everyone can see them.
+	# TODO #1b (suffix): Stick your two silly variables (from #1b) onto the scoreboard
+	# so they show up during the game. Decorate however you like with stars, emojis,
+	# or extra text.
+	#
+	# Given:
+	#   - score_label.text   — the scoreboard string (use += to append more text)
+	#
+	# Syntax:
+	#   - str(variable)   converts a number to text so you can add it to a string
 	#@todo
 	score_label.text += "   ★ " + str(skibidi_speed) + " ★ " + str(gyatt_factor)
 	#@end

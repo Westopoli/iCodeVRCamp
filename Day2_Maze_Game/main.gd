@@ -62,18 +62,28 @@ func _ready():
 	game_over_panel.visible = false
 	player.position = cell_to_world(player_cell)
 
-	# TODO #1: there should be 3 ghosts lined up in the pen at the
-	# start of the game. Use a `for i in range(...)` loop so the spawn
-	# call is written once, not three times. The helper ghost_spawn_pos(i)
-	# (pre-given below) returns the world position for the i-th ghost.
+	# TODO #1: Spawn 3 ghosts side by side in the ghost pen. Use a `for` loop so we
+	# write the spawn call once instead of three times. When you run the game, you
+	# should see 3 red squares lined up inside the pen.
+	#
+	# Given:
+	#   - spawn_ghost_at(pos)   — spawns one ghost at a world position
+	#   - ghost_spawn_pos(i)    — returns the world position for the i-th ghost
+	#
+	# Syntax:
+	#   - for i in range(3):
 	#@todo
 	for i in range(3):
 		spawn_ghost_at(ghost_spawn_pos(i))
 	#@end
 
-	# TODO #3a (caller): set dots_remaining to the total number of dots
-	# painted in the maze. count_dots() (TODO #3b below) gives you that
-	# number.
+	# TODO #3a: Call the `count_dots()` function you'll write below (3b) and remember
+	# the answer in `dots_remaining`. This number is what the win check counts down
+	# to zero.
+	#
+	# Given:
+	#   - dots_remaining   — the variable to store the count in
+	#   - count_dots()     — the function you write in #3b (returns total dot count)
 	#@todo
 	dots_remaining = count_dots()
 	#@end
@@ -118,8 +128,16 @@ func _process(delta):
 	if PERSONALITY_MODE_ENABLED:
 		fc_node.step_all_personality_ghosts()
 	else:
-		# TODO #2: every frame, every ghost in the `ghosts` list should
-		# take one step. step_ghost(ghost) makes one ghost step.
+		# TODO #2: Each frame, walk through every ghost in the `ghosts` list and tell it
+		# to take one step. After this chunk (and the 2-second release delay), the ghosts
+		# start patrolling instead of standing still in the pen.
+		#
+		# Given:
+		#   - ghosts         — the list of all active ghost nodes
+		#   - step_ghost(ghost)   — makes one ghost take one step
+		#
+		# Syntax:
+		#   - for item in list:
 		#@todo
 		for ghost in ghosts:
 			step_ghost(ghost)
@@ -145,11 +163,22 @@ func try_step() -> void:
 #  KID FUNCTIONS — you write these today.
 # ============================================================
 
-# TODO #4: write `func reset_player()` — no inputs, returns nothing.
-# Goal: after calling it, the player is back at the starting tile,
-# the on-screen position matches that tile, and no leftover movement
-# is happening (player_moving false, current_dir + queued_dir cleared
-# to Vector2i.ZERO). Useful pre-given values: PLAYER_START, cell_to_world().
+# TODO #4: Write a function called `reset_player()` that sends the player back
+# to the starting tile and clears any leftover movement. The game calls this
+# when a ghost catches the player.
+#
+# Given:
+#   - PLAYER_START          — the starting tile coordinate (Vector2i)
+#   - cell_to_world(cell)   — converts a tile coordinate to a world position
+#   - player_cell           — current tile the player occupies
+#   - player.position       — the player sprite's world position
+#   - player_moving         — movement flag to clear (set to false)
+#   - current_dir           — current movement direction to clear
+#   - queued_dir            — queued movement direction to clear
+#
+# Syntax:
+#   - Vector2i.ZERO   (empty direction — use to clear current_dir and queued_dir)
+#   - func name() -> void:
 #@todo
 func reset_player() -> void:
 	player_cell = PLAYER_START
@@ -160,14 +189,18 @@ func reset_player() -> void:
 #@end
 
 
-# TODO #5: write `func move_player(direction)` — takes a Vector2i
-# (one of Vector2i.LEFT/RIGHT/UP/DOWN). Goal: if the tile in that
-# direction is a wall, the player doesn't move. Otherwise the player
-# moves one tile that way.
-# Useful pre-given values:
-#   - hit_wall(cell)        — true if cell is a wall (your TODO #6)
-#   - wrap_cell(cell)       — handles tunnel wrap
-#   - step_player_to(cell)  — updates player_cell + slides the sprite
+# TODO #5: Write the function that actually moves the player one tile in a given
+# direction — but only if that direction isn't blocked by a wall. After this
+# chunk, the arrow keys move the player around the maze.
+#
+# Given:
+#   - player_cell           — the player's current tile coordinate
+#   - hit_wall(cell)        — returns true if that cell is a wall (your #6)
+#   - wrap_cell(cell)       — handles tunnel wrap at map edges
+#   - step_player_to(cell)  — moves player_cell and slides the sprite
+#
+# Syntax:
+#   - direction: Vector2i   (parameter type annotation)
 #@todo
 func move_player(direction: Vector2i) -> void:
 	var next_cell := player_cell + direction
@@ -196,20 +229,35 @@ func hit_wall(cell: Vector2i) -> bool:
 		if cell.y in TUNNEL_ROWS:
 			return false
 		return true
-	# TODO #6: cell is inside the maze. Return whether wall_layer
-	# has a wall tile at this cell.
+	# TODO #6: Write a function that looks at a tile position and reports back `true`
+	# if it's a wall, `false` if it's open floor. Both the player and the ghosts use
+	# this to know what they can walk through. (The off-grid edge cases above are
+	# pre-given — your job is just the last part inside the maze.)
+	#
+	# Given:
+	#   - wall_layer.get_cell_source_id(cell)   — returns -1 if no tile, any other number if wall
+	#
+	# Syntax:
+	#   - -> bool   (return type annotation)
+	#   - return source_id != -1
 	#@todo
 	var source_id := wall_layer.get_cell_source_id(cell)
 	return source_id != -1
 	#@end
 
 
-# TODO #3b: write `func count_dots() -> int`. The function should
-# walk every cell of the maze and return the total number of cells
-# that have a dot painted on them. The maze is MAZE_W wide and
-# MAZE_H tall. The pre-given helper cell_has_dot(x, y) returns true
-# when cell (x, y) has a dot, false otherwise. Use a `while` loop
-# for the walk (today's lesson).
+# TODO #3b: Write a function that scans every tile in the maze, counts how many
+# have a dot painted on them, and returns that total. This is the number the
+# player has to chomp down to zero to win.
+#
+# Given:
+#   - MAZE_W              — maze width in tiles
+#   - MAZE_H              — maze height in tiles
+#   - cell_has_dot(x, y)  — returns true if tile (x, y) has a dot
+#
+# Syntax:
+#   - while x < limit:   (keeps looping until condition is false)
+#   - -> int             (return type annotation)
 #@todo
 func count_dots() -> int:
 	var count := 0

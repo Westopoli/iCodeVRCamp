@@ -201,7 +201,21 @@ func start_match(p1_char: String, p2_char: String, map_id: String) -> void:
 	clear_match_state()
 	build_map(map_id)
 
-	# === KID CHUNK #4 — TWO INSTANCES ===
+	# TODO #4: When the match starts, build two Player instances — one for P1, one
+	# for P2 — and place them at opposite ends of the map. Each is the same class,
+	# but `setup()` configures them with different player_num (1 vs 2), different
+	# characters (P1's pick vs P2's pick), and different spawn positions. Without
+	# this chunk, the fight screen is just an empty map: no fighters appear.
+	#
+	# Given:
+	#   - PLAYER_SCENE       — the Player scene to instantiate
+	#   - player1 / player2  — variables to assign the new instances to
+	#   - p1_char / p2_char  — character name strings chosen at character select
+	#
+	# Syntax:
+	#   - SCENE.instantiate()              — creates one new instance
+	#   - add_child(node)                  — adds it to the scene tree
+	#   - node.setup(num, char, Vector2(x, y))   — configures the player
 	#@todo
 	player1 = PLAYER_SCENE.instantiate()
 	add_child(player1)

@@ -2127,7 +2127,7 @@ Other render rules:
       opponent.take_damage(attack_damage)
   ```
 - Image: `D4C7.png -- not done --` — player.gd:178-199 with two-tone overlay
-- Caption: "Start the cooldown: attack_cooldown_timer = attack_cooldown. Then match attack_type: — \"melee\": set melee_swing_timer = 0.15, call queue_redraw(), get the opponent with get_opponent(). return if they're null or already dead. Compute to_opp = opponent.position - position. Two lines are pre-given in your code (in_range and same_height — both use abs()). You write: var facing_opponent = sign(to_opp.x) == facing. Then if in_range and facing_opponent and same_height: opponent.take_damage(attack_damage). \"projectile\": call spawn_projectile()."
+- Caption: "Set the cooldown timer so the attack can't fire twice in a row. Then `match attack_type:` — `\"melee\"` draws the swing arc and damages the opponent if they're in range, facing you, and at the same height (`in_range` and `same_height` are pre-given; you write `facing_opponent`). `\"projectile\"` just calls `spawn_projectile()`."
 - Notes: T7 verbatim. R5 note: `in_range` and `same_height` lines are pre-given inside the block (marked `# Pre-given:`). Kid writes `facing_opponent` and the final `if` check only. Use R5 two-tone overlay on RHS screenshot: gray on `# Pre-given:` lines, red on kid lines.
 
 #### Slide D4-S080 — After-works HUGE PAYOFF: fight loop complete

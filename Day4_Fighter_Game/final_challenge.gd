@@ -3,7 +3,12 @@
 # Then in player.gd's attack() match, the kid adds a "custom":
 # branch that does whatever they want.
 
-# FINAL CHALLENGE 1: fill the stats
+# FC-1: Fill in your custom character's stats below. Change each value to
+# match the fighter you invented — name, sprite, walk speed, jump height,
+# attack style, damage, and cooldown.
+#
+# Syntax:
+#   - "key": value   (each line in a dictionary)
 #@todo
 const CUSTOM_CHARACTER := {
     "display_name": "MyCharacter",
@@ -20,12 +25,12 @@ const CUSTOM_CHARACTER := {
 }
 #@end
 
-# FINAL CHALLENGE 2: register your character in main.gd's CHARACTERS dict.
+# FC-2: Register your character in main.gd's CHARACTERS dict.
 # Find CHARACTERS at top of main.gd. Add a new key:
 #       CHARACTERS["custom"] = CUSTOM_CHARACTER
 # (best place: in main.gd's _ready() after CHARACTERS is set.)
 
-# FINAL CHALLENGE 3: implement your attack.
+# FC-3: Implement your attack.
 # Open player.gd. Find the attack() function's match statement.
 # Add a new case for "custom":
 #       "custom":

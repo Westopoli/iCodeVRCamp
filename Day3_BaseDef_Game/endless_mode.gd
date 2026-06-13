@@ -49,23 +49,14 @@ const WOUNDED_HP_THRESHOLD := 5          # FC-5b: what counts as "wounded"
 const BASE_HP_REGEN_PER_CLEAR := 2       # base HP restored each screen clear (no cap)
 
 
-# ============================================================
-#  FINAL CHALLENGE 1 — STATE VARIABLES
+# FC-1: Declare 5 top-level variables for endless mode state.
+# Mirrors morning chunk #1 (variable declarations).
 #
-#  Endless mode needs to remember five things between frames:
-#    spawn_timer    a float starting at 0.0  — counts up each frame
-#    difficulty     an integer starting at 1 — drives the difficulty band
-#    spawn_interval a float starting at SPAWN_INTERVAL_START (2.0) —
-#                   seconds between spawns; shrinks over time
-#    spawn_queue    an empty list — holds enemy-type strings waiting
-#                   to spawn on upcoming ticks
-#    clear_streak   an integer starting at 0 — how many screen-clears
-#                   in a row (drives speed ramp + base regen)
+# Given:
+#   - SPAWN_INTERVAL_START   — the starting spawn interval constant
 #
-#  Inputs:  none.
-#  Outcome: after the script loads, all five state variables exist
-#           at their starting values.
-# ============================================================
+# Syntax:
+#   - var name: float = value
 # FINAL CHALLENGE 1
 #@todo
 var spawn_timer: float = 0.0
@@ -85,19 +76,16 @@ func endless_tick(delta: float) -> void:
 	# Pre-given: tick the spawn timer + drain the queue.
 	spawn_timer_tick(delta)
 
-	# ========================================================
-	#  TODO FC-3: PER-FRAME BUFF SWEEP
+	# FC-3: Each frame, walk every enemy in `main.enemies` and call
+	# `endless_buff(e, delta)`; walk every tower in `main.towers` and call
+	# `buff_tower(t, delta)`.
+	# Mirrors morning chunk #3 (two for-loops in _process).
 	#
-	#  Endless mode buffs both sides every frame so the game can
-	#  ramp forever.  Walk every enemy on the field and bump its
-	#  speed (the pre-given `endless_buff` helper handles the
-	#  math), then walk every tower and bump its damage (the
-	#  pre-given `buff_tower` helper handles that one).
-	#
-	#  Inputs:  main.enemies, main.towers, and delta.
-	#  Outcome: endless_buff(e, delta) is called for every enemy,
-	#           and buff_tower(t, delta) is called for every tower.
-	# ========================================================
+	# Given:
+	#   - main.enemies            — list of active enemies
+	#   - main.towers             — list of placed towers
+	#   - endless_buff(e, delta)  — applies endless scaling to one enemy
+	#   - buff_tower(t, delta)    — applies endless scaling to one tower
 	#@todo
 	for e in main.enemies:
 		endless_buff(e, delta)
@@ -123,17 +111,14 @@ func spawn_timer_tick(delta: float) -> void:
 		spawn_timer = 0.0
 
 
-# ============================================================
-#  FINAL CHALLENGE 2a — ADD A SPAWN TO THE QUEUE
+# FC-2a: Append `t` (a type string) to `spawn_queue`.
+# Mirrors morning chunk #2a (.append).
 #
-#  This helper is called by `escalate()` (FC-6) to load the
-#  spawn queue with the next enemy type.  Your job is one line:
-#  put the type string on the end of the queue.
+# Given:
+#   - spawn_queue   — the pending-spawn list
 #
-#  Inputs:  `t` (a string, either "grunt" or "runner") and the
-#           `spawn_queue` list (from FC-1).
-#  Outcome: after this runs, `t` sits at the back of spawn_queue.
-# ============================================================
+# Syntax:
+#   - list.append(item)
 func queue_spawn(t: String) -> void:
 	# FINAL CHALLENGE 2a
 	#@todo
@@ -141,23 +126,19 @@ func queue_spawn(t: String) -> void:
 	#@end
 
 
-# ============================================================
-#  FINAL CHALLENGE 2b — DRAIN THE QUEUE + REWARD
+# FC-2b: Pop the front of `spawn_queue`, spawn that type at a random edge,
+# and pay STREAK_BONUS coins.
+# Mirrors morning chunk #2b (erase + reward).
 #
-#  The spawn timer just fired and the queue is guaranteed
-#  non-empty (the pre-given caller refilled it if needed).
-#  Pop the first type off the queue, hand it to
-#  `main.spawn_enemy(random_edge(), the_type)`, and pay the
-#  player a small coin bonus (endless mode is generous — every
-#  spawn pays).
+# Given:
+#   - spawn_queue                    — the pending-spawn list
+#   - main.spawn_enemy(pos, type)    — spawns one enemy at a position
+#   - random_edge()                  — returns a random map-edge position
+#   - main.coins                     — the player's coin counter
+#   - STREAK_BONUS                   — coin bonus amount
 #
-#  Inputs:  the `spawn_queue` list, `main.coins`, `main.spawn_enemy`,
-#           the pre-given `random_edge()` helper, and STREAK_BONUS.
-#  Outcome: one type has been removed from the front of
-#           spawn_queue, main.spawn_enemy has been called with
-#           that type at a random edge cell, and main.coins has
-#           grown by STREAK_BONUS.
-# ============================================================
+# Syntax:
+#   - list.pop_front()   (removes and returns the first item)
 func take_next_spawn() -> void:
 	# FINAL CHALLENGE 2b
 	#@todo
@@ -167,24 +148,12 @@ func take_next_spawn() -> void:
 	#@end
 
 
-# ============================================================
-#  FINAL CHALLENGE 4 — FUNCTION TAKING A LIST
+# FC-4: Loop the parameter list, calling `endless_buff(e, delta)` on each.
+# Mirrors morning chunk #4 (function takes a list as parameter).
 #
-#  Same job as the FC-3 loop over `main.enemies`, but the list
-#  now arrives through this function's parameter.  Whoever calls
-#  `buff_all(some_list, delta)` decides which list gets buffed.
-#
-#  Nothing in this scaffold calls `buff_all` by default (FC-3
-#  already buffs `main.enemies` directly).  You CAN refactor
-#  FC-3 to call `buff_all(main.enemies, delta)` if you want —
-#  just like you could refactor TODO #3 this morning to call
-#  `move_all(enemies, delta)`.  The function still has to be
-#  written either way as the FC-4 lesson.
-#
-#  Inputs:  `enemy_list` (a list of enemies) and `delta`.
-#  Outcome: endless_buff(e, delta) is called for every enemy
-#           in `enemy_list`.
-# ============================================================
+# Given:
+#   - enemy_list              — a list of enemies passed in as a parameter
+#   - endless_buff(e, delta)  — applies endless scaling to one enemy
 func buff_all(enemy_list: Array, delta: float) -> void:
 	# FINAL CHALLENGE 4
 	#@todo
@@ -193,20 +162,16 @@ func buff_all(enemy_list: Array, delta: float) -> void:
 	#@end
 
 
-# ============================================================
-#  FINAL CHALLENGE 5a — RETURN THE FASTEST ENEMY (R5 partial hole)
+# FC-5a: Return the enemy with the highest `.speed`. The pre-given init
+# (fastest = null, best_speed = 0.0) and the pre-given `return fastest`
+# sandwich your hole — write only the loop-and-update section.
+# Mirrors morning chunk #5a (function returns ONE from a list).
 #
-#  Endless mode wants to know which enemy is currently the
-#  scariest one — the one with the highest .speed value.  Pre-
-#  given init below starts with no winner and "best speed so
-#  far" of zero, so the first enemy automatically beats it.
-#  Your loop walks main.enemies and updates the winner.
-#
-#  Inputs:  `main.enemies` (the list of live enemies).
-#  Outcome: when this section finishes, `fastest` holds the
-#           enemy with the highest .speed (or stays null if the
-#           list is empty), and `best_speed` holds its speed.
-# ============================================================
+# Given:
+#   - main.enemies   — list of active enemies
+#   - fastest        — pre-initialized to null (update as you scan)
+#   - best_speed     — pre-initialized to 0.0 (update as you scan)
+#   - e.speed        — an enemy's current speed
 func get_fastest_enemy() -> Node:
 	# Pre-given: start with no winner and a "best speed so far"
 	# value of zero — the first enemy automatically beats it.

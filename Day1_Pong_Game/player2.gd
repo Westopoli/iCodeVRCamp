@@ -49,15 +49,17 @@ func _process(_delta):
 	elif ball_middle < paddle_middle - 10:
 		position.y -= ai_speed
 
-	# ============================================================
-	#  FINAL CHALLENGE — STEP 2: ADD A REAL SECOND PLAYER.
+	# FC: Make the right paddle move when a real human presses the I and K keys —
+	# I goes up, K goes down. After this step, a second player can sit at the
+	# keyboard and play against player 1.
 	#
-	#  Now that the AI is off, write code that moves the paddle
-	#  when a human presses the I and K keys:
-	#    - I key pressed → paddle goes UP   (position.y -= paddle_speed)
-	#    - K key pressed → paddle goes DOWN (position.y += paddle_speed)
-	#  Hint: Input.is_key_pressed(KEY_I)
-	# ============================================================
+	# Given:
+	#   - paddle_speed   — the paddle's movement speed (declared at top of file)
+	#   - position.y     — the paddle's current vertical position
+	#
+	# Syntax:
+	#   - Input.is_key_pressed(KEY_I)   — true every frame while I is held
+	#   - KEY_I, KEY_K                  — the key constants
 	#@todo
 	if Input.is_key_pressed(KEY_I):
 		position.y -= paddle_speed
