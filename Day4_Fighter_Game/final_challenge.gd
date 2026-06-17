@@ -1,14 +1,11 @@
-# FINAL CHALLENGE
-# Empty dict the kid fills with their own character's stats.
-# Then in player.gd's attack() match, the kid adds a "custom":
-# branch that does whatever they want.
+# FINAL CHALLENGE   Build your own 5th character
+# FC-1: fill in your character's stats below.
+# FC-2: register your character in main.gd's CHARACTERS dict.
+# FC-3: add a "custom" branch to the attack() function in player.gd.
 
-# FC-1: Fill in your custom character's stats below. Change each value to
-# match the fighter you invented — name, sprite, walk speed, jump height,
-# attack style, damage, and cooldown.
-#
-# Syntax:
-#   - "key": value   (each line in a dictionary)
+# FC-1   Fill in your character's stats.
+# Change any values you want: display_name, sprite path, walk_speed, jump_impulse,
+# attack_damage, attack_cooldown. Keep attack_type as "custom".
 #@todo
 const CUSTOM_CHARACTER := {
     "display_name": "MyCharacter",
@@ -40,6 +37,3 @@ const CUSTOM_CHARACTER := {
 #           #   - charge attack (extra damage if no recent attack)
 #           #   - heal yourself instead of attacking
 #           #   - shoot 3 projectiles in a spread
-#
-# Use what you've already learned today: take_damage(), spawn_projectile(),
-# the character_data dict.
