@@ -6,6 +6,9 @@
 # FC-1   Fill in your character's stats.
 # Change any values you want: display_name, sprite path, walk_speed, jump_impulse,
 # attack_damage, attack_cooldown. Keep attack_type as "custom".
+#
+# Syntax:
+#   - "key": value   (each line in a dictionary)
 #@todo
 const CUSTOM_CHARACTER := {
     "display_name": "MyCharacter",

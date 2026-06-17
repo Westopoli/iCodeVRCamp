@@ -1546,6 +1546,18 @@ Order: personalization (S086a) → Final Challenge (S087–S098) → export (S09
 - Image: none
 - Notes: "The targeting math is pre-given — you're wiring the personalities together, not computing vectors."
 
+#### Slide D2-S093i — FC-1 instructions: `spawn_personality_ghosts()`
+- Format: G05 Concept Explanation
+- Title: "FC-1 — `spawn_personality_ghosts()`"
+- Body:
+  - "**Mirrors Chunk #1** — same `for i in range(N):` shape you wrote this morning"
+  - "**Goal:** spawn one ghost per personality; when done, 4 personality ghosts appear in the pen at startup"
+  - "**Given:** `PERSONALITY_COUNT` (= 4) and `spawn_one_personality(i)` — spawns the i-th personality ghost for you"
+  - "**You write:** 2 lines — one `for` loop that calls `spawn_one_personality(i)` each turn"
+  - "**Syntax:** `for i in range(PERSONALITY_COUNT):` then `    spawn_one_personality(i)`"
+- Image: none
+- Notes: R3 mirror = Chunk #1. Kid writes exactly 2 lines.
+
 #### Slide D2-S093 — FC-1 hole: `spawn_personality_ghosts()`
 - Format: G09 Concept + Task
 - Title: "FC-1 — mirrors Chunk #1"
@@ -1558,6 +1570,18 @@ Order: personalization (S086a) → Final Challenge (S087–S098) → export (S09
 - Caption: "Spawn one ghost per personality — use `range(PERSONALITY_COUNT)` and call `spawn_one_personality(i)` each time."
 - Notes: Identical shape to morning chunk #1. `spawn_one_personality(i)` is pre-given. Kid writes 2 lines.
 
+#### Slide D2-S094i — FC-2 instructions: `step_all_personality_ghosts()`
+- Format: G05 Concept Explanation
+- Title: "FC-2 — `step_all_personality_ghosts()`"
+- Body:
+  - "**Mirrors Chunk #2** — same `for item in list:` shape you wrote this morning"
+  - "**Goal:** every frame, give each personality ghost one movement step — after this, the 4 ghosts start patrolling the maze"
+  - "**Given:** `ghosts` (list of all active personality ghosts) and `step_personality(ghost)` — moves one ghost one tile"
+  - "**You write:** 2 lines — loop over `ghosts`, call `step_personality(ghost)` each turn"
+  - "**Syntax:** `for ghost in ghosts:` then `    step_personality(ghost)`"
+- Image: none
+- Notes: R3 mirror = Chunk #2. Literal same shape. Kid writes 2 lines.
+
 #### Slide D2-S094 — FC-2 hole: `step_all_personality_ghosts()`
 - Format: G09 Concept + Task
 - Title: "FC-2 — mirrors Chunk #2"
@@ -1569,6 +1593,18 @@ Order: personalization (S086a) → Final Challenge (S087–S098) → export (S09
 - Image: `D2FC2.png` — `ghost_personalities.gd` FC-2 hole (lines 227-234), red overlay on the `#@todo` block.
 - Caption: "Every frame, give every personality ghost one step — loop over `ghosts` and call `step_personality(ghost)`."
 - Notes: Literally same shape as morning chunk #2. Kid writes 2 lines.
+
+#### Slide D2-S095i — FC-3 instructions: `count_ghosts_of(personality) -> int`
+- Format: G05 Concept Explanation
+- Title: "FC-3 — `count_ghosts_of(personality) -> int`"
+- Body:
+  - "**Mirrors Chunk #3** — loop + counter pattern; return the total at the end"
+  - "**Goal:** count how many ghosts in `ghosts` have the given personality tag; return that number"
+  - "**Given:** `ghosts` (the list), `ghost.get_meta(\"personality\")` reads one ghost's tag, and `personality` (the parameter passed in)"
+  - "**You write:** ~5 lines — `var count := 0`, loop, check each tag with `if`, increment, then `return count`"
+  - "**Syntax:** `for ghost in ghosts:` / `    if ghost.get_meta(\"personality\") == personality:` / `        count += 1`"
+- Image: none
+- Notes: R3 mirror = Chunk #3. For-each or while both accepted. Kid writes ~5 lines.
 
 #### Slide D2-S095 — FC-3 hole: `count_ghosts_of(personality) -> int`
 - Format: G09 Concept + Task
@@ -1584,6 +1620,18 @@ Order: personalization (S086a) → Final Challenge (S087–S098) → export (S09
 - Caption: "Count how many ghosts in `ghosts` have the given personality tag. Return the count."
 - Notes: Counter pattern from morning #3. For-each or while both accepted (R6 note in §7). `ghost.get_meta("personality")` reads the tag. Kid writes ~5 lines.
 
+#### Slide D2-S096i — FC-4 instructions: `reset_personality_ghosts()`
+- Format: G05 Concept Explanation
+- Title: "FC-4 — `reset_personality_ghosts()`"
+- Body:
+  - "**Mirrors Chunk #4** — loop with a manual index counter (same pattern as morning chunk #4)"
+  - "**Goal:** send every personality ghost back to the pen; called automatically when the player loses a life"
+  - "**Given:** `ghosts` (the list) and `respawn_personality_ghost(ghost, i)` — teleports one ghost to pen slot i"
+  - "**You write:** ~4 lines — `var i := 0`, loop over `ghosts`, call `respawn_personality_ghost(ghost, i)`, then `i += 1`"
+  - "**Syntax:** `var i := 0` / `for ghost in ghosts:` / `    respawn_personality_ghost(ghost, i)` / `    i += 1`"
+- Image: none
+- Notes: R3 mirror = Chunk #4. Pre-given helper handles one ghost. Kid writes ~4 lines.
+
 #### Slide D2-S096 — FC-4 hole: `reset_personality_ghosts()`
 - Format: G09 Concept + Task
 - Title: "FC-4 — mirrors Chunk #4"
@@ -1596,6 +1644,18 @@ Order: personalization (S086a) → Final Challenge (S087–S098) → export (S09
 - Caption: "Send every personality ghost back to the pen. Loop over `ghosts` with an index counter and call `respawn_personality_ghost(ghost, i)`."
 - Notes: Reset pattern from morning #4. Pre-given `respawn_personality_ghost(ghost, i)` handles one ghost. Kid writes ~4 lines (for-each + index counter).
 
+#### Slide D2-S097i — FC-5 instructions: `target_for(ghost) -> Vector2i`
+- Format: G05 Concept Explanation
+- Title: "FC-5 — `target_for(ghost) -> Vector2i`"
+- Body:
+  - "**Mirrors Chunk #5** — function that takes a parameter and returns a value"
+  - "**Goal:** given a ghost, return its target tile by reading its personality and calling the right pre-given helper"
+  - "**Given:** `ghost.get_meta(\"personality\")` reads the tag; constants `BLINKY`, `PINKY`, `INKY`, `CLYDE`; and helpers `blinky_target(ghost)`, `pinky_target(ghost)`, `inky_target(ghost)`, `clyde_target(ghost)`"
+  - "**You write:** ~9 lines — `var p = ghost.get_meta(\"personality\")` then 4 `if/elif` branches, each returning the matching target helper"
+  - "**Syntax:** `if p == BLINKY: return blinky_target(ghost)` — repeat for PINKY, INKY, CLYDE"
+- Image: none
+- Notes: R3 mirror = Chunk #5. All 4 target helpers are pre-given. Kid writes ~9 lines (4 if-branches).
+
 #### Slide D2-S097 — FC-5 hole: `target_for(ghost) -> Vector2i`
 - Format: G09 Concept + Task
 - Title: "FC-5 — mirrors Chunk #5"
@@ -1607,6 +1667,18 @@ Order: personalization (S086a) → Final Challenge (S087–S098) → export (S09
 - Image: `D2FC5.png` — `ghost_personalities.gd` FC-5 hole (lines 264-283), red overlay on the `#@todo` block.
 - Caption: "Given a ghost, return its target tile. Read its personality, then return the right pre-given target helper."
 - Notes: func-with-param + return. Pre-given helpers: `blinky_target`, `pinky_target`, `inky_target`, `clyde_target`. Kid reads the personality meta and routes to the right helper. ~9 lines (4 if-branches).
+
+#### Slide D2-S098i — FC-6 instructions: `is_clyde_close(ghost) -> bool`
+- Format: G05 Concept Explanation
+- Title: "FC-6 — `is_clyde_close(ghost) -> bool`"
+- Body:
+  - "**Mirrors Chunk #6** — function that returns a `bool` (true or false)"
+  - "**Goal:** return `true` when the given ghost is within 8 tiles of the player, `false` otherwise"
+  - "**Given:** `distance_to_player(ghost)` — returns a `float` tile distance from the ghost to the player"
+  - "**You write:** 2 lines — store the distance in `var d`, then `return d < 8.0`"
+  - "**Syntax:** `var d := distance_to_player(ghost)` / `return d < 8.0`"
+- Image: none
+- Notes: R3 mirror = Chunk #6. Mirrors `is_even` shape exactly. Kid writes 2 lines.
 
 #### Slide D2-S098 — FC-6 hole: `is_clyde_close(ghost) -> bool`
 - Format: G09 Concept + Task

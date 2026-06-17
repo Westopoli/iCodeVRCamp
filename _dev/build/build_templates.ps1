@@ -29,7 +29,7 @@ param(
 )
 
 $ErrorActionPreference = "Stop"
-$repoRoot = Split-Path -Parent $PSScriptRoot
+$repoRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
 $distDir  = Join-Path $repoRoot "dist"
 
 # Strip a .gd file's lines for the given target ("Complete" or "Template").
@@ -42,8 +42,25 @@ function Convert-GdLines {
     $mode = "normal"   # normal | todo
     foreach ($line in $Lines) {
         $trim = $line.Trim()
-        if ($trim -eq "#@todo") { $mode = "todo";   continue }
-        if ($trim -eq "#@end")  { $mode = "normal"; continue }
+        if ($trim -eq "#@todo") { $mode = "todo"; continue }
+        if ($trim -eq "#@end") {
+            if ($Target -eq "Template") {
+                # If the last non-blank, non-comment line in $out is a block
+                # opener (ends with ":"), the stripped #@todo block was its
+                # entire body. Insert pass so GDScript doesn't parse-error.
+                for ($ri = $out.Count - 1; $ri -ge 0; $ri--) {
+                    $prev = $out[$ri]
+                    if ($prev -match '^\s*$' -or $prev -match '^\s*#') { continue }
+                    if ($prev -match ':\s*$') {
+                        if ($prev -match '^(\s*)') { $bi = $matches[1] }
+                        $out.Add($bi + "`t" + "pass  # <- delete this line and write your code above")
+                    }
+                    break
+                }
+            }
+            $mode = "normal"
+            continue
+        }
         if ($mode -eq "normal") {
             $out.Add($line)
         } elseif ($mode -eq "todo") {

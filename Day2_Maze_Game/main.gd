@@ -65,6 +65,13 @@ func _ready():
 	# TODO #1   Spawn 3 ghosts in the pen at the start.
 	# Goal: call spawn_ghost_at(ghost_spawn_pos(i)) for i = 0, 1, 2.
 	# Use for i in range(3) so the call is written once.
+	#
+	# Given:
+	#   - spawn_ghost_at(pos)   — spawns one ghost at a world position
+	#   - ghost_spawn_pos(i)    — returns the world position for the i-th ghost
+	#
+	# Syntax:
+	#   - for i in range(3):
 	#@todo
 	for i in range(3):
 		spawn_ghost_at(ghost_spawn_pos(i))
@@ -72,6 +79,10 @@ func _ready():
 
 	# TODO #3a   Store the dot total.
 	# Goal: call count_dots() and store the result in dots_remaining.
+	#
+	# Given:
+	#   - dots_remaining   — the variable to store the count in
+	#   - count_dots()     — the function you write in #3b (returns total dot count)
 	#@todo
 	dots_remaining = count_dots()
 	#@end
@@ -118,6 +129,13 @@ func _process(delta):
 	else:
 		# TODO #2   Step every ghost each frame.
 		# Goal: call step_ghost(ghost) on every ghost in the ghosts list.
+		#
+		# Given:
+		#   - ghosts         — the list of all active ghost nodes
+		#   - step_ghost(ghost)   — makes one ghost take one step
+		#
+		# Syntax:
+		#   - for item in list:
 		#@todo
 		for ghost in ghosts:
 			step_ghost(ghost)
@@ -150,6 +168,19 @@ func try_step() -> void:
 #     - set player_moving to false
 #     - set current_dir to Vector2i.ZERO
 #     - set queued_dir to Vector2i.ZERO
+#
+# Given:
+#   - PLAYER_START          — the starting tile coordinate (Vector2i)
+#   - cell_to_world(cell)   — converts a tile coordinate to a world position
+#   - player_cell           — current tile the player occupies
+#   - player.position       — the player sprite's world position
+#   - player_moving         — movement flag to clear (set to false)
+#   - current_dir           — current movement direction to clear
+#   - queued_dir            — queued movement direction to clear
+#
+# Syntax:
+#   - Vector2i.ZERO   (empty direction — use to clear current_dir and queued_dir)
+#   - func name() -> void:
 #@todo
 func reset_player() -> void:
 	player_cell = PLAYER_START
@@ -179,6 +210,15 @@ func reset_player() -> void:
 #     #   if hit_wall(next_cell): return
 #     #   next_cell = wrap_cell(next_cell)
 #     #   step_player_to(next_cell)
+#
+# Given:
+#   - player_cell           — the player's current tile coordinate
+#   - hit_wall(cell)        — returns true if that cell is a wall (your #6)
+#   - wrap_cell(cell)       — handles tunnel wrap at map edges
+#   - step_player_to(cell)  — moves player_cell and slides the sprite
+#
+# Syntax:
+#   - direction: Vector2i   (parameter type annotation)
 #@todo
 func move_player(direction: Vector2i) -> void:
 	var next_cell := player_cell + direction
@@ -205,6 +245,13 @@ func hit_wall(cell: Vector2i) -> bool:
 	# TODO #6   Is there a wall tile at this cell?
 	# Goal: return true if wall_layer has a tile here, false if it's open.
 	# Use wall_layer.get_cell_source_id(cell) — returns -1 when no tile exists.
+	#
+	# Given:
+	#   - wall_layer.get_cell_source_id(cell)   — returns -1 if no tile, any other number if wall
+	#
+	# Syntax:
+	#   - -> bool   (return type annotation)
+	#   - return source_id != -1
 	#@todo
 	var source_id := wall_layer.get_cell_source_id(cell)
 	return source_id != -1
@@ -241,6 +288,15 @@ func hit_wall(cell: Vector2i) -> bool:
 #                             #   add 1 to y
 #                     #   add 1 to x
 #             #   return count
+#
+# Given:
+#   - MAZE_W              — maze width in tiles
+#   - MAZE_H              — maze height in tiles
+#   - cell_has_dot(x, y)  — returns true if tile (x, y) has a dot
+#
+# Syntax:
+#   - while x < limit:   (keeps looping until condition is false)
+#   - -> int             (return type annotation)
 #@todo
 func count_dots() -> int:
 	var count := 0

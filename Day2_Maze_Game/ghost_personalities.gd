@@ -216,6 +216,13 @@ func clear_base_ghosts() -> void:
 # FC-1   spawn_personality_ghosts()
 # Goal: spawn one ghost per personality (PERSONALITY_COUNT total).
 # Use for i in range(PERSONALITY_COUNT). Helper: spawn_one_personality(i).
+#
+# Given:
+#   - spawn_one_personality(i)   — spawns one ghost for the i-th personality
+#   - PERSONALITY_COUNT          — total number of personalities
+#
+# Syntax:
+#   - for i in range(N):
 #@todo
 func spawn_personality_ghosts() -> void:
 	for i in range(PERSONALITY_COUNT):
@@ -225,6 +232,13 @@ func spawn_personality_ghosts() -> void:
 
 # FC-2   step_all_personality_ghosts()
 # Goal: call step_personality(ghost) on every ghost in the ghosts list.
+#
+# Given:
+#   - ghosts               — the list of personality ghosts
+#   - step_personality(ghost)   — makes one personality ghost step
+#
+# Syntax:
+#   - for item in list:
 #@todo
 func step_all_personality_ghosts() -> void:
 	for ghost in ghosts:
@@ -252,6 +266,13 @@ func step_all_personality_ghosts() -> void:
 #             #   if ghost.get_meta("personality") == personality
 #                     #   add 1 to count
 #     #   return count
+#
+# Given:
+#   - ghosts                           — the list of personality ghosts
+#   - ghost.get_meta("personality")    — returns that ghost's personality string
+#
+# Syntax:
+#   - -> int
 #@todo
 func count_ghosts_of(personality: String) -> int:
 	var count := 0
@@ -266,6 +287,10 @@ func count_ghosts_of(personality: String) -> int:
 # Goal: send every ghost back to the pen.
 # Helper: respawn_personality_ghost(ghost, index) resets one ghost to pen slot index.
 # Track index yourself — start at 0 and add 1 each loop iteration.
+#
+# Given:
+#   - ghosts                              — the list of personality ghosts
+#   - respawn_personality_ghost(ghost, i) — sends one ghost back to pen slot i
 #@todo
 func reset_personality_ghosts() -> void:
 	var i := 0
@@ -298,6 +323,17 @@ func reset_personality_ghosts() -> void:
 #     #   if p == PINKY:   return pinky_target(ghost)
 #     #   if p == INKY:     return inky_target(ghost)
 #     #   return clyde_target(ghost)
+#
+# Given:
+#   - ghost.get_meta("personality")    — returns the ghost's personality string
+#   - BLINKY / PINKY / INKY            — personality constants
+#   - blinky_target(ghost)             — target tile for Blinky
+#   - pinky_target(ghost)              — target tile for Pinky
+#   - inky_target(ghost)               — target tile for Inky
+#   - clyde_target(ghost)              — target tile for Clyde (default)
+#
+# Syntax:
+#   - -> Vector2i
 #@todo
 func target_for(ghost) -> Vector2i:
 	var p = ghost.get_meta("personality")
@@ -314,6 +350,12 @@ func target_for(ghost) -> Vector2i:
 # FC-6   is_clyde_close(ghost) -> bool
 # Goal: return true if this ghost is closer than 8 tiles to the player.
 # Helper: distance_to_player(ghost) gives the tile distance.
+#
+# Given:
+#   - distance_to_player(ghost)   — returns tile distance from ghost to player
+#
+# Syntax:
+#   - -> bool
 #@todo
 func is_clyde_close(ghost) -> bool:
 	var d := distance_to_player(ghost)

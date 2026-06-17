@@ -56,6 +56,12 @@ const BASE_HP_REGEN_PER_CLEAR := 2       # base HP restored each screen clear (n
 #     var spawn_interval: float = SPAWN_INTERVAL_START
 #     var spawn_queue: Array = []
 #     var clear_streak: int = 0
+#
+# Given:
+#   - SPAWN_INTERVAL_START   — the starting spawn interval constant
+#
+# Syntax:
+#   - var name: float = value
 #@todo
 var spawn_timer: float = 0.0
 var difficulty: int = 1
@@ -77,6 +83,13 @@ func endless_tick(delta: float) -> void:
 	# FC-3   Per-frame buff sweep
 	# Loop main.enemies and call endless_buff(e, delta) on each.
 	# Loop main.towers and call buff_tower(t, delta) on each.
+	#
+	# Given:
+	#   - main.enemies            — list of active enemies
+	#   - main.towers             — list of placed towers
+	#   - delta                   — this frame's time (passed in automatically)
+	#   - endless_buff(e, delta)  — applies endless scaling to one enemy
+	#   - buff_tower(t, delta)    — applies endless scaling to one tower
 	#@todo
 	for e in main.enemies:
 		endless_buff(e, delta)
@@ -105,6 +118,12 @@ func spawn_timer_tick(delta: float) -> void:
 func queue_spawn(t: String) -> void:
 	# FC-2a   queue_spawn(t)
 	# Goal: add t to the back of spawn_queue using .append().
+	#
+	# Given:
+	#   - spawn_queue   — the pending-spawn list
+	#
+	# Syntax:
+	#   - list.append(item)
 	#@todo
 	spawn_queue.append(t)
 	#@end
@@ -114,6 +133,16 @@ func take_next_spawn() -> void:
 	# FC-2b   take_next_spawn()
 	# Goal: pop the first type off spawn_queue, spawn it at a random edge, pay STREAK_BONUS coins.
 	# Use: spawn_queue.pop_front() to get the type, main.spawn_enemy(random_edge(), t) to spawn, main.coins += STREAK_BONUS to pay.
+	#
+	# Given:
+	#   - spawn_queue                    — the pending-spawn list
+	#   - main.spawn_enemy(pos, type)    — spawns one enemy at a position
+	#   - random_edge()                  — returns a random map-edge position
+	#   - main.coins                     — the player's coin counter
+	#   - STREAK_BONUS                   — coin bonus amount
+	#
+	# Syntax:
+	#   - list.pop_front()   (removes and returns the first item)
 	#@todo
 	var t: String = spawn_queue.pop_front()
 	main.spawn_enemy(random_edge(), t)
@@ -124,6 +153,10 @@ func take_next_spawn() -> void:
 func buff_all(enemy_list: Array, delta: float) -> void:
 	# FC-4   buff_all(enemy_list, delta)
 	# Goal: call endless_buff(e, delta) on every enemy in enemy_list.
+	#
+	# Given:
+	#   - enemy_list              — a list of enemies passed in as a parameter
+	#   - endless_buff(e, delta)  — applies endless scaling to one enemy
 	#@todo
 	for e in enemy_list:
 		endless_buff(e, delta)
@@ -152,6 +185,12 @@ func get_fastest_enemy() -> Node:
 	#             #   if e.speed > best_speed:
 	#                     #   fastest = e
 	#                     #   best_speed = e.speed
+	#
+	# Given:
+	#   - main.enemies   — list of active enemies
+	#   - fastest        — pre-initialized to null (update as you scan)
+	#   - best_speed     — pre-initialized to 0.0 (update as you scan)
+	#   - e.speed        — an enemy's current speed
 	#@todo
 	for e in main.enemies:
 		if e.speed > best_speed:
