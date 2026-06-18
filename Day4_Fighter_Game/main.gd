@@ -58,9 +58,12 @@ const CHARACTERS := {
 	},
 }
 
+# To change a map's platform color: find the map below and edit its Color(r, g, b) value.
+# Each channel is 0.0 (dark) to 1.0 (bright) — e.g. Color(1, 0, 0) is pure red.
 const MAPS := {
 	"battlefield": {
 		"display_name": "Battlefield",
+		"color": Color(0.35, 0.28, 0.12),   # earthy brown
 		"platforms": [
 			[0,    600, 1280, 120, false],
 			[300,  420, 200,  16,  true],
@@ -70,12 +73,14 @@ const MAPS := {
 	},
 	"final_destination": {
 		"display_name": "Final Destination",
+		"color": Color(0.12, 0.12, 0.22),   # dark space blue
 		"platforms": [
 			[0, 600, 1280, 120, false],
 		],
 	},
 	"pokemon_stadium": {
 		"display_name": "Pokémon Stadium",
+		"color": Color(0.55, 0.20, 0.15),   # arena red
 		"platforms": [
 			[0,   600, 1280, 120, false],
 			[240, 440, 200,  16,  true],
@@ -249,7 +254,7 @@ func build_map(map_id: String) -> void:
 		var cr := ColorRect.new()
 		cr.size = Vector2(w, h)
 		cr.position = Vector2(-w / 2.0, -h / 2.0)
-		cr.color = Color(0.35, 0.25, 0.15, 1) if not one_way else Color(0.5, 0.4, 0.2, 1)
+		cr.color = data["color"]
 		body.add_child(cr)
 		map_root.add_child(body)
 

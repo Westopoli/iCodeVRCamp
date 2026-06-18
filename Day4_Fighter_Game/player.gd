@@ -265,9 +265,7 @@ func attack() -> void:
 			melee_swing_timer = 0.15
 			queue_redraw()
 			var opponent = get_opponent()
-			if opponent == null:
-				return
-			if opponent.is_dead():
+			if opponent == null and opponent.is_dead():
 				return
 			var to_opp = opponent.position - position
 			# Pre-given:

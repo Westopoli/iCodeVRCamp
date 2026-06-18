@@ -6,6 +6,21 @@ Canonical course doc. Update this as decisions firm up. Future chats start here.
 
 ---
 
+## 0. Camp Family & Roadmap
+
+| Sub-camp | Length | Variants | Status |
+|---|---|---|---|
+| 5-Day Code-Heavy | 5 days | — | **[UNDER RENOVATION]** — incorporating post-launch feedback |
+| 5-Day Creative-Heavy | 5 days | — | Planned — built from fixed code-heavy base |
+| 3-Day | 3 days | — | Planned — derived from 5-day |
+| 1-Day | 1 day | — | Planned — derived from 3-day |
+
+**Sequencing:** feedback is processed one day at a time (D1 → D2 → D3 → D4 → D5) to fix the code-heavy version first. Creative-heavy is then designed and built from that fixed base. 3-day and 1-day are derived last.
+
+See `TODO.md` (repo root) for the current next-steps queue.
+
+---
+
 ## 1. Identity
 
 Five-day summer coding camp. Replaces a prior Unity + C# + VR camp that collapsed under Unity's dependency hell (old games on new Unity = constant breakage, instructor firefighting instead of teaching).

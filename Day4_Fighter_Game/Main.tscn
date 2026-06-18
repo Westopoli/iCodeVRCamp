@@ -1,37 +1,38 @@
-[gd_scene load_steps=2 format=4 uid="uid://b8d4mainsc"]
+[gd_scene format=3 uid="uid://b8d4mainsc"]
 
-[ext_resource type="Script" path="res://main.gd" id="1"]
+[ext_resource type="Script" uid="uid://0h1j1ejpssrc" path="res://main.gd" id="1"]
 
-[node name="Main" type="Node2D"]
+[node name="Main" type="Node2D" unique_id=293283349]
 script = ExtResource("1")
 
-[node name="Background" type="ColorRect" parent="."]
+[node name="Background" type="ColorRect" parent="." unique_id=861512552]
 offset_right = 1280.0
 offset_bottom = 720.0
 color = Color(0.4, 0.7, 0.95, 1)
 
-[node name="MapRoot" type="Node2D" parent="."]
+[node name="MapRoot" type="Node2D" parent="." unique_id=1235889132]
 
-[node name="Projectiles" type="Node2D" parent="."]
+[node name="Projectiles" type="Node2D" parent="." unique_id=558769660]
 
-[node name="UI" type="CanvasLayer" parent="."]
+[node name="UI" type="CanvasLayer" parent="." unique_id=1856424021]
 
-[node name="CharSelectPanel" type="Panel" parent="UI"]
+[node name="CharSelectPanel" type="Panel" parent="UI" unique_id=1599439717]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="TitleLabel" type="Label" parent="UI/CharSelectPanel"]
+[node name="TitleLabel" type="Label" parent="UI/CharSelectPanel" unique_id=1351032159]
+layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
+theme_override_font_sizes/font_size = 24
 text = "P1 — pick your fighter: 1=Knight 2=Ninja 3=Mage 4=Archer  (Space confirms)"
 horizontal_alignment = 1
 vertical_alignment = 1
-theme_override_font_sizes/font_size = 24
 
-[node name="MapSelectPanel" type="Panel" parent="UI"]
+[node name="MapSelectPanel" type="Panel" parent="UI" unique_id=1207087515]
 visible = false
 anchors_preset = 15
 anchor_right = 1.0
@@ -39,36 +40,40 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="MapTitle" type="Label" parent="UI/MapSelectPanel"]
+[node name="MapTitle" type="Label" parent="UI/MapSelectPanel" unique_id=1490097707]
+layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
+theme_override_font_sizes/font_size = 24
 text = "Pick your map:  1=Battlefield  2=Final Destination  3=Pokémon Stadium  (Space confirms)"
 horizontal_alignment = 1
 vertical_alignment = 1
-theme_override_font_sizes/font_size = 24
 
-[node name="CountdownLabel" type="Label" parent="UI"]
+[node name="CountdownLabel" type="Label" parent="UI" unique_id=1551084352]
 visible = false
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+theme_override_font_sizes/font_size = 128
 horizontal_alignment = 1
 vertical_alignment = 1
-theme_override_font_sizes/font_size = 128
 
-[node name="WinLabel" type="Label" parent="UI"]
+[node name="WinLabel" type="Label" parent="UI" unique_id=1990014742]
 visible = false
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+theme_override_font_sizes/font_size = 64
 text = "P1 WINS"
 horizontal_alignment = 1
 vertical_alignment = 1
-theme_override_font_sizes/font_size = 64
 
-[node name="HudLabel" type="Label" parent="UI"]
+[node name="HudLabel" type="Label" parent="UI" unique_id=2120485975]
 visible = false
+anchors_preset = 10
 anchor_right = 1.0
 offset_bottom = 40.0
+theme_override_font_sizes/font_size = 18
 text = "Wave Knight vs Ninja on Battlefield"
 horizontal_alignment = 1
 vertical_alignment = 1
-theme_override_font_sizes/font_size = 18
