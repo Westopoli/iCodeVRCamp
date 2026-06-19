@@ -69,6 +69,15 @@ Five-day summer coding camp. Replaces a prior Unity + C# + VR camp that collapse
 
 **Teaching pattern (every concept chunk):** Instructor explains → live board walkthrough of example → example stays on screen → kids attempt similar-but-not-copy task in game → instructor guides if stuck. ("I Do / You Do")
 
+**Teaching pattern addendum — pre-TODO design section for bigger TODOs (locked 2026-06-19).** For any TODO with >4 kid LoC, add a dedicated slide section *before* the actual TODO slide:
+  1. State the outcome in plain English ("This function needs to find the closest enemy in range").
+  2. List the variables, helpers, and data they have available.
+  3. Ask: "How would YOU design this? What would you do first?" — give kids a moment to think aloud or jot down an approach.
+  4. When the TODO slide arrives, explicitly frame it as "here's one way — implement yours."
+  The goal is active design thinking before code entry, not passive transcription. Smaller TODOs (≤4 kid LoC) do not need this preamble — the TODO slide itself is sufficient.
+
+**Teaching pattern addendum — "millions of ways" intro slide (locked 2026-06-19, D1 and D2).** At the beginning of D1 and D2's coding section, add one slide explicitly stating: there are thousands — sometimes millions — of valid ways to write any piece of code. The LHS syntax guides and RHS comment scaffolds show *one* approach; students' own implementations are equally valid as long as they work. By D3 a brief one-line callback is enough. This framing prevents students from treating the TODO slides as the single correct answer.
+
 **Locked day-to-concept mapping:**
 
 | Day | Game | Primary concepts | Chunks |
@@ -142,11 +151,24 @@ To avoid ambiguity in slide planning, FC-mirror counting, and rule-application:
   - **Why:** The old LHS (one board example) prescribed a single pattern, excluding valid alternatives and sometimes front-loading irrelevant syntax. The new LHS covers the full vocabulary without prescribing a shape. The old RHS (empty hole screenshot) gave no line-count signal — kids stared at a blank space with no anchor. The new RHS names the variables and tells them exactly how many lines, removing blank-page paralysis without handing them the answer.
   - **How to apply:** When authoring or renovating any day's TODO slides, use this format. Replace any existing "Pattern: …" LHS with "SYNTAX FOR: #N" guides. Replace empty-hole RHS screenshots with comment-scaffold RHS screenshots (requires capturing the `.gd` file with comments filled in). Update per-day renovation pass.
 
+**R8 — Every TODO slide must display the TODO number prominently (locked 2026-06-19).** Because the code-position screenshot (the old wayfinder) has been removed from the RHS, students need a clear visual anchor to know which task they are on.
+  - Every TODO chunk slide must show **"TODO #N"** (or **"TODO #Na"** for sub-holes, e.g. "TODO #5a") in large bold text, prominently on the slide — not buried in body copy.
+  - FC slides display **"FINAL CHALLENGE"** per existing convention; individual FC todo rows do not need separate numbered labels beyond what R3.2 specifies.
+  - **Why:** without a screenshot showing cursor position, the only position signal is the label on the slide. Students glancing up from their keyboard need to see it at a glance, not read for it.
+  - **How to apply:** when authoring or renovating any day's TODO slides, add the bold TODO identifier as a slide-level header element. Applies to all days, all TODOs.
+
 **R3 — Final Challenge definition.** The Final Challenge is **a review of the day's TODO chunks**, presented all-at-once and **guided by pointer, not by walkthrough**.
   - Difficulty ceiling = **same code constructs as the day's in-chunk TODOs**, nothing harder. No new concepts. If a current Final Challenge requires concepts beyond the day, **rewrite the Final Challenge**, not this rule.
   - Framing = "review disguised as unlocking a new feature" — tangible payoff (new mode / new character / new behavior) but the code shape reuses what they already wrote that day.
   - **Required Final Challenge slide** in each day's deck: maps each FC TODO → the earlier chunk(s) it mirrors. Core message: "contrast each FC TODO with what you already implemented earlier today — each one is nothing new, you already learned how to do it." No new code on this slide; pure pointer.
   - This supersedes earlier "half-guided — slides give targeting rules in prose + diagrams" framing in the Final Challenge table for D2 and D3.
+
+**R3.2 — FC slide format: one compressed slide, same LHS/RHS information density as TODO slides (locked 2026-06-19).** The Final Challenge ships as a single slide per day. That slide is dense — think reference card — but must provide the same information a student gets from a regular TODO slide:
+  - Each FC todo item gets its own compressed row or mini-block on the slide.
+  - Each block shows: (a) a brief syntax guide (the LHS equivalent — what syntax shapes are available) and (b) line-by-line comment instructions (the RHS equivalent — one `# comment` per line the student writes, naming the specific variables).
+  - The FC slide remains ONE slide total per day. Compression is mandatory; verbosity is not.
+  - **Why:** students tackling the FC need the same syntax reference and line-count signal that the morning TODO slides provided — they don't have an instructor walking them through it. Without both pieces, the FC is a blank-screen experience, not a guided stretch.
+  - **How to apply:** when renovating any day's FC slide, add both syntax and instruction content per FC todo in a compressed layout. Do not expand to multiple slides — the single-slide constraint is locked.
 
 **R3.1 — FC mirror completeness (locked 2026-05-29).** The Final Challenge ships **one kid mirror hole per morning chunk** (see Lingo lock above — "chunk" means a row in the §4 per-day table, not a "concept" umbrella and not a `#@todo` sub-hole). Total FC kid LoC is within **±20%** of morning kid LoC. Every chunk's lesson reappears in the FC; no chunk skipped. Same shape, new context — payoff math hidden in pre-given helpers.
   - **Why:** R3 says FC is a review. A "review" that skips half the day's chunks isn't a review — it's a sample. D2's FC (6 morning chunks → 6 FC mirror holes → ~24 vs ~25 kid LoC) is the reference model. D3's earlier FC (8 morning chunks → 4 FC mirror holes → ~12 vs ~36 kid LoC) failed this rule; remediated 2026-05-29 to 8 mirror holes (one per chunk; FC ships 12 `#@todo` sub-holes total because FC-6 mirrors morning chunk #6's match dispatcher with one sub-hole per branch).
@@ -770,7 +792,11 @@ What ouroboros has that's NOT useful for kids' camp (too complex / out of scope)
 
 ## 10. Personalization Layer
 
-**Locked requirement:** Every game (D1-D4) must include a dedicated "make it yours" section after core tasks are done. Goal: creative freedom, inter-student variance, zero-to-minimal code. Additive to all concept work — nothing removed.
+**Locked requirement:** Every game (D1-D4) must include dedicated "make it yours" moments throughout the day — not batched at the end. Goal: creative freedom, inter-student variance, zero-to-minimal code. Additive to all concept work — nothing removed.
+
+**Terminology lock (2026-06-19):** Individual personalization items are called **"Personalization Sessions"** (not "Beats"). The word "Beat" is jargon. Use "Personalization Session N" or simply "Personalization" at the slide level. The section header §10 keeps the name "Personalization Layer" for internal/BIBLE authoring; slides and SLIDE_SOURCE docs use "Personalization Session."
+
+**Distribution lock (2026-06-19):** Personalization sessions must be **spread throughout the day**, not batched at the end. After each major milestone (first visible payoff, midpoint, post-hardest-chunk), drop in a personalization moment before continuing coding. The count of sessions per day does not change — only the distribution. Each day's SLIDE_SOURCE §6 (or equivalent) should note which coding chunk each personalization session follows, so there are natural creative breaks woven into the session flow rather than one long creative sprint at the tail end.
 
 **Mechanisms by game (to be designed into each scaffold):**
 
