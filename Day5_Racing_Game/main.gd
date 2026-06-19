@@ -246,7 +246,7 @@ func _first_display_container() -> Node3D:
 		if not (c is Node3D) or c.name == "StarterTrack":
 			continue
 		for piece in c.get_children():
-			if piece is Node3D and piece.name.length() > 2 and piece.name[2] == "_":
+			if piece is Node3D and piece.name.length() > 2 and str(piece.name)[2] == "_":
 				return c
 	return null
 

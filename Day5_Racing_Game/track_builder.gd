@@ -91,7 +91,7 @@ static func spawn_triggers_for(track_root: Node3D, container: Node3D) -> Transfo
 	var placed: Array = []
 	for c in container.get_children():
 		# ordered road pieces are named "NN_Name"; skip pylons/markers
-		if c is Node3D and c.name.length() > 2 and c.name[0].is_valid_int() and c.name[2] == "_":
+		if c is Node3D and c.name.length() > 2 and str(c.name)[0].is_valid_int() and str(c.name)[2] == "_":
 			placed.append(c)
 	if placed.is_empty():
 		return Transform3D.IDENTITY
