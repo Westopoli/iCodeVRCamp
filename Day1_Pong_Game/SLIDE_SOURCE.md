@@ -28,19 +28,33 @@
 - **Concepts introduced**: **Variables** + **Conditions** (if / else / comparison / booleans).
 - **Why this game first**: every visible element (ball, paddles, walls) is literally just a number changing each frame. Variables and `if` checks *are* the entire game — no engine features hide the mechanic. Day 1 is "copy-along" depth (BIBLE §3 lock): the instructor types on the board, kids type the same thing, no figuring it out yet.
 
-### GDScript vs Python (Day 1 slide — pull verbatim into deck)
+### GDScript vs Python (Day 1 slide — visual diagram)
 
+**Slide design (two-column visual, not plain text):**
+- Left column header: "Python" (blue label)
+- Right column header: "GDScript" (green label)
+- Two comparison rows with arrows between them:
+
+Row 1 — Variables:
 ```
-Python:  x = 5                       GDScript:  var x = 5
-Python:  name = "Alex"               GDScript:  var name = "Alex"
-
-Python:  if score > 10:              GDScript:  if score > 10:
-             print("winning")                       print("winning")
-         else:                                 else:
-             print("losing")                       print("losing")
+Python                          GDScript
+──────────────────────────────────────────────────
+x = 5            ──→──    var x = 5
+                           ^^^
+                       (one extra word)
 ```
 
-**Takeaway line**: "GDScript is Python with one extra word (`var`) when you make a new variable. Everything else today looks identical."
+Row 2 — Functions:
+```
+Python                          GDScript
+──────────────────────────────────────────────────
+def update():    ──→──    func update():
+    ...                       ...
+```
+
+**Only these two differences appear on the slide.** Both rows use colored callout boxes: the `var` keyword highlighted in iCode red with a callout arrow; the `func` keyword highlighted similarly. Everything that is IDENTICAL (if/else, loops, indentation rules) is NOT on this slide — keep it to what's new today only.
+
+**Takeaway line (below the diagram):** "GDScript is Python with `var` and `func` instead of nothing and `def`. Everything else today looks identical."
 
 ---
 
@@ -84,21 +98,23 @@ None — Day 1 has no balance sim. Ball speed and paddle speed are kid-chosen in
 
 ## 3. Chunk table — verified against `main.gd`
 
-In lesson order (also BIBLE §4 order and `main.gd` file order):
+In lesson order (numbers = the order students do them in class):
 
 | # | Concept | File location | Hole lines | Hole size |
 |---|---|---|---|---|
-| #1a | Variable declaration (required) | `main.gd:35-39` | 3 | small |
-| #1b | Variable declaration (creative naming) | `main.gd:45-48` | 2 | small |
-| #6a | Boolean variable declaration | `main.gd:54-56` | 1 | tiny |
-| #6b | Boolean check + `return` | `main.gd:72-77` | 4 | medium |
-| #2 | Read + update (`+=`) | `main.gd:81-84` | 2 | small |
-| #4 | `if / else` (wall bounce) | `main.gd:89-94` | 5 | medium |
-| #3 | `if` statement (single condition) | `main.gd:100-103` | 2 | small |
-| #5 | Comparison operators — scoring | `main.gd:107-114` | 6 | medium |
-| #1b (suffix) | Creative vars on the scoreboard | `main.gd:120-122` | 1 | tiny |
+| **#1** | Variable declaration (required) | `main.gd` | 3 | small |
+| **#2** | Variable declaration (creative naming) | `main.gd` | 2 | small |
+| **#3** | Boolean variable declaration | `main.gd` | 1 | tiny |
+| **#4** | Boolean check + `return` + Space key | `main.gd` | 4 | medium |
+| **#5** | Read + update (`+=`) | `main.gd` | 2 | small |
+| **#6** | `if / else` (wall bounce, named border vars) | `main.gd` | 5 | medium |
+| **#7** | `if` statement (single condition, print) | `main.gd` | 2 | small |
+| **#8** | Comparison operators — scoring | `main.gd` | 6 | medium |
+| **#9** | Creative vars on the scoreboard | `main.gd` | 1 | tiny |
 
-**Total**: 9 `#@todo`/`#@end` blocks across **8 conceptual chunks** (chunk #1b appears in two places — declaration at top + scoreboard suffix in `_process`).
+**Total**: 9 `#@todo`/`#@end` blocks across **9 conceptual chunks**. TODO numbers = lesson order (TODO #1 is the first thing students type, TODO #9 is the last).
+
+**Note:** Line numbers shift slightly after named-var addition to TODO #6. Verify against current `main.gd` before capturing screenshots.
 
 ---
 
@@ -328,9 +344,12 @@ In lesson order (also BIBLE §4 order and `main.gd` file order):
 
 ## 6. Personalization layer ("make it yours")
 
-End-of-day beat after all morning chunks. Order suggested, not mandatory. Each beat = one walkthrough.
+Personalization sessions are spread throughout the day — not all batched at the end. See §10 for placement. Order suggested, not mandatory. Each session = one walkthrough. **If low on time, skip any personalization session. Give them to students who are ahead.**
 
-### Beat 1 — Change ball + paddle colour in the Inspector
+### Personalization Session 1 — Speed tuning (mid-day, after TODO #8)
+> See slide D1-S102a (after scoring payoff) for placement.
+
+### Personalization Session 2 — Change ball + paddle colour in the Inspector
 
 > Uses the `@export` variables on the `Main` node.
 
@@ -345,34 +364,23 @@ End-of-day beat after all morning chunks. Order suggested, not mandatory. Each b
 9. Press **Ctrl+S** to save the scene.
 10. Press **F5** to run and see the new colours.
 
-### Beat 2 — Tweak paddle / ball speeds in code
+### Personalization Session 3 — Edit your silly variable names
 
-> The speeds from chunk #1a are not `@export`'d. Optional slide: contrast this with Beat 1 to introduce the `@export` keyword as "the magic word that brings a variable into the Inspector."
-
-1. Open `main.gd` (Walkthrough B).
-2. Find line 36 (chunk #1a — `var ball_speed_x := 6.0`).
-3. Click on the number `6.0`.
-4. Change it to a higher number for a faster ball, lower for slower. (Suggest 3-12 range.)
-5. Press **Ctrl+S**.
-6. Press **F5** to test.
-
-### Beat 3 — Edit your silly variable names
-
-1. Open `main.gd`, find chunk #1b (line 46-47).
+1. Open `main.gd`, find TODO #2 vars.
 2. Change either or both variable names to something funnier.
-3. **Also update line 121** (the scoreboard suffix) — the names there must match #1b. If you changed `skibidi_speed` → `cap_factor` in #1b, change it in #1b-suffix too.
+3. **Also update TODO #9** (the scoreboard suffix) — the names there must match TODO #2. If you changed `skibidi_speed` → `cap_factor` in #2, change it in #9 too.
 4. Save, run.
 
-### Beat 4 — Edit the scoreboard suffix
+### Personalization Session 4 — Edit the scoreboard suffix
 
-1. Open `main.gd`, find chunk #1b-suffix (line 121).
+1. Open `main.gd`, find TODO #9 (scoreboard suffix).
 2. Swap the `★` characters for any emoji (Discord-style picker works in the editor on Windows: `Win+.`).
 3. Add more text, more variables, more decoration.
 4. Save, run.
 
-### Beat 5 — Tweak the paddle spin (stretch — pre-given helper)
+### Personalization Session 5 — Tweak the paddle spin (stretch — pre-given helper)
 
-1. Open `main.gd`, scroll to `spin_from_paddle()` (lines 149-156). This is **pre-given code, not a chunk** — kids can read and tweak.
+1. Open `main.gd`, scroll to `spin_from_paddle()`. This is **pre-given code, not a chunk** — kids can read and tweak.
 2. Change the `8.0` at the end of `return hit_offset * 8.0` — higher = steeper bounce-off-edge, lower = softer.
 3. Save, run.
 
@@ -562,23 +570,25 @@ Every slide entry uses this template:
 - Image: none
 - Notes: tee up the two umbrella concepts; both expand in the chunks ahead.
 
-#### Slide D1-S005 — GDScript vs Python
+#### Slide D1-S005 — GDScript vs Python (visual diagram)
 - Format: G03 GDScript-vs-Python
-- Title: "GDScript is Python with one extra word"
-- Body (two-column code panel, monospace, side-by-side):
+- Title: "GDScript is Python with two small differences"
+- Body LHS:
   ```
-  Python:                       GDScript:
-  x = 5                         var x = 5
-  name = "Alex"                 var name = "Alex"
+  x = 5
 
-  if score > 10:                if score > 10:
-      print("winning")              print("winning")
-  else:                         else:
-      print("losing")               print("losing")
+  def update():
+      pass
   ```
-- Below the code panel, single line: "Add `var` when you make a NEW variable. Everything else looks identical."
-- Image: none (the code panel is the slide)
-- Notes: "If you've ever seen Python — congrats, you almost already know GDScript."
+- Body RHS:
+  ```gdscript
+  var x = 5
+
+  func update():
+      pass
+  ```
+- Image: `d1_gdscript_vs_python_diagram.png` — the diagram described above as a clean visual. Placeholder OK on first build.
+- Notes: "Show TWO differences only. If kids ask about anything else — loops, if/else — tell them it's the same as Python. That's the point."
 
 ### 10.2 Section divider — Pre-coding setup (slide 6)
 
@@ -749,18 +759,31 @@ Every slide entry uses this template:
 - Image: `d1_chunk1a_hole.png` — screenshot of main.gd lines 33-39 (the comment + the empty #@todo block). Red overlay rectangle covers lines 36-38 (the gap between #@todo on line 35 and #@end on line 39).
 - Notes: —
 
-#### Slide D1-S033 — Example + TODO side-by-side (MANDATORY "do it")
-- Format: G09 Concept + Task (LHS) + G11 Code Screenshot (RHS) — composite layout
-- Title: "Your task: chunk #1a"
-- Body LHS (board example, big monospace centred in left half):
+#### Slide D1-S032b — Pre-TODO #1: What you're about to write
+- Format: G14 Pre-TODO
+- Title: "What you're about to write"
+- Body:
   ```gdscript
-  var score := 0
+  # ball left-right speed (5=slow, 15=super fast)
+  # ball up-down speed (5=slow, 15=super fast)
+  # paddle speed (5=slow, 15=super fast)
   ```
-  With caption underneath: "Pattern: `var` + name + `:=` + starting value."
-- Body RHS (right half, image): `d1_chunk1a_todo.png` — Godot script editor screenshot of main.gd lines 34-39 with a red overlay rectangle covering the gap between line 35 (`#@todo`) and line 39 (`#@end`).
-- Caption below RHS: "Make THREE variables: ball x-speed, ball y-speed, paddle speed. Pick any numbers."
-- Image (RHS): see above.
-- Notes: kids type for the next few minutes. Instructor circulates.
+  - "**What:** Three variables — left-right ball speed, up-down ball speed, and paddle speed."
+  - "**Why:** Without these, the ball has no speed. It can't move. Every moving thing in Pong needs a number."
+  - "**How:** `var name := value` makes a new variable. The `:=` sets the starting value. Pick any numbers you like."
+- Notes: read the Why aloud first. Then let them choose their own numbers.
+
+#### Slide D1-S033 — TODO #1 (chunk #1a)
+- Format: G13 TODO
+- Title: "**TODO #1** — Create your game variables"
+- Syntax: var
+- Body RHS:
+  ```gdscript
+  # ball left-right speed (5=slow, 15=super fast)
+  # ball up-down speed (5=slow, 15=super fast)
+  # paddle speed (5=slow, 15=super fast)
+  ```
+- Notes: 3 lines. Let them pick their own starting values — ball won't run yet, but this is their first code. Celebrate it.
 
 ### 10.7 Walkthrough C — Run the project (slides 34-37)
 
@@ -895,16 +918,29 @@ Every slide entry uses this template:
 - Image: `d1_chunk1b_where.png` — screenshot of main.gd lines 44-48 with a red overlay rectangle covering lines 46-47 (gap between `#@todo` on line 45 and `#@end` on line 48).
 - Notes: —
 
-#### Slide D1-S050 — Example + TODO side-by-side
-- Format: G09 + G11 composite
-- Title: "Your task: chunk #1b"
-- Body LHS (board example, big monospace centred):
+#### Slide D1-S049b — Pre-TODO #2: What you're about to write
+- Format: G14 Pre-TODO
+- Title: "What you're about to write"
+- Body:
   ```gdscript
-  var skibidi_speed := 99
+  # silly variable name #1 (your choice)
+  # silly variable name #2 (your choice)
   ```
-- Body RHS (image): `d1_chunk1b_todo.png` — Godot screenshot of main.gd lines 44-48, red overlay on the gap.
-- Caption below RHS: "Make TWO variables — any name, any starting number. Go weird if you want."
-- Notes: kids type.
+  - "**What:** Two variables — names are 100% your choice. Numbers too."
+  - "**Why:** You'll display them on the scoreboard in TODO #9. Pick something that'll make your neighbour laugh."
+  - "**How:** Same `var name := value` as before. Name rules: lowercase, underscores, no spaces."
+- Notes: take 30 seconds to hear silly names from the room before they type.
+
+#### Slide D1-S050 — TODO #2 (chunk #1b)
+- Format: G13 TODO
+- Title: "**TODO #2** — Your own variables"
+- Syntax: var
+- Body RHS:
+  ```gdscript
+  # silly variable name #1 (your choice)
+  # silly variable name #2 (your choice)
+  ```
+- Notes: 2 lines. 100% creative. Take 30 seconds to hear silly names from the room before they type.
 
 ### 10.10 Chunk #6a — Boolean (slides 51-62, full new-concept arc)
 
@@ -985,16 +1021,29 @@ Every slide entry uses this template:
 - Image: `d1_chunk6a_where.png` — screenshot of main.gd lines 53-56 with red overlay on line 55 (the gap between `#@todo` on line 54 and `#@end` on line 56).
 - Notes: —
 
-#### Slide D1-S062 — Example + TODO side-by-side
-- Format: G09 + G11 composite
-- Title: "Your task: chunk #6a"
-- Body LHS (board example):
+#### Slide D1-S061b — Pre-TODO #3: What you're about to write
+- Format: G14 Pre-TODO
+- Title: "What you're about to write"
+- Body:
   ```gdscript
-  var is_alive := true
+  # a true/false variable called ball_moving
+  # start it as false
   ```
-- Body RHS (image): `d1_chunk6a_todo.png` — Godot screenshot of main.gd lines 53-56, red overlay on the gap.
-- Caption below RHS: "Make a true/false variable called `ball_moving`. Start it as `false`."
-- Notes: kids type.
+  - "**What:** One variable — a true/false switch called `ball_moving`."
+  - "**Why:** The ball needs to freeze until Space is pressed. This flag is the on/off switch."
+  - "**How:** Same `var name := value` — the value is just `true` or `false` instead of a number."
+- Notes: 1 line. Tiny — but it's their first boolean. Make it feel important.
+
+#### Slide D1-S062 — TODO #3 (chunk #6a)
+- Format: G13 TODO
+- Title: "**TODO #3** — Make a boolean"
+- Syntax: var, bool
+- Body RHS:
+  ```gdscript
+  # a true/false variable called ball_moving
+  # start it as false
+  ```
+- Notes: 1 line. Tiny — but it's their first boolean. Make it feel important.
 
 ### 10.11 Chunk #6b — `if` statement (slides 63-75, full new-concept arc + after-works)
 
@@ -1022,6 +1071,129 @@ Every slide entry uses this template:
 - Caption: "Indent matters. The indented block runs ONLY when the condition is true."
 - Image: none
 - Notes: —
+
+### 10.11a — Indentation: The Invisible Box (slides S065a–S065i, dedicated concept section)
+
+> Inserted here because the `if` shape slide just showed indentation for the first time. Students need to understand what the indent *means* before they write their first `if`.
+
+#### Slide D1-S065a — Indentation: What is it?
+- Format: G04 Headline / Divider
+- Title: "What is indentation?"
+- Body:
+  - "Notice how some lines are shifted to the right?"
+  - "That shift is called **indentation**. In GDScript (and Python), it's not decorative — it tells the computer which lines belong to which rule."
+- Image: none
+- Notes: —
+
+#### Slide D1-S065b — The Invisible Box
+- Format: G10 Board Example
+- Title: "Think of it as an invisible box"
+- Body: Visual code diagram with colored overlay boxes — described for the slide builder:
+  ```
+  if score > 5:         ← OPENS the box (blue/highlighted)
+  ┌─────────────────────────────────────────┐
+  │   print("winning")   ← LINE 1 (inside) │
+  │   do_something()     ← LINE 2 (inside) │
+  └─────────────────────────────────────────┘
+  print("done")           ← LINE 3 (ALWAYS runs, outside the box)
+  ```
+  The `if` line is colored differently (e.g. yellow). The box border is a distinct color (e.g. blue). LINE 3 is clearly outside and below the box.
+- Caption: "The box only opens when the condition is true. Lines INSIDE only run when the box is open. Lines OUTSIDE always run."
+- Image: `d1_invisible_box_diagram.png` — the colored box diagram described above. Instructor generates this as a custom graphic. Placeholder OK.
+- Notes: instructor draws the box on the board or points to it on the diagram. "The `if` line opens the box. Anything indented under it is inside that box."
+
+#### Slide D1-S065c — When the condition is TRUE
+- Format: G10 Board Example
+- Title: "Condition is TRUE → box opens"
+- Body: Same diagram as S065b, but with annotations:
+  - `if score > 5:` — condition = TRUE, box OPENS (glow/highlight effect)
+  - LINE 1 ✓ runs
+  - LINE 2 ✓ runs
+  - LINE 3 ✓ always runs (outside box)
+- Image: `d1_box_open.png` — box diagram with lines 1+2 highlighted green, line 3 also highlighted green (but visually separate/outside).
+- Notes: "All three lines run — the two inside the box AND line 3 after it."
+
+#### Slide D1-S065d — When the condition is FALSE
+- Format: G10 Board Example
+- Title: "Condition is FALSE → box stays closed"
+- Body: Same diagram, different annotations:
+  - `if score > 5:` — condition = FALSE, box CLOSED (grayed out)
+  - LINE 1 ✗ skipped
+  - LINE 2 ✗ skipped
+  - LINE 3 ✓ always runs (outside box)
+- Image: `d1_box_closed.png` — box grayed out, lines 1+2 dimmed/X'd, line 3 highlighted green.
+- Notes: "Only line 3 runs. The box was never opened, so lines 1 and 2 got skipped entirely."
+
+#### Slide D1-S065e — What if you DON'T indent?
+- Format: G10 Board Example
+- Title: "What happens without indentation?"
+- Body:
+  ```
+  if score > 5:    ← the if
+  print("winning") ← NOT indented → NOT inside the box
+  print("done")    ← NOT indented → also not inside the box
+  ```
+  Caption: "The `if` has an empty box — it controls NOTHING. Both lines run no matter what. The `if` is useless."
+- Image: `d1_box_empty.png` — empty box under the `if` line, both `print` lines shown outside (below) the box. Red warning icon.
+- Notes: "This is the most common beginner mistake — forgetting to indent. GDScript will error, or the code will do the wrong thing. The indent IS the instruction."
+
+#### Slide D1-S065f — Not just `if`s!
+- Format: G05 Build Narrative
+- Title: "The box rule applies to EVERYTHING"
+- Body:
+  - "Every `if:` opens a box"
+  - "Every `func ...:` opens a box"
+  - "Every `for ... in ...:` opens a box"
+  - "Every `else:` opens a box"
+  - "**Anything followed by a colon `:` opens a box. What's indented under it is inside.**"
+- Image: none
+- Notes: "You'll see this pattern all week. The box rule never changes — same for functions (D2), loops (D2), and everything after."
+
+#### Slide D1-S065g — Check: Quiz 1
+- Format: G10 Board Example
+- Title: "**Quiz:** Which lines run when the `if` is TRUE?"
+- Body: Visual code with numbered lines:
+  ```
+  if health > 0:       ← condition = TRUE
+      line 1
+      line 2
+  line 3
+  ```
+  Question below: "Which lines run? A) Only line 1   B) Lines 1 and 2   C) Lines 1, 2, and 3"
+- Image: none
+- Notes: Answer is C. Lines 1+2 are inside the box (condition is true, box opens). Line 3 always runs regardless.
+
+#### Slide D1-S065h — Check: Quiz 2
+- Format: G10 Board Example
+- Title: "**Quiz:** Which line ALWAYS runs?"
+- Body: Visual code:
+  ```
+  if is_paused:
+      line 1
+      line 2
+  line 3
+  ```
+  Question: "Which line runs whether `is_paused` is true OR false?"
+- Image: none
+- Notes: Answer is line 3. Lines 1+2 only run when paused. Line 3 happens either way.
+
+#### Slide D1-S065i — Check: Quiz 3 (nested)
+- Format: G10 Board Example
+- Title: "**Quiz:** Nested boxes — what runs?"
+- Body: Visual code:
+  ```
+  if has_key:
+      line 1
+      if door_locked:
+          line 2
+      line 3
+  line 4
+  ```
+  Two questions:
+  - "If `has_key = true` AND `door_locked = true` — which lines run?"
+  - "If `has_key = false` — which lines run?"
+- Image: `d1_nested_box.png` — nested box diagram: outer box (has_key), inner box (door_locked), with lines labeled.
+- Notes: Answers: (1) Lines 1, 2, 3, 4. (2) Only line 4. The outer box never opened, so everything inside it (1, 2, 3) is skipped.
 
 #### Slide D1-S066 — Example 1/3: If you're hungry → eat
 - Format: G04 Headline / Divider
@@ -1068,17 +1240,33 @@ Every slide entry uses this template:
 - Image: `d1_chunk6b_where.png` — screenshot of main.gd lines 70-77 with red overlay covering lines 73-76 (gap between `#@todo` on line 72 and `#@end` on line 77).
 - Notes: —
 
-#### Slide D1-S072 — Example + TODO side-by-side
-- Format: G09 + G11 composite
-- Title: "Your task: chunk #6b"
-- Body LHS (board example):
+#### Slide D1-S071b — Pre-TODO #4: What you're about to write
+- Format: G14 Pre-TODO
+- Title: "What you're about to write"
+- Body:
   ```gdscript
-  if is_alive == false:
-      return
+  # if Space is pressed:
+  #     set ball_moving to true
+  # if ball_moving is false:
+  #     return
   ```
-- Body RHS (image): `d1_chunk6b_todo.png` — Godot screenshot of main.gd lines 70-77, red overlay on the gap.
-- Caption below RHS: "When the player presses Space → flip `ball_moving` to true. While `ball_moving` is still false → `return` to freeze the ball."
-- Notes: —
+  - "**What:** Two `if` checks — one listens for Space, one freezes the ball."
+  - "**Why:** The ball should wait. Without the `return`, it starts moving the moment the game opens."
+  - "**How:** `Input.is_key_pressed(KEY_SPACE)` asks 'is Space held right now?' `return` stops the rest of the function."
+- Notes: walk slowly. This is their first `if` that does something they can SEE.
+
+#### Slide D1-S072 — TODO #4 (chunk #6b)
+- Format: G13 TODO
+- Title: "**TODO #4** — Space key + ball freeze"
+- Syntax: if, input_key, return
+- Body RHS:
+  ```gdscript
+  # if Space is pressed:
+  #     set ball_moving to true
+  # if ball_moving is false:
+  #     return
+  ```
+- Notes: 4 lines — 2 `if` blocks. Walk slowly; this is their first `if` that does something they can SEE.
 
 #### Slide D1-S073 — After-works payoff
 - Format: G04 Headline / Divider
@@ -1087,32 +1275,69 @@ Every slide entry uses this template:
 - Image: none
 - Notes: first visible game-behavior moment. Celebrate it.
 
-### 10.12 Chunk #2 — `+=` shortcut (slides 74-76, slim extension)
+#### Slide D1-S073a — Dot-notation explainer
+- Format: G10 Board Example
+- Title: "`Input` is an **object**"
+- Body:
+  - "`Input` is an **object** — a thing that holds data and can *do* things."
+  - "The `.` is how we talk to an object:"
+  ```gdscript
+  Input.is_key_pressed(KEY_SPACE)
+  #  ↑       ↑
+  # object   verb (ask Input to check a key)
+  ```
+  - "Read it as: 'Ask `Input` — is the Space key pressed?'"
+  - "We'll learn ALL about objects on Day 4. For now: **Noun.verb()** is how you use them."
+- Image: none
+- Notes: "Plant the seed now. On D4 they'll make their own objects. Here it just demystifies the dot."
 
-#### Slide D1-S074 — Recap
+### 10.12 Chunk #5 — `+=` shortcut (slides 74-76, slim extension)
+
+#### Slide D1-S074 — "Code Isn't the Only Way" (cross-day, first mention)
+- Format: G04 Headline / Divider
+- Title: "There is no ONE right answer in code."
+- Body:
+  - "For any problem in programming, there are thousands — sometimes MILLIONS — of valid solutions."
+  - "The examples on the left side of TODO slides are **one** way. Your way is just as valid if it works."
+  - "What matters: **does it run? does it do what you wanted?** If yes — it's correct."
+- Image: none
+- Notes: plant this early. Reinforce every time a student second-guesses their own approach.
+
+#### Slide D1-S074a — Updating a variable
 - Format: G04 Headline / Divider
 - Title: "Updating a variable"
-- Body: "We already know `var` makes a variable. Now we UPDATE one. `x = x + 1` works — but `x += 1` is the shortcut every programmer uses for the rest of their life."
+- Body: "We already know `var` makes a variable. Now we **UPDATE** one — read the current value, do some math, put the new value back."
 - Image: none
 - Notes: —
 
-#### Slide D1-S075 — Example + TODO side-by-side
-- Format: G09 + G11 composite
-- Title: "Your task: chunk #2"
-- Body LHS (board example):
+#### Slide D1-S074b — Pre-TODO #5: What you're about to write
+- Format: G14 Pre-TODO
+- Title: "What you're about to write"
+- Body:
   ```gdscript
-  score = score + 1
-  # …same thing, shorter:
-  score += 1
+  # add ball_speed_x to ball.position.x
+  # add ball_speed_y to ball.position.y
   ```
-- Body RHS (image): `D1C2.png` — Godot screenshot of main.gd lines 80-84, red overlay on the gap between `#@todo` (line 81) and `#@end` (line 84).
-- Caption below RHS: "Add `ball_speed_x` to `ball.position.x` every frame. Same for y. The ball will start moving (and drift off-screen — we'll catch it next)."
-- Notes: —
+  - "**What:** Two lines — move the ball left-right, and up-down, every frame."
+  - "**Why:** Without this, the ball just sits there. This is the only reason anything moves."
+  - "**How:** `+=` reads the current value, adds the speed, and puts the result back. Long form `x = x + speed` also works."
+- Notes: 2 lines. Both syntaxes valid — let them pick whichever feels natural.
+
+#### Slide D1-S075 — TODO #5 (chunk #2)
+- Format: G13 TODO
+- Title: "**TODO #5** — Move the ball"
+- Syntax: dot_eq
+- Body RHS:
+  ```gdscript
+  # add ball_speed_x to ball.position.x
+  # add ball_speed_y to ball.position.y
+  ```
+- Notes: 2 lines. Remind them they can use long form OR shortcut. Both work.
 
 #### Slide D1-S076 — After-works payoff (small)
 - Format: G04 Headline / Divider
 - Title: "The ball moves now"
-- Body: "Press F5, then Space. The ball drifts off the right side of the screen. That's expected — chunk #4 catches it."
+- Body: "Press F5, then Space. The ball drifts off the right side of the screen. That's expected — TODO #6 catches it."
 - Image: none
 - Notes: —
 
@@ -1178,27 +1403,89 @@ Every slide entry uses this template:
 - Format: G11 Code Screenshot
 - Title: "Where in `main.gd`?"
 - Body: "Inside `_process`, right after we move the ball."
-- Image: `D1C4.png` — screenshot of main.gd lines 87-94 with red overlay covering lines 90-93 (gap between `#@todo` on line 89 and `#@end` on line 94).
+- Image: `D1C6.png` — screenshot of main.gd showing the TODO #6 block (after TODO #5), red overlay covering the hole.
 - Notes: —
 
-#### Slide D1-S086 — Example + TODO side-by-side
-- Format: G09 + G11 composite
-- Title: "Your task: chunk #4"
-- Body LHS (board example):
+#### Slide D1-S085a — The border variables explained
+- Format: G10 Board Example
+- Title: "What are the borders?"
+- Body:
+  - "Our screen is **648 pixels tall**. Y=0 is the top. Y=648 is the bottom."
+  - "We define two named borders:"
   ```gdscript
-  if hungry:
-      eat()
-  else:
-      sleep()
+  var upper_border = 0               # top of screen
+  var lower_border = SCREEN_H - BALL_SIZE  # = 648 - 20 = 628
   ```
-- Body RHS (image): `D1C4.png` — Godot screenshot of main.gd lines 87-94, red overlay on the gap.
-- Caption below RHS: "When the ball goes off the top OR bottom → flip `ball_speed_y`. Else → keep going (use `pass` for now)."
-- Notes: —
+  - "`upper_border = 0` — ball bounces when its top edge goes above 0 (off-screen up)"
+  - "`lower_border = 628` — WHY 628 and not 648?"
+- Image: `d1_screen_y_diagram.png` — diagram of the screen with Y axis labeled, ball at top (y=0) and bottom (y=628), BALL_SIZE gap highlighted.
+- Notes: next slide explains why SCREEN_H - BALL_SIZE.
+
+#### Slide D1-S085b — Why `SCREEN_H - BALL_SIZE`?
+- Format: G10 Board Example
+- Title: "Why subtract `BALL_SIZE`?"
+- Body:
+  - "The ball's position tracks its **top-left corner**, not its centre."
+  ```
+  y = 628  →  ball top-left at 628
+              ball bottom-right at 648  ← just touching the wall ✓
+
+  y = 648  →  ball has already gone OFF the screen ✗
+  ```
+  - "So `lower_border = SCREEN_H - BALL_SIZE` = 648 - 20 = **628** — the last position where the ball is still fully on screen."
+  - "Math lets us calculate the exact boundary without guessing."
+- Image: `d1_ball_position_diagram.png` — diagram showing ball with top-left and bottom-right labeled, touching the bottom wall at y=628.
+- Notes: "This is the kind of math you'll use all week. Variables + arithmetic = you never have to guess a magic number."
+
+#### Slide D1-S085c — Math as a tool
+- Format: G04 Headline / Divider
+- Title: "Math figures it out for you."
+- Body:
+  - "Instead of guessing `628`, we wrote `SCREEN_H - BALL_SIZE`."
+  - "If you change the screen size, or the ball size, the border updates **automatically** — you don't touch it."
+  - "This is why game developers use math: one formula that works for any size, any speed, any screen."
+  - "**You'll need this kind of thinking later this week.** Keep it in mind."
+- Image: none
+- Notes: brief but important framing. The takeaway is: math isn't about numbers, it's about relationships.
+
+#### Slide D1-S085d — Pre-TODO #6: What you're about to write
+- Format: G14 Pre-TODO
+- Title: "What you're about to write"
+- Body:
+  ```gdscript
+  var upper_border = 0
+  var lower_border = SCREEN_H - BALL_SIZE
+  # if ball.position.y < upper_border
+  # or ball.position.y > lower_border:
+  #     flip ball_speed_y (negate it)
+  # else:
+  #     pass
+  ```
+  - "**What:** Named border variables + an `if/else` that bounces the ball off the top and bottom."
+  - "**Why:** Without this, the ball drifts off screen. The `or` checks both walls in one line."
+  - "**How:** Negating speed (`-ball_speed_y`) flips its direction. `else: pass` means 'otherwise do nothing'."
+- Notes: walk through the border diagram slides first. The named vars make the condition readable.
+
+#### Slide D1-S086 — TODO #6 (chunk #4)
+- Format: G13 TODO
+- Title: "**TODO #6** — Wall bounce"
+- Syntax: var, or, negate, if_else
+- Body RHS:
+  ```gdscript
+  var upper_border = 0
+  var lower_border = SCREEN_H - BALL_SIZE
+  # if ball.position.y < upper_border
+  # or ball.position.y > lower_border:
+  #     flip ball_speed_y (negate it)
+  # else:
+  #     pass
+  ```
+- Notes: 5 student lines (2 var lines + if/flip/else). Walk through the diagram slides first, then let them type.
 
 #### Slide D1-S087 — After-works payoff
 - Format: G04 Headline / Divider
 - Title: "The ball bounces"
-- Body: "Press F5, then Space. The ball ricochets off the top and bottom walls now. It still flies off the LEFT and RIGHT sides — chunk #5 fixes that."
+- Body: "Press F5, then Space. The ball ricochets off the top and bottom walls now. It still flies off the LEFT and RIGHT sides — TODO #8 fixes that."
 - Image: none
 - Notes: —
 
@@ -1211,17 +1498,40 @@ Every slide entry uses this template:
 - Image: none
 - Notes: —
 
-#### Slide D1-S089 — Example + TODO side-by-side
-- Format: G09 + G11 composite
-- Title: "Your task: chunk #3"
-- Body LHS (board example):
+#### Slide D1-S088b — Pre-TODO #7: What you're about to write
+- Format: G14 Pre-TODO
+- Title: "What you're about to write"
+- Body:
   ```gdscript
-  if score > 5:
-      print("winning")
+  # if ball.position.x is past SCREEN_W:
+  #     print("point!")
   ```
-- Body RHS (image): `D1C3.png` — Godot screenshot of main.gd lines 99-103, red overlay on the gap between `#@todo` (line 100) and `#@end` (line 103).
-- Caption below RHS: "When the ball goes past the right edge → `print(\"point!\")` to the Output panel. (Real scoring comes in #5.)"
-- Notes: —
+  - "**What:** One `if` check — if the ball went past the right edge, print a message."
+  - "**Why:** This is a 'does the `if` even work?' test before adding real scoring in TODO #8."
+  - "**How:** `print()` sends text to the Output panel at the bottom of Godot. Great for debugging."
+- Notes: 2 lines. Quick one. The Output panel printing is the visible payoff.
+
+#### Slide D1-S089 — TODO #7 (chunk #3)
+- Format: G13 TODO
+- Title: "**TODO #7** — Print 'point!'"
+- Syntax: if, print
+- Body RHS:
+  ```gdscript
+  # if ball.position.x is past SCREEN_W:
+  #     print("point!")
+  ```
+- Notes: 2 lines. Quick one — let them type it fast. The Output panel printing is the visible payoff.
+
+#### Slide D1-S089a — What is `print()`?
+- Format: G10 Board Example
+- Title: "See the `()` after `print`?"
+- Body:
+  - "The `()` after a name means it's a **function** — a bundle of code someone already wrote."
+  - "`print()` is a function that came with GDScript. Someone wrote it so we don't have to."
+  - "We'll learn to write our OWN functions on Day 2."
+  - "`reset_ball()` (below) is another pre-written function you'll use soon."
+- Image: none
+- Notes: first parentheses callout. Keep it brief — seed the concept of functions, don't explain them fully yet.
 
 #### Slide D1-S090 — After-works payoff (small)
 - Format: G04 Headline / Divider
@@ -1304,17 +1614,37 @@ Every slide entry uses this template:
 - Image: `D1C5.png` — screenshot of main.gd lines 105-114 with red overlay covering lines 108-113 (gap between `#@todo` on line 107 and `#@end` on line 114).
 - Notes: —
 
-#### Slide D1-S101 — Example + TODO side-by-side
-- Format: G09 + G11 composite
-- Title: "Your task: chunk #5"
-- Body LHS (board example):
+#### Slide D1-S100b — Pre-TODO #8: What you're about to write
+- Format: G14 Pre-TODO
+- Title: "What you're about to write"
+- Body:
   ```gdscript
-  if lives == 0:
-      game_over()
+  # if ball passed right edge (> SCREEN_W):
+  #     add 1 to left_score
+  #     call reset_ball()
+  # if ball passed left edge (< 0):
+  #     add 1 to right_score
+  #     call reset_ball()
   ```
-- Body RHS (image): `D1C5.png` — Godot screenshot of main.gd lines 105-114, red overlay on the gap.
-- Caption below RHS: "Use `>` for the right edge and `<` for the left edge. Bump the correct score and call `reset_ball()`."
-- Notes: —
+  - "**What:** Two `if` blocks — one for each edge. Ball exits right → left player scores. Ball exits left → right player scores."
+  - "**Why:** TODO #7 just printed text. This upgrades it to real scoring with the counter you set up in TODO #1."
+  - "**How:** `reset_ball()` is pre-written for you — it moves the ball back to centre. `+= 1` adds one point."
+- Notes: walk through one block, let them mirror the second themselves.
+
+#### Slide D1-S101 — TODO #8 (chunk #5)
+- Format: G13 TODO
+- Title: "**TODO #8** — Real scoring"
+- Syntax: if, plus_eq, func_call
+- Body RHS:
+  ```gdscript
+  # if ball passed right edge (> SCREEN_W):
+  #     add 1 to left_score
+  #     call reset_ball()
+  # if ball passed left edge (< 0):
+  #     add 1 to right_score
+  #     call reset_ball()
+  ```
+- Notes: 6 lines — 2 `if` blocks, each with 2 lines inside. Walk through one, let them mirror the second.
 
 #### Slide D1-S102 — After-works payoff
 - Format: G04 Headline / Divider
@@ -1323,30 +1653,99 @@ Every slide entry uses this template:
 - Image: none
 - Notes: payoff moment — game now has real stakes.
 
-### 10.16 Chunk #1b-suffix — Display silly vars on scoreboard (slides 103-105, slim extension)
-
-#### Slide D1-S103 — Recap
+#### Slide D1-S102a — Personalization Session 1 (spread throughout, first drop)
 - Format: G04 Headline / Divider
-- Title: "Remember your silly variables?"
-- Body: "Time to put your `#1b` variables ON SCREEN. We use `str()` to turn numbers into text so we can stick them onto the scoreboard."
+- Title: "Personalization Break — Make it yours"
+- Body:
+  - "The ball bounces and scoring works. Pause and make this Pong YOURS:"
+  - "• Change `ball_speed_x` and `ball_speed_y` — how fast do you want it?"
+  - "• Change `paddle_speed` — is it too slow? Too fast?"
+  - "• Change ball/paddle colour in the Inspector (click `Main` node → `Ball Color`)"
+  - "Save (Ctrl+S) and run (F5) after each change."
+- Image: none
+- Notes: "**Low on time? Skip this and keep going. Student already done? This is for them.** 3-5 minute break before the last two TODOs."
+
+### 10.16 TODO #9 — Display silly vars on scoreboard (slides 103-105)
+
+#### Slide D1-S103 — Remember your silly variables?
+- Format: G04 Headline / Divider
+- Title: "Remember your silly variables from TODO #2?"
+- Body: "Time to put them ON SCREEN. But there's one problem — the scoreboard only holds **text**, and your variables are **numbers**. We need to convert them."
+- Image: none
+- Notes: bridge from the variable payoff to the string concepts below.
+
+#### Slide D1-S103a — What is `str()`?
+- Format: G10 Board Example
+- Title: "`str()` — turns a number into text"
+- Body:
+  - "The scoreboard expects text (a `String`). Your variables are numbers (`int` or `float`)."
+  - "You can't put a number directly into text — you need to convert it first:"
+  ```gdscript
+  str(99)      # → "99"   (the number 99 as text)
+  str(skibidi_speed)   # → "99"  (whatever value the variable holds)
+  ```
+  - "`str()` = **str**ing-ify. Turns any number into readable text."
 - Image: none
 - Notes: —
 
-#### Slide D1-S104 — Example + TODO side-by-side
-- Format: G09 + G11 composite
-- Title: "Your task: chunk #1b-suffix"
-- Body LHS (board example):
+#### Slide D1-S103b — Joining text with `+`
+- Format: G10 Board Example
+- Title: "Joining text pieces with `+`"
+- Body:
+  - "In code, `+` can join text together (this is called **concatenation**):"
   ```gdscript
-  label.text = "Speed: " + str(skibidi_speed)
+  "Speed: " + str(skibidi_speed)   # → "Speed: 99"
+  "★ " + str(gyatt_factor) + " ★" # → "★ 42 ★"
   ```
-- Body RHS (image): `D1C1c.png` — Godot screenshot of main.gd lines 119-122, red overlay on line 121 (gap between `#@todo` on line 120 and `#@end` on line 122).
-- Caption below RHS: "Append your two silly variables onto `score_label.text`. Decorate with stars, emojis, whatever you want."
+  - "You can chain as many pieces as you want."
+- Image: none
 - Notes: —
+
+#### Slide D1-S103c — Appending with `+=`
+- Format: G10 Board Example
+- Title: "Appending with `+=`"
+- Body:
+  - "The scoreboard already has the score text. We want to ADD our silly vars to the END — not replace it."
+  - "Use `+=` on the text label:"
+  ```gdscript
+  score_label.text += "   ★ " + str(skibidi_speed)
+  # reads: "stick this onto the end of whatever's already there"
+  ```
+- Image: none
+- Notes: "Same `+=` shortcut from TODO #5, but now on a text string instead of a number."
+
+#### Slide D1-S103d — Pre-TODO #9: What you're about to write
+- Format: G14 Pre-TODO
+- Title: "What you're about to write"
+- Body:
+  ```gdscript
+  # append first silly var to score_label.text
+  # use str() to convert it, + to join with a label
+  # append second silly var too
+  # add stars, emojis, labels if you want
+  ```
+  - "**What:** One line that appends your silly variables onto the scoreboard text."
+  - "**Why:** Your variables from TODO #2 have been sitting there doing nothing. Now they show up live in the game."
+  - "**How:** `str()` converts a number to text. `+` joins text pieces. `+=` adds to what's already on the scoreboard."
+- Notes: let them decorate freely — stars, emojis, labels. The more chaotic the better.
+
+#### Slide D1-S104 — TODO #9
+- Format: G13 TODO
+- Title: "**TODO #9** — Scoreboard personalisation"
+- Syntax: str, str_join, dot_eq
+- Body RHS:
+  ```gdscript
+  # append first silly var to score_label.text
+  # use str() to convert it, + to join with a label
+  # append second silly var too
+  # add stars, emojis, labels if you want
+  ```
+- Notes: 1-2 lines. High creativity. Let them go wild with decoration.
 
 #### Slide D1-S105 — After-works payoff
 - Format: G04 Headline / Divider
 - Title: "Your variables, live on the scoreboard"
-- Body: "Run it. The scoreboard now shows your skibidi_speed (or whatever you called it) right next to the score."
+- Body: "Run it. The scoreboard now shows your silly variables right next to the score. Have your neighbour read theirs out loud."
 - Image: none
 - Notes: high personalization payoff. Have kids show their neighbour.
 
@@ -1354,48 +1753,81 @@ Every slide entry uses this template:
 
 > **python-pptx chat: emit slides S106 through S140 below, in order.** Personalization (§10.17a) covers Beats 1–5 of §6; the export walkthrough (Beat 6) is broken out into its own section §10.17d. Body text is final and pasteable. Screenshots use the `d1_` prefix; capture per §10.18.
 
-### §10.17a — Personalization (Beats 1–5, slides S106–S120)
+### §10.17a — Personalization Sessions 2–5 (slides S106–S120)
+
+> Session 1 already appeared mid-day at S102a. Sessions 2–5 land here at end-of-day. **Each session slide carries the note: "Low on time? Skip. Student ahead? Give this to them."**
 
 #### Slide D1-S106 — Section divider: Make it yours
 - Format: G04 Headline / Divider
-- Title: "Make it yours"
-- Body: "Five ways to make this Pong YOUR Pong. Pick the ones you want — do them in any order."
+- Title: "Make it yours — Personalization Sessions"
+- Body: "More ways to make this Pong YOUR Pong. Pick any, in any order."
 - Image: none
-- Notes: morning chunks are done and the game works. This is the open-ended play block. Kids who want to keep building, build; kids who want to jump to the Final Challenge can.
+- Notes: morning chunks are done and the game works. Open-ended play block. Kids who want FC can jump there.
 
-#### Slide D1-S107 — Recolour 1: colours live in the Inspector
+#### Slide D1-S107 — Personalization Session 2: Recolour 1
 - Format: G12 Screenshot + Caption
-- Title: "Make it yours — recolour your game"
+- Title: "Personalization Session 2 — Recolour your game"
 - Body: "Run the game, then look at the **Inspector** on the right. `Ball Color` and `Paddle Color` are right there — click a swatch, pick any colour, then Save (Ctrl+S) and run (F5)."
 - Image: `D1B1S1.png` — editor with the game running and the Inspector showing the Ball Color + Paddle Color swatches.
-- Notes: the colours are `@export` variables, which is why they appear in the Inspector. Next slide shows where they live in code.
+- Notes: "Low on time? Skip. Student ahead? Give this to them." The colours are `@export` variables — next slide shows where they live in code.
 
-#### Slide D1-S108 — Recolour 2: where the colours live in code
+#### Slide D1-S108 — Personalization Session 2: Recolour 2 (where colours live)
 - Format: G12 Screenshot + Caption
 - Title: "Where your colours come from"
 - Body: "At the top of `main.gd`, two lines define them: `@export var ball_color` and `@export var paddle_color`. The magic word `@export` is what makes a variable show up in the Inspector."
 - Image: `D1B1S2.png` — main.gd lines 13-14, the two `@export var ...color := Color(...)` lines.
 - Notes: light-touch — name the `@export` pattern, don't quiz. Change colours in the Inspector OR here; same thing, two doors in.
 
-#### Slide D1-S109 — Speeds: tune the numbers
+#### Slide D1-S109 — Personalization Session 3: Edit silly variable names
 - Format: G12 Screenshot + Caption
-- Title: "Make it yours — faster or slower"
-- Body: "In `main.gd`, find your chunk #1a lines: `ball_speed_x`, `ball_speed_y`, and `paddle_speed`. Bump the numbers — higher = faster, lower = slower. Try the 3–12 range. Save, run, feel the difference."
-- Image: `D1B3S2.png` — main.gd TODO #1a block showing the `ball_speed_x`, `ball_speed_y`, `paddle_speed` var lines.
-- Notes: callback to chunk #1a "numbers you can tune." These speeds are NOT `@export`, so you change them in code — the contrast with the colours is the lesson.
+- Title: "Personalization Session 3 — Rename your variables"
+- Body: "In `main.gd`, find your **TODO #2** variables. Rename them to something even funnier. Then find **TODO #9** (the scoreboard) and update the name there too — they must match."
+- Image: `D1B3S2.png` — main.gd TODO #2 block showing the two silly var lines.
+- Notes: "Low on time? Skip. Student ahead? Give this to them." Remind kids: if they rename in #2, they MUST update #9 too.
 
-### §10.17b — Final Challenge: `player2.gd` (slide S121, self-directed)
+### §10.17b — Final Challenge: `player2.gd` (slides S121–S123, compressed R3.2 format)
 
-#### Slide D1-S121 — Final Challenge (self-directed, single pointer)
+#### Slide D1-S121 — Final Challenge intro
 - Format: G04 Headline / Divider
 - Title: "Final Challenge — make Pong 2-player"
 - Body:
-  - "Open `player2.gd` (it's on the `PaddleRight` node). Two banners inside mark the work:"
-  - "**STEP 1** — comment out the 5 AI lines in `_process` (`#` each, or select + Ctrl+K). The right paddle goes still."
-  - "**STEP 2** — fill the `#@todo` block so the **I** and **K** keys move the paddle."
-  - "No walkthrough. You already did every piece this morning — `paddle_speed`, `if`, key input. Give it a whirl on your own."
+  - "Open `player2.gd` (it's on the `PaddleRight` node). Two TODOs inside:"
+  - "FC-1 — comment out the AI (right paddle plays itself → should sit still)"
+  - "FC-2 — add I/K key movement for a real second player"
+  - "FC-3 (bonus) — random ball respawn angle with `randf_range()`"
+  - "You already did every piece this morning. Give it a whirl."
 - Image: none
-- Notes: opt-in payoff for kids who finished the morning. On the projector, just open player2.gd and point at the STEP 1 + STEP 2 banners, then let them go. No per-step slides, no FC screenshots.
+- Notes: opt-in payoff. Open player2.gd on projector, point at the banners, then let them go.
+
+#### Slide D1-S122 — FC-1 + FC-2 (compressed, R3.2 format)
+- Format: G13 TODO
+- Title: "**FC-1** + **FC-2** — AI off, real player on"
+- Syntax: comment, if, input_key, minus_eq, plus_eq
+- Body RHS:
+  ```gdscript
+  # FC-1: comment out ALL 5 AI lines
+  # (select + Ctrl+K, or add # manually)
+  # paddle should now sit still
+
+  # FC-2: add I/K key movement
+  # if I key pressed → move UP
+  # if K key pressed → move DOWN
+  ```
+- Notes: FC-2 = 4 lines. Walk the room; don't give the solution verbally before they try.
+
+#### Slide D1-S123 — FC-3 Bonus: Random respawn angle
+- Format: G13 TODO
+- Title: "**FC-3 (Bonus)** — Random ball respawn angle"
+- Syntax: const, var, func_call
+- Body RHS:
+  ```gdscript
+  # in reset_ball(), after position reset:
+  # define ANGLE_MIN and ANGLE_MAX constants
+  # pick a random angle with randf_range()
+  # convert to x speed using cos(deg_to_rad())
+  # convert to y speed using sin(deg_to_rad())
+  ```
+- Notes: Genuine stretch. Most kids won't get here. If they do: "angle math converts a direction into x and y amounts."
 
 ### §10.17c — Asset recap (slide S128)
 
@@ -1490,9 +1922,12 @@ Every slide entry uses this template:
 ### 10.18 Build-time notes for python-pptx chat
 
 - **Master frame**: every slide gets the iCode master (black bar; logo top-left, red **"DAY 1"** label top-right, page-number bottom-right) per `SLIDES_FORMATS.md` "master frame" spec.
-- **Brand**: red / black / grey minimalist (LOCKED 2026-06-08, `SLIDES_PLAN.md` § Brand). No per-day color tab — the "DAY 1" red label is the only per-day mark. (Earlier "day tab color = iCode red" line is superseded; red is now the single system accent.)
-- **Walkthrough step badges**: G12 slides with a step ID (e.g. "A.1", "C.3") render the badge as a small filled circle top-right of the screenshot, badge text inside. python-pptx implements this as a single `Shape` per slide.
-- **Red highlight overlays**: described in plain text in each `Image:` field. Default shape is a 4px-stroke red rectangle (no fill, slight transparency on edges OK). If multiple targets per slide, list each separately.
-- **Speaker notes**: the `Notes:` field on each slide may be populated into the PPTX speaker-notes pane (optional — instructor can also just reference this file as a cue card per `SLIDES_FORMATS.md` open spec item 5).
-- **Slide count (full day, AUTHORED 2026-06-08)**: **140 numbered slides + 3 suffix inserts (S002a, S003a, S003b) = 143 total.** Build order: S001, S002, S002a, S003, S003a, S003b, S004 … S105 (lesson block) … S106–S140 (personalization → FC → asset recap → export → closer). No "stop at S105" — emit the whole day.
-- **Verification before build**: re-run §9 checklist on this file. If `main.gd` line numbers shift, the `where` and `todo` screenshots need re-capturing and the body text in S031, S032, S033, S049, S050, S061, S062, S071, S072, S075, S085, S086, S089, S100, S101, S104 needs updating (every slide that references a `main.gd` line range).
+- **Brand**: red / black / grey minimalist. No per-day color tab — the "DAY 1" red label is the only per-day mark.
+- **Walkthrough step badges**: G12 slides with a step ID (e.g. "A.1", "C.3") render the badge as a small filled circle top-right of the screenshot, badge text inside.
+- **Red highlight overlays**: described in plain text in each `Image:` field. Default shape is a 4px-stroke red rectangle (no fill).
+- **Speaker notes**: the `Notes:` field on each slide may be populated into the PPTX speaker-notes pane.
+- **Slide count (REVISED 2026-06-20)**: Original 143 slides + **new inserts**: 9-slide indentation section (S065a–S065i), 1 dot-notation slide (S073a), 2 chunk #2 slides (S074/S074a), 3 border-explanation slides (S085a–S085c), 1 parentheses callout (S089a), 1 personalization break (S102a), 3 str/concat explanation slides (S103a–S103c), 2 extra FC slides (S122–S123). **Total: ~165 slides.** Build order: S001, S002, S002a, S003, S003a, S003b, S004, S005 … S065, S065a–S065i, S066 … S072, S073, S073a, S074, S074a, S075 … S085, S085a, S085b, S085c, S086, S087 … S089, S089a, S090 … S101, S102, S102a, S103, S103a, S103b, S103c, S104, S105 … S106–S123 (personalization → FC) … S128–S140.
+- **TODO numbers updated (2026-06-20)**: TODOs renumbered to match lesson order. #1a→#1, #1b→#2, #6a→#3, #6b→#4, old #2→#5, old #4→#6, old #3→#7, old #5→#8, #1b-suffix→#9. All TODO slide titles now display **bold TODO #N** per R8.
+- **Verification before build**: re-run §9 checklist. Screenshots with `-- not done --` are build-time placeholders — skip those slides or emit with placeholder image. After `main.gd` renaming, all TODO `#@todo` blocks are intact; line numbers shifted slightly for TODO #6 (named border vars added 2 lines).
+- **Indentation visual slides** (S065b–S065i): require custom diagram images (`d1_invisible_box_diagram.png`, `d1_box_open.png`, `d1_box_closed.png`, `d1_box_empty.png`, `d1_nested_box.png`). Instructor generates these; build script uses placeholder until captured.
+- **GDScript vs Python visual** (S005): requires `d1_gdscript_vs_python_diagram.png`. Placeholder OK on first build.

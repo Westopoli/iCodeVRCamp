@@ -18,16 +18,16 @@ Layouts:
 """
 
 import re
+import subprocess
+import tempfile
+import os
 
+from pptx import Presentation as _PRS
 from pptx.util import Inches, Pt, Emu
 from pptx.enum.shapes import MSO_SHAPE
 from pptx.enum.text import PP_ALIGN, MSO_ANCHOR
 from pptx.dml.color import RGBColor
 from pathlib import Path
-
-from pygments import lex
-from pygments.lexers import GDScriptLexer
-from pygments.token import Token
 
 try:
     from PIL import Image as _PILImage
@@ -78,34 +78,75 @@ def _emit_inline(p, text, *, font_name, size, bold=False, italic=False, color=No
 
 
 # ============================================================
-#  GDScript syntax highlighter — maps Pygments tokens to theme colors
+#  Pandoc syntax highlighter — extracts colored runs from pandoc PPTX output
 # ============================================================
 
-def _token_color(tok_type):
-    """Map a Pygments token type to a theme RGBColor.
+_PANDOC_CACHE = {}  # (code_text, lang) → list of (text, RGBColor_or_None)
+_DML_NS = 'http://schemas.openxmlformats.org/drawingml/2006/main'
 
-    GDScript lexer emits: Token.Keyword, Token.Keyword.Type, Token.Name.Function,
-    Token.Name.Builtin, Token.Literal.String.*, Token.Literal.Number.*,
-    Token.Comment.*, Token.Operator, Token.Punctuation, Token.Text.
-    """
-    if tok_type in Token.Comment:
-        return theme.SYNTAX_COMMENT
-    if tok_type in Token.Literal.String:
-        return theme.SYNTAX_STRING
-    if tok_type in Token.Literal.Number:
-        return theme.SYNTAX_NUMBER
-    if tok_type in Token.Keyword.Type:
-        return theme.SYNTAX_TYPE
-    if tok_type in Token.Keyword:
-        # Pygments groups GDScript control-flow under Keyword; distinguish by string
-        return theme.SYNTAX_KEYWORD
-    if tok_type in Token.Name.Function:
-        return theme.SYNTAX_FUNCTION
-    if tok_type in Token.Name.Builtin:
-        return theme.SYNTAX_FUNCTION
-    if tok_type in Token.Name.Class:
-        return theme.SYNTAX_TYPE
-    return theme.CODE_TEXT
+
+def _pandoc_color_runs(code_text, lang="gdscript"):
+    """Run code through pandoc and return list of (text, RGBColor_or_None) per token.
+    Pandoc encodes code lines in ONE paragraph with <a:br/> XML elements between runs.
+    Iterates para._p children directly so line breaks are captured.
+    Falls back to [(code_text, None)] if pandoc unavailable."""
+    key = (code_text, lang)
+    if key in _PANDOC_CACHE:
+        return _PANDOC_CACHE[key]
+    try:
+        md = f"```{lang}\n{code_text}\n```\n"
+        with tempfile.NamedTemporaryFile(suffix='.md', mode='w', delete=False) as f:
+            f.write(md)
+            md_path = f.name
+        pptx_path = md_path.replace('.md', '.pptx')
+        subprocess.run(
+            ['pandoc', md_path, '-o', pptx_path, '--highlight-style=breezedark'],
+            check=True, capture_output=True
+        )
+        prs = _PRS(pptx_path)
+        slide = prs.slides[0]
+        runs = []
+        ns = _DML_NS
+        for shape in slide.shapes:
+            if not shape.has_text_frame:
+                continue
+            if 'Title' in shape.name:
+                continue
+            for para in shape.text_frame.paragraphs:
+                # Iterate raw XML children — run.text misses <a:br/> line breaks
+                for elem in para._p:
+                    local = elem.tag.split('}')[-1] if '}' in elem.tag else elem.tag
+                    if local == 'br':
+                        runs.append(('\n', None))
+                    elif local == 'r':
+                        t_nodes = elem.findall(f'{{{ns}}}t')
+                        txt = ''.join(t.text or '' for t in t_nodes)
+                        if not txt:
+                            continue
+                        color = None
+                        rpr = elem.find(f'{{{ns}}}rPr')
+                        if rpr is not None:
+                            solid = rpr.find(f'{{{ns}}}solidFill')
+                            if solid is not None:
+                                srgb = solid.find(f'{{{ns}}}srgbClr')
+                                if srgb is not None:
+                                    val = srgb.get('val', '')
+                                    if len(val) == 6:
+                                        color = RGBColor(int(val[0:2], 16),
+                                                         int(val[2:4], 16),
+                                                         int(val[4:6], 16))
+                        runs.append((txt, color))
+                runs.append(('\n', None))  # paragraph boundary
+            break  # only first content shape
+        # Strip trailing newlines
+        while runs and runs[-1] == ('\n', None):
+            runs.pop()
+        os.unlink(md_path)
+        os.unlink(pptx_path)
+        _PANDOC_CACHE[key] = runs
+        return runs
+    except Exception:
+        return [(code_text, None)]
 
 
 # ============================================================
@@ -161,74 +202,68 @@ def _add_bullets(slide, left, top, width, height, bullets, *,
 
 def _add_code_block(slide, left, top, width, height, code_text,
                     bg_color=None, fg_color=None, font_size=None,
-                    highlight=True):
+                    highlight=True, lang="gdscript"):
     """Add a dark-bg code block with monospace text.
 
-    `highlight=True` (default) runs the code through the Pygments GDScript
-    lexer and applies per-token colors. `highlight=False` falls back to a
-    single foreground color (useful for non-GDScript content like Python
-    comparison panes).
+    `highlight=True` (default) runs code through pandoc (breezedark theme) for
+    per-token colors. `highlight=False` uses a single foreground color.
+    Shape is a sharp RECTANGLE with zero margins to maximize usable space.
     """
-    shape = slide.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE,
+    shape = slide.shapes.add_shape(MSO_SHAPE.RECTANGLE,
                                     left, top, width, height)
     shape.fill.solid()
     shape.fill.fore_color.rgb = bg_color or theme.CODE_BG
     shape.line.fill.background()
     tf = shape.text_frame
-    tf.word_wrap = True
-    tf.margin_left = Inches(0.2)
-    tf.margin_right = Inches(0.2)
-    tf.margin_top = Inches(0.15)
-    tf.margin_bottom = Inches(0.15)
+    tf.word_wrap = False
+    tf.margin_left = Emu(0)
+    tf.margin_right = Emu(0)
+    tf.margin_top = Emu(0)
+    tf.margin_bottom = Emu(0)
+
+    size = font_size or theme.SIZE_CODE
+    default_color = fg_color or theme.CODE_TEXT
 
     if not highlight:
-        # Plain rendering — one run per line, single color
+        # Plain monospace — one paragraph per line, single color
         for i, line in enumerate(code_text.split("\n")):
             p = tf.paragraphs[0] if i == 0 else tf.add_paragraph()
             p.alignment = PP_ALIGN.LEFT
             run = p.add_run()
             run.text = line if line else " "
             run.font.name = theme.FONT_MONO
-            run.font.size = font_size or theme.SIZE_CODE
-            run.font.color.rgb = fg_color or theme.CODE_TEXT
+            run.font.size = size
+            run.font.color.rgb = default_color
         return shape
 
-    # Pygments-highlighted rendering — one paragraph per line, one run per token
-    size = font_size or theme.SIZE_CODE
-    lines = code_text.split("\n")
-    # Pre-tokenize the whole block once, then split tokens across lines
-    tokens = list(lex(code_text, GDScriptLexer()))
+    # Pandoc-colored rendering
+    color_runs = _pandoc_color_runs(code_text, lang)
 
-    # Group tokens by line. A token can contain newlines — split on \n.
-    lines_tokens = [[]]
-    for tok_type, tok_text in tokens:
-        if "\n" in tok_text:
-            parts = tok_text.split("\n")
-            for j, part in enumerate(parts):
-                if part:
-                    lines_tokens[-1].append((tok_type, part))
-                if j < len(parts) - 1:
-                    lines_tokens.append([])
+    # Reconstruct lines: split on '\n' tokens
+    lines = [[]]
+    for text, color in color_runs:
+        if text == '\n':
+            lines.append([])
         else:
-            lines_tokens[-1].append((tok_type, tok_text))
+            lines[-1].append((text, color))
 
-    for i, line_tokens in enumerate(lines_tokens):
+    for i, line_runs in enumerate(lines):
         p = tf.paragraphs[0] if i == 0 else tf.add_paragraph()
         p.alignment = PP_ALIGN.LEFT
-        if not line_tokens:
-            # blank line — add a single space so paragraph height holds
+        if not line_runs:
             run = p.add_run()
             run.text = " "
             run.font.name = theme.FONT_MONO
             run.font.size = size
-            run.font.color.rgb = theme.CODE_TEXT
+            run.font.color.rgb = default_color
             continue
-        for tok_type, tok_text in line_tokens:
+        for text, color in line_runs:
             run = p.add_run()
-            run.text = tok_text
+            run.text = text
             run.font.name = theme.FONT_MONO
             run.font.size = size
-            run.font.color.rgb = _token_color(tok_type)
+            run.font.color.rgb = color if color else default_color
+
     return shape
 
 
@@ -720,5 +755,186 @@ def l8_action(prs, *, day=None, page=None, prose, lhs_code, rhs_screenshot,
         red_left = rhs_left + (col_width - red_width) / 2
         red_top = img_top + (img_height - red_height) / 2
         _draw_overlay_box(slide, red_left, red_top, red_width, red_height)
+
+    return slide
+
+
+# ============================================================
+#  L9 — TODO (small badge + two panels: SYNTAX | WRITE THIS)
+# ============================================================
+
+def _pick_code_font(code_text, panel_height_emu, panel_width_in,
+                    start_pt=18, min_pt=11):
+    """Return Pt() font size that fits code_text in the given panel.
+    Shrinks from start_pt down to min_pt; returns min_pt if nothing fits.
+    Uses panel_width_in (inches) to calculate actual chars per line."""
+    panel_h_in = panel_height_emu / 914400
+    for size_pt in range(start_pt, min_pt - 1, -1):
+        line_h = size_pt * 1.45 / 72
+        # Consolas: ~0.6 * size_pt wide per char in points; near-zero safety margin only
+        inner_w_in = panel_width_in - 0.02
+        chars_per_line = max(1, int(inner_w_in * 72 / (size_pt * 0.62)))
+        lines = sum(
+            max(1, (len(l) // chars_per_line) + (1 if len(l) % chars_per_line else 0))
+            for l in (code_text or "").split("\n")
+        )
+        if lines * line_h <= panel_h_in:
+            return Pt(size_pt)
+    return Pt(min_pt)
+
+
+def l9_todo(prs, *, day=None, page=None, todo_label, lhs_code, rhs_code):
+    """L9 — TODO slide: full-width red badge + SYNTAX panel (LHS, 38%) +
+    WRITE THIS panel (RHS, 62%) + bottom note.
+    Stacked layout if any RHS line > 60 chars after font scaling."""
+    slide = _new_slide(prs)
+    apply_master(slide, day, page)
+
+    body_width = theme.SLIDE_WIDTH - theme.BODY_LEFT_MARGIN - theme.BODY_RIGHT_MARGIN
+    body_width_in = body_width / 914400
+
+    # --- Full-width red badge (strips markdown ** from label) ---
+    badge_top = theme.BODY_TOP + Inches(0.12)
+    badge_height = Inches(0.42)
+    clean_label = todo_label.replace("**", "")
+    badge = slide.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE,
+                                    theme.BODY_LEFT_MARGIN, badge_top,
+                                    body_width, badge_height)
+    badge.fill.solid()
+    badge.fill.fore_color.rgb = theme.ICODE_RED
+    badge.line.fill.background()
+    tf = badge.text_frame
+    tf.margin_left = Inches(0.2)
+    tf.margin_right = Inches(0.2)
+    tf.margin_top = Inches(0.04)
+    tf.margin_bottom = Inches(0.04)
+    tf.vertical_anchor = MSO_ANCHOR.MIDDLE
+    p = tf.paragraphs[0]
+    p.alignment = PP_ALIGN.LEFT
+    run = p.add_run()
+    run.text = clean_label
+    run.font.name = theme.FONT_HEADING
+    run.font.size = Pt(17)
+    run.font.bold = True
+    run.font.color.rgb = theme.BG_WHITE
+
+    # --- Geometry: equal 50/50 split ---
+    note_height = Inches(0.45)
+    label_height = Inches(0.32)
+    gutter = Inches(0.25)
+
+    panel_top = badge_top + badge_height + Inches(0.18)
+    panel_with_label_top = panel_top + label_height
+    panel_height = theme.SLIDE_HEIGHT - panel_with_label_top - note_height - theme.BODY_BOTTOM_MARGIN
+
+    col_width = (body_width - gutter) / 2
+    col_width_in = col_width / 914400
+
+    # Stacked if any line won't fit at minimum font in the 50% column
+    chars_at_min = max(1, int(col_width_in * 72 / (11 * 0.62)))
+    all_lines = (lhs_code or "").split("\n") + (rhs_code or "").split("\n")
+    stacked = any(len(l) > chars_at_min for l in all_lines)
+
+    if stacked:
+        # Stack vertically, full width
+        each_h = (theme.SLIDE_HEIGHT - panel_top - note_height - theme.BODY_BOTTOM_MARGIN
+                  - Inches(0.15)) / 2
+
+        lhs_font = _pick_code_font(lhs_code, each_h - label_height, body_width_in, start_pt=14)
+        rhs_font = _pick_code_font(rhs_code, each_h - label_height, body_width_in, start_pt=14)
+
+        _add_textbox(slide, theme.BODY_LEFT_MARGIN, panel_top, body_width, label_height,
+                     "SYNTAX", font_size=theme.SIZE_BODY_SMALL, bold=True, color=theme.ICODE_RED)
+        _add_code_block(slide, theme.BODY_LEFT_MARGIN, panel_top + label_height,
+                        body_width, each_h - label_height, lhs_code or "",
+                        font_size=lhs_font)
+
+        rhs_top = panel_top + each_h + Inches(0.15)
+        _add_textbox(slide, theme.BODY_LEFT_MARGIN, rhs_top, body_width, label_height,
+                     "WRITE THIS", font_size=theme.SIZE_BODY_SMALL, bold=True, color=theme.ICODE_RED)
+        _add_code_block(slide, theme.BODY_LEFT_MARGIN, rhs_top + label_height,
+                        body_width, each_h - label_height, rhs_code or "",
+                        bg_color=theme.TODO_PANEL_BG, highlight=True,
+                        font_size=rhs_font)
+    else:
+        # Side-by-side: equal 50/50
+        lhs_font = _pick_code_font(lhs_code, panel_height, col_width_in, start_pt=14)
+        rhs_font = _pick_code_font(rhs_code, panel_height, col_width_in, start_pt=14)
+
+        rhs_left = theme.BODY_LEFT_MARGIN + col_width + gutter
+
+        _add_textbox(slide, theme.BODY_LEFT_MARGIN, panel_top, col_width, label_height,
+                     "SYNTAX", font_size=theme.SIZE_BODY_SMALL, bold=True, color=theme.ICODE_RED)
+        _add_code_block(slide, theme.BODY_LEFT_MARGIN, panel_with_label_top,
+                        col_width, panel_height, lhs_code or "",
+                        font_size=lhs_font)
+
+        _add_textbox(slide, rhs_left, panel_top, col_width, label_height,
+                     "WRITE THIS", font_size=theme.SIZE_BODY_SMALL, bold=True, color=theme.ICODE_RED)
+        _add_code_block(slide, rhs_left, panel_with_label_top,
+                        col_width, panel_height, rhs_code or "",
+                        bg_color=theme.TODO_PANEL_BG, highlight=True,
+                        font_size=rhs_font)
+
+    # --- Bottom note ---
+    note_top = theme.SLIDE_HEIGHT - note_height - theme.BODY_BOTTOM_MARGIN
+    _add_textbox(slide, theme.BODY_LEFT_MARGIN, note_top, body_width, note_height,
+                 "Detailed instructions are in your code file, right next to this TODO.",
+                 font_size=theme.SIZE_CAPTION, color=theme.TEXT_MUTED,
+                 alignment=PP_ALIGN.LEFT)
+
+    return slide
+
+
+# ============================================================
+#  L10 — Pre-TODO context slide
+# ============================================================
+
+def l10_pretodo(prs, *, day=None, page=None, heading, code=None, bullets=None, paragraph=None):
+    """L10 — Pre-TODO context: heading + code (LHS 45%) + bullets/text (RHS 55%) + bottom note.
+    Shows what students are about to write and why, before the TODO slide."""
+    slide = _new_slide(prs)
+    apply_master(slide, day, page)
+
+    body_width = theme.SLIDE_WIDTH - theme.BODY_LEFT_MARGIN - theme.BODY_RIGHT_MARGIN
+
+    # Heading
+    _add_textbox(
+        slide,
+        theme.BODY_LEFT_MARGIN, theme.BODY_TOP + Inches(0.2),
+        body_width, Inches(0.75),
+        heading,
+        font_name=theme.FONT_HEADING,
+        font_size=theme.SIZE_HEADING,
+        bold=True,
+    )
+
+    note_height = Inches(0.45)
+    col_top = theme.BODY_TOP + Inches(1.1)
+    col_height = theme.SLIDE_HEIGHT - col_top - note_height - theme.BODY_BOTTOM_MARGIN
+
+    gutter = Inches(0.4)
+    lhs_width = body_width * 0.45
+    rhs_width = body_width - lhs_width - gutter
+    rhs_left = theme.BODY_LEFT_MARGIN + lhs_width + gutter
+
+    # LHS: code block
+    if code:
+        _add_code_block(slide, theme.BODY_LEFT_MARGIN, col_top, lhs_width, col_height, code)
+
+    # RHS: bullets or paragraph
+    if bullets:
+        _add_bullets(slide, rhs_left, col_top, rhs_width, col_height, bullets,
+                     font_size=theme.SIZE_BODY)
+    elif paragraph:
+        _add_textbox(slide, rhs_left, col_top, rhs_width, col_height, paragraph,
+                     font_size=theme.SIZE_BODY)
+
+    # Bottom note
+    note_top = theme.SLIDE_HEIGHT - note_height - theme.BODY_BOTTOM_MARGIN
+    _add_textbox(slide, theme.BODY_LEFT_MARGIN, note_top, body_width, note_height,
+                 "This is one approach — yours works if it runs.",
+                 font_size=theme.SIZE_CAPTION, color=theme.TEXT_MUTED,
+                 alignment=PP_ALIGN.LEFT)
 
     return slide

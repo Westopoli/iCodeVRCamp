@@ -11,7 +11,7 @@ Canonical course doc. Update this as decisions firm up. Future chats start here.
 | Sub-camp | Length | Variants | Status |
 |---|---|---|---|
 | 5-Day Code-Heavy | 5 days | — | **[UNDER RENOVATION]** — incorporating post-launch feedback |
-| 5-Day Creative-Heavy | 5 days | — | Planned — built from fixed code-heavy base |
+| 5-Day Creative-Heavy | 5 days | — | **D1-D4 BUILT (2026-06-21)** — `CreativeCamp/` (separate projects + decks). One concept/day (D1 vars, D2 loops, D3 functions, D4 conditions), 3-5 tiny TODOs each, personalization-heavy. Plan: `CreativeCamp/CREATIVE_CAMP.md`. D5 + screenshot capture pending. |
 | 3-Day | 3 days | — | Planned — derived from 5-day |
 | 1-Day | 1 day | — | Planned — derived from 3-day |
 

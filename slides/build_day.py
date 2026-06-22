@@ -19,6 +19,7 @@ from pathlib import Path
 
 import theme
 import templates as tpl
+import syntax_table
 from pptx import Presentation
 
 DAY_FOLDERS = {
@@ -124,6 +125,10 @@ def _parse_fields(block):
 
 def _norm_field(name):
     low = name.lower()
+    if low.startswith("body lhs"):
+        return "BodyLHS"
+    if low.startswith("body rhs"):
+        return "BodyRHS"
     if low.startswith("body"):
         return "Body"
     if low.startswith("caption"):
@@ -132,6 +137,8 @@ def _norm_field(name):
         return "Title"
     if low.startswith("subtitle"):
         return "Subtitle"
+    if low.startswith("syntax"):
+        return "Syntax"
     if low.startswith("format"):
         return "Format"
     if low.startswith("image"):
@@ -208,6 +215,45 @@ def _code(fields):
     return "\n".join(out)
 
 
+def _syntax_lhs(fields):
+    """Build LHS syntax panel from 'Syntax:' field (comma-separated keys from syntax_table).
+    Falls back to _code_lhs() if no Syntax field present."""
+    raw = _first(fields, "Syntax", "")
+    if not raw:
+        return _code_lhs(fields)
+    keys = [k.strip() for k in raw.split(",") if k.strip()]
+    snippets = [syntax_table.SYNTAX[k] for k in keys if k in syntax_table.SYNTAX]
+    return "\n\n".join(snippets)
+
+
+def _code_lhs(fields):
+    """Concatenate the first fenced code block found in BodyLHS."""
+    out, in_code = [], False
+    for line in fields.get("BodyLHS", []):
+        if line.strip().startswith("```"):
+            if in_code:
+                break
+            in_code = True
+            continue
+        if in_code:
+            out.append(line)
+    return "\n".join(out)
+
+
+def _code_rhs(fields):
+    """Concatenate the first fenced code block found in BodyRHS."""
+    out, in_code = [], False
+    for line in fields.get("BodyRHS", []):
+        if line.strip().startswith("```"):
+            if in_code:
+                break
+            in_code = True
+            continue
+        if in_code:
+            out.append(line)
+    return "\n".join(out)
+
+
 def _image_path(fields, day):
     """Resolve a screenshot to an on-disk path (or a best-guess path that will
     render as a placeholder). Applies the guide-name ALIASES and searches the
@@ -242,6 +288,9 @@ def _caption(fields):
 #  G01-G12 -> L1-L8 dispatch
 # ------------------------------------------------------------
 
+_auto_fixes = []  # populated by render_slide; printed at end of main()
+
+
 def render_slide(prs, slide, day, page, overlays=None):
     fields = slide["fields"]
     g = _gtag(fields)
@@ -249,6 +298,7 @@ def render_slide(prs, slide, day, page, overlays=None):
     bullets = _bullets(fields)
     code = _code(fields)
     img = _image_path(fields, day)
+    label = slide["id"]
 
     if g == "G01":  # Day Title
         tpl.l1_title(prs, day=day, page=page, heading=title,
@@ -258,9 +308,10 @@ def render_slide(prs, slide, day, page, overlays=None):
             tpl.l2_body(prs, day=day, page=page, heading=title, bullets=bullets)
         else:
             tpl.l2_body(prs, day=day, page=page, heading=title, paragraph=_paragraph(fields))
-    elif g == "G03":  # GDScript vs Python
+    elif g == "G03":  # GDScript vs Python — LHS=Python, RHS=GDScript
         tpl.l3_side_by_side(prs, day=day, page=page, heading=title,
-                            left_label="Code", left_code=code or _paragraph(fields))
+                            left_label="Python", left_code=_code_lhs(fields),
+                            right_label="GDScript", right_code=_code_rhs(fields))
     elif g == "G04":  # Headline / Divider — bullets => body, else title+subtitle
         if bullets:
             tpl.l2_body(prs, day=day, page=page, heading=title, bullets=bullets)
@@ -268,8 +319,18 @@ def render_slide(prs, slide, day, page, overlays=None):
             tpl.l1_title(prs, day=day, page=page, heading=title,
                          subtitle=_first(fields, "Subtitle") or _paragraph(fields) or None)
     elif g in ("G06", "G10"):  # Scene Tree, Board Example -> code block
-        tpl.l6_code(prs, day=day, page=page, heading=title,
-                    code=code or _paragraph(fields), caption=None)
+        if code:
+            tpl.l6_code(prs, day=day, page=page, heading=title, code=code, caption=None)
+        elif img:
+            # No code but has image — auto-fix to screenshot slide, suppress instruction leak
+            _auto_fixes.append(f"S{label}: G10 no code + image → G12 (screenshot). Check slide source.")
+            tpl.l7_step(prs, day=day, page=page, screenshot=img, caption=title)
+        else:
+            # No code, no image — render body as text, no code box
+            _auto_fixes.append(f"S{label}: G10 no code, no image → L2 body. Check slide source.")
+            tpl.l2_body(prs, day=day, page=page, heading=title,
+                        bullets=bullets or None,
+                        paragraph=None if bullets else _paragraph(fields) or None)
     elif g == "G07":  # Table -> render rows as bullets (md prose tables vary)
         body = bullets or [_paragraph(fields)]
         tpl.l2_body(prs, day=day, page=page, heading=title, bullets=body)
@@ -279,6 +340,17 @@ def render_slide(prs, slide, day, page, overlays=None):
                       lhs_code=code or "",
                       rhs_screenshot=img,
                       overlays=overlays)
+    elif g == "G13":  # TODO slide — two-panel (SYNTAX | WRITE THIS)
+        tpl.l9_todo(prs, day=day, page=page,
+                    todo_label=title,
+                    lhs_code=_syntax_lhs(fields),
+                    rhs_code=_code_rhs(fields))
+    elif g == "G14":  # Pre-TODO context slide
+        tpl.l10_pretodo(prs, day=day, page=page,
+                        heading=title,
+                        code=code,
+                        bullets=bullets,
+                        paragraph=_paragraph(fields))
     elif g == "G11":  # Code Screenshot -> step shot w/ red overlay, no badge
         tpl.l7_step(prs, day=day, page=page, screenshot=img,
                     caption=_paragraph(fields) or title, red_overlay=True,
@@ -346,7 +418,11 @@ def main():
         print(f"Unknown day: {day}")
         sys.exit(1)
 
-    src = REPO / folder / "SLIDE_SOURCE.md"
+    # SLIDE_SRC env overrides the source blueprint (used by the Creative-Heavy
+    # build to point at CreativeCamp/DayN_*_Creative/SLIDE_SOURCE.md without
+    # disturbing the code-heavy DAY_FOLDERS mapping).
+    env_src = os.environ.get("SLIDE_SRC")
+    src = Path(env_src) if env_src else REPO / folder / "SLIDE_SOURCE.md"
     if not src.exists():
         print(f"No SLIDE_SOURCE.md for day {day}: {src}")
         sys.exit(1)
@@ -399,6 +475,10 @@ def main():
     if skipped:
         for sid, gn in skipped:
             print(f"  skipped S{sid} ({gn})")
+    if _auto_fixes:
+        print(f"{len(_auto_fixes)} auto-fix(es) applied (instruction leak prevented):")
+        for msg in _auto_fixes:
+            print(f"  {msg}")
     if errors:
         print(f"{len(errors)} slide(s) hit render errors:")
         for sid, err in errors:

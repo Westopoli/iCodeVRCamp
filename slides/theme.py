@@ -73,6 +73,9 @@ SYNTAX_OPERATOR = RGBColor(0xE6, 0xE6, 0xE6)       # default fg — =, +, -, etc
 OVERLAY_RED = RGBColor(0xE5, 0x3A, 0x2C)
 OVERLAY_GRAY = RGBColor(0x99, 0x99, 0x99)  # for R5 partial pre-given regions
 
+# L9 TODO slide — RHS "write this" panel background (dark green, distinct from CODE_BG)
+TODO_PANEL_BG = RGBColor(0x1A, 0x26, 0x1A)
+
 
 # ============================================================
 #  Fonts (approximated — confirm with raw brand pack when available)

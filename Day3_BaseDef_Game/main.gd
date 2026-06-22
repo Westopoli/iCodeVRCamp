@@ -220,6 +220,9 @@ func _process(delta: float) -> void:
 	#   - delta                — this frame's time (passed in automatically)
 	#   - step_enemy(e, delta) — moves one enemy one step
 	#   - tower_tick(t, delta) — runs one tower's cooldown + targeting + firing
+	#
+	# Syntax:
+	#   - for item in list:
 	#@todo
 	for e in enemies:
 		step_enemy(e, delta)
@@ -485,6 +488,14 @@ func tower_tick(t: Node, delta: float) -> void:
 	match t_type:
 		"cannon", "sniper":
 			# TODO #6a   Cannon + Sniper: call get_nearest_enemy_in_range; fire if result is not null.
+			#
+			# Given:
+			#   - get_nearest_enemy_in_range(t.position, t_range)   — returns one enemy or null
+			#   - fire_at(t, target, t_damage)                      — fires at that enemy
+			#   - t.set_meta("cooldown", t_rate)                    — resets the cooldown
+			#
+			# Syntax:
+			#   - if thing != null:
 			#@todo
 			var target: Node = get_nearest_enemy_in_range(t.position, t_range)
 			if target != null:
@@ -493,6 +504,14 @@ func tower_tick(t: Node, delta: float) -> void:
 			#@end
 		"splash":
 			# TODO #6b   Splash: call get_enemies_in_radius; fire if the list is not empty.
+			#
+			# Given:
+			#   - get_enemies_in_radius(t.position, t_range)   — returns a list of enemies in range
+			#   - fire_at(t, targets, t_damage)                — fires at the entire list
+			#   - t.set_meta("cooldown", t_rate)               — resets the cooldown
+			#
+			# Syntax:
+			#   - if list.size() > 0:
 			#@todo
 			var targets: Array = get_enemies_in_radius(t.position, t_range)
 			if targets.size() > 0:

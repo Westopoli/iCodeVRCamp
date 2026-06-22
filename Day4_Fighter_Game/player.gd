@@ -75,6 +75,16 @@ var attack_cooldown: float = 0.55
 # `set_state(new_state)` helper. The helper does three things: skip if the new
 # state matches the current one, print the new state so kids can watch
 # transitions in the Output panel, then update `state`.
+#
+# Given:
+#   - state       — the property you're declaring (holds the current state name)
+#   - new_state   — the argument the caller passes in (the state to switch to)
+#
+# Syntax:
+#   - var name: String = "value"
+#   - func name(param: String) -> void:
+#   - if new_state == state: return   (early exit — do nothing if already in this state)
+#   - print(value)
 #@todo
 var state: String = "idle"
 

@@ -106,26 +106,35 @@ def build_one(project_dir: Path, target: str) -> None:
     print(f"  built {zip_path}")
 
 
-def discover_projects(day_filter: str) -> list[Path]:
+def discover_projects(day_filter: str, root: Path) -> list[Path]:
     projects = sorted(
-        p for p in REPO_ROOT.iterdir()
+        p for p in root.iterdir()
         if p.is_dir() and re.match(r"^Day\d", p.name)
     )
     if day_filter:
         projects = [p for p in projects if p.name == day_filter]
         if not projects:
-            raise SystemExit(f"No project folder named '{day_filter}' in {REPO_ROOT}")
+            raise SystemExit(f"No project folder named '{day_filter}' in {root}")
     return projects
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Build iCode camp Template + Complete ZIPs.")
     parser.add_argument("--day", default="", help="Build a single day (e.g. Day1_Pong_Game).")
+    parser.add_argument("--root", default="", help="Folder to scan for DayN_* projects (default: repo root). Use for the Creative-Heavy build, e.g. --root CreativeCamp.")
+    parser.add_argument("--out", default="", help="Output dir for ZIPs (default: dist/). Use --out dist_creative for the Creative build.")
     args = parser.parse_args()
 
+    global DIST_DIR
+    if args.out:
+        DIST_DIR = (REPO_ROOT / args.out) if not Path(args.out).is_absolute() else Path(args.out)
     DIST_DIR.mkdir(parents=True, exist_ok=True)
 
-    projects = discover_projects(args.day)
+    scan_root = REPO_ROOT
+    if args.root:
+        scan_root = (REPO_ROOT / args.root) if not Path(args.root).is_absolute() else Path(args.root)
+
+    projects = discover_projects(args.day, scan_root)
     if not projects:
         print("No DayN_* project folders found yet.")
         return 0
