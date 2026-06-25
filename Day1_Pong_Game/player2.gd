@@ -53,13 +53,16 @@ func _process(_delta):
 	# I goes up, K goes down. After this step, a second player can sit at the
 	# keyboard and play against player 1.
 	#
-	# Given:
-	#   - paddle_speed   — the paddle's movement speed (declared at top of file)
-	#   - position.y     — the paddle's current vertical position
-	#
 	# Syntax:
-	#   - Input.is_key_pressed(KEY_I)   — true every frame while I is held
-	#   - KEY_I, KEY_K                  — the key constants
+	#   - if condition:
+	#   - Input.is_key_pressed(KEY_I)
+	#   - position.y -= paddle_speed
+	#
+	# Write it — one # line per line of code you'll write:
+	# if I key pressed:
+	#     move paddle UP (position.y -= paddle_speed)
+	# if K key pressed:
+	#     move paddle DOWN (position.y += paddle_speed)
 	#@todo
 	if Input.is_key_pressed(KEY_I):
 		position.y -= paddle_speed

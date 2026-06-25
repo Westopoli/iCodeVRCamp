@@ -213,16 +213,15 @@ func clear_base_ghosts() -> void:
 #  YOUR JOB — fill these six TODOs.
 # ============================================================
 
-# FC-1   spawn_personality_ghosts()
-# Goal: spawn one ghost per personality (PERSONALITY_COUNT total).
-# Use for i in range(PERSONALITY_COUNT). Helper: spawn_one_personality(i).
-#
-# Given:
-#   - spawn_one_personality(i)   — spawns one ghost for the i-th personality
-#   - PERSONALITY_COUNT          — total number of personalities
+# FINAL CHALLENGE FC-1: Write spawn_personality_ghosts() — make one ghost appear per personality (PERSONALITY_COUNT total). Mirrors morning chunk #1.
 #
 # Syntax:
 #   - for i in range(N):
+#
+# Write it — one # line per line of code you'll write:
+# func spawn_personality_ghosts() -> void:
+#     for i in range(PERSONALITY_COUNT):
+#         spawn_one_personality(i)
 #@todo
 func spawn_personality_ghosts() -> void:
 	for i in range(PERSONALITY_COUNT):
@@ -230,15 +229,15 @@ func spawn_personality_ghosts() -> void:
 #@end
 
 
-# FC-2   step_all_personality_ghosts()
-# Goal: call step_personality(ghost) on every ghost in the ghosts list.
-#
-# Given:
-#   - ghosts               — the list of personality ghosts
-#   - step_personality(ghost)   — makes one personality ghost step
+# FINAL CHALLENGE FC-2: Write step_all_personality_ghosts() — make every ghost in the ghosts list take one step. Mirrors morning chunk #2.
 #
 # Syntax:
 #   - for item in list:
+#
+# Write it — one # line per line of code you'll write:
+# func step_all_personality_ghosts() -> void:
+#     for ghost in ghosts:
+#         step_personality(ghost)
 #@todo
 func step_all_personality_ghosts() -> void:
 	for ghost in ghosts:
@@ -246,33 +245,20 @@ func step_all_personality_ghosts() -> void:
 #@end
 
 
-# FC-3   count_ghosts_of(personality) -> int
-# Goal: return how many ghosts in the ghosts list have this personality.
-# Read each ghost's tag with ghost.get_meta("personality").
-#
-# Pattern:
-#     func count_things(collection, target) -> int:
-#             var total := 0
-#             for item in collection:
-#                     if item.get_meta("kind") == target:
-#                             total += 1
-#             return total
-#
-# Note: function names are accurate; variable names are for illustration only.
-#
-# Your code:
-#     #   start count at 0
-#     #   for each ghost in ghosts:
-#             #   if ghost.get_meta("personality") == personality
-#                     #   add 1 to count
-#     #   return count
-#
-# Given:
-#   - ghosts                           — the list of personality ghosts
-#   - ghost.get_meta("personality")    — returns that ghost's personality string
+# FINAL CHALLENGE FC-3: Write count_ghosts_of(personality) — return how many ghosts in the ghosts list have that personality tag. Mirrors morning chunk #3.
 #
 # Syntax:
-#   - -> int
+#   - func name(personality: String) -> int:
+#   - for item in list:
+#   - if condition:
+#
+# Write it — one # line per line of code you'll write:
+# func count_ghosts_of(personality: String) -> int:
+#     start count at 0
+#     for each ghost in ghosts:
+#         if ghost.get_meta("personality") == personality:
+#             add 1 to count
+#     return count
 #@todo
 func count_ghosts_of(personality: String) -> int:
 	var count := 0
@@ -283,14 +269,18 @@ func count_ghosts_of(personality: String) -> int:
 #@end
 
 
-# FC-4   reset_personality_ghosts()
-# Goal: send every ghost back to the pen.
-# Helper: respawn_personality_ghost(ghost, index) resets one ghost to pen slot index.
-# Track index yourself — start at 0 and add 1 each loop iteration.
+# FINAL CHALLENGE FC-4: Write reset_personality_ghosts() — send every ghost back to the pen. Mirrors morning chunk #4.
 #
-# Given:
-#   - ghosts                              — the list of personality ghosts
-#   - respawn_personality_ghost(ghost, i) — sends one ghost back to pen slot i
+# Syntax:
+#   - func name() -> void:
+#   - for item in list:
+#
+# Write it — one # line per line of code you'll write:
+# func reset_personality_ghosts() -> void:
+#     start i at 0
+#     for each ghost in ghosts:
+#         call respawn_personality_ghost(ghost, i)
+#         add 1 to i
 #@todo
 func reset_personality_ghosts() -> void:
 	var i := 0
@@ -300,40 +290,23 @@ func reset_personality_ghosts() -> void:
 #@end
 
 
-# FC-5   target_for(ghost) -> Vector2i
-# Goal: return the target tile for this ghost based on its personality.
-# Read the personality with ghost.get_meta("personality").
-#
-# Pattern:
-#     func route(thing) -> Vector2i:
-#             var kind = thing.get_meta("personality")
-#             if kind == BLINKY:
-#                     return blinky_target(thing)
-#             if kind == PINKY:
-#                     return pinky_target(thing)
-#             if kind == INKY:
-#                     return inky_target(thing)
-#             return clyde_target(thing)
-#
-# Note: function names and constants are accurate; variable names are for illustration only.
-#
-# Your code:
-#     #   var p = ghost.get_meta("personality")
-#     #   if p == BLINKY: return blinky_target(ghost)
-#     #   if p == PINKY:   return pinky_target(ghost)
-#     #   if p == INKY:     return inky_target(ghost)
-#     #   return clyde_target(ghost)
-#
-# Given:
-#   - ghost.get_meta("personality")    — returns the ghost's personality string
-#   - BLINKY / PINKY / INKY            — personality constants
-#   - blinky_target(ghost)             — target tile for Blinky
-#   - pinky_target(ghost)              — target tile for Pinky
-#   - inky_target(ghost)               — target tile for Inky
-#   - clyde_target(ghost)              — target tile for Clyde (default)
+# FINAL CHALLENGE FC-5: Write target_for(ghost) — return the tile this ghost is aiming for, based on its personality. Mirrors morning chunk #5.
 #
 # Syntax:
-#   - -> Vector2i
+#   - func name(ghost) -> Vector2i:
+#   - if condition:
+#   - return value
+#
+# Write it — one # line per line of code you'll write:
+# func target_for(ghost) -> Vector2i:
+#     read p from ghost.get_meta("personality")
+#     if p == BLINKY:
+#         return blinky_target(ghost)
+#     if p == PINKY:
+#         return pinky_target(ghost)
+#     if p == INKY:
+#         return inky_target(ghost)
+#     return clyde_target(ghost)
 #@todo
 func target_for(ghost) -> Vector2i:
 	var p = ghost.get_meta("personality")
@@ -347,15 +320,16 @@ func target_for(ghost) -> Vector2i:
 #@end
 
 
-# FC-6   is_clyde_close(ghost) -> bool
-# Goal: return true if this ghost is closer than 8 tiles to the player.
-# Helper: distance_to_player(ghost) gives the tile distance.
-#
-# Given:
-#   - distance_to_player(ghost)   — returns tile distance from ghost to player
+# FINAL CHALLENGE FC-6: Write is_clyde_close(ghost) — report back true when this ghost is closer than 8 tiles to the player. Mirrors morning chunk #6.
 #
 # Syntax:
-#   - -> bool
+#   - func name(ghost) -> bool:
+#   - return value
+#
+# Write it — one # line per line of code you'll write:
+# func is_clyde_close(ghost) -> bool:
+#     read d from distance_to_player(ghost)
+#     return true if d < 8.0
 #@todo
 func is_clyde_close(ghost) -> bool:
 	var d := distance_to_player(ghost)

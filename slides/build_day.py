@@ -418,11 +418,7 @@ def main():
         print(f"Unknown day: {day}")
         sys.exit(1)
 
-    # SLIDE_SRC env overrides the source blueprint (used by the Creative-Heavy
-    # build to point at CreativeCamp/DayN_*_Creative/SLIDE_SOURCE.md without
-    # disturbing the code-heavy DAY_FOLDERS mapping).
-    env_src = os.environ.get("SLIDE_SRC")
-    src = Path(env_src) if env_src else REPO / folder / "SLIDE_SOURCE.md"
+    src = REPO / folder / "SLIDE_SOURCE.md"
     if not src.exists():
         print(f"No SLIDE_SOURCE.md for day {day}: {src}")
         sys.exit(1)

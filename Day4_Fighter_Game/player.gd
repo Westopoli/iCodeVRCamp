@@ -44,25 +44,33 @@ func setup(num: int, char_name: String, spawn_pos: Vector2) -> void:
 	attack_cooldown = character_data["attack_cooldown"]
 	state = "idle"
 
-# TODO #1: Declare the three core properties every Player needs to track its own
-# state: `hp` (start at 100), `max_hp` (also 100 — used to scale the HP bar),
-# and `facing` (start at 1 = looking right).
+# TODO #1: Give every Player the three core properties it needs to remember about itself — current HP, max HP, and which way it faces.
 #
 # Syntax:
 #   - var name: int = value
+#
+# Write it — one # line per line of code you'll write:
+# var hp: int = 100
+# var max_hp: int = 100
+# var facing: int = 1
 #@todo
 var hp: int = 100
 var max_hp: int = 100
 var facing: int = 1
 #@end
 
-# TODO #2: Declare the five properties that mirror the character config:
-# `walk_speed`, `jump_impulse`, `attack_type`, `attack_damage`,
-# `attack_cooldown`.
+# TODO #2: Give the Player the five character-stat properties that the picked fighter's config fills in (with Knight's numbers as defaults).
 #
 # Syntax:
 #   - var name: float = value
 #   - var name: String = "value"
+#
+# Write it — one # line per line of code you'll write:
+# var walk_speed: float = 220.0
+# var jump_impulse: float = 520.0
+# var attack_type: String = "melee"
+# var attack_damage: int = 18
+# var attack_cooldown: float = 0.55
 #@todo
 var walk_speed: float = 220.0
 var jump_impulse: float = 520.0
@@ -71,20 +79,22 @@ var attack_damage: int = 18
 var attack_cooldown: float = 0.55
 #@end
 
-# TODO #5: Declare a `state` property (starts at `"idle"`) and write a
-# `set_state(new_state)` helper. The helper does three things: skip if the new
-# state matches the current one, print the new state so kids can watch
-# transitions in the Output panel, then update `state`.
-#
-# Given:
-#   - state       — the property you're declaring (holds the current state name)
-#   - new_state   — the argument the caller passes in (the state to switch to)
+# TODO #5: Give the Player a `state` property and a helper that safely switches it — doing nothing if the new state is the one it's already in, otherwise printing and storing it.
 #
 # Syntax:
 #   - var name: String = "value"
 #   - func name(param: String) -> void:
-#   - if new_state == state: return   (early exit — do nothing if already in this state)
+#   - if a == b: return
 #   - print(value)
+#
+# Write it — one # line per line of code you'll write:
+# var state: String = "idle"
+#
+# func set_state(new_state: String) -> void:
+#     if new_state == state:
+#         return
+#     print(new_state)
+#     state = new_state
 #@todo
 var state: String = "idle"
 
@@ -136,17 +146,18 @@ func _physics_process(delta: float) -> void:
 	match state:
 		"idle":
 			velocity.x = 0
-			# TODO #6a: Inside the `idle` branch — switch to "walk" when
-			# `get_move_direction()` is non-zero, and switch to "jump" (with upward
-			# `velocity.y`) when jump is pressed on the floor.
+			# TODO #6a: From idle, leave for walk the moment the player moves, or launch into a jump when jump is pressed on the ground.
 			#
-			# Given:
-			#   - get_move_direction()          — returns -1, 0, or 1
-			#   - get_input_just_pressed("jump") — true one frame when jump pressed
-			#   - is_on_floor()                 — true when standing on ground
-			#   - jump_impulse                  — the upward force value (negate for up)
-			#   - velocity.y                    — set to -jump_impulse to jump
-			#   - set_state("state")            — changes the current state
+			# Syntax:
+			#   - if a == b:
+			#   - obj.method()
+			#
+			# Write it — one # line per line of code you'll write:
+			# if get_move_direction() is not 0, the player is moving:
+			#     set_state to "walk"
+			# if jump was just pressed AND the player is on the floor:
+			#     set velocity.y to -jump_impulse (negative = upward)
+			#     set_state to "jump"
 			#@todo
 			if get_move_direction() != 0:
 				set_state("walk")
@@ -156,17 +167,18 @@ func _physics_process(delta: float) -> void:
 			#@end
 		"walk":
 			velocity.x = walk_speed * get_move_direction()
-			# TODO #6b: Inside the `walk` branch — switch back to "idle" when
-			# `get_move_direction()` is zero, and switch to "jump" (with upward
-			# `velocity.y`) when jump is pressed on the floor.
+			# TODO #6b: From walk, drop back to idle when the player stops moving, or launch into a jump when jump is pressed on the ground.
 			#
-			# Given:
-			#   - get_move_direction()          — returns -1, 0, or 1
-			#   - get_input_just_pressed("jump") — true one frame when jump pressed
-			#   - is_on_floor()                 — true when standing on ground
-			#   - jump_impulse                  — the upward force value (negate for up)
-			#   - velocity.y                    — set to -jump_impulse to jump
-			#   - set_state("state")            — changes the current state
+			# Syntax:
+			#   - if a == b:
+			#   - obj.method()
+			#
+			# Write it — one # line per line of code you'll write:
+			# if get_move_direction() is 0, the player stopped:
+			#     set_state to "idle"
+			# if jump was just pressed AND the player is on the floor:
+			#     set velocity.y to -jump_impulse (negative = upward)
+			#     set_state to "jump"
 			#@todo
 			if get_move_direction() == 0:
 				set_state("idle")
@@ -176,24 +188,30 @@ func _physics_process(delta: float) -> void:
 			#@end
 		"jump":
 			velocity.x = walk_speed * get_move_direction() * 0.85
-			# TODO #6c: Inside the `jump` branch — when `velocity.y > 0` (upward velocity
-			# has run out), switch to "fall".
+			# TODO #6c: From jump, switch to fall once the player has stopped rising and started heading downward.
 			#
-			# Given:
-			#   - velocity.y      — positive = moving downward, negative = moving upward
-			#   - set_state("fall")
+			# Syntax:
+			#   - if a > b:
+			#   - obj.method()
+			#
+			# Write it — one # line per line of code you'll write:
+			# if velocity.y > 0, the player is now moving downward:
+			#     set_state to "fall"
 			#@todo
 			if velocity.y > 0:
 				set_state("fall")
 			#@end
 		"fall":
 			velocity.x = walk_speed * get_move_direction() * 0.85
-			# TODO #6d: Inside the `fall` branch — when `is_on_floor()` is true (player
-			# has landed), switch back to "idle".
+			# TODO #6d: From fall, return to idle the moment the player touches the floor.
 			#
-			# Given:
-			#   - is_on_floor()     — true when the player has landed on the floor
-			#   - set_state("idle")
+			# Syntax:
+			#   - if condition:
+			#   - obj.method()
+			#
+			# Write it — one # line per line of code you'll write:
+			# if is_on_floor() is true, the player has landed:
+			#     set_state to "idle"
 			#@todo
 			if is_on_floor():
 				set_state("idle")
@@ -218,21 +236,21 @@ func _physics_process(delta: float) -> void:
 
 	move_and_slide()
 
-# TODO #3: Fill the empty `take_damage(amount)` body so opponents can actually
-# hurt each other. Subtract `amount` from `hp`, start the hit flash, switch
-# state to "hit", shrink the HP bar to match hp/max_hp, and call `die()` if
-# HP dropped to zero.
-#
-# Given:
-#   - hp                    — current health points
-#   - max_hp                — max health points (used to scale the bar)
-#   - hit_flash_timer       — set to 0.2 to start the flash
-#   - set_state("hit")
-#   - hp_bar_fill.size.x    — set to (float(hp) / max_hp) * 80.0
-#   - die()                 — call if hp <= 0
+# TODO #3: Make a hit actually hurt — drop the Player's HP, flash it red, freeze it in the "hit" state, resize the HP bar, and end the fight if it dies.
 #
 # Syntax:
-#   - float(hp) / max_hp * 80.0   (bar is 80px wide; cast to float first)
+#   - hp -= amount
+#   - obj.size.x = value
+#   - if a <= b:
+#   - obj.method()
+#
+# Write it — one # line per line of code you'll write:
+# subtract amount from hp
+# set hit_flash_timer to 0.2 to start the red flash
+# set_state to "hit"
+# set hp_bar_fill.size.x to float(hp) / max_hp * 80.0 (bar is 80px wide)
+# if hp dropped to 0 or below:
+#     call die()
 func take_damage(amount: int) -> void:
 	#@todo
 	hp -= amount
@@ -243,30 +261,30 @@ func take_damage(amount: int) -> void:
 		die()
 	#@end
 
-# TODO #7: Fill the empty `attack()` body. Start the cooldown timer. Then
-# `match attack_type:` — melee branch does the swing rectangle and damages the
-# opponent (only if they exist, aren't dead, and are in range + facing direction
-# + same height). Projectile branch just spawns a projectile.
-#
-# Given:
-#   - attack_cooldown_timer          — set to attack_cooldown to start cooldown
-#   - attack_cooldown                — the cooldown duration
-#   - attack_type                    — "melee" or "projectile" (this object's type)
-#   - melee_swing_timer              — set to 0.15 to show the swing
-#   - queue_redraw()                 — triggers the swing visual
-#   - get_opponent()                 — returns the other player (or null)
-#   - opponent.is_dead()             — true if opponent is dead
-#   - opponent.position / position   — world positions for range check
-#   - character_data["attack_range"] — melee reach in pixels
-#   - facing                         — 1 = right, -1 = left
-#   - opponent.take_damage(amount)
-#   - attack_damage
-#   - spawn_projectile()
+# TODO #7: Make the Player attack — start the cooldown, then branch on attack_type: melee does a swing that damages an opponent who is alive, in range, faced, and at the same height; projectile fires a shot.
 #
 # Syntax:
-#   - match variable:   (like if/elif but pattern-matches on a value)
-#   - abs(x)           (absolute value)
-#   - sign(x)          (returns -1, 0, or 1)
+#   - match x:
+#   - if a and b and c:
+#   - obj.method()
+#
+# Write it — one # line per line of code you'll write:
+# start the cooldown: set attack_cooldown_timer to attack_cooldown
+# match attack_type:
+#     "melee":
+#         set melee_swing_timer to 0.15 to show the swing
+#         call queue_redraw() to draw the swing arc
+#         get the other player: var opponent = get_opponent()
+#         if opponent is null or dead:
+#             return (no melee hit)
+#         measure the gap: var to_opp = opponent.position - position
+#         (pre-given) in_range — is the opponent within attack_range?
+#         (pre-given) facing_opponent — are we facing the opponent?
+#         (pre-given) same_height — is the opponent at roughly the same height?
+#         if in_range and facing_opponent and same_height:
+#             opponent.take_damage(attack_damage)
+#     "projectile":
+#         spawn_projectile()
 func attack() -> void:
 	#@todo
 	attack_cooldown_timer = attack_cooldown

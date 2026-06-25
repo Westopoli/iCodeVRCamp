@@ -3,12 +3,26 @@
 # FC-2: register your character in main.gd's CHARACTERS dict.
 # FC-3: add a "custom" branch to the attack() function in player.gd.
 
-# FC-1   Fill in your character's stats.
-# Change any values you want: display_name, sprite path, walk_speed, jump_impulse,
-# attack_damage, attack_cooldown. Keep attack_type as "custom".
+# FC-1: Build the stat sheet for your very own 5th fighter — fill the CUSTOM_CHARACTER dict with the name, sprite, look, and combat numbers you want (keep attack_type as "custom").
 #
 # Syntax:
-#   - "key": value   (each line in a dictionary)
+#   - const NAME := { ... }
+#   - "key": value
+#
+# Write it — one # line per line of code you'll write:
+# const CUSTOM_CHARACTER := {
+#     "display_name": <your fighter's name>,
+#     "sprite": <a path under assets/kenney_pp/characters/ — try tile_0004.png+>,
+#     "tint": Color(r, g, b),
+#     "walk_speed": <float>,
+#     "jump_impulse": <float>,
+#     "attack_type": "custom",
+#     "attack_damage": <int>,
+#     "attack_cooldown": <float>,
+#     "attack_range": <float>,
+#     "projectile_speed": <float>,
+#     "projectile_gravity_scale": <float>,
+# }
 #@todo
 const CUSTOM_CHARACTER := {
     "display_name": "MyCharacter",

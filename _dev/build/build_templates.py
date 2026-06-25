@@ -119,10 +119,11 @@ def discover_projects(day_filter: str, root: Path) -> list[Path]:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Build iCode camp Template + Complete ZIPs.")
+    parser = argparse.ArgumentParser(description="Build iCode camp student Template ZIPs (dist holds templates only; the full DayN_* folders ARE the Complete games).")
     parser.add_argument("--day", default="", help="Build a single day (e.g. Day1_Pong_Game).")
-    parser.add_argument("--root", default="", help="Folder to scan for DayN_* projects (default: repo root). Use for the Creative-Heavy build, e.g. --root CreativeCamp.")
-    parser.add_argument("--out", default="", help="Output dir for ZIPs (default: dist/). Use --out dist_creative for the Creative build.")
+    parser.add_argument("--root", default="", help="Folder to scan for DayN_* projects (default: repo root).")
+    parser.add_argument("--out", default="", help="Output dir for ZIPs (default: dist/).")
+    parser.add_argument("--complete", action="store_true", help="Also emit Complete answer-key ZIPs (off by default — the DayN_* folder is the complete game).")
     args = parser.parse_args()
 
     global DIST_DIR
@@ -141,7 +142,8 @@ def main() -> int:
 
     for p in projects:
         print(f"{p.name}:")
-        build_one(p, "Complete")
+        if args.complete:
+            build_one(p, "Complete")
         build_one(p, "Template")
     print(f"Done. ZIPs in {DIST_DIR}")
     return 0

@@ -62,27 +62,26 @@ func _ready():
 	game_over_panel.visible = false
 	player.position = cell_to_world(player_cell)
 
-	# TODO #1   Spawn 3 ghosts in the pen at the start.
-	# Goal: call spawn_ghost_at(ghost_spawn_pos(i)) for i = 0, 1, 2.
-	# Use for i in range(3) so the call is written once.
-	#
-	# Given:
-	#   - spawn_ghost_at(pos)   — spawns one ghost at a world position
-	#   - ghost_spawn_pos(i)    — returns the world position for the i-th ghost
+	# TODO #1: Make 3 ghosts appear lined up in the pen when the game starts.
 	#
 	# Syntax:
-	#   - for i in range(3):
+	#   - for i in range(N):
+	#
+	# Write it — one # line per line of code you'll write:
+	# for i going from 0 to 2 (range(3)):
+	#     call spawn_ghost_at(ghost_spawn_pos(i))
 	#@todo
 	for i in range(3):
 		spawn_ghost_at(ghost_spawn_pos(i))
 	#@end
 
-	# TODO #3a   Store the dot total.
-	# Goal: call count_dots() and store the result in dots_remaining.
+	# TODO #3a: Store the maze's dot total so the win counter knows the target.
 	#
-	# Given:
-	#   - dots_remaining   — the variable to store the count in
-	#   - count_dots()     — the function you write in #3b (returns total dot count)
+	# Syntax:
+	#   - name = some_function()
+	#
+	# Write it — one # line per line of code you'll write:
+	# set dots_remaining to the result of count_dots()
 	#@todo
 	dots_remaining = count_dots()
 	#@end
@@ -127,15 +126,14 @@ func _process(delta):
 	if PERSONALITY_MODE_ENABLED:
 		fc_node.step_all_personality_ghosts()
 	else:
-		# TODO #2   Step every ghost each frame.
-		# Goal: call step_ghost(ghost) on every ghost in the ghosts list.
-		#
-		# Given:
-		#   - ghosts         — the list of all active ghost nodes
-		#   - step_ghost(ghost)   — makes one ghost take one step
+		# TODO #2: Each frame, make every ghost in the ghosts list take one step.
 		#
 		# Syntax:
 		#   - for item in list:
+		#
+		# Write it — one # line per line of code you'll write:
+		# for each ghost in the ghosts list:
+		#     call step_ghost(ghost)
 		#@todo
 		for ghost in ghosts:
 			step_ghost(ghost)
@@ -161,26 +159,19 @@ func try_step() -> void:
 #  KID FUNCTIONS — you write these today.
 # ============================================================
 
-# TODO #4   reset_player()
-# Goal: send the player back to the starting tile with no movement left over.
-#     - set player_cell to PLAYER_START
-#     - set player.position to cell_to_world(player_cell)
-#     - set player_moving to false
-#     - set current_dir to Vector2i.ZERO
-#     - set queued_dir to Vector2i.ZERO
-#
-# Given:
-#   - PLAYER_START          — the starting tile coordinate (Vector2i)
-#   - cell_to_world(cell)   — converts a tile coordinate to a world position
-#   - player_cell           — current tile the player occupies
-#   - player.position       — the player sprite's world position
-#   - player_moving         — movement flag to clear (set to false)
-#   - current_dir           — current movement direction to clear
-#   - queued_dir            — queued movement direction to clear
+# TODO #4: Write reset_player() — send the player home to the start tile with no leftover movement.
 #
 # Syntax:
-#   - Vector2i.ZERO   (empty direction — use to clear current_dir and queued_dir)
 #   - func name() -> void:
+#   - Vector2i.ZERO   (empty direction)
+#
+# Write it — one # line per line of code you'll write:
+# func reset_player() -> void:
+#     set player_cell to PLAYER_START
+#     set player.position to cell_to_world(player_cell)
+#     set player_moving to false
+#     set current_dir to Vector2i.ZERO
+#     set queued_dir to Vector2i.ZERO
 #@todo
 func reset_player() -> void:
 	player_cell = PLAYER_START
@@ -191,34 +182,19 @@ func reset_player() -> void:
 #@end
 
 
-# TODO #5   move_player(direction: Vector2i)
-# Goal: move the player one tile in direction — but only if no wall is there.
-# Helpers: hit_wall(cell), wrap_cell(cell), step_player_to(cell).
-#
-# Pattern:
-#     func move_player(dir):
-#             var dest = origin + dir
-#             if hit_wall(dest):
-#                     return
-#             dest = wrap_cell(dest)
-#             step_player_to(dest)
-#
-# Note: function names are accurate; variable names are for illustration only.
-#
-# Your code:
-#     #   var next_cell = player_cell + direction
-#     #   if hit_wall(next_cell): return
-#     #   next_cell = wrap_cell(next_cell)
-#     #   step_player_to(next_cell)
-#
-# Given:
-#   - player_cell           — the player's current tile coordinate
-#   - hit_wall(cell)        — returns true if that cell is a wall (your #6)
-#   - wrap_cell(cell)       — handles tunnel wrap at map edges
-#   - step_player_to(cell)  — moves player_cell and slides the sprite
+# TODO #5: Write move_player(direction) — move the player one tile that way, but only if no wall blocks it.
 #
 # Syntax:
-#   - direction: Vector2i   (parameter type annotation)
+#   - func name(direction: Vector2i) -> void:
+#   - if condition:
+#
+# Write it — one # line per line of code you'll write:
+# func move_player(direction: Vector2i) -> void:
+#     calculate next_cell as player_cell + direction
+#     if hit_wall(next_cell):
+#         return early (don't move)
+#     set next_cell to wrap_cell(next_cell)
+#     call step_player_to(next_cell)
 #@todo
 func move_player(direction: Vector2i) -> void:
 	var next_cell := player_cell + direction
@@ -242,61 +218,39 @@ func hit_wall(cell: Vector2i) -> bool:
 		if cell.y in TUNNEL_ROWS:
 			return false
 		return true
-	# TODO #6   Is there a wall tile at this cell?
-	# Goal: return true if wall_layer has a tile here, false if it's open.
-	# Use wall_layer.get_cell_source_id(cell) — returns -1 when no tile exists.
-	#
-	# Given:
-	#   - wall_layer.get_cell_source_id(cell)   — returns -1 if no tile, any other number if wall
+	# TODO #6: The cell is inside the maze — report back true if it's a wall, false if it's open.
 	#
 	# Syntax:
-	#   - -> bool   (return type annotation)
-	#   - return source_id != -1
+	#   - return value
+	#
+	# Write it — one # line per line of code you'll write:
+	# get the tile id with wall_layer.get_cell_source_id(cell)
+	# return true if id is not -1, false otherwise
 	#@todo
 	var source_id := wall_layer.get_cell_source_id(cell)
 	return source_id != -1
 	#@end
 
 
-# TODO #3b   count_dots() -> int
-# Goal: walk every cell in the maze and return how many have a dot.
-# Use two nested while loops (x across columns, y down rows).
-# Helper: cell_has_dot(x, y) returns true if that cell has a dot.
-#
-# Pattern:
-#     func count_things() -> int:
-#             var total := 0
-#             var col := 0
-#             while col < width:
-#                     var row := 0
-#                     while row < height:
-#                             if cell_has_dot(col, row):
-#                                     total += 1
-#                             row += 1
-#                     col += 1
-#             return total
-#
-# Note: function names are accurate; variable names are for illustration only.
-#
-# Your code:
-#     func count_dots() -> int:
-#             #   start count at 0, start x at 0
-#             #   while x is less than MAZE_W:
-#                     #   start y at 0
-#                     #   while y is less than MAZE_H:
-#                             #   if cell_has_dot(x, y): add 1 to count
-#                             #   add 1 to y
-#                     #   add 1 to x
-#             #   return count
-#
-# Given:
-#   - MAZE_W              — maze width in tiles
-#   - MAZE_H              — maze height in tiles
-#   - cell_has_dot(x, y)  — returns true if tile (x, y) has a dot
+# TODO #3b: Write count_dots() — scan every tile in the maze and return how many have a dot.
 #
 # Syntax:
-#   - while x < limit:   (keeps looping until condition is false)
-#   - -> int             (return type annotation)
+#   - func name() -> int:
+#   - while condition:
+#   - if condition:
+#
+# Write it — one # line per line of code you'll write:
+# func count_dots() -> int:
+#     start count at 0
+#     start x at 0
+#     while x < MAZE_W:
+#         start y at 0
+#         while y < MAZE_H:
+#             if cell_has_dot(x, y):
+#                 add 1 to count
+#             add 1 to y
+#         add 1 to x
+#     return count
 #@todo
 func count_dots() -> int:
 	var count := 0

@@ -35,6 +35,11 @@ var right_score := 0
 #
 # Syntax:
 #   - var name := value
+#
+# Write it — one # line per line of code you'll write:
+# ball left-right speed (5=slow, 15=super fast)
+# ball up-down speed (5=slow, 15=super fast)
+# paddle speed (5=slow, 15=super fast)
 #@todo
 var ball_speed_x := 6.0
 var ball_speed_y := 3.0
@@ -45,6 +50,13 @@ var paddle_speed := 6.0
 # TODO #2: Invent two variables with names of your choosing — silly, serious,
 # whatever you want — and give each one a starting number. You'll see them on
 # the scoreboard later (TODO #9).
+#
+# Syntax:
+#   - var name := value
+#
+# Write it — one # line per line of code you'll write:
+# silly variable name #1 (your choice)
+# silly variable name #2 (your choice)
 #@todo
 var skibidi_speed := 99
 var gyatt_factor := 42
@@ -57,6 +69,9 @@ var gyatt_factor := 42
 #
 # Syntax:
 #   - var name := false
+#
+# Write it — one # line per line of code you'll write:
+# a true/false variable called ball_moving, started as false
 #@todo
 var ball_moving := false
 #@end
@@ -77,12 +92,16 @@ func _process(_delta):
 	# `_process` while `ball_moving` is `false`. When you run the game, the ball
 	# should freeze at the centre until Space is pressed.
 	#
-	# Given:
-	#   - Input.is_key_pressed(KEY_SPACE)  — true while Space is held
-	#   - ball_moving                      — the flag declared in TODO #3
-	#
 	# Syntax:
-	#   - if condition == false: return
+	#   - if condition:
+	#   - Input.is_key_pressed(KEY_SPACE)
+	#   - return
+	#
+	# Write it — one # line per line of code you'll write:
+	# if Space is pressed:
+	#     set ball_moving to true
+	# if ball_moving is false:
+	#     return
 	#@todo
 	if Input.is_key_pressed(KEY_SPACE):
 		ball_moving = true
@@ -94,12 +113,12 @@ func _process(_delta):
 	# moves. After this chunk, the ball should drift off the screen (until later
 	# chunks bounce it back).
 	#
-	# Given:
-	#   - ball.position.x / ball.position.y   — the ball's current position
-	#   - ball_speed_x / ball_speed_y         — speeds declared in TODO #1
-	#
 	# Syntax:
-	#   - +=   (adds to: x += 5  is the same as  x = x + 5)
+	#   - target += value   (x += 5 is the same as x = x + 5)
+	#
+	# Write it — one # line per line of code you'll write:
+	# add ball_speed_x to ball.position.x
+	# add ball_speed_y to ball.position.y
 	#@todo
 	ball.position.x += ball_speed_x
 	ball.position.y += ball_speed_y
@@ -109,14 +128,20 @@ func _process(_delta):
 	# speed so it bounces. Otherwise let it keep going. After this chunk, the ball
 	# ricochets off the top and bottom walls instead of flying off.
 	#
-	# Given:
-	#   - upper_border   — 0 (top of screen)
-	#   - lower_border   — SCREEN_H - BALL_SIZE (bottom of screen, adjusted for ball size)
-	#   - ball_speed_y   — the vertical speed to flip
-	#
 	# Syntax:
-	#   - or            (checks two conditions: if A or B:)
+	#   - var name = value
+	#   - if A or B:
+	#   - if / else:
 	#   - -ball_speed_y   (negate = flip the sign)
+	#
+	# Write it — one # line per line of code you'll write:
+	# make upper_border = 0  (top of screen)
+	# make lower_border = SCREEN_H - BALL_SIZE  (bottom of screen)
+	# (blank line — leave one for readability)
+	# if ball.position.y < upper_border or ball.position.y > lower_border:
+	#     flip ball_speed_y (negate it)
+	# else:
+	#     pass
 	#@todo
 	var upper_border = 0
 	var lower_border = SCREEN_H - BALL_SIZE
@@ -133,12 +158,13 @@ func _process(_delta):
 	# `point!` to the Output panel. This is a "does the if even work?" check before
 	# we add real scoring in TODO #8.
 	#
-	# Given:
-	#   - SCREEN_W         — screen width in pixels
-	#   - ball.position.x  — the ball's current x position
-	#
 	# Syntax:
+	#   - if condition:
 	#   - print("text")
+	#
+	# Write it — one # line per line of code you'll write:
+	# if ball.position.x is past SCREEN_W:
+	#     print("point!")
 	#@todo
 	if ball.position.x > SCREEN_W:
 		print("point!")
@@ -149,11 +175,18 @@ func _process(_delta):
 	# reset the ball. Mirror it for the left edge. After this chunk, the scoreboard
 	# at the top of the screen actually counts.
 	#
-	# Given:
-	#   - SCREEN_W      — screen width in pixels
-	#   - left_score    — left player's score (add 1 when ball exits right)
-	#   - right_score   — right player's score (add 1 when ball exits left)
-	#   - reset_ball()  — resets the ball to centre
+	# Syntax:
+	#   - if condition:
+	#   - score += 1
+	#   - reset_ball()
+	#
+	# Write it — one # line per line of code you'll write:
+	# if ball passed right edge (> SCREEN_W):
+	#     add 1 to left_score
+	#     call reset_ball()
+	# if ball passed left edge (< 0):
+	#     add 1 to right_score
+	#     call reset_ball()
 	#@todo
 	if ball.position.x > SCREEN_W:
 		left_score += 1
@@ -169,13 +202,13 @@ func _process(_delta):
 	# so they show up during the game. Decorate however you like with stars, emojis,
 	# or extra text.
 	#
-	# Given:
-	#   - score_label.text   — the scoreboard string (use += to append more text)
-	#
 	# Syntax:
-	#   - str(variable)   converts a number to text so you can add it to a string
-	#   - "text" + str(var)   joins text and a number into one string
-	#   - label.text += "more"   appends to existing text
+	#   - str(variable)
+	#   - "text" + str(var)
+	#   - label.text += "more"
+	#
+	# Write it — one # line per line of code you'll write:
+	# append both silly vars to score_label.text — str() to convert, + to join, decorate freely
 	#@todo
 	score_label.text += "   ★ " + str(skibidi_speed) + " ★ " + str(gyatt_factor)
 	#@end

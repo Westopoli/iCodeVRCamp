@@ -49,19 +49,19 @@ const WOUNDED_HP_THRESHOLD := 5          # FC-5b: what counts as "wounded"
 const BASE_HP_REGEN_PER_CLEAR := 2       # base HP restored each screen clear (no cap)
 
 
-# FC-1   State variables
-# Declare these 5 variables at the top of the script:
-#     var spawn_timer: float = 0.0
-#     var difficulty: int = 1
-#     var spawn_interval: float = SPAWN_INTERVAL_START
-#     var spawn_queue: Array = []
-#     var clear_streak: int = 0
-#
-# Given:
-#   - SPAWN_INTERVAL_START   — the starting spawn interval constant
+# FC-1: Declare the five pieces of endless-mode state at the top of the script (mirrors morning #1).
 #
 # Syntax:
 #   - var name: float = value
+#   - var name: int = value
+#   - var name: Array = []    (empty list)
+#
+# Write it — one # line per line of code you'll write:
+# var spawn_timer: float = 0.0
+# var difficulty: int = 1
+# var spawn_interval: float = SPAWN_INTERVAL_START
+# var spawn_queue: Array = []
+# var clear_streak: int = 0
 #@todo
 var spawn_timer: float = 0.0
 var difficulty: int = 1
@@ -80,16 +80,16 @@ func endless_tick(delta: float) -> void:
 	# Pre-given: tick the spawn timer + drain the queue.
 	spawn_timer_tick(delta)
 
-	# FC-3   Per-frame buff sweep
-	# Loop main.enemies and call endless_buff(e, delta) on each.
-	# Loop main.towers and call buff_tower(t, delta) on each.
+	# FC-3: Every frame, buff every enemy then buff every tower (mirrors morning #3's two for-loops).
 	#
-	# Given:
-	#   - main.enemies            — list of active enemies
-	#   - main.towers             — list of placed towers
-	#   - delta                   — this frame's time (passed in automatically)
-	#   - endless_buff(e, delta)  — applies endless scaling to one enemy
-	#   - buff_tower(t, delta)    — applies endless scaling to one tower
+	# Syntax:
+	#   - for item in list:
+	#
+	# Write it — one # line per line of code you'll write:
+	# for each e in main.enemies:
+	#     call endless_buff(e, delta)
+	# for each t in main.towers:
+	#     call buff_tower(t, delta)
 	#@todo
 	for e in main.enemies:
 		endless_buff(e, delta)
@@ -116,33 +116,30 @@ func spawn_timer_tick(delta: float) -> void:
 
 
 func queue_spawn(t: String) -> void:
-	# FC-2a   queue_spawn(t)
-	# Goal: add t to the back of spawn_queue using .append().
-	#
-	# Given:
-	#   - spawn_queue   — the pending-spawn list
+	# FC-2a: Add the type string t to the back of spawn_queue (mirrors morning #2a's .append).
 	#
 	# Syntax:
 	#   - list.append(item)
+	#
+	# Write it — one # line per line of code you'll write:
+	# add t to the spawn_queue list: spawn_queue.append(t)
 	#@todo
 	spawn_queue.append(t)
 	#@end
 
 
 func take_next_spawn() -> void:
-	# FC-2b   take_next_spawn()
-	# Goal: pop the first type off spawn_queue, spawn it at a random edge, pay STREAK_BONUS coins.
-	# Use: spawn_queue.pop_front() to get the type, main.spawn_enemy(random_edge(), t) to spawn, main.coins += STREAK_BONUS to pay.
-	#
-	# Given:
-	#   - spawn_queue                    — the pending-spawn list
-	#   - main.spawn_enemy(pos, type)    — spawns one enemy at a position
-	#   - random_edge()                  — returns a random map-edge position
-	#   - main.coins                     — the player's coin counter
-	#   - STREAK_BONUS                   — coin bonus amount
+	# FC-2b: Pop the next type off the queue, spawn it at a random edge, and pay the streak bonus (mirrors morning #2b).
 	#
 	# Syntax:
 	#   - list.pop_front()   (removes and returns the first item)
+	#   - func_name(args)
+	#   - counter += amount
+	#
+	# Write it — one # line per line of code you'll write:
+	# pop the first type off spawn_queue: var t = spawn_queue.pop_front()
+	# spawn it at a random edge: main.spawn_enemy(random_edge(), t)
+	# pay the streak bonus: main.coins += STREAK_BONUS
 	#@todo
 	var t: String = spawn_queue.pop_front()
 	main.spawn_enemy(random_edge(), t)
@@ -151,12 +148,15 @@ func take_next_spawn() -> void:
 
 
 func buff_all(enemy_list: Array, delta: float) -> void:
-	# FC-4   buff_all(enemy_list, delta)
-	# Goal: call endless_buff(e, delta) on every enemy in enemy_list.
+	# FC-4: Fill in buff_all so it buffs every enemy in the list it was handed (enemy_list — mirrors morning #4).
 	#
-	# Given:
-	#   - enemy_list              — a list of enemies passed in as a parameter
-	#   - endless_buff(e, delta)  — applies endless scaling to one enemy
+	# Syntax:
+	#   - for item in list:
+	#   - func name(list, delta):
+	#
+	# Write it — one # line per line of code you'll write:
+	# for each e in enemy_list:
+	#     call endless_buff(e, delta)
 	#@todo
 	for e in enemy_list:
 		endless_buff(e, delta)
@@ -169,28 +169,17 @@ func get_fastest_enemy() -> Node:
 	var fastest: Node = null
 	var best_speed: float = 0.0
 
-	# FC-5a   get_fastest_enemy() -> Node
-	# Goal: walk main.enemies; update fastest and best_speed whenever you find a faster one.
+	# FC-5a: Scan the enemies and find the one with the highest speed (mirrors morning #5a).
 	#
-	# Pattern:
-	#     for thing in collection:
-	#             if thing.measurement > top_so_far:
-	#                     leader = thing
-	#                     top_so_far = thing.measurement
+	# Syntax:
+	#   - for item in list:
+	#   - if cond:
 	#
-	# Note: function names are accurate; variable names are for illustration only.
-	#
-	# Your code:
-	#     #   for each e in main.enemies:
-	#             #   if e.speed > best_speed:
-	#                     #   fastest = e
-	#                     #   best_speed = e.speed
-	#
-	# Given:
-	#   - main.enemies   — list of active enemies
-	#   - fastest        — pre-initialized to null (update as you scan)
-	#   - best_speed     — pre-initialized to 0.0 (update as you scan)
-	#   - e.speed        — an enemy's current speed
+	# Write it — one # line per line of code you'll write:
+	# for each e in main.enemies:
+	#     if e.speed > best_speed:
+	#         set fastest = e
+	#         set best_speed = e.speed
 	#@todo
 	for e in main.enemies:
 		if e.speed > best_speed:
@@ -203,24 +192,20 @@ func get_fastest_enemy() -> Node:
 
 
 func get_wounded_enemies() -> Array:
-	# FC-5b   get_wounded_enemies() -> Array
-	# Goal: return a new list of every enemy in main.enemies whose hp is at or below WOUNDED_HP_THRESHOLD.
+	# FC-5b: Build and return a brand-new list of every enemy whose hp is at or below WOUNDED_HP_THRESHOLD (mirrors morning #5b).
 	#
-	# Pattern:
-	#     var found := []
-	#     for thing in collection:
-	#             if thing.stat <= cutoff:
-	#                     found.append(thing)
-	#     return found
+	# Syntax:
+	#   - var name: Array = []    (empty list)
+	#   - for item in list:
+	#   - list.append(item)
+	#   - return value
 	#
-	# Note: function names are accurate; variable names are for illustration only.
-	#
-	# Your code:
-	#     #   var result: Array = []
-	#     #   for each e in main.enemies:
-	#             #   if e.hp <= WOUNDED_HP_THRESHOLD:
-	#                     #   result.append(e)
-	#     #   return result
+	# Write it — one # line per line of code you'll write:
+	# var result: Array = []
+	# for each e in main.enemies:
+	#     if e.hp <= WOUNDED_HP_THRESHOLD:
+	#         result.append(e)
+	# return result
 	#@todo
 	var result: Array = []
 	for e in main.enemies:
@@ -230,36 +215,56 @@ func get_wounded_enemies() -> Array:
 	#@end
 
 
-# FC-6   escalate() match branches
-# Goal: in each branch, pick a type with pick_type_for_band(band) and call queue_spawn(t).
-# Easy: once. Medium: twice. Hard: three times. Insane: four times.
-#
-# Pattern (medium branch as example):
-#     "mid_level":
-#             var kind = pick_type_for_band(band)
-#             queue_spawn(kind)
-#             queue_spawn(kind)
-#
-# Note: function names are accurate; variable names are for illustration only.
+# FC-6: The four branches below fill escalate() (mirrors morning #6). Pre-given:
+# difficulty_band() picks the band and the match dispatches to it. In each branch,
+# pick one type with pick_type_for_band(band), then queue that many spawns —
+# easy once, medium twice, hard three times, insane four times.
 func escalate() -> void:
 	# Pre-given: figure out the band, then dispatch.
 	var band: String = difficulty_band()
 	match band:
 		"easy":
-			# FC-6a   easy: call queue_spawn once
+			# FC-6a: Easy band — pick a type, then queue one spawn of it.
+			#
+			# Syntax:
+			#   - var x = func_name(args)
+			#   - func_name(args)
+			#
+			# Write it — one # line per line of code you'll write:
+			# pick a type for this band: var t = pick_type_for_band(band)
+			# queue one spawn: queue_spawn(t)
 			#@todo
 			var t: String = pick_type_for_band(band)
 			queue_spawn(t)
 			#@end
 		"medium":
-			# FC-6b   medium: call queue_spawn twice
+			# FC-6b: Medium band — pick a type, then queue two spawns of it.
+			#
+			# Syntax:
+			#   - var x = func_name(args)
+			#   - func_name(args)
+			#
+			# Write it — one # line per line of code you'll write:
+			# pick a type for this band: var t = pick_type_for_band(band)
+			# queue spawn one: queue_spawn(t)
+			# queue spawn two: queue_spawn(t)
 			#@todo
 			var t: String = pick_type_for_band(band)
 			queue_spawn(t)
 			queue_spawn(t)
 			#@end
 		"hard":
-			# FC-6c   hard: call queue_spawn three times
+			# FC-6c: Hard band — pick a type, then queue three spawns of it.
+			#
+			# Syntax:
+			#   - var x = func_name(args)
+			#   - func_name(args)
+			#
+			# Write it — one # line per line of code you'll write:
+			# pick a type for this band: var t = pick_type_for_band(band)
+			# queue spawn one: queue_spawn(t)
+			# queue spawn two: queue_spawn(t)
+			# queue spawn three: queue_spawn(t)
 			#@todo
 			var t: String = pick_type_for_band(band)
 			queue_spawn(t)
@@ -267,7 +272,18 @@ func escalate() -> void:
 			queue_spawn(t)
 			#@end
 		"insane":
-			# FC-6d   insane: call queue_spawn four times
+			# FC-6d: Insane band — pick a type, then queue four spawns of it.
+			#
+			# Syntax:
+			#   - var x = func_name(args)
+			#   - func_name(args)
+			#
+			# Write it — one # line per line of code you'll write:
+			# pick a type for this band: var t = pick_type_for_band(band)
+			# queue spawn one: queue_spawn(t)
+			# queue spawn two: queue_spawn(t)
+			# queue spawn three: queue_spawn(t)
+			# queue spawn four: queue_spawn(t)
 			#@todo
 			var t: String = pick_type_for_band(band)
 			queue_spawn(t)
@@ -278,13 +294,22 @@ func escalate() -> void:
 
 
 func check_for_screen_clear() -> void:
-	# FC-7   check_for_screen_clear()
-	# Goal: when main.enemies is empty AND spawn_queue is empty, ramp the game:
-	#     - add 1 to clear_streak
-	#     - add 1 to difficulty
-	#     - multiply spawn_interval by SPAWN_INTERVAL_SHRINK (makes it smaller — spawns come faster)
-	#     - add BASE_HP_REGEN_PER_CLEAR to main.base_hp
-	#     - call escalate()
+	# FC-7: When the screen is clear, ramp the whole game one notch harder and queue the next burst (mirrors morning #7).
+	#
+	# Syntax:
+	#   - if cond and cond:
+	#   - list.size() == 0   (check if list is empty)
+	#   - counter += amount
+	#   - value *= factor
+	#   - func_name()
+	#
+	# Write it — one # line per line of code you'll write:
+	# if main.enemies.size() == 0 and spawn_queue.size() == 0:
+	#     add 1 to clear_streak
+	#     add 1 to difficulty
+	#     shrink spawn_interval: spawn_interval *= SPAWN_INTERVAL_SHRINK
+	#     regen the base: main.base_hp += BASE_HP_REGEN_PER_CLEAR
+	#     call escalate()
 	#@todo
 	if main.enemies.size() == 0 and spawn_queue.size() == 0:
 		clear_streak += 1

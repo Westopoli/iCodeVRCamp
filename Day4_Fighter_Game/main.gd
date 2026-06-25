@@ -206,21 +206,20 @@ func start_match(p1_char: String, p2_char: String, map_id: String) -> void:
 	clear_match_state()
 	build_map(map_id)
 
-	# TODO #4: When the match starts, build two Player instances — one for P1, one
-	# for P2 — and place them at opposite ends of the map. Each is the same class,
-	# but `setup()` configures them with different player_num (1 vs 2), different
-	# characters (P1's pick vs P2's pick), and different spawn positions. Without
-	# this chunk, the fight screen is just an empty map: no fighters appear.
-	#
-	# Given:
-	#   - PLAYER_SCENE       — the Player scene to instantiate
-	#   - player1 / player2  — variables to assign the new instances to
-	#   - p1_char / p2_char  — character name strings chosen at character select
+	# TODO #4: Spawn the two fighters — build one Player instance for P1 and one for P2 from the same scene, add each to the tree, and set them up at opposite ends of the map.
 	#
 	# Syntax:
-	#   - SCENE.instantiate()              — creates one new instance
-	#   - add_child(node)                  — adds it to the scene tree
-	#   - node.setup(num, char, Vector2(x, y))   — configures the player
+	#   - var node = SCENE.instantiate()
+	#   - add_child(node)
+	#   - node.method(args)
+	#
+	# Write it — one # line per line of code you'll write:
+	# make P1: player1 = PLAYER_SCENE.instantiate()
+	# add player1 to the scene tree
+	# set up player1: setup(1, p1_char, Vector2(200, 500)) — left side
+	# make P2: player2 = PLAYER_SCENE.instantiate()
+	# add player2 to the scene tree
+	# set up player2: setup(2, p2_char, Vector2(1080, 500)) — right side
 	#@todo
 	player1 = PLAYER_SCENE.instantiate()
 	add_child(player1)

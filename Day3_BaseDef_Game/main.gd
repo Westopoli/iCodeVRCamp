@@ -100,17 +100,17 @@ const DRAW_GRID_LINES := true
 # --- preloads ---
 const ENEMY_SCENE := preload("res://Enemy.tscn")
 
-# TODO #1   Declare 4 game-state variables.
-# enemies and towers start as empty lists [].
-# coins starts at START_COINS. base_hp starts at START_BASE_HP.
-#
-# Given:
-#   - START_COINS      — starting coin constant
-#   - START_BASE_HP    — starting base HP constant
+# TODO #1: Give the game the four pieces of state it remembers — two empty lists and two counters.
 #
 # Syntax:
 #   - var name: Array = []    (empty list)
 #   - var name: int = value   (integer with type)
+#
+# Write it — one # line per line of code you'll write:
+# var enemies: Array = [] (empty list)
+# var towers: Array = [] (empty list)
+# var coins: int = START_COINS
+# var base_hp: int = START_BASE_HP
 #@todo
 var enemies: Array = []
 var towers: Array = []
@@ -210,19 +210,16 @@ func _process(delta: float) -> void:
 				spawn_enemy(random_edge_cell(), t)
 				spawn_cooldown = SPAWN_INTERVAL
 
-	# TODO #3   Move the world each frame.
-	# Loop enemies and call step_enemy(e, delta) on each.
-	# Loop towers and call tower_tick(t, delta) on each.
-	#
-	# Given:
-	#   - enemies              — list of all active enemies
-	#   - towers               — list of all placed towers
-	#   - delta                — this frame's time (passed in automatically)
-	#   - step_enemy(e, delta) — moves one enemy one step
-	#   - tower_tick(t, delta) — runs one tower's cooldown + targeting + firing
+	# TODO #3: Move the whole world this frame — step every enemy, then tick every tower.
 	#
 	# Syntax:
 	#   - for item in list:
+	#
+	# Write it — one # line per line of code you'll write:
+	# for each e in enemies:
+	#     call step_enemy(e, delta)
+	# for each t in towers:
+	#     call tower_tick(t, delta)
 	#@todo
 	for e in enemies:
 		step_enemy(e, delta)
@@ -230,24 +227,21 @@ func _process(delta: float) -> void:
 		tower_tick(t, delta)
 	#@end
 
-	# TODO #7   Wave done? Advance or win.
-	# Goal: when wave_in_progress is true AND both enemies and enemies_to_spawn are empty:
-	#     - set wave_in_progress to false
-	#     - add 1 to wave_index
-	#     - if wave_index is at or past the end of WAVES: call you_win()
-	#     - otherwise: call start_next_wave()
-	#
-	# Given:
-	#   - wave_in_progress      — flag: true while a wave is running
-	#   - enemies               — list of active enemies (empty = all dead)
-	#   - enemies_to_spawn      — spawn queue (empty = none left to send)
-	#   - wave_index            — current wave number (bump by 1 when done)
-	#   - WAVES                 — the full wave list (compare size to know if last)
-	#   - you_win()             — call if no waves remain
-	#   - start_next_wave()     — call if more waves remain
+	# TODO #7: When a wave is finished, advance to the next wave — or win the game if that was the last one.
 	#
 	# Syntax:
+	#   - if cond and cond:
 	#   - list.size() == 0   (check if list is empty)
+	#   - func_name()        (call a function)
+	#
+	# Write it — one # line per line of code you'll write:
+	# if wave_in_progress and enemies.size() == 0 and enemies_to_spawn.size() == 0:
+	#     set wave_in_progress to false
+	#     add 1 to wave_index
+	#     if wave_index >= WAVES.size():
+	#         call you_win()
+	#     else:
+	#         call start_next_wave()
 	#@todo
 	if wave_in_progress and enemies.size() == 0 and enemies_to_spawn.size() == 0:
 		wave_in_progress = false
@@ -291,15 +285,13 @@ func spawn_enemy(spawn_cell: Vector2i, enemy_type: String) -> void:
 	spr.modulate = stats["color"]
 	enemies_node.add_child(e)
 
-	# TODO #2a   Add this enemy to the list.
-	# Goal: append e to enemies so the game loop can see it.
-	#
-	# Given:
-	#   - e         — the freshly built enemy node
-	#   - enemies   — the active-enemy list (from #1)
+	# TODO #2a: Put this freshly built enemy onto the enemies list so the game loop can see it.
 	#
 	# Syntax:
 	#   - list.append(item)
+	#
+	# Write it — one # line per line of code you'll write:
+	# add e to the enemies list: enemies.append(e)
 	#@todo
 	enemies.append(e)
 	#@end
@@ -313,33 +305,27 @@ func kill_enemy(e: Node, give_reward: bool = true) -> void:
 	if give_reward:
 		var reward: int = ENEMY_STATS[e.enemy_type]["reward"]
 
-		# TODO #2b   Remove from list and pay out.
-		# Goal: erase e from enemies, then add reward to coins.
-		#
-		# Given:
-		#   - e         — the enemy being killed
-		#   - reward    — coin payout for this enemy type
-		#   - enemies   — the active-enemy list
-		#   - coins     — the player's coin counter
+		# TODO #2b: A tower killed this enemy — take it off the list and pay the player the reward.
 		#
 		# Syntax:
 		#   - list.erase(item)
+		#   - counter += amount
+		#
+		# Write it — one # line per line of code you'll write:
+		# remove e from enemies: enemies.erase(e)
+		# add reward to coins: coins += reward
 		#@todo
 		enemies.erase(e)
 		coins += reward
 		#@end
 	else:
-		# TODO #2b (no reward): When an enemy reaches the base, it's gone from the
-		# list — but the player gets no coins (the enemy succeeded; no tower killed
-		# it). One line. Without this, base-hit enemies stay in the list and waves
-		# stack up.
-		#
-		# Given:
-		#   - e         — the enemy that reached the base
-		#   - enemies   — the active-enemy list
+		# TODO #2b: This enemy reached the base — take it off the list, but pay no reward (no tower killed it).
 		#
 		# Syntax:
 		#   - list.erase(item)
+		#
+		# Write it — one # line per line of code you'll write:
+		# remove e from enemies: enemies.erase(e)
 		#@todo
 		enemies.erase(e)
 		#@end
@@ -347,15 +333,15 @@ func kill_enemy(e: Node, give_reward: bool = true) -> void:
 
 
 func move_all(enemy_list: Array, delta: float) -> void:
-	# TODO #4   move_all(enemy_list, delta)
-	# Goal: call step_enemy(e, delta) on every enemy in enemy_list.
-	#
-	# Given:
-	#   - enemy_list             — a list of enemies passed in as a parameter
-	#   - step_enemy(e, delta)   — moves one enemy one step
+	# TODO #4: Fill in move_all so it steps every enemy in the list it was handed (enemy_list, not enemies).
 	#
 	# Syntax:
+	#   - for item in list:
 	#   - func name(list, delta):
+	#
+	# Write it — one # line per line of code you'll write:
+	# for each e in enemy_list:
+	#     call step_enemy(e, delta)
 	#@todo
 	for e in enemy_list:
 		step_enemy(e, delta)
@@ -369,34 +355,19 @@ func get_nearest_enemy_in_range(pos: Vector2, tower_range: float) -> Node:
 	var nearest: Node = null
 	var best_dist: float = tower_range + 1.0
 
-	# TODO #5a   Find the closest enemy in range.
-	# Goal: walk enemies; update nearest and best_dist when you find one closer and within tower_range.
-	#
-	# Pattern:
-	#     for thing in collection:
-	#             var dist = origin.distance_to(thing.position)
-	#             if dist <= max_reach and dist < closest_so_far:
-	#                     winner = thing
-	#                     closest_so_far = dist
-	#
-	# Note: function names are accurate; variable names are for illustration only.
-	#
-	# Your code:
-	#     #   for each e in enemies:
-	#             #   var d = pos.distance_to(e.position)
-	#             #   if d <= tower_range and d < best_dist:
-	#                     #   nearest = e
-	#                     #   best_dist = d
-	#
-	# Given:
-	#   - enemies      — list of all active enemies
-	#   - pos          — the tower's world position
-	#   - tower_range  — the tower's firing range
-	#   - nearest      — pre-initialized to null (update as you scan)
-	#   - best_dist    — pre-initialized to a very large number (update as you scan)
+	# TODO #5a: Scan the enemies and find the closest one that's still inside the tower's range.
 	#
 	# Syntax:
+	#   - for item in list:
+	#   - if cond and cond:
 	#   - pos.distance_to(e.position)   (distance between two positions)
+	#
+	# Write it — one # line per line of code you'll write:
+	# for each e in enemies:
+	#     compute d = pos.distance_to(e.position)
+	#     if d <= tower_range and d < best_dist:
+	#         set nearest = e
+	#         set best_dist = d
 	#@todo
 	for e in enemies:
 		var d: float = pos.distance_to(e.position)
@@ -410,34 +381,21 @@ func get_nearest_enemy_in_range(pos: Vector2, tower_range: float) -> Node:
 
 
 func get_enemies_in_radius(pos: Vector2, radius: float) -> Array:
-	# TODO #5b   Collect every enemy inside the blast radius.
-	# Goal: return a new list of every enemy within radius of pos.
-	#
-	# Pattern:
-	#     var found := []
-	#     for thing in collection:
-	#             if origin.distance_to(thing.position) <= reach:
-	#                     found.append(thing)
-	#     return found
-	#
-	# Note: function names are accurate; variable names are for illustration only.
-	#
-	# Your code:
-	#     #   var result: Array = []
-	#     #   for each e in enemies:
-	#             #   if pos.distance_to(e.position) <= radius:
-	#                     #   result.append(e)
-	#     #   return result
-	#
-	# Given:
-	#   - enemies   — list of all active enemies
-	#   - pos       — the tower's world position
-	#   - radius    — the splash radius
-	#   - result    — pre-initialized empty list (append to it, then return it)
+	# TODO #5b: Build and return a brand-new list holding every enemy inside the blast radius.
 	#
 	# Syntax:
-	#   - pos.distance_to(e.position)   (distance between two positions)
+	#   - var name: Array = []    (empty list)
+	#   - for item in list:
 	#   - list.append(item)
+	#   - return value
+	#   - pos.distance_to(e.position)   (distance between two positions)
+	#
+	# Write it — one # line per line of code you'll write:
+	# var result: Array = []
+	# for each e in enemies:
+	#     if pos.distance_to(e.position) <= radius:
+	#         result.append(e)
+	# return result
 	#@todo
 	var result: Array = []
 	for e in enemies:
@@ -465,37 +423,23 @@ func tower_tick(t: Node, delta: float) -> void:
 	var t_rate: float = TOWER_STATS[t_type]["fire_rate"]
 	var t_damage: int = TOWER_STATS[t_type]["damage"]
 
-	# TODO #6   Pick a target and fire.
-	# Goal: use the right finder for this tower type; if it finds something, fire and reset cooldown.
-	# Helpers: get_nearest_enemy_in_range(pos, range), get_enemies_in_radius(pos, range), fire_at(t, target, damage).
-	#
-	# Pattern (one branch):
-	#     "some_type":
-	#             var found = find_something(location, reach)
-	#             if found is not empty or null:
-	#                     fire_at(tower, found, power)
-	#                     tower.set_meta("cooldown", rate)
-	#
-	# Note: function names are accurate; variable names are for illustration only.
-	#
-	# Given:
-	#   - get_nearest_enemy_in_range(pos, range)   — returns one enemy or null (#5a)
-	#   - get_enemies_in_radius(pos, radius)        — returns a list of enemies (#5b)
-	#   - fire_at(t, target, damage)               — fires at a single enemy or list
-	#   - t.position, t_range, t_damage, t_rate    — tower stats (already unpacked)
-	#   - t.set_meta("cooldown", t_rate)           — resets the tower's cooldown
-	# Pre-given: dispatch by tower type — kid fills each branch.
+	# TODO #6 lives in the two branches below. Pre-given: this match dispatches
+	# by tower type — Cannon/Sniper share a single-target branch (#6a), Splash
+	# gets its own list-target branch (#6b). Kid fills each branch body.
 	match t_type:
 		"cannon", "sniper":
-			# TODO #6a   Cannon + Sniper: call get_nearest_enemy_in_range; fire if result is not null.
-			#
-			# Given:
-			#   - get_nearest_enemy_in_range(t.position, t_range)   — returns one enemy or null
-			#   - fire_at(t, target, t_damage)                      — fires at that enemy
-			#   - t.set_meta("cooldown", t_rate)                    — resets the cooldown
+			# TODO #6a: Cannon and Sniper find one target, then fire at it and reset the cooldown.
 			#
 			# Syntax:
+			#   - var x = func_name(args)
 			#   - if thing != null:
+			#   - func_name(args)
+			#
+			# Write it — one # line per line of code you'll write:
+			# var target = get_nearest_enemy_in_range(t.position, t_range)
+			# if target != null:
+			#     call fire_at(t, target, t_damage)
+			#     reset cooldown: t.set_meta("cooldown", t_rate)
 			#@todo
 			var target: Node = get_nearest_enemy_in_range(t.position, t_range)
 			if target != null:
@@ -503,15 +447,18 @@ func tower_tick(t: Node, delta: float) -> void:
 				t.set_meta("cooldown", t_rate)
 			#@end
 		"splash":
-			# TODO #6b   Splash: call get_enemies_in_radius; fire if the list is not empty.
-			#
-			# Given:
-			#   - get_enemies_in_radius(t.position, t_range)   — returns a list of enemies in range
-			#   - fire_at(t, targets, t_damage)                — fires at the entire list
-			#   - t.set_meta("cooldown", t_rate)               — resets the cooldown
+			# TODO #6b: Splash collects every target in its radius, then fires at the whole list and resets the cooldown.
 			#
 			# Syntax:
+			#   - var x = func_name(args)
 			#   - if list.size() > 0:
+			#   - func_name(args)
+			#
+			# Write it — one # line per line of code you'll write:
+			# var targets = get_enemies_in_radius(t.position, t_range)
+			# if targets.size() > 0:
+			#     call fire_at(t, targets, t_damage)
+			#     reset cooldown: t.set_meta("cooldown", t_rate)
 			#@todo
 			var targets: Array = get_enemies_in_radius(t.position, t_range)
 			if targets.size() > 0:
