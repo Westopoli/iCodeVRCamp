@@ -1038,9 +1038,9 @@ Each slide entry uses:
 - Title: "TODO #1 — prep: three core properties"
 - Body:
   ```gdscript
-  # var hp: int = 100
-  # var max_hp: int = 100
-  # var facing: int = 1
+  # Declare the player's current health points, starting at 100
+  # Declare the player's maximum health, also starting at 100
+  # Declare which direction the player faces (1 = right, -1 = left), starting right
   ```
   - **What:** Every Player needs to track its own HP and which direction it faces.
   - **Why:** `hp` and `max_hp` scale the HP bar. `facing` drives sprite flip and attack direction.
@@ -1054,9 +1054,9 @@ Each slide entry uses:
 - Syntax: var
 - Body RHS:
   ```gdscript
-  # var hp: int = 100
-  # var max_hp: int = 100
-  # var facing: int = 1
+  # Declare the player's current health points, starting at 100
+  # Declare the player's maximum health, also starting at 100
+  # Declare which direction the player faces (1 = right, -1 = left), starting right
   ```
 - Bottom note: "Detailed instructions are in your code file, right next to this TODO."
 
@@ -1117,11 +1117,11 @@ Each slide entry uses:
 - Title: "TODO #2 — prep: character config vars"
 - Body:
   ```gdscript
-  # var walk_speed: float = 220.0
-  # var jump_impulse: float = 520.0
-  # var attack_type: String = "melee"
-  # var attack_damage: int = 18
-  # var attack_cooldown: float = 0.55
+  # Declare the player's walking speed, using Knight's default value
+  # Declare the player's jump strength, using Knight's default value
+  # Declare the player's attack style ("melee" or "projectile"), defaulting to melee
+  # Declare how much damage each hit deals, using Knight's default value
+  # Declare how long between attacks in seconds, using Knight's default value
   ```
   - **What:** Declare five properties that mirror the character dict keys.
   - **Why:** `setup()` overwrites these from `CHARACTERS[char_name]`. Defaults let the file compile before the game starts.
@@ -1135,11 +1135,11 @@ Each slide entry uses:
 - Syntax: var
 - Body RHS:
   ```gdscript
-  # var walk_speed: float = 220.0
-  # var jump_impulse: float = 520.0
-  # var attack_type: String = "melee"
-  # var attack_damage: int = 18
-  # var attack_cooldown: float = 0.55
+  # Declare the player's walking speed, using Knight's default value
+  # Declare the player's jump strength, using Knight's default value
+  # Declare the player's attack style ("melee" or "projectile"), defaulting to melee
+  # Declare how much damage each hit deals, using Knight's default value
+  # Declare how long between attacks in seconds, using Knight's default value
   ```
 - Bottom note: "Detailed instructions are in your code file, right next to this TODO."
 
@@ -1215,12 +1215,12 @@ Each slide entry uses:
 - Title: "TODO #3 — prep: take_damage body"
 - Body:
   ```gdscript
-  # hp -= amount
-  # hit_flash_timer = 0.2
-  # set_state("hit")
-  # hp_bar_fill.size.x = float(hp) / max_hp * 80.0
-  # if hp <= 0:
-  #     die()
+  # Subtract the incoming damage from the player's current HP
+  # Start a brief flash effect so the hit is visible on screen
+  # Switch the player into the "hit" state
+  # Resize the HP bar to reflect the new HP percentage
+  # If HP has reached zero or below:
+  #     Trigger the player's death
   ```
   - **What:** Fill the `take_damage()` body so opponents can actually hurt each other.
   - **Why:** Without this, the HP bar never changes and nobody dies — no fight.
@@ -1234,12 +1234,12 @@ Each slide entry uses:
 - Syntax: minus_eq, dot_eq, if, func_call
 - Body RHS:
   ```gdscript
-  # hp -= amount
-  # hit_flash_timer = 0.2
-  # set_state("hit")
-  # hp_bar_fill.size.x = float(hp) / max_hp * 80.0
-  # if hp <= 0:
-  #     die()
+  # Subtract the incoming damage from the player's current HP
+  # Start a brief flash effect so the hit is visible on screen
+  # Switch the player into the "hit" state
+  # Resize the HP bar to reflect the new HP percentage
+  # If HP has reached zero or below:
+  #     Trigger the player's death
   ```
 - Bottom note: "Detailed instructions are in your code file, right next to this TODO."
 
@@ -1332,12 +1332,12 @@ Each slide entry uses:
 - Title: "TODO #4 — prep: two Player instances"
 - Body:
   ```gdscript
-  # player1 = PLAYER_SCENE.instantiate()
-  # add_child(player1)
-  # player1.setup(1, p1_char, Vector2(200, 500))
-  # player2 = PLAYER_SCENE.instantiate()
-  # add_child(player2)
-  # player2.setup(2, p2_char, Vector2(1080, 500))
+  # Create a new Player 1 instance from the player scene
+  # Add Player 1 to the game world so it exists and runs
+  # Set up Player 1 as player number 1 with their chosen character on the left side
+  # Create a new Player 2 instance from the player scene
+  # Add Player 2 to the game world so it exists and runs
+  # Set up Player 2 as player number 2 with their chosen character on the right side
   ```
   - **What:** Spawn two Player instances at opposite ends of the map.
   - **Why:** Without this, the fight screen stays empty — no fighters appear.
@@ -1351,12 +1351,12 @@ Each slide entry uses:
 - Syntax: instantiate, func_call
 - Body RHS:
   ```gdscript
-  # player1 = PLAYER_SCENE.instantiate()
-  # add_child(player1)
-  # player1.setup(1, p1_char, Vector2(200, 500))
-  # player2 = PLAYER_SCENE.instantiate()
-  # add_child(player2)
-  # player2.setup(2, p2_char, Vector2(1080, 500))
+  # Create a new Player 1 instance from the player scene
+  # Add Player 1 to the game world so it exists and runs
+  # Set up Player 1 as player number 1 with their chosen character on the left side
+  # Create a new Player 2 instance from the player scene
+  # Add Player 2 to the game world so it exists and runs
+  # Set up Player 2 as player number 2 with their chosen character on the right side
   ```
 - Bottom note: "Detailed instructions are in your code file, right next to this TODO."
 
@@ -1491,13 +1491,12 @@ Each slide entry uses:
 - Title: "TODO #5 — prep: state var + set_state helper"
 - Body:
   ```gdscript
-  # var state: String = "idle"
+  # Declare the player's current state, starting as "idle"
   #
-  # func set_state(new_state: String) -> void:
-  #     if new_state == state:
-  #         return
-  #     print(new_state)
-  #     state = new_state
+  # Write a helper function that changes the state safely:
+  #     If the new state is already the current state, return early — don't change anything
+  #     Print the new state name so you can watch transitions in the Output panel
+  #     Update the state variable to the new value
   ```
   - **What:** Declare the `state` variable and write the helper that changes it safely.
   - **Why:** Chunk #6 reads `state` every frame. Without it, the match statement breaks.
@@ -1511,13 +1510,12 @@ Each slide entry uses:
 - Syntax: var, func_param, if, return, print
 - Body RHS:
   ```gdscript
-  # var state: String = "idle"
+  # Declare the player's current state, starting as "idle"
   #
-  # func set_state(new_state: String) -> void:
-  #     if new_state == state:
-  #         return
-  #     print(new_state)
-  #     state = new_state
+  # Write a helper function that changes the state safely:
+  #     If the new state is already the current state, return early — don't change anything
+  #     Print the new state name so you can watch transitions in the Output panel
+  #     Update the state variable to the new value
   ```
 - Bottom note: "Detailed instructions are in your code file, right next to this TODO."
 
@@ -1587,19 +1585,19 @@ Each slide entry uses:
 - Body:
   ```gdscript
   # "idle" branch (#6a):
-  #     if get_move_direction() != 0: set_state("walk")
-  #     if get_input_just_pressed("jump") and is_on_floor():
-  #         velocity.y = -jump_impulse
-  #         set_state("jump")
+  #     If the player presses a direction key, switch to "walk"
+  #     If the player presses jump while standing on the floor:
+  #         Launch the player upward
+  #         Switch to "jump"
   # "walk" branch (#6b):
-  #     if get_move_direction() == 0: set_state("idle")
-  #     if get_input_just_pressed("jump") and is_on_floor():
-  #         velocity.y = -jump_impulse
-  #         set_state("jump")
+  #     If the player releases the direction key, switch to "idle"
+  #     If the player presses jump while standing on the floor:
+  #         Launch the player upward
+  #         Switch to "jump"
   # "jump" branch (#6c):
-  #     if velocity.y > 0: set_state("fall")
+  #     If the player starts moving downward, switch to "fall"
   # "fall" branch (#6d):
-  #     if is_on_floor(): set_state("idle")
+  #     If the player lands on the floor, switch to "idle"
   ```
   - **What:** Fill four `if` blocks — one per state branch — deciding when to transition.
   - **Why:** Without this, fighters can't move, jump, or fall.
@@ -1614,19 +1612,19 @@ Each slide entry uses:
 - Body RHS:
   ```gdscript
   # "idle" branch (#6a):
-  #     if get_move_direction() != 0: set_state("walk")
-  #     if get_input_just_pressed("jump") and is_on_floor():
-  #         velocity.y = -jump_impulse
-  #         set_state("jump")
+  #     If the player presses a direction key, switch to "walk"
+  #     If the player presses jump while standing on the floor:
+  #         Launch the player upward
+  #         Switch to "jump"
   # "walk" branch (#6b):
-  #     if get_move_direction() == 0: set_state("idle")
-  #     if get_input_just_pressed("jump") and is_on_floor():
-  #         velocity.y = -jump_impulse
-  #         set_state("jump")
+  #     If the player releases the direction key, switch to "idle"
+  #     If the player presses jump while standing on the floor:
+  #         Launch the player upward
+  #         Switch to "jump"
   # "jump" branch (#6c):
-  #     if velocity.y > 0: set_state("fall")
+  #     If the player starts moving downward, switch to "fall"
   # "fall" branch (#6d):
-  #     if is_on_floor(): set_state("idle")
+  #     If the player lands on the floor, switch to "idle"
   ```
 - Bottom note: "Detailed instructions are in your code file, right next to this TODO."
 
@@ -1707,8 +1705,8 @@ Each slide entry uses:
 - Title: "TODO #7 — prep: the hit-check `if`"
 - Body:
   ```gdscript
-  # if in_range and facing_opponent and same_height:
-  #     opponent.take_damage(attack_damage)
+  # If the opponent is close enough, being faced, and at the same height:
+  #     Deal attack damage to the opponent
   ```
   - **What:** Write the `if` that decides whether a melee attack lands.
   - **Why:** Three conditions must all be true: close enough, facing them, same height.
@@ -1722,8 +1720,8 @@ Each slide entry uses:
 - Syntax: if, func_call
 - Body RHS:
   ```gdscript
-  # if in_range and facing_opponent and same_height:
-  #     opponent.take_damage(attack_damage)
+  # If the opponent is close enough, being faced, and at the same height:
+  #     Deal attack damage to the opponent
   ```
 - Bottom note: "Detailed instructions are in your code file, right next to this TODO."
 

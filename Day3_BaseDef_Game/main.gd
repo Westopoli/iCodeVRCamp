@@ -106,11 +106,15 @@ const ENEMY_SCENE := preload("res://Enemy.tscn")
 #   - var name: Array = []    (empty list)
 #   - var name: int = value   (integer with type)
 #
-# Write it — one # line per line of code you'll write:
-# var enemies: Array = [] (empty list)
-# var towers: Array = [] (empty list)
-# var coins: int = START_COINS
-# var base_hp: int = START_BASE_HP
+# Given:
+#   - START_COINS      — constant at the top of the file (starting coin amount)
+#   - START_BASE_HP    — constant at the top of the file (starting base health)
+#
+# Line by line:
+#   Create an empty list to track all enemies on screen
+#   Create an empty list to track all placed towers
+#   Set the starting coin count to the value of START_COINS
+#   Set the starting base HP to the value of START_BASE_HP
 #@todo
 var enemies: Array = []
 var towers: Array = []
@@ -215,11 +219,15 @@ func _process(delta: float) -> void:
 	# Syntax:
 	#   - for item in list:
 	#
-	# Write it — one # line per line of code you'll write:
-	# for each e in enemies:
-	#     call step_enemy(e, delta)
-	# for each t in towers:
-	#     call tower_tick(t, delta)
+	# Given:
+	#   - enemies            — list of all active enemy nodes
+	#   - towers             — list of all placed tower nodes
+	#   - step_enemy(e, delta)   — pre-given: moves one enemy forward one step
+	#   - tower_tick(t, delta)   — pre-given: lets one tower scan for targets and fire
+	#
+	# Line by line:
+	#   Use a for loop to visit each enemy and move it one step forward
+	#   Use a for loop to visit each tower and let it take its turn
 	#@todo
 	for e in enemies:
 		step_enemy(e, delta)
@@ -234,14 +242,23 @@ func _process(delta: float) -> void:
 	#   - list.size() == 0   (check if list is empty)
 	#   - func_name()        (call a function)
 	#
-	# Write it — one # line per line of code you'll write:
-	# if wave_in_progress and enemies.size() == 0 and enemies_to_spawn.size() == 0:
-	#     set wave_in_progress to false
-	#     add 1 to wave_index
-	#     if wave_index >= WAVES.size():
-	#         call you_win()
-	#     else:
-	#         call start_next_wave()
+	# Given:
+	#   - wave_in_progress         — true while a wave is running
+	#   - enemies                  — list of active enemies (empty = all dead)
+	#   - enemies_to_spawn         — queue of enemies still waiting to appear
+	#   - wave_index               — which wave number we're on (0-based)
+	#   - WAVES                    — the full list of waves
+	#   - you_win()                — pre-given: triggers the win screen
+	#   - start_next_wave()        — pre-given: loads the next wave
+	#
+	# Line by line:
+	#   If a wave is running and all enemies are gone and no more enemies are queued:
+	#       Mark the wave as finished
+	#       Move to the next wave number
+	#       If all waves have been completed:
+	#           Trigger the win screen
+	#       Otherwise:
+	#           Start the next wave
 	#@todo
 	if wave_in_progress and enemies.size() == 0 and enemies_to_spawn.size() == 0:
 		wave_in_progress = false
@@ -290,8 +307,12 @@ func spawn_enemy(spawn_cell: Vector2i, enemy_type: String) -> void:
 	# Syntax:
 	#   - list.append(item)
 	#
-	# Write it — one # line per line of code you'll write:
-	# add e to the enemies list: enemies.append(e)
+	# Given:
+	#   - e          — the enemy node just built above this hole
+	#   - enemies    — the list of all active enemies
+	#
+	# Line by line:
+	#   Add the newly spawned enemy to the enemies list
 	#@todo
 	enemies.append(e)
 	#@end
@@ -311,9 +332,15 @@ func kill_enemy(e: Node, give_reward: bool = true) -> void:
 		#   - list.erase(item)
 		#   - counter += amount
 		#
-		# Write it — one # line per line of code you'll write:
-		# remove e from enemies: enemies.erase(e)
-		# add reward to coins: coins += reward
+		# Given:
+		#   - e         — the enemy node to remove
+		#   - enemies   — the list of active enemies
+		#   - reward    — the coin payout amount (unpacked above this hole)
+		#   - coins     — the player's current coin total
+		#
+		# Line by line:
+		#   Remove this enemy from the enemies list
+		#   Add the reward amount to the player's coins
 		#@todo
 		enemies.erase(e)
 		coins += reward
@@ -324,8 +351,12 @@ func kill_enemy(e: Node, give_reward: bool = true) -> void:
 		# Syntax:
 		#   - list.erase(item)
 		#
-		# Write it — one # line per line of code you'll write:
-		# remove e from enemies: enemies.erase(e)
+		# Given:
+		#   - e         — the enemy node to remove
+		#   - enemies   — the list of active enemies
+		#
+		# Line by line:
+		#   Remove this enemy from the enemies list
 		#@todo
 		enemies.erase(e)
 		#@end
@@ -339,9 +370,12 @@ func move_all(enemy_list: Array, delta: float) -> void:
 	#   - for item in list:
 	#   - func name(list, delta):
 	#
-	# Write it — one # line per line of code you'll write:
-	# for each e in enemy_list:
-	#     call step_enemy(e, delta)
+	# Given:
+	#   - enemy_list         — the list parameter handed to this function (not the global `enemies`)
+	#   - step_enemy(e, delta)   — pre-given: moves one enemy forward one step
+	#
+	# Line by line:
+	#   Use a for loop to visit each enemy in the list and move it one step forward
 	#@todo
 	for e in enemy_list:
 		step_enemy(e, delta)
@@ -362,12 +396,20 @@ func get_nearest_enemy_in_range(pos: Vector2, tower_range: float) -> Node:
 	#   - if cond and cond:
 	#   - pos.distance_to(e.position)   (distance between two positions)
 	#
-	# Write it — one # line per line of code you'll write:
-	# for each e in enemies:
-	#     compute d = pos.distance_to(e.position)
-	#     if d <= tower_range and d < best_dist:
-	#         set nearest = e
-	#         set best_dist = d
+	# Given:
+	#   - enemies              — list of all active enemies
+	#   - pos                  — the tower's world position (parameter)
+	#   - tower_range          — the tower's range radius (parameter)
+	#   - nearest              — starts as null; updated when a closer enemy is found
+	#   - best_dist            — starts just outside range; updated each time nearest updates
+	#   - pos.distance_to(e.position)  — built-in: returns distance between two positions
+	#
+	# Line by line:
+	#   Use a for loop to check each enemy in the enemies list:
+	#       Measure the distance from the tower to this enemy
+	#       If the enemy is within range and closer than the previous best:
+	#           Remember this enemy as the closest so far
+	#           Update the closest distance found
 	#@todo
 	for e in enemies:
 		var d: float = pos.distance_to(e.position)
@@ -390,12 +432,18 @@ func get_enemies_in_radius(pos: Vector2, radius: float) -> Array:
 	#   - return value
 	#   - pos.distance_to(e.position)   (distance between two positions)
 	#
-	# Write it — one # line per line of code you'll write:
-	# var result: Array = []
-	# for each e in enemies:
-	#     if pos.distance_to(e.position) <= radius:
-	#         result.append(e)
-	# return result
+	# Given:
+	#   - enemies              — list of all active enemies
+	#   - pos                  — the tower's world position (parameter)
+	#   - radius               — the splash radius (parameter)
+	#   - pos.distance_to(e.position)  — built-in: returns distance between two positions
+	#
+	# Line by line:
+	#   Start with an empty list to hold matching enemies
+	#   Use a for loop to check each enemy in the enemies list:
+	#       If this enemy is within the splash radius:
+	#           Add it to the result list
+	#   Return the list of enemies in range
 	#@todo
 	var result: Array = []
 	for e in enemies:
@@ -435,11 +483,19 @@ func tower_tick(t: Node, delta: float) -> void:
 			#   - if thing != null:
 			#   - func_name(args)
 			#
-			# Write it — one # line per line of code you'll write:
-			# var target = get_nearest_enemy_in_range(t.position, t_range)
-			# if target != null:
-			#     call fire_at(t, target, t_damage)
-			#     reset cooldown: t.set_meta("cooldown", t_rate)
+			# Given:
+			#   - t                                     — the tower node
+			#   - t.position                            — the tower's world position
+			#   - t_range, t_damage, t_rate             — unpacked above this hole
+			#   - get_nearest_enemy_in_range(pos, range) — returns one enemy or null
+			#   - fire_at(tower, target, damage)        — pre-given: fires and deals damage
+			#   - t.set_meta("cooldown", t_rate)        — resets the cooldown timer
+			#
+			# Line by line:
+			#   Find the closest enemy within this tower's range
+			#   If an enemy was found:
+			#       Fire at that enemy
+			#       Reset the cooldown timer so the tower must wait before firing again
 			#@todo
 			var target: Node = get_nearest_enemy_in_range(t.position, t_range)
 			if target != null:
@@ -454,11 +510,19 @@ func tower_tick(t: Node, delta: float) -> void:
 			#   - if list.size() > 0:
 			#   - func_name(args)
 			#
-			# Write it — one # line per line of code you'll write:
-			# var targets = get_enemies_in_radius(t.position, t_range)
-			# if targets.size() > 0:
-			#     call fire_at(t, targets, t_damage)
-			#     reset cooldown: t.set_meta("cooldown", t_rate)
+			# Given:
+			#   - t                                     — the tower node
+			#   - t.position                            — the tower's world position
+			#   - t_range, t_damage, t_rate             — unpacked above this hole
+			#   - get_enemies_in_radius(pos, radius)    — returns a list of enemies in range
+			#   - fire_at(tower, targets, damage)       — pre-given: fires at a list of enemies
+			#   - t.set_meta("cooldown", t_rate)        — resets the cooldown timer
+			#
+			# Line by line:
+			#   Collect all enemies within the splash radius into a list
+			#   If the list is not empty (at least one enemy is in range):
+			#       Fire at all of them
+			#       Reset the cooldown timer so the tower must wait before firing again
 			#@todo
 			var targets: Array = get_enemies_in_radius(t.position, t_range)
 			if targets.size() > 0:

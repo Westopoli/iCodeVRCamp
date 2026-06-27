@@ -213,13 +213,22 @@ func start_match(p1_char: String, p2_char: String, map_id: String) -> void:
 	#   - add_child(node)
 	#   - node.method(args)
 	#
-	# Write it — one # line per line of code you'll write:
-	# make P1: player1 = PLAYER_SCENE.instantiate()
-	# add player1 to the scene tree
-	# set up player1: setup(1, p1_char, Vector2(200, 500)) — left side
-	# make P2: player2 = PLAYER_SCENE.instantiate()
-	# add player2 to the scene tree
-	# set up player2: setup(2, p2_char, Vector2(1080, 500)) — right side
+	# Given:
+	#   PLAYER_SCENE    — the preloaded Player scene (use .instantiate() to build one)
+	#   player1         — variable to store the P1 node
+	#   player2         — variable to store the P2 node
+	#   p1_char         — the character name string P1 chose
+	#   p2_char         — the character name string P2 chose
+	#   add_child()     — Godot built-in; puts a node into the scene tree so it runs
+	#
+	# Line by line:
+	#   func start_match(p1_char: String, p2_char: String, map_id: String) -> void:
+	#       Create a new Player 1 instance from the player scene
+	#       Add Player 1 to the game world so it exists and runs
+	#       Set up Player 1 as player number 1 with their chosen character on the left side
+	#       Create a new Player 2 instance from the player scene
+	#       Add Player 2 to the game world so it exists and runs
+	#       Set up Player 2 as player number 2 with their chosen character on the right side
 	#@todo
 	player1 = PLAYER_SCENE.instantiate()
 	add_child(player1)

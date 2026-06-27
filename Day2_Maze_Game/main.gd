@@ -67,9 +67,14 @@ func _ready():
 	# Syntax:
 	#   - for i in range(N):
 	#
-	# Write it — one # line per line of code you'll write:
-	# for i going from 0 to 2 (range(3)):
-	#     call spawn_ghost_at(ghost_spawn_pos(i))
+	# Given:
+	#   - range(3)              — counts i from 0 to 2, runs 3 times
+	#   - ghost_spawn_pos(i)    — returns the world position for ghost slot i
+	#   - spawn_ghost_at(pos)   — spawns one ghost at the given position
+	#
+	# Line by line:
+	#   Use a for loop to repeat 3 times (i = 0, 1, 2):
+	#       Spawn one ghost at the position for slot i
 	#@todo
 	for i in range(3):
 		spawn_ghost_at(ghost_spawn_pos(i))
@@ -80,8 +85,12 @@ func _ready():
 	# Syntax:
 	#   - name = some_function()
 	#
-	# Write it — one # line per line of code you'll write:
-	# set dots_remaining to the result of count_dots()
+	# Given:
+	#   - dots_remaining   — the variable that tracks how many dots are left to chomp
+	#   - count_dots()     — the function you write in TODO #3b; scans the maze and returns a number
+	#
+	# Line by line:
+	#   Call count_dots() and store the result as the number of dots to collect
 	#@todo
 	dots_remaining = count_dots()
 	#@end
@@ -131,9 +140,13 @@ func _process(delta):
 		# Syntax:
 		#   - for item in list:
 		#
-		# Write it — one # line per line of code you'll write:
-		# for each ghost in the ghosts list:
-		#     call step_ghost(ghost)
+		# Given:
+		#   - ghosts             — the list of all ghost nodes
+		#   - step_ghost(ghost)  — pre-given: moves one ghost one step
+		#
+		# Line by line:
+		#   Use a for loop to visit each ghost in the ghosts list:
+		#       Tell that ghost to take one step
 		#@todo
 		for ghost in ghosts:
 			step_ghost(ghost)
@@ -165,13 +178,23 @@ func try_step() -> void:
 #   - func name() -> void:
 #   - Vector2i.ZERO   (empty direction)
 #
-# Write it — one # line per line of code you'll write:
-# func reset_player() -> void:
-#     set player_cell to PLAYER_START
-#     set player.position to cell_to_world(player_cell)
-#     set player_moving to false
-#     set current_dir to Vector2i.ZERO
-#     set queued_dir to Vector2i.ZERO
+# Given:
+#   - player_cell           — stores the player's current tile position
+#   - PLAYER_START          — the tile the player starts on
+#   - player                — the player node (has a .position property)
+#   - cell_to_world(cell)   — converts a tile position to screen coordinates
+#   - player_moving         — true/false flag for whether the player is mid-slide
+#   - current_dir           — the direction the player is currently moving
+#   - queued_dir            — the next direction queued from key input
+#   - Vector2i.ZERO         — an empty/zero direction value
+#
+# Line by line:
+#   func reset_player() -> void:
+#       Send the player back to the starting tile
+#       Move the player's sprite to match that tile on screen
+#       Mark the player as not currently moving
+#       Forget which direction the player was going
+#       Forget any direction the player had queued up
 #@todo
 func reset_player() -> void:
 	player_cell = PLAYER_START
@@ -188,13 +211,18 @@ func reset_player() -> void:
 #   - func name(direction: Vector2i) -> void:
 #   - if condition:
 #
-# Write it — one # line per line of code you'll write:
-# func move_player(direction: Vector2i) -> void:
-#     calculate next_cell as player_cell + direction
-#     if hit_wall(next_cell):
-#         return early (don't move)
-#     set next_cell to wrap_cell(next_cell)
-#     call step_player_to(next_cell)
+# Given:
+#   - player_cell           — the player's current tile position
+#   - hit_wall(cell)        — returns true if that tile is a wall
+#   - wrap_cell(cell)       — handles tunnel wrap (stepping off-edge)
+#   - step_player_to(cell)  — slides the player sprite to a new tile
+#
+# Line by line:
+#   func move_player(direction: Vector2i) -> void:
+#       Figure out which tile the player would land on if they step in this direction
+#       If that tile is a wall, return early — don't move
+#       If the player stepped off the edge, wrap them to the other side of the maze
+#       Slide the player to the new tile
 #@todo
 func move_player(direction: Vector2i) -> void:
 	var next_cell := player_cell + direction
@@ -223,12 +251,19 @@ func hit_wall(cell: Vector2i) -> bool:
 	# Syntax:
 	#   - return value
 	#
-	# Write it — one # line per line of code you'll write:
-	# get the tile id with wall_layer.get_cell_source_id(cell)
-	# return true if id is not -1, false otherwise
+	# Given:
+	#   - wall_layer                          — the TileMapLayer node holding wall tiles
+	#   - cell                                — the tile position to check (already a parameter)
+	#   - wall_layer.get_cell_source_id(cell) — returns the tile ID, or -1 if nothing is there
+	#
+	# Line by line:
+	#   Ask the wall layer what tile is at this cell and store the ID
+	#   Check whether the ID means a wall is there (anything other than -1)
+	#   Return the result
 	#@todo
 	var source_id := wall_layer.get_cell_source_id(cell)
-	return source_id != -1
+	var is_wall := source_id != -1
+	return is_wall
 	#@end
 
 
@@ -239,18 +274,22 @@ func hit_wall(cell: Vector2i) -> bool:
 #   - while condition:
 #   - if condition:
 #
-# Write it — one # line per line of code you'll write:
-# func count_dots() -> int:
-#     start count at 0
-#     start x at 0
-#     while x < MAZE_W:
-#         start y at 0
-#         while y < MAZE_H:
-#             if cell_has_dot(x, y):
-#                 add 1 to count
-#             add 1 to y
-#         add 1 to x
-#     return count
+# Given:
+#   - MAZE_W              — maze width in tiles (28)
+#   - MAZE_H              — maze height in tiles (31)
+#   - cell_has_dot(x, y)  — returns true if a dot tile exists at column y, row x
+#
+# Line by line:
+#   func count_dots() -> int:
+#       Start with zero dots counted
+#       Start at the first row (x = 0)
+#       Use a while loop to walk through every row (x) in the maze, one at a time:
+#           Start at the first column (y = 0) in this row
+#           Use a while loop to walk through every column (y) in this row, one at a time:
+#               If this tile has a dot on it, add one to the count
+#               Move to the next column (y = y + 1)
+#           Move to the next row (x = x + 1)
+#       Return the total dot count
 #@todo
 func count_dots() -> int:
 	var count := 0

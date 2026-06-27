@@ -937,10 +937,10 @@ End-to-end smoke test: hand `BIBLE.md` + this file to a fresh Claude session, as
 - Title: "What you're about to write"
 - Body:
   ```gdscript
-  # var enemies: Array = [] (empty list)
-  # var towers: Array = [] (empty list)
-  # var coins: int = START_COINS
-  # var base_hp: int = START_BASE_HP
+  # Create an empty list to track all enemies on screen
+  # Create an empty list to track all placed towers
+  # Set the starting coin count to the value of START_COINS
+  # Set the starting base HP to the value of START_BASE_HP
   ```
   - "**What:** Four variable declarations — two empty lists, two integer counters."
   - "**Why:** Without these, the game has nowhere to store enemies, towers, or score."
@@ -954,10 +954,10 @@ End-to-end smoke test: hand `BIBLE.md` + this file to a fresh Claude session, as
 - Syntax: list_init, var, const
 - Body RHS:
   ```gdscript
-  # var enemies: Array = [] (empty list)
-  # var towers: Array = [] (empty list)
-  # var coins: int = START_COINS
-  # var base_hp: int = START_BASE_HP
+  # Create an empty list to track all enemies on screen
+  # Create an empty list to track all placed towers
+  # Set the starting coin count to the value of START_COINS
+  # Set the starting base HP to the value of START_BASE_HP
   ```
 - Image: `D3C1.png` — main.gd lines 103-119, red overlay on `#@todo` gap.
 - Notes: 4 lines. `START_COINS` and `START_BASE_HP` are pre-given constants at the top of the file.
@@ -1026,7 +1026,7 @@ End-to-end smoke test: hand `BIBLE.md` + this file to a fresh Claude session, as
 - Title: "What you're about to write"
 - Body:
   ```gdscript
-  # add e to the enemies list: enemies.append(e)
+  # Add the newly spawned enemy to the enemies list
   ```
   - "**What:** One line — append the new enemy to `enemies`."
   - "**Why:** Without this, spawned enemies never enter the list. The game loop can't see them."
@@ -1040,7 +1040,7 @@ End-to-end smoke test: hand `BIBLE.md` + this file to a fresh Claude session, as
 - Syntax: list_append
 - Body RHS:
   ```gdscript
-  # add e to the enemies list: enemies.append(e)
+  # Add the newly spawned enemy to the enemies list
   ```
 - Image: `D3C2a.png` — main.gd lines 291-302, red overlay on `#@todo` gap.
 - Notes: 1 line. `e` is the enemy node instantiated just above this hole.
@@ -1057,12 +1057,12 @@ End-to-end smoke test: hand `BIBLE.md` + this file to a fresh Claude session, as
 - Title: "What you're about to write"
 - Body:
   ```gdscript
-  # reward branch (enemy killed by tower):
-  # remove e from enemies: enemies.erase(e)
-  # add reward to coins: coins += reward
+  # Reward branch (enemy killed by a tower):
+  # Remove this enemy from the enemies list
+  # Add the reward amount to the player's coins
 
-  # no-reward branch (enemy reached the base):
-  # remove e from enemies: enemies.erase(e)
+  # No-reward branch (enemy reached the base):
+  # Remove this enemy from the enemies list
   ```
   - "**What:** Two holes — both erase `e` from the list. The reward branch also pays out coins."
   - "**Why:** Without the erase, dead enemies stay in the list forever. The wave never ends."
@@ -1076,12 +1076,12 @@ End-to-end smoke test: hand `BIBLE.md` + this file to a fresh Claude session, as
 - Syntax: list_erase, plus_eq
 - Body RHS:
   ```gdscript
-  # reward branch (enemy killed by tower):
-  # remove e from enemies: enemies.erase(e)
-  # add reward to coins: coins += reward
+  # Reward branch (enemy killed by a tower):
+  # Remove this enemy from the enemies list
+  # Add the reward amount to the player's coins
 
-  # no-reward branch (enemy reached the base):
-  # remove e from enemies: enemies.erase(e)
+  # No-reward branch (enemy reached the base):
+  # Remove this enemy from the enemies list
   ```
 - Image: `D3C2b.png` — main.gd lines 313-342. Two-tone overlay: gray = pre-given `if give_reward:` / `else:` guards; red = your two holes.
 - Notes: 2 holes: reward branch = 2 lines, no-reward branch = 1 line. `reward` is already unpacked in the reward branch.
@@ -1112,8 +1112,8 @@ End-to-end smoke test: hand `BIBLE.md` + this file to a fresh Claude session, as
 - Title: "What you're about to write"
 - Body:
   ```gdscript
-  # for each e in enemies: call step_enemy(e, delta)
-  # for each t in towers: call tower_tick(t, delta)
+  # Use a for loop to visit each enemy and move it one step forward
+  # Use a for loop to visit each tower and let it take its turn
   ```
   - "**What:** Two for-loops — move every enemy, tick every tower."
   - "**Why:** Without this, nothing on screen moves. The game is frozen."
@@ -1127,8 +1127,8 @@ End-to-end smoke test: hand `BIBLE.md` + this file to a fresh Claude session, as
 - Syntax: for_in
 - Body RHS:
   ```gdscript
-  # for each e in enemies: call step_enemy(e, delta)
-  # for each t in towers: call tower_tick(t, delta)
+  # Use a for loop to visit each enemy and move it one step forward
+  # Use a for loop to visit each tower and let it take its turn
   ```
 - Image: `D3C3.png` — main.gd lines 213-228, red overlay on `#@todo` gap.
 - Notes: 2 lines. `delta` is the frame time — already a parameter of `_process(delta)`.
@@ -1166,7 +1166,7 @@ End-to-end smoke test: hand `BIBLE.md` + this file to a fresh Claude session, as
 - Title: "What you're about to write"
 - Body:
   ```gdscript
-  # for each e in enemy_list: call step_enemy(e, delta)
+  # Use a for loop to visit each enemy in the list and move it one step forward
   ```
   - "**What:** One line — loop the parameter list, step each enemy."
   - "**Why:** The FC (endless mode) calls `move_all()` with its own list. Same loop, different input."
@@ -1180,7 +1180,7 @@ End-to-end smoke test: hand `BIBLE.md` + this file to a fresh Claude session, as
 - Syntax: for_in, func_param
 - Body RHS:
   ```gdscript
-  # for each e in enemy_list: call step_enemy(e, delta)
+  # Use a for loop to visit each enemy in the list and move it one step forward
   ```
 - Image: `D3C4.png` — main.gd lines 346-359, red overlay on `#@todo` gap.
 - Notes: 1 line. Use `enemy_list` (the parameter), not `enemies`.
@@ -1246,11 +1246,11 @@ End-to-end smoke test: hand `BIBLE.md` + this file to a fresh Claude session, as
 - Title: "What you're about to write"
 - Body:
   ```gdscript
-  # for each e in enemies:
-  #     compute d = pos.distance_to(e.position)
-  #     if d <= tower_range and d < best_dist:
-  #         set nearest = e
-  #         set best_dist = d
+  # Use a for loop to check each enemy in the enemies list:
+  #     Measure the distance from the tower to this enemy
+  #     If the enemy is within range and closer than the previous best:
+  #         Remember this enemy as the closest so far
+  #         Update the closest distance found
   ```
   - "**What:** Walk the enemies list; update `nearest` and `best_dist` when you find a closer in-range enemy."
   - "**Why:** Towers need to know WHO to shoot. This function finds the answer."
@@ -1264,11 +1264,11 @@ End-to-end smoke test: hand `BIBLE.md` + this file to a fresh Claude session, as
 - Syntax: for_in, if, or, dot
 - Body RHS:
   ```gdscript
-  # for each e in enemies:
-  #     compute d = pos.distance_to(e.position)
-  #     if d <= tower_range and d < best_dist:
-  #         set nearest = e
-  #         set best_dist = d
+  # Use a for loop to check each enemy in the enemies list:
+  #     Measure the distance from the tower to this enemy
+  #     If the enemy is within range and closer than the previous best:
+  #         Remember this enemy as the closest so far
+  #         Update the closest distance found
   ```
 - Image: `D3C5a.png` — main.gd lines 362-403, red overlay on `#@todo` gap.
 - Notes: 5 lines. `nearest` and `best_dist` pre-given above; `return nearest` pre-given below.
@@ -1309,11 +1309,11 @@ End-to-end smoke test: hand `BIBLE.md` + this file to a fresh Claude session, as
 - Title: "What you're about to write"
 - Body:
   ```gdscript
-  # var result: Array = []
-  # for each e in enemies:
-  #     if pos.distance_to(e.position) <= radius:
-  #         result.append(e)
-  # return result
+  # Start with an empty list to hold matching enemies
+  # Use a for loop to check each enemy in the enemies list:
+  #     If this enemy is within the splash radius:
+  #         Add it to the result list
+  # Return the list of enemies in range
   ```
   - "**What:** Build and return a new list of every enemy within `radius`."
   - "**Why:** The Splash tower needs this list to fire at everyone in range."
@@ -1327,11 +1327,11 @@ End-to-end smoke test: hand `BIBLE.md` + this file to a fresh Claude session, as
 - Syntax: list_init, for_in, list_append, return, if
 - Body RHS:
   ```gdscript
-  # var result: Array = []
-  # for each e in enemies:
-  #     if pos.distance_to(e.position) <= radius:
-  #         result.append(e)
-  # return result
+  # Start with an empty list to hold matching enemies
+  # Use a for loop to check each enemy in the enemies list:
+  #     If this enemy is within the splash radius:
+  #         Add it to the result list
+  # Return the list of enemies in range
   ```
 - Image: `D3C5b.png` — main.gd lines 409-444, red overlay on `#@todo` gap.
 - Notes: 5 lines. `pos`, `radius`, `enemies` are all parameters or globals. `pos.distance_to(e.position)` is the distance check.
@@ -1385,10 +1385,10 @@ End-to-end smoke test: hand `BIBLE.md` + this file to a fresh Claude session, as
 - Title: "What you're about to write — `\"cannon\", \"sniper\":` branch"
 - Body:
   ```gdscript
-  # var target = get_nearest_enemy_in_range(t.position, t_range)
-  # if target != null:
-  #     call fire_at(t, target, t_damage)
-  #     reset cooldown: t.set_meta("cooldown", t_rate)
+  # Find the closest enemy within this tower's range
+  # If an enemy was found:
+  #     Fire at that enemy
+  #     Reset the cooldown timer so the tower must wait before firing again
   ```
   - "**What:** Find one target; if found, fire and reset the cooldown."
   - "**Why:** Without this, Cannon and Sniper towers never shoot."
@@ -1402,10 +1402,10 @@ End-to-end smoke test: hand `BIBLE.md` + this file to a fresh Claude session, as
 - Syntax: func_return, if, func_call
 - Body RHS:
   ```gdscript
-  # var target = get_nearest_enemy_in_range(t.position, t_range)
-  # if target != null:
-  #     call fire_at(t, target, t_damage)
-  #     reset cooldown: t.set_meta("cooldown", t_rate)
+  # Find the closest enemy within this tower's range
+  # If an enemy was found:
+  #     Fire at that enemy
+  #     Reset the cooldown timer so the tower must wait before firing again
   ```
 - Image: `D3C6.png` — main.gd lines 487-493, red overlay on `# TODO #6a` hole only.
 - Notes: 4 lines. Inside the `"cannon", "sniper":` branch of the `match` block.
@@ -1415,10 +1415,10 @@ End-to-end smoke test: hand `BIBLE.md` + this file to a fresh Claude session, as
 - Title: "What you're about to write — `\"splash\":` branch"
 - Body:
   ```gdscript
-  # var targets = get_enemies_in_radius(t.position, t_range)
-  # if targets.size() > 0:
-  #     call fire_at(t, targets, t_damage)
-  #     reset cooldown: t.set_meta("cooldown", t_rate)
+  # Collect all enemies within the splash radius into a list
+  # If the list is not empty (at least one enemy is in range):
+  #     Fire at all of them
+  #     Reset the cooldown timer so the tower must wait before firing again
   ```
   - "**What:** Collect a list of targets in the splash radius; if any found, fire at all of them."
   - "**Why:** Without this, Splash towers never shoot."
@@ -1432,10 +1432,10 @@ End-to-end smoke test: hand `BIBLE.md` + this file to a fresh Claude session, as
 - Syntax: func_return, list_size, if, func_call
 - Body RHS:
   ```gdscript
-  # var targets = get_enemies_in_radius(t.position, t_range)
-  # if targets.size() > 0:
-  #     call fire_at(t, targets, t_damage)
-  #     reset cooldown: t.set_meta("cooldown", t_rate)
+  # Collect all enemies within the splash radius into a list
+  # If the list is not empty (at least one enemy is in range):
+  #     Fire at all of them
+  #     Reset the cooldown timer so the tower must wait before firing again
   ```
 - Image: `D3C6.png` — main.gd lines 495-501, red overlay on `# TODO #6b` hole only.
 - Notes: 4 lines. Inside the `"splash":` branch.
@@ -1498,13 +1498,13 @@ End-to-end smoke test: hand `BIBLE.md` + this file to a fresh Claude session, as
 - Title: "What you're about to write"
 - Body:
   ```gdscript
-  # if wave_in_progress and enemies.size() == 0 and enemies_to_spawn.size() == 0:
-  #     set wave_in_progress to false
-  #     add 1 to wave_index
-  #     if wave_index >= WAVES.size():
-  #         call you_win()
-  #     else:
-  #         call start_next_wave()
+  # If a wave is running and all enemies are gone and no more enemies are queued:
+  #     Mark the wave as finished
+  #     Move to the next wave number
+  #     If all waves have been completed:
+  #         Trigger the win screen
+  #     Otherwise:
+  #         Start the next wave
   ```
   - "**What:** Detect when a wave ends, advance the counter, win or loop."
   - "**Why:** Without this, the game never advances past wave 1."
@@ -1518,13 +1518,13 @@ End-to-end smoke test: hand `BIBLE.md` + this file to a fresh Claude session, as
 - Syntax: if, list_size, plus_eq, func_call
 - Body RHS:
   ```gdscript
-  # if wave_in_progress and enemies.size() == 0 and enemies_to_spawn.size() == 0:
-  #     set wave_in_progress to false
-  #     add 1 to wave_index
-  #     if wave_index >= WAVES.size():
-  #         call you_win()
-  #     else:
-  #         call start_next_wave()
+  # If a wave is running and all enemies are gone and no more enemies are queued:
+  #     Mark the wave as finished
+  #     Move to the next wave number
+  #     If all waves have been completed:
+  #         Trigger the win screen
+  #     Otherwise:
+  #         Start the next wave
   ```
 - Image: `D3C7.png` — main.gd lines 230-256, red overlay on `#@todo` gap.
 - Notes: 6 lines. All variables and functions are named in the comments above.

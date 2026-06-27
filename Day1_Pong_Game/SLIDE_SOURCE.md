@@ -1245,10 +1245,10 @@ Every slide entry uses this template:
 - Title: "What you're about to write"
 - Body:
   ```gdscript
-  # if Space is pressed:
-  #     set ball_moving to true
-  # if ball_moving is false:
-  #     return
+  # If the Space key is held down:
+  #     Mark the ball as ready to move
+  # If the ball is not marked as moving yet:
+  #     Return early — don't process movement this frame
   ```
   - "**What:** Two `if` checks — one listens for Space, one freezes the ball."
   - "**Why:** The ball should wait. Without the `return`, it starts moving the moment the game opens."
@@ -1261,10 +1261,10 @@ Every slide entry uses this template:
 - Syntax: if, input_key, return
 - Body RHS:
   ```gdscript
-  # if Space is pressed:
-  #     set ball_moving to true
-  # if ball_moving is false:
-  #     return
+  # If the Space key is held down:
+  #     Mark the ball as ready to move
+  # If the ball is not marked as moving yet:
+  #     Return early — don't process movement this frame
   ```
 - Notes: 4 lines — 2 `if` blocks. Walk slowly; this is their first `if` that does something they can SEE.
 
@@ -1315,8 +1315,8 @@ Every slide entry uses this template:
 - Title: "What you're about to write"
 - Body:
   ```gdscript
-  # add ball_speed_x to ball.position.x
-  # add ball_speed_y to ball.position.y
+  # Move the ball left or right by its horizontal speed
+  # Move the ball up or down by its vertical speed
   ```
   - "**What:** Two lines — move the ball left-right, and up-down, every frame."
   - "**Why:** Without this, the ball just sits there. This is the only reason anything moves."
@@ -1329,8 +1329,8 @@ Every slide entry uses this template:
 - Syntax: dot_eq
 - Body RHS:
   ```gdscript
-  # add ball_speed_x to ball.position.x
-  # add ball_speed_y to ball.position.y
+  # Move the ball left or right by its horizontal speed
+  # Move the ball up or down by its vertical speed
   ```
 - Notes: 2 lines. Remind them they can use long form OR shortcut. Both work.
 
@@ -1455,11 +1455,10 @@ Every slide entry uses this template:
   ```gdscript
   var upper_border = 0
   var lower_border = SCREEN_H - BALL_SIZE
-  # if ball.position.y < upper_border
-  # or ball.position.y > lower_border:
-  #     flip ball_speed_y (negate it)
-  # else:
-  #     pass
+  # If the ball is above the top edge or below the bottom edge:
+  #     Flip the ball's vertical direction (make it bounce)
+  # Otherwise:
+  #     Do nothing
   ```
   - "**What:** Named border variables + an `if/else` that bounces the ball off the top and bottom."
   - "**Why:** Without this, the ball drifts off screen. The `or` checks both walls in one line."
@@ -1474,11 +1473,10 @@ Every slide entry uses this template:
   ```gdscript
   var upper_border = 0
   var lower_border = SCREEN_H - BALL_SIZE
-  # if ball.position.y < upper_border
-  # or ball.position.y > lower_border:
-  #     flip ball_speed_y (negate it)
-  # else:
-  #     pass
+  # If the ball is above the top edge or below the bottom edge:
+  #     Flip the ball's vertical direction (make it bounce)
+  # Otherwise:
+  #     Do nothing
   ```
 - Notes: 5 student lines (2 var lines + if/flip/else). Walk through the diagram slides first, then let them type.
 
@@ -1503,8 +1501,8 @@ Every slide entry uses this template:
 - Title: "What you're about to write"
 - Body:
   ```gdscript
-  # if ball.position.x is past SCREEN_W:
-  #     print("point!")
+  # If the ball has passed the right edge of the screen:
+  #     Print "point!" to the output panel
   ```
   - "**What:** One `if` check — if the ball went past the right edge, print a message."
   - "**Why:** This is a 'does the `if` even work?' test before adding real scoring in TODO #8."
@@ -1517,8 +1515,8 @@ Every slide entry uses this template:
 - Syntax: if, print
 - Body RHS:
   ```gdscript
-  # if ball.position.x is past SCREEN_W:
-  #     print("point!")
+  # If the ball has passed the right edge of the screen:
+  #     Print "point!" to the output panel
   ```
 - Notes: 2 lines. Quick one — let them type it fast. The Output panel printing is the visible payoff.
 
@@ -1619,12 +1617,12 @@ Every slide entry uses this template:
 - Title: "What you're about to write"
 - Body:
   ```gdscript
-  # if ball passed right edge (> SCREEN_W):
-  #     add 1 to left_score
-  #     call reset_ball()
-  # if ball passed left edge (< 0):
-  #     add 1 to right_score
-  #     call reset_ball()
+  # If the ball passed the right edge of the screen:
+  #     Add 1 to the left player's score
+  #     Send the ball back to the centre
+  # If the ball passed the left edge of the screen:
+  #     Add 1 to the right player's score
+  #     Send the ball back to the centre
   ```
   - "**What:** Two `if` blocks — one for each edge. Ball exits right → left player scores. Ball exits left → right player scores."
   - "**Why:** TODO #7 just printed text. This upgrades it to real scoring with the counter you set up in TODO #1."
@@ -1637,12 +1635,12 @@ Every slide entry uses this template:
 - Syntax: if, plus_eq, func_call
 - Body RHS:
   ```gdscript
-  # if ball passed right edge (> SCREEN_W):
-  #     add 1 to left_score
-  #     call reset_ball()
-  # if ball passed left edge (< 0):
-  #     add 1 to right_score
-  #     call reset_ball()
+  # If the ball passed the right edge of the screen:
+  #     Add 1 to the left player's score
+  #     Send the ball back to the centre
+  # If the ball passed the left edge of the screen:
+  #     Add 1 to the right player's score
+  #     Send the ball back to the centre
   ```
 - Notes: 6 lines — 2 `if` blocks, each with 2 lines inside. Walk through one, let them mirror the second.
 
@@ -1719,10 +1717,10 @@ Every slide entry uses this template:
 - Title: "What you're about to write"
 - Body:
   ```gdscript
-  # append first silly var to score_label.text
-  # use str() to convert it, + to join with a label
-  # append second silly var too
-  # add stars, emojis, labels if you want
+  # Add your first silly variable to the end of the scoreboard text
+  # Convert the number to text with str(), then join it with a label using +
+  # Do the same for your second silly variable
+  # Decorate with stars, emojis, or labels if you want
   ```
   - "**What:** One line that appends your silly variables onto the scoreboard text."
   - "**Why:** Your variables from TODO #2 have been sitting there doing nothing. Now they show up live in the game."
@@ -1735,10 +1733,10 @@ Every slide entry uses this template:
 - Syntax: str, str_join, dot_eq
 - Body RHS:
   ```gdscript
-  # append first silly var to score_label.text
-  # use str() to convert it, + to join with a label
-  # append second silly var too
-  # add stars, emojis, labels if you want
+  # Add your first silly variable to the end of the scoreboard text
+  # Convert the number to text with str(), then join it with a label using +
+  # Do the same for your second silly variable
+  # Decorate with stars, emojis, or labels if you want
   ```
 - Notes: 1-2 lines. High creativity. Let them go wild with decoration.
 

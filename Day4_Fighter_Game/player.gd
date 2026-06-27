@@ -49,10 +49,13 @@ func setup(num: int, char_name: String, spawn_pos: Vector2) -> void:
 # Syntax:
 #   - var name: int = value
 #
-# Write it — one # line per line of code you'll write:
-# var hp: int = 100
-# var max_hp: int = 100
-# var facing: int = 1
+# Given:
+#   (declaring new variables — no existing vars needed)
+#
+# Line by line:
+#   Declare the player's current health points, starting at 100
+#   Declare the player's maximum health, also starting at 100
+#   Declare which direction the player faces (1 = right, -1 = left), starting right
 #@todo
 var hp: int = 100
 var max_hp: int = 100
@@ -65,12 +68,15 @@ var facing: int = 1
 #   - var name: float = value
 #   - var name: String = "value"
 #
-# Write it — one # line per line of code you'll write:
-# var walk_speed: float = 220.0
-# var jump_impulse: float = 520.0
-# var attack_type: String = "melee"
-# var attack_damage: int = 18
-# var attack_cooldown: float = 0.55
+# Given:
+#   character_data    — dict set by setup() using CHARACTERS[char_name] from main.gd
+#
+# Line by line:
+#   Declare the player's walking speed, using Knight's default value
+#   Declare the player's jump strength, using Knight's default value
+#   Declare the player's attack style ("melee" or "projectile"), defaulting to melee
+#   Declare how much damage each hit deals, using Knight's default value
+#   Declare how long between attacks in seconds, using Knight's default value
 #@todo
 var walk_speed: float = 220.0
 var jump_impulse: float = 520.0
@@ -87,14 +93,16 @@ var attack_cooldown: float = 0.55
 #   - if a == b: return
 #   - print(value)
 #
-# Write it — one # line per line of code you'll write:
-# var state: String = "idle"
+# Given:
+#   state    — the var you declare at the top of this block; set_state() reads it
 #
-# func set_state(new_state: String) -> void:
-#     if new_state == state:
-#         return
-#     print(new_state)
-#     state = new_state
+# Line by line:
+#   Declare the player's current state, starting as "idle"
+#
+#   func set_state(new_state: String) -> void:
+#       If the new state is already the current state, return early — don't change anything
+#       Print the new state name so you can watch transitions in the Output panel
+#       Update the state variable to the new value
 #@todo
 var state: String = "idle"
 
@@ -152,12 +160,19 @@ func _physics_process(delta: float) -> void:
 			#   - if a == b:
 			#   - obj.method()
 			#
-			# Write it — one # line per line of code you'll write:
-			# if get_move_direction() is not 0, the player is moving:
-			#     set_state to "walk"
-			# if jump was just pressed AND the player is on the floor:
-			#     set velocity.y to -jump_impulse (negative = upward)
-			#     set_state to "jump"
+			# Given:
+			#   get_move_direction()           — returns -1 (left), 0 (stopped), or 1 (right)
+			#   get_input_just_pressed("jump") — true on the frame jump is first pressed
+			#   is_on_floor()                  — true if standing on a platform
+			#   velocity.y                     — set to -jump_impulse to launch upward
+			#   jump_impulse                   — the upward launch force (chunk #2 var)
+			#   set_state()                    — helper to switch state
+			#
+			# Line by line:
+			#   If the player presses a direction key, switch to "walk"
+			#   If the player presses jump while standing on the floor:
+			#       Launch the player upward
+			#       Switch to "jump"
 			#@todo
 			if get_move_direction() != 0:
 				set_state("walk")
@@ -173,12 +188,19 @@ func _physics_process(delta: float) -> void:
 			#   - if a == b:
 			#   - obj.method()
 			#
-			# Write it — one # line per line of code you'll write:
-			# if get_move_direction() is 0, the player stopped:
-			#     set_state to "idle"
-			# if jump was just pressed AND the player is on the floor:
-			#     set velocity.y to -jump_impulse (negative = upward)
-			#     set_state to "jump"
+			# Given:
+			#   get_move_direction()           — returns -1 (left), 0 (stopped), or 1 (right)
+			#   get_input_just_pressed("jump") — true on the frame jump is first pressed
+			#   is_on_floor()                  — true if standing on a platform
+			#   velocity.y                     — set to -jump_impulse to launch upward
+			#   jump_impulse                   — the upward launch force (chunk #2 var)
+			#   set_state()                    — helper to switch state
+			#
+			# Line by line:
+			#   If the player releases the direction key, switch to "idle"
+			#   If the player presses jump while standing on the floor:
+			#       Launch the player upward
+			#       Switch to "jump"
 			#@todo
 			if get_move_direction() == 0:
 				set_state("idle")
@@ -194,9 +216,12 @@ func _physics_process(delta: float) -> void:
 			#   - if a > b:
 			#   - obj.method()
 			#
-			# Write it — one # line per line of code you'll write:
-			# if velocity.y > 0, the player is now moving downward:
-			#     set_state to "fall"
+			# Given:
+			#   velocity.y   — positive means moving downward in Godot 2D
+			#   set_state()  — helper to switch state
+			#
+			# Line by line:
+			#   If the player starts moving downward, switch to "fall"
 			#@todo
 			if velocity.y > 0:
 				set_state("fall")
@@ -209,9 +234,12 @@ func _physics_process(delta: float) -> void:
 			#   - if condition:
 			#   - obj.method()
 			#
-			# Write it — one # line per line of code you'll write:
-			# if is_on_floor() is true, the player has landed:
-			#     set_state to "idle"
+			# Given:
+			#   is_on_floor()  — Godot built-in; true when standing on a platform
+			#   set_state()    — helper to switch state
+			#
+			# Line by line:
+			#   If the player lands on the floor, switch to "idle"
 			#@todo
 			if is_on_floor():
 				set_state("idle")
@@ -244,68 +272,70 @@ func _physics_process(delta: float) -> void:
 #   - if a <= b:
 #   - obj.method()
 #
-# Write it — one # line per line of code you'll write:
-# subtract amount from hp
-# set hit_flash_timer to 0.2 to start the red flash
-# set_state to "hit"
-# set hp_bar_fill.size.x to float(hp) / max_hp * 80.0 (bar is 80px wide)
-# if hp dropped to 0 or below:
-#     call die()
+# Given:
+#   hp               — the player's current health points
+#   max_hp           — the player's maximum health points
+#   hit_flash_timer  — set to 0.2 to trigger a red flash
+#   hp_bar_fill      — the ColorRect representing the HP bar (80px wide at full HP)
+#   set_state()      — helper that safely switches state (from your chunk #5)
+#   die()            — pre-given: hides the sprite and ends the fight
+#
+# Line by line:
+#   func take_damage(amount: int) -> void:
+#       Subtract the incoming damage from the player's current HP
+#       Start a brief flash effect so the hit is visible on screen
+#       Switch the player into the "hit" state
+#       Resize the HP bar to reflect the new HP percentage
+#       If HP has reached zero or below:
+#           Trigger the player's death
 func take_damage(amount: int) -> void:
 	#@todo
 	hp -= amount
 	hit_flash_timer = 0.2
 	set_state("hit")
-	hp_bar_fill.size.x = (float(hp) / max_hp) * 80.0   # bar is 80px wide
+	var hp_ratio = float(hp) / max_hp
+	hp_bar_fill.size.x = hp_ratio * 80.0
 	if hp <= 0:
 		die()
 	#@end
 
-# TODO #7: Make the Player attack — start the cooldown, then branch on attack_type: melee does a swing that damages an opponent who is alive, in range, faced, and at the same height; projectile fires a shot.
+# TODO #7: The cooldown, swing, and distance math are pre-given. Write the if check that decides whether the hit lands.
 #
 # Syntax:
-#   - match x:
 #   - if a and b and c:
 #   - obj.method()
 #
-# Write it — one # line per line of code you'll write:
-# start the cooldown: set attack_cooldown_timer to attack_cooldown
-# match attack_type:
-#     "melee":
-#         set melee_swing_timer to 0.15 to show the swing
-#         call queue_redraw() to draw the swing arc
-#         get the other player: var opponent = get_opponent()
-#         if opponent is null or dead:
-#             return (no melee hit)
-#         measure the gap: var to_opp = opponent.position - position
-#         (pre-given) in_range — is the opponent within attack_range?
-#         (pre-given) facing_opponent — are we facing the opponent?
-#         (pre-given) same_height — is the opponent at roughly the same height?
-#         if in_range and facing_opponent and same_height:
-#             opponent.take_damage(attack_damage)
-#     "projectile":
-#         spawn_projectile()
+# Given:
+#   in_range         — true if opponent.x distance <= character_data["attack_range"]
+#   facing_opponent  — true if sign(to_opp.x) == facing
+#   same_height      — true if opponent.y distance <= 60 px
+#   opponent         — the other Player node (pre-fetched above your hole)
+#   attack_damage    — how much damage each hit deals (chunk #2 var)
+#
+# Line by line:
+#   If the opponent is close enough, being faced, and at the same height:
+#       Deal attack damage to the opponent
 func attack() -> void:
-	#@todo
 	attack_cooldown_timer = attack_cooldown
 	match attack_type:
 		"melee":
 			melee_swing_timer = 0.15
 			queue_redraw()
 			var opponent = get_opponent()
-			if opponent == null and opponent.is_dead():
+			if opponent == null:
+				return
+			if opponent.is_dead():
 				return
 			var to_opp = opponent.position - position
-			# Pre-given:
 			var in_range = abs(to_opp.x) <= character_data["attack_range"]
 			var facing_opponent = sign(to_opp.x) == facing
-			# Pre-given:
 			var same_height = abs(to_opp.y) <= 60
+			#@todo
 			if in_range and facing_opponent and same_height:
 				opponent.take_damage(attack_damage)
+			#@end
 		"projectile":
 			spawn_projectile()
-	#@end
 
 # === pre-given ===
 func spawn_projectile() -> void:

@@ -890,8 +890,8 @@ End-to-end smoke test: hand `BIBLE.md` + this file to a fresh Claude session, as
 - Title: "What you're about to write"
 - Body:
   ```gdscript
-  # for i going from 0 to 2 (range(3)):
-  #     call spawn_ghost_at(ghost_spawn_pos(i))
+  # Use a for loop to repeat 3 times (i = 0, 1, 2):
+  #     Spawn one ghost at the position for slot i
   ```
   - "**What:** A `for` loop that spawns 3 ghosts at startup — one per iteration."
   - "**Why:** Without this loop, no ghosts appear. The maze is empty."
@@ -905,8 +905,8 @@ End-to-end smoke test: hand `BIBLE.md` + this file to a fresh Claude session, as
 - Syntax: for_range
 - Body RHS:
   ```gdscript
-  # for i going from 0 to 2 (range(3)):
-  #     call spawn_ghost_at(ghost_spawn_pos(i))
+  # Use a for loop to repeat 3 times (i = 0, 1, 2):
+  #     Spawn one ghost at the position for slot i
   ```
 - Image: `D2C1.png` — main.gd lines 65-78, red overlay on `#@todo` gap.
 - Notes: 2 lines. `spawn_ghost_at` and `ghost_spawn_pos(i)` are pre-given helpers. Celebrate their first loop.
@@ -978,8 +978,8 @@ End-to-end smoke test: hand `BIBLE.md` + this file to a fresh Claude session, as
 - Title: "What you're about to write"
 - Body:
   ```gdscript
-  # for each ghost in the ghosts list:
-  #     call step_ghost(ghost)
+  # Use a for loop to visit each ghost in the ghosts list:
+  #     Tell that ghost to take one step
   ```
   - "**What:** A `for` loop that moves every ghost by one step, every frame."
   - "**Why:** Without this, ghosts spawn but never move."
@@ -993,8 +993,8 @@ End-to-end smoke test: hand `BIBLE.md` + this file to a fresh Claude session, as
 - Syntax: for_in
 - Body RHS:
   ```gdscript
-  # for each ghost in the ghosts list:
-  #     call step_ghost(ghost)
+  # Use a for loop to visit each ghost in the ghosts list:
+  #     Tell that ghost to take one step
   ```
 - Image: `D2C2.png` — main.gd lines 130-142, red overlay on `#@todo` gap inside the `else` branch.
 - Notes: 2 lines. `step_ghost(ghost)` is pre-given. This loop runs 60 times per second.
@@ -1130,7 +1130,7 @@ End-to-end smoke test: hand `BIBLE.md` + this file to a fresh Claude session, as
 - Title: "What you're about to write"
 - Body:
   ```gdscript
-  # set dots_remaining to the result of count_dots()
+  # Call count_dots() and store the result as the number of dots to collect
   ```
   - "**What:** One line — call `count_dots()` and store the answer."
   - "**Why:** `dots_remaining` is the win counter. Without this, it stays 0 forever."
@@ -1144,7 +1144,7 @@ End-to-end smoke test: hand `BIBLE.md` + this file to a fresh Claude session, as
 - Syntax: func_return, var
 - Body RHS:
   ```gdscript
-  # set dots_remaining to the result of count_dots()
+  # Call count_dots() and store the result as the number of dots to collect
   ```
 - Image: `D2C3a.png` — main.gd lines 80-88, red overlay on `#@todo` gap.
 - Notes: 1 line. `count_dots()` is the function they write next in #3b.
@@ -1194,16 +1194,15 @@ End-to-end smoke test: hand `BIBLE.md` + this file to a fresh Claude session, as
 - Title: "What you're about to write"
 - Body:
   ```gdscript
-  # start count at 0
-  # start x at 0
-  # while x < MAZE_W:
-  #     start y at 0
-  #     while y < MAZE_H:
-  #         if cell_has_dot(x, y):
-  #             add 1 to count
-  #         add 1 to y
-  #     add 1 to x
-  # return count
+  # Start with zero dots counted
+  # Start at the first row (x = 0)
+  # Use a while loop to walk through every row (x) in the maze, one at a time:
+  #     Start at the first column (y = 0) in this row
+  #     Use a while loop to walk through every column (y) in this row, one at a time:
+  #         If this tile has a dot on it, add one to the count
+  #         Move to the next column (y = y + 1)
+  #     Move to the next row (x = x + 1)
+  # Return the total dot count
   ```
   - "**What:** Nested while loops that scan every tile and count dots."
   - "**Why:** `count_dots()` is called by #3a. Without it, the win counter never starts."
@@ -1217,16 +1216,15 @@ End-to-end smoke test: hand `BIBLE.md` + this file to a fresh Claude session, as
 - Syntax: while_loop, var, return, if
 - Body RHS:
   ```gdscript
-  # start count at 0
-  # start x at 0
-  # while x < MAZE_W:
-  #     start y at 0
-  #     while y < MAZE_H:
-  #         if cell_has_dot(x, y):
-  #             add 1 to count
-  #         add 1 to y
-  #     add 1 to x
-  # return count
+  # Start with zero dots counted
+  # Start at the first row (x = 0)
+  # Use a while loop to walk through every row (x) in the maze, one at a time:
+  #     Start at the first column (y = 0) in this row
+  #     Use a while loop to walk through every column (y) in this row, one at a time:
+  #         If this tile has a dot on it, add one to the count
+  #         Move to the next column (y = y + 1)
+  #     Move to the next row (x = x + 1)
+  # Return the total dot count
   ```
 - Image: `D2C3b.png` — main.gd lines 207-225, red overlay on `#@todo` gap.
 - Notes: Harder chunk — circulate actively. `MAZE_W`, `MAZE_H`, `cell_has_dot(x, y)` all pre-given.
@@ -1341,11 +1339,11 @@ End-to-end smoke test: hand `BIBLE.md` + this file to a fresh Claude session, as
 - Title: "What you're about to write"
 - Body:
   ```gdscript
-  # set player_cell to PLAYER_START
-  # set player.position to cell_to_world(player_cell)
-  # set player_moving to false
-  # set current_dir to Vector2i.ZERO
-  # set queued_dir to Vector2i.ZERO
+  # Send the player back to the starting tile
+  # Move the player's sprite to match that tile on screen
+  # Mark the player as not currently moving
+  # Forget which direction the player was going
+  # Forget any direction the player had queued up
   ```
   - "**What:** Five assignments that send the player home with a clean slate."
   - "**Why:** Without this, a ghost catch leaves the player stuck mid-tile."
@@ -1359,11 +1357,11 @@ End-to-end smoke test: hand `BIBLE.md` + this file to a fresh Claude session, as
 - Syntax: func_void, dot_eq
 - Body RHS:
   ```gdscript
-  # set player_cell to PLAYER_START
-  # set player.position to cell_to_world(player_cell)
-  # set player_moving to false
-  # set current_dir to Vector2i.ZERO
-  # set queued_dir to Vector2i.ZERO
+  # Send the player back to the starting tile
+  # Move the player's sprite to match that tile on screen
+  # Mark the player as not currently moving
+  # Forget which direction the player was going
+  # Forget any direction the player had queued up
   ```
 - Image: `D2C4.png` — main.gd lines 164-191, red overlay on `#@todo` gap.
 - Notes: 5 lines. All variable names and helpers listed in the code comments above `#@todo` in their file.
@@ -1477,10 +1475,10 @@ End-to-end smoke test: hand `BIBLE.md` + this file to a fresh Claude session, as
 - Title: "What you're about to write"
 - Body:
   ```gdscript
-  # calculate next_cell as player_cell + direction
-  # if hit_wall(next_cell): return early (don't move)
-  # set next_cell to wrap_cell(next_cell)
-  # call step_player_to(next_cell)
+  # Figure out which tile the player would land on if they step in this direction
+  # If that tile is a wall, return early — don't move
+  # If the player stepped off the edge, wrap them to the other side of the maze
+  # Slide the player to the new tile
   ```
   - "**What:** Move the player one tile — wall check first, tunnel wrap after."
   - "**Why:** Without this, arrow keys do nothing."
@@ -1494,10 +1492,10 @@ End-to-end smoke test: hand `BIBLE.md` + this file to a fresh Claude session, as
 - Syntax: func_param, if, return, func_call
 - Body RHS:
   ```gdscript
-  # calculate next_cell as player_cell + direction
-  # if hit_wall(next_cell): return early (don't move)
-  # set next_cell to wrap_cell(next_cell)
-  # call step_player_to(next_cell)
+  # Figure out which tile the player would land on if they step in this direction
+  # If that tile is a wall, return early — don't move
+  # If the player stepped off the edge, wrap them to the other side of the maze
+  # Slide the player to the new tile
   ```
 - Image: `D2C5.png` — main.gd lines 194-229, red overlay on `#@todo` gap.
 - Notes: 4 lines. Wall check → return → wrap → step. All helpers pre-given.
@@ -1608,8 +1606,8 @@ End-to-end smoke test: hand `BIBLE.md` + this file to a fresh Claude session, as
 - Title: "What you're about to write"
 - Body:
   ```gdscript
-  # get the tile id: wall_layer.get_cell_source_id(cell)
-  # return true if id is not -1, false otherwise
+  # Ask the wall layer what tile is at this cell and store the result
+  # Return true if a tile was found there, false if the cell is empty
   ```
   - "**What:** Two lines inside the `#@todo` block — the in-grid wall check."
   - "**Why:** The off-grid and tunnel guards above are pre-given. Your section answers: is there a wall tile here?"
@@ -1623,8 +1621,8 @@ End-to-end smoke test: hand `BIBLE.md` + this file to a fresh Claude session, as
 - Syntax: func_return, dot
 - Body RHS:
   ```gdscript
-  # get the tile id: wall_layer.get_cell_source_id(cell)
-  # return true if id is not -1, false otherwise
+  # Ask the wall layer what tile is at this cell and store the result
+  # Return true if a tile was found there, false if the cell is empty
   ```
 - Image: `D2C6.png` — main.gd lines 232-257. Two-tone overlay: gray = pre-given off-grid + tunnel guards; red = your hole.
 - Notes: R5 partial hole. 2 lines. Gray overlay = pre-given; red = your hole.
